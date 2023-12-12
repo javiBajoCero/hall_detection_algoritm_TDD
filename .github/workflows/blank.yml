@@ -31,9 +31,9 @@ jobs:
           cd tester_code_and_testing_results
           echo Last run was on \n $(date) >runner_logs.txt
           ls
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      # build the tester code project, makefile
+      - name: update .txt
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          cd tester_code_and_testing_results
+          make
+          ls
