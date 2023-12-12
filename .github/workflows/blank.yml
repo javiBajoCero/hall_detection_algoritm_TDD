@@ -32,8 +32,8 @@ jobs:
           echo Last run was on \n $(date) >runner_logs.txt
           ls
       # build the tester code project, makefile
-      - name: update .txt
+      - name: run makefile on tester code
         run: |
-          cd tester_code_and_testing_results
+          cd tester_code_and_testing_results\hall_error_emulator_nucleo-G431RB
           make
           ls
