@@ -31,9 +31,9 @@ jobs:
           cd tester_code_and_testing_results
           echo Last run was on \n $(date) >runner_logs.txt
           ls
-      # build the tester code project, makefile
+      # build the tester code project, makefile //makefile previously installed "sudo apt install make" (it comes with raspbian already i think)
       - name: run makefile on tester code
         run: |
-          cd tester_code_and_testing_results\hall_error_emulator_nucleo-G431RB
+          cd tester_code_and_testing_results/hall_error_emulator_nucleo-G431RB
           make
           ls
