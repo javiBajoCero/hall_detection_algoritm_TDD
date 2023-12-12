@@ -28,8 +28,9 @@ jobs:
       # just a fun text and the date
       - name: update .txt
         run: |
-          cd tester code and testing results
+          cd tester_code_and_testing_results
           echo Last run was on \n $(date) >runner_logs.txt
+          ls
 
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
