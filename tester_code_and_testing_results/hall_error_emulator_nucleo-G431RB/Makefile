@@ -120,11 +120,11 @@ AS_INCLUDES =
 
 # C includes
 C_INCLUDES =  \
--ICore/Inc \
--IDrivers/STM32G4xx_HAL_Driver/Inc \
--IDrivers/STM32G4xx_HAL_Driver/Inc/Legacy \
--IDrivers/CMSIS/Device/ST/STM32G4xx/Include \
--IDrivers/CMSIS/Include
+Core/Inc \
+Drivers/STM32G4xx_HAL_Driver/Inc \
+Drivers/STM32G4xx_HAL_Driver/Inc/Legacy \
+Drivers/CMSIS/Device/ST/STM32G4xx/Include \
+Drivers/CMSIS/Include
 
 
 # compile gcc flags
@@ -145,7 +145,7 @@ CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
 # LDFLAGS
 #######################################
 # link script
-LDSCRIPT = STM32G431RBTx_FLASH.ld
+LDSCRIPT = STM32G431RBTX_FLASH.ld
 
 # libraries
 LIBS = -lc -lm -lnosys 
