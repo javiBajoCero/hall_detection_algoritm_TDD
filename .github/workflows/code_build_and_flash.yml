@@ -15,8 +15,8 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  building_and_flashing:
+  # This workflow contains two jobs, the first one is:
+  tester_building_and_flashing:
     # The type of runner that the job will run on
     runs-on: self-hosted
 
@@ -46,3 +46,20 @@ jobs:
         run: |
           cd tester_code_and_testing_results/hall_error_emulator_nucleo-G431RB
           sudo openocd
+
+  #second job 
+  tested_building_and_flashing:
+    # The type of runner that the job will run on
+    runs-on: self-hosted
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      # just a fun text and the date
+      - name: update .txt
+        run: |
+          cd tested_code
+          echo Last run was on \n $(date) >runner_logs.txt
+          ls
