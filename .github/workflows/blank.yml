@@ -44,5 +44,5 @@ jobs:
       #previously instaled openocd "sudo apt-get install openocd"
       - name: flash tester binaries into tester nucleo board
         run: |
-          cd hall_detection_algoritm_TDD\tester_code_and_testing_results\hall_error_emulator_nucleo-G431RB 
+          cd hall_detection_algoritm_TDD/tester_code_and_testing_results\hall_error_emulator_nucleo-G431RB 
           sudo openocd
