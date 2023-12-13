@@ -29,7 +29,7 @@ jobs:
       - name: update .txt
         run: |
           cd tester_code_and_testing_results
-          echo Last run was on \n $(date) >runner_logs.txt
+          echo Last test run was on \n $(date) >runner_logs.txt
           ls
       # build the tester code project, makefile 
       # makefile previously installed "sudo apt install make" (it comes with raspbian already i think)
