@@ -120,11 +120,11 @@ AS_INCLUDES =
 
 # C includes
 C_INCLUDES =  \
-Core/Inc \
-Drivers/STM32G4xx_HAL_Driver/Inc \
-Drivers/STM32G4xx_HAL_Driver/Inc/Legacy \
-Drivers/CMSIS/Device/ST/STM32G4xx/Include \
-Drivers/CMSIS/Include
+-Core/Inc \
+-Drivers/STM32G4xx_HAL_Driver/Inc \
+-Drivers/STM32G4xx_HAL_Driver/Inc/Legacy \
+-Drivers/CMSIS/Device/ST/STM32G4xx/Include \
+-Drivers/CMSIS/Include
 
 
 # compile gcc flags
