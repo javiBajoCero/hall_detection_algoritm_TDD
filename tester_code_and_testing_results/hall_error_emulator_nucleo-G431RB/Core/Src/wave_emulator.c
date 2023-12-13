@@ -11,7 +11,7 @@
 #include "tim.h"
 
 #include "wave_emulator.h"
-#include "real_waveforms.h"
+
 
 
 uint32_t emulator_enabled=0;			/*!< this variable is public, acts as a semaphore for the emulator  */
