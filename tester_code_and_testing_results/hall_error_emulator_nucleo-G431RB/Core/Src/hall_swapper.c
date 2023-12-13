@@ -19,7 +19,6 @@ GPIO_PinState signal_outputs[3]	={GPIO_PIN_RESET,GPIO_PIN_RESET,GPIO_PIN_RESET};
 
 
 //all funtions inside this .c are listed here:
-//void hall_swapper_twentyKHzinterruptionIRQ( void );
 void read_input_signals(void);
 void emulated_read_input_signals(void);
 void polarice_signals(hall_signals_order hall_x);

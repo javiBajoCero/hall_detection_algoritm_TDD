@@ -12,4 +12,5 @@
 
 void ui_uart_init();
 void ui_uart_listen();
+
 #endif /* INC_USER_INTERFACE_H_ */

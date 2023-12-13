@@ -57,9 +57,7 @@ char hall_status_string[]={" A B C"};
 
 
 //functions within this .c file
-void ui_uart_init();
 void ui_uart_transmit_initial_message();
-void ui_uart_listen();
 uint32_t ui_uart_echo_and_breaklinedetect_rx();
 
 uint32_t decode_ABCcommands(uint8_t *pData, uint16_t Size);

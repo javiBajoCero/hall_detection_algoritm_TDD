@@ -11,14 +11,13 @@
 #include "tim.h"
 
 #include "wave_emulator.h"
-
+#include "real_waveforms.h"
 
 
 uint32_t emulator_enabled=0;			/*!< this variable is public, acts as a semaphore for the emulator  */
 uint32_t old_emulator_enabled=0;		/*!< auxiliar local variable to store emulator_enabled values to be compared to*/
 
 //all functions contained in this .c
-void emulation();
 void enable_emulator();
 void disable_emulator();
 
