@@ -43,4 +43,6 @@ jobs:
       #flashes firmware to the disrovery board attached to the self-hosted runner
       #previously instaled openocd "sudo apt-get install openocd"
       - name: flash tester binaries into tester nucleo board
-        run: sudo openocd
+        run: |
+          cd hall_detection_algoritm_TDD\tester_code_and_testing_results\hall_error_emulator_nucleo-G431RB 
+          sudo openocd
