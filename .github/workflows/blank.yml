@@ -43,4 +43,4 @@ jobs:
       #flashes firmware to the disrovery board attached to the self-hosted runner
       #previously instaled openocd "sudo apt-get install openocd"
       - name: flash tester binaries into tester nucleo board
-        run: sudo openocd
+        run: sudo apt-get install openocd -y
