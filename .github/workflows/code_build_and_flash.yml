@@ -52,7 +52,7 @@ jobs:
       - name: update .txt
         run: |
           cd tested_code
-          echo Last run was on \n $(date) >runner_logs.txt
+          echo Last run was : \n $(date) >runner_logs.txt
           ls
 
       - name: run makefile of code to test
