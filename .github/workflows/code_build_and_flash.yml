@@ -28,7 +28,7 @@ jobs:
       # just a fun text and the date
       - name: update .txt
         run: |
-          cd tester_code_and_testing_results
+          cd TESTS
           echo Last test run was on \n $(date) >runner_logs.txt
           ls
 
@@ -55,7 +55,7 @@ jobs:
       # just a fun text and the date
       - name: update .txt
         run: |
-          cd tested_code
+          cd TESTS
           echo Last run was : \n $(date) >runner_logs.txt
           ls
 
