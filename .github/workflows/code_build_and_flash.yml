@@ -31,21 +31,25 @@ jobs:
           cd tester_code_and_testing_results
           echo Last test run was on \n $(date) >runner_logs.txt
           ls
+
+
+
       # build the tester code project, makefile 
       # makefile previously installed "sudo apt install make" (it comes with raspbian already i think)
       # crosscompiling toolachain also installed with "sudo apt-get install gcc-arm-none-eabi"
-      - name: run makefile of tester code
+      - name: TEST2 building tester code with makefile
         run: |
-          cd tester_code_and_testing_results/hall_error_emulator_nucleo-G431RB
+          cd TESTS/TEST2_HIL_hall_signals_scrambled_49_cases/tester_jig_code/hall_error_emulator_nucleo-G431RB
           make
           ls
 
       #flashes firmware to the disrovery board attached to the self-hosted runner
       #previously instaled openocd "sudo apt-get install openocd"
-      - name: flash tester binaries into tester nucleo board
+      - name: TEST2 flash tester binaries into tester nucleo board
         run: |
-          cd tester_code_and_testing_results/hall_error_emulator_nucleo-G431RB
+          cd TESTS/TEST2_HIL_hall_signals_scrambled_49_cases/tester_jig_code/hall_error_emulator_nucleo-G431RB
           sudo openocd
+
 
 #now we do the same for the tested board
       # just a fun text and the date
