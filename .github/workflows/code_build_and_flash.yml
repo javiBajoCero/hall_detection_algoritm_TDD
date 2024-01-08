@@ -61,7 +61,7 @@ jobs:
 
       - name: run makefile of code to test
         run: |
-          cd target_code_to_be_tested
+          cd target_code_to_be_tested/hall_detection_algoritm
           make
           ls
 
