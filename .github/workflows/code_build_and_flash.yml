@@ -7,8 +7,6 @@ on:
   # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
     branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -28,7 +26,7 @@ jobs:
       # just a fun text and the date
       - name: update .txt
         run: |
-          cd tester_code_and_testing_results
+          cd TESTS
           echo Last test run was on \n $(date) >runner_logs.txt
           ls
 
@@ -55,13 +53,13 @@ jobs:
       # just a fun text and the date
       - name: update .txt
         run: |
-          cd tested_code
+          cd TESTS
           echo Last run was : \n $(date) >runner_logs.txt
           ls
 
       - name: run makefile of code to test
         run: |
-          cd tested_code/hall_detection_algoritm
+          cd target_code_to_be_tested/hall_detection_algoritm
           make
           ls
 
