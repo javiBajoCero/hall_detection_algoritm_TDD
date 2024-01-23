@@ -14,3 +14,5 @@ All tests need to pass every time there is a new change or a new test is added.
 
 # getting inspired from:    
 - Gene Schroeder's embedded CI/CD course (he uses jenkins and im using github actions, still very educative) https://github.com/g-schro/ci-cd-class-1
+- this linkedin post's comment section: https://www.linkedin.com/posts/jessewarden_test-driven-development-is-fundamentally-activity-7152648850288091137-SAHB?utm_source=share&utm_medium=member_desktop
+- A very nice book "Test Driven Development for Embedded C (Pragmatic Programmers) " by james greening
