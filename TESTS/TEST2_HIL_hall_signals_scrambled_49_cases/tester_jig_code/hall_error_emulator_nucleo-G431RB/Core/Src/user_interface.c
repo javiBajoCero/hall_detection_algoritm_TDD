@@ -195,9 +195,9 @@ uint32_t decode_othercommands(uint8_t *pData, uint16_t Size){
 	if(aux_variable_searching_strings!=NULL){
 		HAL_Delay(50);
 		HAL_UART_Transmit_DMA(&hlpuart1, resetmessage, sizeof(resetmessage));
-		HAL_GPIO_Write(RESET_TARGET_BOARD_GPIO_Port, RESET_TARGET_BOARD_Pin,GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(RESET_TARGET_BOARD_GPIO_Port, RESET_TARGET_BOARD_Pin,GPIO_PIN_RESET);
 		HAL_Delay(100);
-		HAL_GPIO_Write(RESET_TARGET_BOARD_GPIO_Port, RESET_TARGET_BOARD_Pin,GPIO_PIN_SET);
+		HAL_GPIO_WritePin(RESET_TARGET_BOARD_GPIO_Port, RESET_TARGET_BOARD_Pin,GPIO_PIN_SET);
 		return 1;
 	}
 
