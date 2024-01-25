@@ -23,19 +23,19 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
+
       - name: build target code with makefile 
         run: |
           cd target_code_to_be_tested/hall_detection_algoritm
           make
           ls
-
-
       #flashes firmware to the disrovery board attached to the self-hosted runner
       #previously instaled openocd "sudo apt-get install openocd"
-      - name: flash target binaries into tester nucleo board
+      - name: flash target binaries into target nucleo board
         run: |
           cd target_code_to_be_tested/hall_detection_algoritm
           sudo openocd
+
 
 
       # build the tester code project, makefile 
