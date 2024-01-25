@@ -31,7 +31,6 @@ jobs:
           ls
 
 
-
       # build the tester code project, makefile 
       # makefile previously installed "sudo apt install make" (it comes with raspbian already i think)
       # crosscompiling toolachain also installed with "sudo apt-get install gcc-arm-none-eabi"
