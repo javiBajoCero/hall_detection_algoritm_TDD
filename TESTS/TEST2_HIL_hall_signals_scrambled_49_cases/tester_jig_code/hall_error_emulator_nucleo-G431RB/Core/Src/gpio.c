@@ -51,7 +51,10 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, output_HALLC_Pin|output_HALLA_Pin|output_HALLB_Pin|RESET_TARGET_BOARD_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, output_HALLC_Pin|output_HALLA_Pin|output_HALLB_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(RESET_TARGET_BOARD_GPIO_Port, RESET_TARGET_BOARD_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pins : PCPin PCPin PCPin */
   GPIO_InitStruct.Pin = bluepushbutton_Pin|input_HALLC_Pin|input_HALLB_Pin;

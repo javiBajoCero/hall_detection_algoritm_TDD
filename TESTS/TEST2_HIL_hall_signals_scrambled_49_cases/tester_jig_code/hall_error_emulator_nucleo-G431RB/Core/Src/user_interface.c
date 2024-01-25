@@ -13,6 +13,7 @@
 #include "user_interface.h"
 #include "hall_swapper.h"   //to access the variables signal_order and  signal_polarity
 #include "wave_emulator.h"
+#include "main.h" //for the reset pin
 
 const uint8_t initialmessage[]=
 		"\n\r%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%HOLA%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\r"
@@ -42,6 +43,9 @@ const uint8_t helpmessage[]=
 const uint8_t emulationcommand[]="emulation";
 const uint8_t on_emulationmessage[]=">>    emulation on\n\r";
 const uint8_t off_emulationmessage[]=">>    emulation off\n\r";
+
+const uint8_t resetcommand[]="reset target";
+const uint8_t resetmessage[]=">>	target just reseted";
 
 const uint8_t okmessage[]=		">>    ok\n\r";
 const uint8_t notokmessage[]=	">>    what was that?, try again\n\r";
@@ -184,6 +188,16 @@ uint32_t decode_othercommands(uint8_t *pData, uint16_t Size){
 	if(aux_variable_searching_strings!=NULL){
 		HAL_Delay(50);
 		HAL_UART_Transmit_DMA(&hlpuart1, helpmessage, sizeof(helpmessage));
+		return 1;
+	}
+
+	aux_variable_searching_strings=strstr((char *)pData, (char *)resetcommand);
+	if(aux_variable_searching_strings!=NULL){
+		HAL_Delay(50);
+		HAL_UART_Transmit_DMA(&hlpuart1, resetmessage, sizeof(resetmessage));
+		HAL_GPIO_Write(RESET_TARGET_BOARD_GPIO_Port, RESET_TARGET_BOARD_Pin,GPIO_PIN_RESET);
+		HAL_Delay(100);
+		HAL_GPIO_Write(RESET_TARGET_BOARD_GPIO_Port, RESET_TARGET_BOARD_Pin,GPIO_PIN_SET);
 		return 1;
 	}
 
