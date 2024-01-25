@@ -71,14 +71,6 @@ void Error_Handler(void);
 #define LPUART1_RX_GPIO_Port GPIOA
 #define input_HALLA_Pin GPIO_PIN_0
 #define input_HALLA_GPIO_Port GPIOB
-#define screen_reset_Pin GPIO_PIN_11
-#define screen_reset_GPIO_Port GPIOB
-#define screen_DC_Pin GPIO_PIN_12
-#define screen_DC_GPIO_Port GPIOB
-#define screen_CS_Pin GPIO_PIN_14
-#define screen_CS_GPIO_Port GPIOB
-#define encoder_button_Pin GPIO_PIN_10
-#define encoder_button_GPIO_Port GPIOA
 #define T_SWDIO_Pin GPIO_PIN_13
 #define T_SWDIO_GPIO_Port GPIOA
 #define T_SWCLK_Pin GPIO_PIN_14
@@ -89,6 +81,8 @@ void Error_Handler(void);
 #define output_HALLA_GPIO_Port GPIOB
 #define output_HALLB_Pin GPIO_PIN_5
 #define output_HALLB_GPIO_Port GPIOB
+#define RESET_TARGET_BOARD_Pin GPIO_PIN_9
+#define RESET_TARGET_BOARD_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 

@@ -95,6 +95,7 @@ int main(void)
   MX_DAC1_Init();
   MX_LPUART1_UART_Init();
   MX_TIM8_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
   ui_uart_init();
   HAL_TIM_Base_Start_IT(&htim8); //start 20Khz timer with enabled interruption
