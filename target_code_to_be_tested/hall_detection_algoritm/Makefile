@@ -36,6 +36,7 @@ BUILD_DIR = build
 ######################################
 # C sources
 C_SOURCES =  \
+Core/Src/hall_detection.c \
 Core/Src/main.c \
 Core/Src/gpio.c \
 Core/Src/stm32f4xx_it.c \
