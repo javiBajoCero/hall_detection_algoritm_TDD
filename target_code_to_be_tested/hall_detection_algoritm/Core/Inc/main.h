@@ -77,7 +77,7 @@ void Error_Handler(void);
 #define TCK_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
-
+extern uint32_t ADCreadings[2];
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
