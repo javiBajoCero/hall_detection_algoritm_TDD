@@ -66,7 +66,7 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c
 
 # ASM sources
 ASM_SOURCES =  \
-startup_stm32f446xx.s
+Core/Startup/startup_stm32f446retx.s
 
 
 #######################################
