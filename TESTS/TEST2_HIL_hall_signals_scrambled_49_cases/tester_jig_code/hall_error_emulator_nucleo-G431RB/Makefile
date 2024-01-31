@@ -71,7 +71,7 @@ Core/Src/wave_emulator.c
 
 # ASM sources
 ASM_SOURCES =  \
-startup_stm32g431xx.s
+Core/Startup/startup_stm32g431rbtx.s
 
 
 #######################################
@@ -149,7 +149,7 @@ CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
 # LDFLAGS
 #######################################
 # link script
-LDSCRIPT = STM32G431RBTx_FLASH.ld
+LDSCRIPT = STM32G431RBTX_FLASH.ld
 
 # libraries
 LIBS = -lc -lm -lnosys 

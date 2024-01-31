@@ -40,6 +40,7 @@ void emulation(){
 * \brief disables tim8 , configures DAC+DMA in circular mode, reenables tim8
 */
 void enable_emulator(){
+	    dma_index=0;
 		HAL_TIM_Base_Stop_IT(&htim8);
 		HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t *)&current_A, sizeof(current_A)/sizeof(current_A[0]), DAC_ALIGN_12B_R);
 		HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_2, (uint32_t *)&current_B, sizeof(current_B)/sizeof(current_B[0]), DAC_ALIGN_12B_R);

@@ -1,0 +1,12 @@
+../Core/Src/user_interface.c:77:6:ui_uart_init	1
+../Core/Src/user_interface.c:84:6:ui_uart_transmit_initial_message	1
+../Core/Src/user_interface.c:88:6:ui_uart_listen	3
+../Core/Src/user_interface.c:100:10:ui_uart_echo_and_breaklinedetect_rx	6
+../Core/Src/user_interface.c:129:10:decode_ABCcommands	11
+../Core/Src/user_interface.c:184:10:decode_othercommands	5
+../Core/Src/user_interface.c:222:10:apply_delete_character_to_buffer	6
+../Core/Src/user_interface.c:243:20:decode_char_to_hall_signals_order	4
+../Core/Src/user_interface.c:267:23:decode_char_to_hall_signals_polarity	2
+../Core/Src/user_interface.c:282:6:reset_or_start_uart_DMA_communications	1
+../Core/Src/user_interface.c:287:6:HAL_UART_TxCpltCallback	1
+../Core/Src/user_interface.c:291:6:HAL_UARTEx_RxEventCallback	1
