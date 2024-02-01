@@ -182,7 +182,6 @@ void calculateElectricPeriod_inTicks(uint32_t* resulting_period){
 	for (uint32_t i = 0; i < MAXZEROCROSSINGS-1; ++i) {
 		averagedsemiPeriod+=(currA.zerocrossings_tick[i+1]-currA.zerocrossings_tick[i]);
 		averagedsemiPeriod+=(currB.zerocrossings_tick[i+1]-currB.zerocrossings_tick[i]);
-		averagedsemiPeriod+=(currC.zerocrossings_tick[i+1]-currC.zerocrossings_tick[i]);
 		averagedsemiPeriod+=(hallA.zerocrossings_tick[i+1]-hallA.zerocrossings_tick[i]);
 		averagedsemiPeriod+=(hallB.zerocrossings_tick[i+1]-hallB.zerocrossings_tick[i]);
 		averagedsemiPeriod+=(hallC.zerocrossings_tick[i+1]-hallC.zerocrossings_tick[i]);
@@ -223,15 +222,15 @@ void assign_closest_phase_to_hall(detection_results_struct* res){
 		hall_orderC[i]/=MAXZEROCROSSINGS;
 
 		if(hall_orderA[i]>((res->electricPeriod_ticks/2)-lowpassfilter_ticks) && hall_orderA[i]<(res->electricPeriod_ticks)){
-			hall_orderA[i]-=(res->electricPeriod_ticks/2)-lowpassfilter_ticks;
+			hall_orderA[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
 		}
 
 		if(hall_orderB[i]>((res->electricPeriod_ticks/2)-lowpassfilter_ticks) && hall_orderB[i]<(res->electricPeriod_ticks)){
-			hall_orderB[i]-=(res->electricPeriod_ticks/2)-lowpassfilter_ticks;
+			hall_orderB[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
 		}
 
 		if(hall_orderC[i]>((res->electricPeriod_ticks/2)-lowpassfilter_ticks) && hall_orderC[i]<(res->electricPeriod_ticks)){
-			hall_orderC[i]-=(res->electricPeriod_ticks/2)-lowpassfilter_ticks;
+			hall_orderC[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
 		}
 	}
 
@@ -239,7 +238,11 @@ void assign_closest_phase_to_hall(detection_results_struct* res){
 	for (uint32_t i = 0; i < number_of_phases; ++i) {
 		if(hall_orderA[i]<minimum){
 			minimum=hall_orderA[i];
-			res->hall_order[phase_A]=i;
+		}
+	}
+	for (uint32_t i = 0; i < number_of_phases; ++i) {
+		if(hall_orderA[i]==minimum){
+			res->hall_order[i]=phase_A;
 		}
 	}
 
@@ -247,7 +250,11 @@ void assign_closest_phase_to_hall(detection_results_struct* res){
 	for (uint32_t i = 0; i < number_of_phases; ++i) {
 		if(hall_orderB[i]<minimum){
 			minimum=hall_orderB[i];
-			res->hall_order[phase_B]=i;
+		}
+	}
+	for (uint32_t i = 0; i < number_of_phases; ++i) {
+		if(hall_orderB[i]==minimum){
+			res->hall_order[i]=phase_B;
 		}
 	}
 
@@ -255,7 +262,11 @@ void assign_closest_phase_to_hall(detection_results_struct* res){
 	for (uint32_t i = 0; i < number_of_phases; ++i) {
 		if(hall_orderC[i]<minimum){
 			minimum=hall_orderC[i];
-			res->hall_order[phase_C]=i;
+		}
+	}
+	for (uint32_t i = 0; i < number_of_phases; ++i) {
+		if(hall_orderC[i]==minimum){
+			res->hall_order[i]=phase_C;
 		}
 	}
 }

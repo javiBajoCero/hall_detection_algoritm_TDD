@@ -8,5 +8,5 @@
 ../Core/Src/user_interface.c:243:20:decode_char_to_hall_signals_order	24	static
 ../Core/Src/user_interface.c:267:23:decode_char_to_hall_signals_polarity	24	static
 ../Core/Src/user_interface.c:282:6:reset_or_start_uart_DMA_communications	8	static
-../Core/Src/user_interface.c:287:6:HAL_UART_TxCpltCallback	16	static
-../Core/Src/user_interface.c:291:6:HAL_UARTEx_RxEventCallback	16	static
+../Core/Src/user_interface.c:288:6:HAL_UART_TxCpltCallback	16	static
+../Core/Src/user_interface.c:292:6:HAL_UARTEx_RxEventCallback	16	static

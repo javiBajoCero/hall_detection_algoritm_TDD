@@ -6,6 +6,6 @@
 ../Core/Src/hall_detection.c:149:6:end_detection	8
 ../Core/Src/hall_detection.c:168:6:evaluate_and_present_results	2
 ../Core/Src/hall_detection.c:180:6:calculateElectricPeriod_inTicks	2
-../Core/Src/hall_detection.c:201:6:assign_closest_phase_to_hall	15
-../Core/Src/hall_detection.c:267:9:absolute	1
-../Core/Src/hall_detection.c:275:6:assign_polarity	19
+../Core/Src/hall_detection.c:200:6:assign_closest_phase_to_hall	21
+../Core/Src/hall_detection.c:278:9:absolute	1
+../Core/Src/hall_detection.c:286:6:assign_polarity	19

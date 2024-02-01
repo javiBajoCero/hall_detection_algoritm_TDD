@@ -45,7 +45,7 @@ const uint8_t on_emulationmessage[]=">>    emulation on\n\r";
 const uint8_t off_emulationmessage[]=">>    emulation off\n\r";
 
 const uint8_t resetcommand[]="reset target";
-const uint8_t resetmessage[]=">>	target just reseted";
+const uint8_t resetmessage[]=">>	target just reseted\n\r";
 
 const uint8_t okmessage[]=		">>    ok\n\r";
 const uint8_t notokmessage[]=	">>    what was that?, try again\n\r";
@@ -281,6 +281,7 @@ hall_signals_polarity decode_char_to_hall_signals_polarity(uint8_t *pData){
 
 void reset_or_start_uart_DMA_communications(){
 	HAL_UART_AbortReceive(&hlpuart1);
+	HAL_Delay(10);
 	HAL_UARTEx_ReceiveToIdle_DMA(&hlpuart1, rx_buffer, sizeof (rx_buffer));	//assign the dma+uart with the reception buffer
 }
 
