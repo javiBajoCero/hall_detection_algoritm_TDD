@@ -11,7 +11,7 @@
 #define ADCBITS 12
 #define MAXTICKs 1000// each tick is 0.05 ms so 1000*0.05=50ms (it takes only 380 ticks to get 6/2=3 electric periods from torrot emulated)
 
-#define lowpassfilter_ticks 10
+#define lowpassfilter_ticks 10 /*!< max number */
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MINSIX(a,b,c,d,e,f) MIN(MIN(MIN(MIN(MIN(a,b),c),d),e),f)
@@ -22,12 +22,11 @@ uint32_t ticks=0;
 
 uint32_t currentADCoffset=(4096-1)/2;//
 
-current_measurements_struct currA;
-current_measurements_struct currB;
-
-hall_measurements_struct hallA;
-hall_measurements_struct hallB;
-hall_measurements_struct hallC;
+current_or_hall_measurements_struct currA;
+current_or_hall_measurements_struct currB;
+current_or_hall_measurements_struct hallA;
+current_or_hall_measurements_struct hallB;
+current_or_hall_measurements_struct hallC;
 
 detection_results_struct results;
 
@@ -39,8 +38,8 @@ void run_hall_detection_inside_20Khz_interruption(detection_state_enum* enabled_
 
 void signals_adquisition();
 void detect_all_zerocrossings();
-void detect_current_zerocrossings(current_measurements_struct* currx);
-void detect_hall_zerocrossings(hall_measurements_struct* hallx);
+void detect_current_zerocrossings(current_or_hall_measurements_struct* currx);
+void detect_hall_zerocrossings(current_or_hall_measurements_struct* hallx);
 
 void end_detection(detection_state_enum* enabled_or_disabled);
 void evaluate_and_present_results(detection_state_enum* enabled_or_disabled);
@@ -93,7 +92,7 @@ void detect_all_zerocrossings(){
 	}
 }
 
-void detect_current_zerocrossings(current_measurements_struct* currx){
+void detect_current_zerocrossings(current_or_hall_measurements_struct* currx){
 	if(		((int32_t)(currx->two_samples_buffer[0]-currentADCoffset)*
 			 (int32_t)(currx->two_samples_buffer[1]-currentADCoffset))<=0){
 		if(currx->numberof_zerocrossings==0){
@@ -121,7 +120,7 @@ void detect_current_zerocrossings(current_measurements_struct* currx){
 	}
 }
 
-void detect_hall_zerocrossings(hall_measurements_struct* hallx){
+void detect_hall_zerocrossings(current_or_hall_measurements_struct* hallx){
 	if(hallx->two_samples_buffer[0]!=hallx->two_samples_buffer[1]){
 		if(hallx->numberof_zerocrossings<MAXZEROCROSSINGS){
 			hallx->zerocrossings_tick[hallx->numberof_zerocrossings]=ticks;

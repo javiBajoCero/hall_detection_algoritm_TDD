@@ -50,15 +50,7 @@ typedef struct{
 	uint32_t zerocrossings_tick[MAXZEROCROSSINGS];
 	signals_polarity_enum zerocrossings_polarity[MAXZEROCROSSINGS];
 	uint32_t numberof_zerocrossings;
-}current_measurements_struct;
-
-typedef struct{
-	GPIO_PinState two_samples_buffer[2];
-
-	uint32_t zerocrossings_tick[MAXZEROCROSSINGS];
-	signals_polarity_enum zerocrossings_polarity[MAXZEROCROSSINGS];
-	uint32_t numberof_zerocrossings;
-}hall_measurements_struct;
+}current_or_hall_measurements_struct;
 
 typedef struct{
 	uint32_t electricPeriod_ticks;
@@ -68,7 +60,17 @@ typedef struct{
 
 
 void run_hall_detection_inside_20Khz_interruption(detection_state_enum* enable);
+//devolver punteros a H1 H2 H3 gpio->IDR , las polaridades son otro asunto
 
+//void Hall_Identification_Test_measurement(
+//		detection_state_enum* enable,
+//		uint8_t *H1,
+//		uint8_t *H2,
+//		uint8_t *H3,
+//		uint8_t *polarityH1,
+//		uint8_t *polarityH2,
+//		uint8_t *polarityH3,
+//		);
 
 
 #endif /* INC_HALL_DETECTION_H_ */
