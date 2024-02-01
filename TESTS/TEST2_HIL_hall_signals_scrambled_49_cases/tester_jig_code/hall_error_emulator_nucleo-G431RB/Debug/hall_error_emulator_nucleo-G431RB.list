@@ -2892,7 +2892,7 @@ uint32_t decode_ABCcommands(uint8_t *pData, uint16_t Size){
  800130c:	2b00      	cmp	r3, #0
  800130e:	d126      	bne.n	800135e <decode_ABCcommands+0x162>
 		//everything went well, unload out new values into the real order and polarity arrays
-		for(uint32_t i = 0; i < sizeof(aux_signal_order); ++i){
+		for(uint32_t i = 0; i < 3; ++i){
  8001310:	2300      	movs	r3, #0
  8001312:	623b      	str	r3, [r7, #32]
  8001314:	e016      	b.n	8001344 <decode_ABCcommands+0x148>
@@ -2914,12 +2914,12 @@ uint32_t decode_ABCcommands(uint8_t *pData, uint16_t Size){
  8001336:	4a12      	ldr	r2, [pc, #72]	; (8001380 <decode_ABCcommands+0x184>)
  8001338:	6a3b      	ldr	r3, [r7, #32]
  800133a:	f822 1013 	strh.w	r1, [r2, r3, lsl #1]
-		for(uint32_t i = 0; i < sizeof(aux_signal_order); ++i){
+		for(uint32_t i = 0; i < 3; ++i){
  800133e:	6a3b      	ldr	r3, [r7, #32]
  8001340:	3301      	adds	r3, #1
  8001342:	623b      	str	r3, [r7, #32]
  8001344:	6a3b      	ldr	r3, [r7, #32]
- 8001346:	2b05      	cmp	r3, #5
+ 8001346:	2b02      	cmp	r3, #2
  8001348:	d9e5      	bls.n	8001316 <decode_ABCcommands+0x11a>
 		}
 		HAL_Delay(50);

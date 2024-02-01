@@ -166,7 +166,7 @@ uint32_t decode_ABCcommands(uint8_t *pData, uint16_t Size){
 
 	if(number_of_identified_phases==3 && hall_order_unknown_flag==0 && hall_polarity_unknown_flag==0){
 		//everything went well, unload out new values into the real order and polarity arrays
-		for(uint32_t i = 0; i < sizeof(aux_signal_order); ++i){
+		for(uint32_t i = 0; i < 3; ++i){
 			signal_order[i]=aux_signal_order[i];
 			signal_polarity[i]=aux_signal_polarity[i];
 		}
