@@ -50,6 +50,14 @@
 #define numberofADCchannels 2
 uint32_t ADCreadings[numberofADCchannels];
 
+uint32_t* H1;
+uint32_t* H2;
+uint32_t* H3;
+
+uint8_t polarityH1;
+uint8_t polarityH2;
+uint8_t polarityH3;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/

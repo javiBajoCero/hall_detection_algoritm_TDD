@@ -33,9 +33,8 @@ void detect_hall_zerocrossings(current_or_hall_measurements_struct* hallx);
 void end_detection(detection_state_enum* enabled_or_disabled);
 void evaluate_and_present_results(detection_state_enum* enabled_or_disabled);
 void calculateElectricPeriod_inTicks(uint32_t* resulting_period);
-float fromTicksToMiliseconds(uint32_t ticks);
 void assign_closest_phase_to_hall(detection_results_struct* res);
-int32_t my_abs(int32_t x);
+int32_t absolute(int32_t x);
 void assign_polarity(detection_results_struct* res);
 
 
@@ -98,10 +97,12 @@ void detect_all_zerocrossings(){
 * \param
 */
 void detect_current_zerocrossings(current_or_hall_measurements_struct* currx){
-	if(		((int32_t)(currx->two_samples_buffer[0]-currentADCoffset)*
-			 (int32_t)(currx->two_samples_buffer[1]-currentADCoffset))<=0){
-		if(currx->numberof_zerocrossings==0){
-			if(currx->numberof_zerocrossings<MAXZEROCROSSINGS){
+	if(	   (((int32_t)(currx->two_samples_buffer[0]-currentADCoffset)*
+			 (int32_t)(currx->two_samples_buffer[1]-currentADCoffset))<=0)
+			 && currx->numberof_zerocrossings<MAXZEROCROSSINGS
+			){
+
+		if(currx->numberof_zerocrossings==0){			//only if this is the first zerocrossing detected
 					currx->zerocrossings_tick[currx->numberof_zerocrossings]=ticks;
 					if(currx->two_samples_buffer[0]>currx->two_samples_buffer[1]){
 						currx->zerocrossings_polarity[currx->numberof_zerocrossings]=rising_polarity;
@@ -109,10 +110,8 @@ void detect_current_zerocrossings(current_or_hall_measurements_struct* currx){
 						currx->zerocrossings_polarity[currx->numberof_zerocrossings]=falling_polarity;
 					}
 					currx->numberof_zerocrossings++;
-			}
 		}else{
-			if((currx->numberof_zerocrossings<MAXZEROCROSSINGS) &&
-			   (int32_t)(ticks-(currx->zerocrossings_tick[currx->numberof_zerocrossings-1]))>lowpassfilter_ticks){
+			if((int32_t)(ticks-(currx->zerocrossings_tick[currx->numberof_zerocrossings-1]))>lowpassfilter_ticks){ //not the first zerocrossing, compare with the previous one to filter noisy signals
 					currx->zerocrossings_tick[currx->numberof_zerocrossings]=ticks;
 					if(currx->two_samples_buffer[0]>currx->two_samples_buffer[1]){
 						currx->zerocrossings_polarity[currx->numberof_zerocrossings]=rising_polarity;
@@ -151,13 +150,14 @@ void end_detection(detection_state_enum* enabled_or_disabled){
 	if(
 			(currA.numberof_zerocrossings>=MAXZEROCROSSINGS) &&
 			(currB.numberof_zerocrossings>=MAXZEROCROSSINGS) &&
+			(currC.numberof_zerocrossings>=MAXZEROCROSSINGS) &&
 			(hallA.numberof_zerocrossings>=MAXZEROCROSSINGS) &&
 			(hallB.numberof_zerocrossings>=MAXZEROCROSSINGS) &&
 			(hallC.numberof_zerocrossings>=MAXZEROCROSSINGS)
 	){
-		*enabled_or_disabled=detection_DISABLED; //end of detection
+		*enabled_or_disabled=detection_DISABLED; //end of detection because the zerocrossing buffers are full
 	}else if(ticks>=MAXTICKs){
-		*enabled_or_disabled=detection_DISABLED;
+		*enabled_or_disabled=detection_DISABLED; //end of detection because of timeout
 	}
 }
 
@@ -198,33 +198,23 @@ void calculateElectricPeriod_inTicks(uint32_t* resulting_period){
 * \brief
 * \param
 */
-float fromTicksToMiliseconds(uint32_t ticks){
-	float miliseconds=0;
-	miliseconds=ticks*0.05;
-	return miliseconds;
-}
-
-/**
-* \brief
-* \param
-*/
 void assign_closest_phase_to_hall(detection_results_struct* res){
 	int32_t hall_orderA[number_of_phases]={0};
 	int32_t hall_orderB[number_of_phases]={0};
 	int32_t hall_orderC[number_of_phases]={0};
 
 	for (uint32_t i = 0; i < MAXZEROCROSSINGS; ++i) {// all zerocrossings loop
-		hall_orderA[phase_A]+=my_abs((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallA.zerocrossings_tick[i]);
-		hall_orderA[phase_B]+=my_abs((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_tick[i]);
-		hall_orderA[phase_C]+=my_abs((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_tick[i]);
+		hall_orderA[phase_A]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallA.zerocrossings_tick[i]);
+		hall_orderA[phase_B]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_tick[i]);
+		hall_orderA[phase_C]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_tick[i]);
 
-		hall_orderB[phase_A]+=my_abs((int32_t)currB.zerocrossings_tick[i]-(int32_t)hallA.zerocrossings_tick[i]);
-		hall_orderB[phase_B]+=my_abs((int32_t)currB.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_tick[i]);
-		hall_orderB[phase_C]+=my_abs((int32_t)currB.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_tick[i]);
+		hall_orderB[phase_A]+=absolute((int32_t)currB.zerocrossings_tick[i]-(int32_t)hallA.zerocrossings_tick[i]);
+		hall_orderB[phase_B]+=absolute((int32_t)currB.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_tick[i]);
+		hall_orderB[phase_C]+=absolute((int32_t)currB.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_tick[i]);
 
-		hall_orderC[phase_A]+=my_abs((int32_t)currC.zerocrossings_tick[i]-(int32_t)hallA.zerocrossings_tick[i]);
-		hall_orderC[phase_B]+=my_abs((int32_t)currC.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_tick[i]);
-		hall_orderC[phase_C]+=my_abs((int32_t)currC.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_tick[i]);
+		hall_orderC[phase_A]+=absolute((int32_t)currC.zerocrossings_tick[i]-(int32_t)hallA.zerocrossings_tick[i]);
+		hall_orderC[phase_B]+=absolute((int32_t)currC.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_tick[i]);
+		hall_orderC[phase_C]+=absolute((int32_t)currC.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_tick[i]);
 	}
 
 	for (uint32_t i = 0; i < number_of_phases; ++i) {
@@ -274,7 +264,7 @@ void assign_closest_phase_to_hall(detection_results_struct* res){
 * \brief
 * \param
 */
-int32_t my_abs(int32_t x){
+int32_t absolute(int32_t x){
     return (int32_t)x < (int32_t)0 ? -x : x;
 }
 
