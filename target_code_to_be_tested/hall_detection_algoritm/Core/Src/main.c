@@ -50,13 +50,11 @@
 #define numberofADCchannels 2
 uint32_t ADCreadings[numberofADCchannels];
 
-uint32_t* H1;
-uint32_t* H2;
-uint32_t* H3;
 
-uint8_t polarityH1;
-uint8_t polarityH2;
-uint8_t polarityH3;
+hall_pin_info H1;
+hall_pin_info H2;
+hall_pin_info H3;
+
 
 /* USER CODE END PV */
 
@@ -78,7 +76,17 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+	 H1.gpio_port=input_hall_A_GPIO_Port;
+	 H1.gpio_pin=input_hall_A_Pin;
+	 H1.polarity=0;
 
+	 H2.gpio_port=input_hall_B_GPIO_Port;
+	 H2.gpio_pin=input_hall_B_Pin;
+	 H2.polarity=0;
+
+	 H3.gpio_port=input_hall_C_GPIO_Port;
+	 H3.gpio_pin=input_hall_C_Pin;
+	 H3.polarity=0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/

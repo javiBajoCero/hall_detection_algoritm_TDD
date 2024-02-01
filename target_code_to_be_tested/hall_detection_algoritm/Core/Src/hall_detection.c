@@ -25,13 +25,24 @@ detection_results_struct results;				/*!< once the algorithm finishes, the detec
 
 
 //all functions declared inside this .c are listed here:
-void run_hall_detection_inside_20Khz_interruption(detection_state_enum* enabled_or_disabled);
-void signals_adquisition();
+void Hall_Identification_Test_measurement(
+		detection_state_enum* enabled_or_disabled,
+		hall_pin_info* H1,
+		hall_pin_info* H2,
+		hall_pin_info* H3
+		);
+
+void signals_adquisition(hall_pin_info* H1,hall_pin_info* H2,hall_pin_info* H3);
 void detect_all_zerocrossings();
 void detect_current_zerocrossings(current_or_hall_measurements_struct* currx);
 void detect_hall_zerocrossings(current_or_hall_measurements_struct* hallx);
 void end_detection(detection_state_enum* enabled_or_disabled);
-void evaluate_and_present_results(detection_state_enum* enabled_or_disabled);
+void evaluate_and_present_results(	detection_state_enum* enabled_or_disabled,
+									hall_pin_info* H1,
+									hall_pin_info* H2,
+									hall_pin_info* H3
+									);
+void swap_hall_gpios_with_detected_results(hall_pin_info* H1,hall_pin_info* H2,hall_pin_info* H3);
 void calculateElectricPeriod_inTicks(uint32_t* resulting_period);
 void assign_closest_phase_to_hall(detection_results_struct* res);
 int32_t absolute(int32_t x);
@@ -42,12 +53,17 @@ void assign_polarity(detection_results_struct* res);
 * \brief
 * \param
 */
-void run_hall_detection_inside_20Khz_interruption(detection_state_enum* enabled_or_disabled){
+void Hall_Identification_Test_measurement(
+		detection_state_enum* enabled_or_disabled,
+		hall_pin_info* H1,
+		hall_pin_info* H2,
+		hall_pin_info* H3
+		){
 	if(*enabled_or_disabled==detection_ENABLED){
-		signals_adquisition();
+		signals_adquisition(H1,H2,H3);
 		detect_all_zerocrossings();
 		end_detection(enabled_or_disabled);
-		evaluate_and_present_results(enabled_or_disabled);
+		evaluate_and_present_results(enabled_or_disabled,H1,H2,H3);
 		ticks++;
 	}
 
@@ -57,7 +73,7 @@ void run_hall_detection_inside_20Khz_interruption(detection_state_enum* enabled_
 * \brief
 * \param
 */
-void signals_adquisition(){
+void signals_adquisition(hall_pin_info* H1,hall_pin_info* H2,hall_pin_info* H3){
 	currA.two_samples_buffer[1]=currA.two_samples_buffer[0];
 	currA.two_samples_buffer[0]= ADCreadings[0]; //i suspect ADC measurements are one sample late, because of the ADC being triggered at the end of the TIM interruption
 
@@ -68,13 +84,13 @@ void signals_adquisition(){
 	currC.two_samples_buffer[0]= currentAplusBplusC-ADCreadings[0]-ADCreadings[1];
 
 	hallA.two_samples_buffer[1]=hallA.two_samples_buffer[0];
-	hallA.two_samples_buffer[0]=HAL_GPIO_ReadPin(input_hall_A_GPIO_Port, input_hall_A_Pin);
+	hallA.two_samples_buffer[0]=HAL_GPIO_ReadPin(H1->gpio_port, H1->gpio_pin);
 
 	hallB.two_samples_buffer[1]=hallB.two_samples_buffer[0];
-	hallB.two_samples_buffer[0]=HAL_GPIO_ReadPin(input_hall_B_GPIO_Port, input_hall_B_Pin);
+	hallB.two_samples_buffer[0]=HAL_GPIO_ReadPin(H2->gpio_port, H2->gpio_pin);
 
 	hallC.two_samples_buffer[1]=hallC.two_samples_buffer[0];
-	hallC.two_samples_buffer[0]=HAL_GPIO_ReadPin(input_hall_C_GPIO_Port, input_hall_C_Pin);
+	hallC.two_samples_buffer[0]=HAL_GPIO_ReadPin(H3->gpio_port, H3->gpio_pin);
 }
 
 /**
@@ -165,14 +181,72 @@ void end_detection(detection_state_enum* enabled_or_disabled){
 * \brief
 * \param
 */
-void evaluate_and_present_results(detection_state_enum* enabled_or_disabled){
+void evaluate_and_present_results(detection_state_enum* enabled_or_disabled,hall_pin_info* H1,hall_pin_info* H2,hall_pin_info* H3){
 	if(*enabled_or_disabled==detection_DISABLED){
 		calculateElectricPeriod_inTicks(&results.electricPeriod_ticks);
 		assign_closest_phase_to_hall(&results);
 		assign_polarity(&results);
+		swap_hall_gpios_with_detected_results(H1,H2,H3);
 	}
 }
 
+void swap_hall_gpios_with_detected_results(hall_pin_info* H1,hall_pin_info* H2,hall_pin_info* H3){
+	hall_pin_info _H1=*H1;
+	hall_pin_info _H2=*H2;
+	hall_pin_info _H3=*H3;
+
+	switch (results.hall_order[phase_A]) {
+		case hall_A:
+			*H1=_H1;
+			H1->polarity=results.hall_polarity[hall_A];
+			break;
+		case hall_B:
+			*H1=_H2;
+			H1->polarity=results.hall_polarity[hall_B];
+			break;
+		case hall_C:
+			*H1=_H3;
+			H1->polarity=results.hall_polarity[hall_C];
+			break;
+		default:
+			break;
+	}
+
+	switch (results.hall_order[phase_B]) {
+		case hall_A:
+			*H2=_H1;
+			H2->polarity=results.hall_polarity[hall_A];
+			break;
+		case hall_B:
+			*H2=_H2;
+			H2->polarity=results.hall_polarity[hall_B];
+			break;
+		case hall_C:
+			*H2=_H3;
+			H2->polarity=results.hall_polarity[hall_C];
+			break;
+		default:
+			break;
+	}
+
+	switch (results.hall_order[phase_C]) {
+		case hall_A:
+			*H3=_H1;
+			H3->polarity=results.hall_polarity[hall_A];
+			break;
+		case hall_B:
+			*H3=_H2;
+			H3->polarity=results.hall_polarity[hall_B];
+			break;
+		case hall_C:
+			*H3=_H3;
+			H3->polarity=results.hall_polarity[hall_C];
+			break;
+		default:
+			break;
+	}
+
+}
 /**
 * \brief
 * \param

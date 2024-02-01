@@ -39,9 +39,9 @@ typedef enum {		//this enum is used inside various if elses, the values could be
 } signals_polarity_enum;
 
 typedef enum {
-  hall_direct = (uint32_t) 0,
-  hall_inverse= (uint32_t) 1,
-  hall_polarity_unknown =(uint32_t) 0xFFFF
+  hall_direct = (uint8_t) 0,
+  hall_inverse= (uint8_t) 1,
+  hall_polarity_unknown =(uint8_t) 0xF
 } hall_curr_relation_enum;
 
 typedef struct{
@@ -59,7 +59,12 @@ typedef struct{
 }detection_results_struct;
 
 
-void run_hall_detection_inside_20Khz_interruption(detection_state_enum* enable);
+void Hall_Identification_Test_measurement(
+		detection_state_enum* enabled_or_disabled,
+		hall_pin_info* H1,
+		hall_pin_info* H2,
+		hall_pin_info* H3
+		);
 //devolver punteros a H1 H2 H3 gpio->IDR , las polaridades son otro asunto
 
 //void Hall_Identification_Test_measurement(
