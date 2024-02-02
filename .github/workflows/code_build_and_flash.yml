@@ -59,7 +59,7 @@ jobs:
         run: |
           cd TESTS/TEST2_HIL_hall_signals_scrambled_49_cases/python_test_script
           ls
-          sudo python test.py
+          sudo python tests.py
 
 
 
