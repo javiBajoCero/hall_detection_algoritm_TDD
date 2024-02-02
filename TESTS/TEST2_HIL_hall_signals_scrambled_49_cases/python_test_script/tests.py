@@ -73,7 +73,7 @@ def main():
             try:
                 # Try opening the serial connection on each available port
                 ser = serial.Serial(
-                    port=port_info.device,
+                    port='/dev/ttyACM1',
                     baudrate=baud_rate,
                     bytesize=byte_size,
                     parity=parity,
