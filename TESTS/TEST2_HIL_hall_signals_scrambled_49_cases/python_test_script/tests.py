@@ -20,7 +20,6 @@ print("The ports are opened")
 
 
 serTester.write(b'emulation/n/r')     # write a string
-time.sleep(1)
 line = serTester.readline()
 print(line)
 line = serTester.readline()
