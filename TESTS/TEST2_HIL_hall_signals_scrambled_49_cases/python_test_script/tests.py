@@ -192,7 +192,7 @@ def main():
 
             # Start a thread or a separate process to receive incoming messages
             import threading
-            receive_thread = threading.Thread(target=receive_messages, args=(ser, 1))  # Run for 1 second
+            receive_thread = threading.Thread(target=receive_messages, args=(ser, 5))  # Run for 5 second
             receive_thread.start()
 
             # Send messages
