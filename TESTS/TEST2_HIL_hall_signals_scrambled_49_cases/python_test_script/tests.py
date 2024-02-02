@@ -43,7 +43,7 @@ def send_messages(ser, messages):
     for message in messages:
         ser.write(message.encode())
         print(f'Sent message: {message}')
-        time.sleep(1)  # Add a delay to allow the device to process the message
+        time.sleep(0.2)  # Add a delay to allow the device to process the message
 
 def receive_messages(ser, duration):
     start_time = time.time()
