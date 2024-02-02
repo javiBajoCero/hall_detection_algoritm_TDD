@@ -43,6 +43,7 @@ def send_emulation_message(ser):
     message = "emulation\n\r"  # Add newline and carriage return
     ser.write(message.encode())
     print(f'Sent message: {message}')
+    time.sleep(1)  # Add a delay to allow the device to process the message
 
 def receive_messages(ser, duration):
     start_time = time.time()
@@ -56,12 +57,12 @@ def main():
     list_available_ports()
 
     # Define the serial connection parameters
-    serial_port = '/dev/ttyACM0'
+    serial_port = '/dev/ttyACM1'
     baud_rate = 115200
     byte_size = 8
     parity = 'N'
     stop_bits = 1
-    timeout = 2
+    timeout = 10  # Increased timeout
     xonxoff = 0
     rtscts = 0
 
