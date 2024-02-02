@@ -50,8 +50,8 @@ def receive_messages(ser, duration):
     while time.time() - start_time < duration:
         if ser.in_waiting > 0:
             received_data = ser.readline().decode().strip()
-            #if received_data != "":
-            print(f"Received: {received_data}")
+            if received_data != "":
+                print(f"Received: {received_data}")
 
 def main():
     # List available serial ports
