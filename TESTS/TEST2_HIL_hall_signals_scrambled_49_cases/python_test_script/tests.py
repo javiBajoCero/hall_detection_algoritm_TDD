@@ -20,7 +20,7 @@ print("The ports are opened");
 
 
 serTester.write(b'emulation/n/r') ;    # write a string
-print(serTester.readline());
+print(serTester.read(size=50));
 
 
 serTester.close();
