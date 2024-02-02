@@ -8,12 +8,13 @@
 #/dev/ttyACM0
 #/dev/ttyAMA0
 
+#python -m serial.tools.list_ports
 
 import serial
 import time
 
-serTester = serial.Serial('/dev/ttyACM1', 115200, bytesize=8, parity='N', stopbits=1, timeout=1, xonxoff=0, rtscts=0);
-serTarget = serial.Serial('/dev/ttyACM2', 115200, bytesize=8, parity='N', stopbits=1, timeout=1, xonxoff=0, rtscts=0);
+serTarget = serial.Serial('/dev/ttyACM1', 115200, bytesize=8, parity='N', stopbits=1, timeout=1, xonxoff=0, rtscts=0);
+serTester = serial.Serial('/dev/ttyACM2', 115200, bytesize=8, parity='N', stopbits=1, timeout=1, xonxoff=0, rtscts=0);
 time.sleep(0.300);
 print("The ports are opened");
 
