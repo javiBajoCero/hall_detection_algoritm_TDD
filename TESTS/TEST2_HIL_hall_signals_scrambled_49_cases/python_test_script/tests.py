@@ -48,7 +48,7 @@ def send_messages(ser, messages):
         print(f'Sent message: {message}')
         time.sleep(waittime)  # Add a delay to allow the device to process the message
 
-def receive_messages(self,ser):
+def receive_messages(ser):
     if ser.in_waiting > 0:
         received_data = ser.readline().decode().strip()
         if received_data != "":
@@ -192,7 +192,7 @@ def main():
 
             # Start a thread or a separate process to receive incoming messages
             import threading
-            receive_thread = threading.Thread(target=receive_messages, args=(self,ser)) 
+            receive_thread = threading.Thread(target=receive_messages, args=(ser),daemon=True) 
             receive_thread.start();
             # Send messages
             send_messages(ser, messages)
