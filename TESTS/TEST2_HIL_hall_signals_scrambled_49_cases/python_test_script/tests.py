@@ -56,7 +56,7 @@ def main():
     list_available_ports()
 
     # Define the serial connection parameters
-    serial_port = '/dev/ttyACM1'
+    serial_port = '/dev/ttyACM0'
     baud_rate = 115200
     byte_size = 8
     parity = 'N'
