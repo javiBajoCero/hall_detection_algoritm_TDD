@@ -33,6 +33,8 @@ import serial
 import serial.tools.list_ports
 import time
 
+waittime=0.5;
+
 def list_available_ports():
     ports = serial.tools.list_ports.comports()
     print("Available serial ports:")
@@ -43,7 +45,7 @@ def send_messages(ser, messages):
     for message in messages:
         ser.write(message.encode())
         print(f'Sent message: {message}')
-        time.sleep(0.2)  # Add a delay to allow the device to process the message
+        time.sleep(waittime)  # Add a delay to allow the device to process the message
 
 def receive_messages(ser, duration):
     start_time = time.time()
@@ -191,7 +193,7 @@ def main():
 
             # Start a thread or a separate process to receive incoming messages
             import threading
-            receive_thread = threading.Thread(target=receive_messages, args=(ser, 2))  # Run for 2 seconds
+            receive_thread = threading.Thread(target=receive_messages, args=(ser, waittime))  # Run for 2 seconds
             receive_thread.start()
 
             # Send messages
