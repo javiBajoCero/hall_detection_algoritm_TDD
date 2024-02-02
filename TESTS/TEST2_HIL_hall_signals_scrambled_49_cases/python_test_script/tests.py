@@ -48,7 +48,7 @@ def send_messages(ser, messages):
         print(f'Sent message: {message}')
         time.sleep(waittime)  # Add a delay to allow the device to process the message
 
-def receive_messages(ser):
+def receive_messages(self,ser):
     if ser.in_waiting > 0:
         received_data = ser.readline().decode().strip()
         if received_data != "":
