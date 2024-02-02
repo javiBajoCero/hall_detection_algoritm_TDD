@@ -54,6 +54,12 @@ jobs:
           cd TESTS/TEST2_HIL_hall_signals_scrambled_49_cases/tester_jig_code/hall_error_emulator_nucleo-G431RB
           sudo openocd
 
+      #takes control of the emulator (tester board) , runs tests and parses results
+      - name: TEST2 run python script
+        run: |
+          cd TESTS/TEST2_HIL_hall_signals_scrambled_49_cases/python_test_script
+          sudo python test.py
+
 
 
 
