@@ -25,7 +25,10 @@ line = serTester.readline()
 print(line)
 line = serTester.readline()
 print(line)
-
+line = serTester.readline()
+print(line)
+line = serTester.readline()
+print(line)
 
 serTester.close()
 serTarget.close()
