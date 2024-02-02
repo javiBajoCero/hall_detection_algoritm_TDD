@@ -17,15 +17,23 @@ print("The ports are opened")
 serTester.write(b'emulation/n/r')     # write a string
 line = serTester.readlines()   # read a '\n' terminated line
 print(line)
+line = serTester.readlines()   # read a '\n' terminated line
+print(line)
 
 serTester.write(b'ABC/n/r')     # write a string
+line = serTester.readlines()   # read a '\n' terminated line
+print(line)
 line = serTester.readlines()   # read a '\n' terminated line
 print(line)
 
 serTester.write(b'reset target/n/r')     # write a string
 line = serTester.readlines()   # read a '\n' terminated line
 print(line)
+line = serTester.readlines()   # read a '\n' terminated line
+print(line)
 
+line = serTester.readlines()   # read a '\n' terminated line
+print(line)
 line = serTester.readlines()   # read a '\n' terminated line
 print(line)
 
