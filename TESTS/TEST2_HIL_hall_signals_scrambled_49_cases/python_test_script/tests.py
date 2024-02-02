@@ -39,11 +39,11 @@ def list_available_ports():
     for port in ports:
         print(f"- {port.device}")
 
-def send_emulation_message(ser):
-    message = "emulation\n\r"  # Add newline and carriage return
-    ser.write(message.encode())
-    print(f'Sent message: {message}')
-    time.sleep(1)  # Add a delay to allow the device to process the message
+def send_messages(ser, messages):
+    for message in messages:
+        ser.write(message.encode())
+        print(f'Sent message: {message}')
+        time.sleep(1)  # Add a delay to allow the device to process the message
 
 def receive_messages(ser, duration):
     start_time = time.time()
@@ -87,13 +87,20 @@ def main():
                 print(f"Error opening port {port_info.device}: {e}")
 
         if ser is not None:
+            # Define the messages to be sent
+            messages = [
+                "emulation\n\r",
+                "ABC\n\r",
+                "reset target\n\r",
+            ]
+
             # Start a thread or a separate process to receive incoming messages
             import threading
-            receive_thread = threading.Thread(target=receive_messages, args=(ser, 1))  # Run for 1 seconds
+            receive_thread = threading.Thread(target=receive_messages, args=(ser, 10))  # Run for 10 seconds
             receive_thread.start()
 
-            # Send "emulation" message
-            send_emulation_message(ser)
+            # Send messages
+            send_messages(ser, messages)
 
             # Wait for the receive thread to finish (or handle it differently based on your needs)
             receive_thread.join()
@@ -107,6 +114,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
