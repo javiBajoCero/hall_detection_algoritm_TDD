@@ -48,13 +48,11 @@ def send_messages(ser, messages):
         print(f'Sent message: {message}')
         time.sleep(waittime)  # Add a delay to allow the device to process the message
 
-def receive_messages(ser, duration):
-    start_time = time.time()
-    while time.time() - start_time < duration:
-        if ser.in_waiting > 0:
-            received_data = ser.readline().decode().strip()
-            if received_data != "":
-                print(f"Received: {received_data}")
+def receive_messages(ser):
+    if ser.in_waiting > 0:
+        received_data = ser.readline().decode().strip()
+        if received_data != "":
+            print(f"Received: {received_data}")
 
 def main():
     # List available serial ports
@@ -194,8 +192,7 @@ def main():
 
             # Start a thread or a separate process to receive incoming messages
             import threading
-            receive_thread = threading.Thread(target=receive_messages, args=(ser, waittime*50))  # Run for 2 seconds
-            receive_thread.start()
+            receive_thread = threading.Thread(target=receive_messages, args=(ser)) 
 
             # Send messages
             send_messages(ser, messages)
