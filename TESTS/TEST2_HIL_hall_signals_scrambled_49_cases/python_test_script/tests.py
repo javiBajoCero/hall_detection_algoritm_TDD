@@ -18,17 +18,14 @@ serTarget = serial.Serial('/dev/ttyACM1', 115200, bytesize=8, parity='N', stopbi
 time.sleep(0.300)
 print("The ports are opened")
 
+
 serTester.write(b'emulation/n/r')     # write a string
+time.sleep(0.100)
 line = serTester.readline()
 print(line)
 line = serTester.readline()
 print(line)
 
-serTarget.write(b'emulation/n/r')     # write a string
-line = serTarget.readline()
-print(line)
-line = serTarget.readline()
-print(line)
 
 serTester.close()
 serTarget.close()
