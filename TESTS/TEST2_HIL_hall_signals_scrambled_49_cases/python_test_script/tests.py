@@ -50,7 +50,9 @@ def receive_messages(ser, duration):
     while time.time() - start_time < duration:
         if ser.in_waiting > 0:
             received_data = ser.readline().decode().strip()
-            print(f"Received: {received_data}")
+            # Remove the print statement to suppress output when data is received
+    else:
+        pass  # Optionally, you can add some code here if needed.
 
 def main():
     # List available serial ports
@@ -89,7 +91,7 @@ def main():
         if ser is not None:
             # Define the messages to be sent
             messages = [
-              "emulation\n\r",
+                "emulation\n\r",
                 "ABC\n\r",
                 "reset target\n\r",
                 "!ABC\n\r",
@@ -190,7 +192,7 @@ def main():
 
             # Start a thread or a separate process to receive incoming messages
             import threading
-            receive_thread = threading.Thread(target=receive_messages, args=(ser, 1))  # Run for 1 seconds
+            receive_thread = threading.Thread(target=receive_messages, args=(ser, 1))  # Run for 1 second
             receive_thread.start()
 
             # Send messages
@@ -208,6 +210,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
