@@ -89,7 +89,7 @@ def main():
         if ser is not None:
             # Start a thread or a separate process to receive incoming messages
             import threading
-            receive_thread = threading.Thread(target=receive_messages, args=(ser, 10))  # Run for 10 seconds
+            receive_thread = threading.Thread(target=receive_messages, args=(ser, 1))  # Run for 1 seconds
             receive_thread.start()
 
             # Send "emulation" message
