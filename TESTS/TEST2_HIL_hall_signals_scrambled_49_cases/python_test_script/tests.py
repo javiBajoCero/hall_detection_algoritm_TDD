@@ -12,7 +12,6 @@
 import serial
 serTester = serial.Serial('/dev/ttyACM0', 115200, bytesize=8, parity='N', stopbits=1, timeout=5, xonxoff=0, rtscts=0)
 serTarget = serial.Serial('/dev/ttyACM1', 115200, bytesize=8, parity='N', stopbits=1, timeout=5, xonxoff=0, rtscts=0)
-time.sleep(0.2)
 print("The ports are opened")
 
 serTester.write(b'emulation/n/r')     # write a string
@@ -32,7 +31,6 @@ print(line)
 
 serTester.close()
 serTarget.close()
-time.sleep(0.2)
 print("The ports are closed")
 
 
