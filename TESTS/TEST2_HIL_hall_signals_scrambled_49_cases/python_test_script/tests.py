@@ -57,7 +57,6 @@ def main():
     list_available_ports()
 
     # Define the serial connection parameters
-    serial_port = '/dev/ttyACM1'
     baud_rate = 115200
     byte_size = 8
     parity = 'N'
@@ -67,40 +66,47 @@ def main():
     rtscts = 0
 
     try:
-        # Open the serial connection
-        ser = serial.Serial(
-            port=serial_port,
-            baudrate=baud_rate,
-            bytesize=byte_size,
-            parity=parity,
-            stopbits=stop_bits,
-            timeout=timeout,
-            xonxoff=xonxoff,
-            rtscts=rtscts
-        )
-        print(f"Serial connection opened on {serial_port} at {baud_rate} baud.")
+        ser = None
+        for port_info in serial.tools.list_ports.comports():
+            try:
+                # Try opening the serial connection on each available port
+                ser = serial.Serial(
+                    port=port_info.device,
+                    baudrate=baud_rate,
+                    bytesize=byte_size,
+                    parity=parity,
+                    stopbits=stop_bits,
+                    timeout=timeout,
+                    xonxoff=xonxoff,
+                    rtscts=rtscts
+                )
+                print(f"Serial connection opened on {port_info.device} at {baud_rate} baud.")
+                break  # Stop iterating if a valid connection is established
 
-        # Start a thread or a separate process to receive incoming messages
-        import threading
-        receive_thread = threading.Thread(target=receive_messages, args=(ser, 10))  # Run for 10 seconds
-        receive_thread.start()
+            except serial.SerialException as e:
+                print(f"Error opening port {port_info.device}: {e}")
 
-        # Send "emulation" message
-        send_emulation_message(ser)
+        if ser is not None:
+            # Start a thread or a separate process to receive incoming messages
+            import threading
+            receive_thread = threading.Thread(target=receive_messages, args=(ser, 10))  # Run for 10 seconds
+            receive_thread.start()
 
-        # Wait for the receive thread to finish (or handle it differently based on your needs)
-        receive_thread.join()
+            # Send "emulation" message
+            send_emulation_message(ser)
 
-        # Close the serial connection
-        ser.close()
-        print("Serial connection closed.")
+            # Wait for the receive thread to finish (or handle it differently based on your needs)
+            receive_thread.join()
+
+            # Close the serial connection
+            ser.close()
+            print("Serial connection closed.")
 
     except serial.SerialException as e:
         print(f"Error: {e}")
 
 if __name__ == "__main__":
     main()
-
 
 
 
