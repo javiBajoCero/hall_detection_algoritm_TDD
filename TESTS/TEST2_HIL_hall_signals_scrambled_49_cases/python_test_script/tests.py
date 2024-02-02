@@ -10,8 +10,11 @@
 
 
 import serial
-ser = serial.Serial('/dev/ttyACM0', 115200, bytesize=8, parity='N', stopbits=1, timeout=5, xonxoff=0, rtscts=0)
-line = ser.readlines()   # read a '\n' terminated line
+serTester = serial.Serial('/dev/ttyACM0', 115200, bytesize=8, parity='N', stopbits=1, timeout=5, xonxoff=0, rtscts=0)
+serTarget = serial.Serial('/dev/ttyACM1', 115200, bytesize=8, parity='N', stopbits=1, timeout=5, xonxoff=0, rtscts=0)
+
+serTester.write('ABC/n/r')     # write a string
+line = serTester.readlines()   # read a '\n' terminated line
 print(line)
 
 
