@@ -34,6 +34,7 @@ import serial.tools.list_ports
 import time
 
 waittime=0.5;
+sent_index=0;
 
 def list_available_ports():
     ports = serial.tools.list_ports.comports()
@@ -41,14 +42,14 @@ def list_available_ports():
     for port in ports:
         print(f"- {port.device}")
 
-def send_messages(ser, messages):
-    for message in messages:
-        ser.write(message.encode())
-        print(f'Sent message: {message}')
-        time.sleep(waittime)  # Add a delay to allow the device to process the message
+def send_messages(ser, message):
+    ser.write(message.encode())
+    print(f'Sent message: {message}')
 
 def receive_messages(ser, duration):
     start_time = time.time()
+    send_messages(ser,messages[sent_index]);
+    sent_index=sent_index+1;
     while time.time() - start_time < duration:
         if ser.in_waiting > 0:
             received_data = ser.readline().decode().strip()
