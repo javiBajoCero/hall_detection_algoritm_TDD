@@ -12,27 +12,21 @@
 import serial
 import time
 
+serTester = serial.Serial('/dev/ttyACM0', 115200, bytesize=8, parity='N', stopbits=1, timeout=1, xonxoff=0, rtscts=0);
+serTarget = serial.Serial('/dev/ttyACM1', 115200, bytesize=8, parity='N', stopbits=1, timeout=1, xonxoff=0, rtscts=0);
+time.sleep(0.300);
+print("The ports are opened");
 
-serTester = serial.Serial('/dev/ttyACM0', 115200, bytesize=8, parity='N', stopbits=1, timeout=1, xonxoff=0, rtscts=0)
-serTarget = serial.Serial('/dev/ttyACM1', 115200, bytesize=8, parity='N', stopbits=1, timeout=1, xonxoff=0, rtscts=0)
-time.sleep(0.300)
-print("The ports are opened")
 
+serTester.write(b'emulation/n/r') ;    # write a string
+print(serTester.readline());
+print(serTester.readline());
+print(serTester.readline());
 
-serTester.write(b'emulation/n/r')     # write a string
-line = serTester.readline()
-print(line)
-line = serTester.readline()
-print(line)
-line = serTester.readline()
-print(line)
-line = serTester.readline()
-print(line)
-
-serTester.close()
-serTarget.close()
-time.sleep(0.300)
-print("The ports are closed")
+serTester.close();
+serTarget.close();
+time.sleep(0.300);
+print("The ports are closed");
 
 
 
