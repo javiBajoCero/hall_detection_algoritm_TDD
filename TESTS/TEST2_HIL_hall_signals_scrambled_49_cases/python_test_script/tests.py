@@ -25,23 +25,10 @@ line = serTester.readlines()   # read a '\n' terminated line
 print(line)
 time.sleep(0.200)
 
-serTester.write(b'ABC/n/r')     # write a string
-line = serTester.readlines()   # read a '\n' terminated line
+serTarget.write(b'emulation/n/r')     # write a string
+line = serTarget.readlines()   # read a '\n' terminated line
 print(line)
-line = serTester.readlines()   # read a '\n' terminated line
-print(line)
-time.sleep(0.200)
-
-serTester.write(b'reset target/n/r')     # write a string
-line = serTester.readlines()   # read a '\n' terminated line
-print(line)
-line = serTester.readlines()   # read a '\n' terminated line
-print(line)
-time.sleep(0.200)
-
-line = serTester.readlines()   # read a '\n' terminated line
-print(line)
-line = serTester.readlines()   # read a '\n' terminated line
+line = serTarget.readlines()   # read a '\n' terminated line
 print(line)
 time.sleep(0.200)
 
