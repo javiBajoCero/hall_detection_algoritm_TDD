@@ -19,9 +19,8 @@ print("The ports are opened");
 
 
 serTester.write(b'emulation/n/r') ;    # write a string
-print(serTester.readline());
-print(serTester.readline());
-print(serTester.readline());
+print(serTester.readlines());
+
 
 serTester.close();
 serTarget.close();
