@@ -33,7 +33,8 @@ import serial
 import serial.tools.list_ports
 import time
 
-
+waittime=0.5;
+sent_index=0;
 
 def list_available_ports():
     ports = serial.tools.list_ports.comports()
@@ -41,15 +42,14 @@ def list_available_ports():
     for port in ports:
         print(f"- {port.device}")
 
-def send_messages(ser, message):
-    ser.write(message.encode())
-    print(f'Sent message: {message}')
+def send_messages(ser, messages):
+    for message in messages:
+        ser.write(message.encode())
+        print(f'Sent message: {message}')
+        time.sleep(waittime)  # Add a delay to allow the device to process the message
 
 def receive_messages(ser, duration):
     start_time = time.time()
-    if sent_index<len(messages) :
-        send_messages(ser,messages[sent_index]);
-        sent_index=sent_index+1;
     while time.time() - start_time < duration:
         if ser.in_waiting > 0:
             received_data = ser.readline().decode().strip()
@@ -91,11 +91,114 @@ def main():
                 print(f"Error opening port {port_info.device}: {e}")
 
         if ser is not None:
+            # Define the messages to be sent
+            messages = [
+              "emulation\n\r",
+                "ABC\n\r",
+                "reset target\n\r",
+                "!ABC\n\r",
+                "reset target\n\r",
+                "!A!BC\n\r",
+                "reset target\n\r",
+                "!A!B!C\n\r",
+                "reset target\n\r",
+                "!AB!C\n\r",
+                "reset target\n\r",
+                "AB!C\n\r",
+                "reset target\n\r",
+                "A!B!C\n\r",
+                "reset target\n\r",
+                "A!BC\n\r",
+                "reset target\n\r",
+                "BCA\n\r",
+                "reset target\n\r",
+                "!BCA\n\r",
+                "reset target\n\r",
+                "!B!CA\n\r",
+                "reset target\n\r",
+                "!B!C!A\n\r",
+                "reset target\n\r",
+                "!BC!A\n\r",
+                "reset target\n\r",
+                "BC!A\n\r",
+                "reset target\n\r",
+                "B!C!A\n\r",
+                "reset target\n\r",
+                "B!CA\n\r",
+                "reset target\n\r",
+                "CAB\n\r",
+                "reset target\n\r",
+                "!CAB\n\r",
+                "reset target\n\r",
+                "!C!AB\n\r",
+                "reset target\n\r",
+                "!C!A!B\n\r",
+                "reset target\n\r",
+                "!CA!B\n\r",
+                "reset target\n\r",
+                "CA!B\n\r",
+                "reset target\n\r",
+                "C!A!B\n\r",
+                "reset target\n\r",
+                "C!AB\n\r",
+                "reset target\n\r",
+                "ACB\n\r",
+                "reset target\n\r",
+                "!ACB\n\r",
+                "reset target\n\r",
+                "!A!CB\n\r",
+                "reset target\n\r",
+                "!A!C!B\n\r",
+                "reset target\n\r",
+                "!AC!B\n\r",
+                "reset target\n\r",
+                "AC!B\n\r",
+                "reset target\n\r",
+                "A!C!B\n\r",
+                "reset target\n\r",
+                "A!CB\n\r",
+                "reset target\n\r",
+                "BAC\n\r",
+                "reset target\n\r",
+                "!BAC\n\r",
+                "reset target\n\r",
+                "!B!AC\n\r",
+                "reset target\n\r",
+                "!B!A!C\n\r",
+                "reset target\n\r",
+                "!BA!C\n\r",
+                "reset target\n\r",
+                "BA!C\n\r",
+                "reset target\n\r",
+                "B!A!C\n\r",
+                "reset target\n\r",
+                "B!AC\n\r",
+                "reset target\n\r",
+                "CBA\n\r",
+                "reset target\n\r",
+                "!CBA\n\r",
+                "reset target\n\r",
+                "!C!BA\n\r",
+                "reset target\n\r",
+                "!C!B!A\n\r",
+                "reset target\n\r",
+                "!CB!A\n\r",
+                "reset target\n\r",
+                "CB!A\n\r",
+                "reset target\n\r",
+                "C!B!A\n\r",
+                "reset target\n\r",
+                "C!BA\n\r",
+                "reset target\n\r",
+            ]
 
             # Start a thread or a separate process to receive incoming messages
             import threading
-            receive_thread = threading.Thread(target=receive_messages, args=(ser, waittime))  # Run for 2 seconds
+            receive_thread = threading.Thread(target=receive_messages, args=(ser, waittime*50))  # Run for 2 seconds
             receive_thread.start()
+
+            # Send messages
+            send_messages(ser, messages)
 
             # Wait for the receive thread to finish (or handle it differently based on your needs)
             receive_thread.join()
@@ -108,110 +211,6 @@ def main():
         print(f"Error: {e}")
 
 if __name__ == "__main__":
-
-    waittime=0.5;
-    sent_index=0;
-
-    # Define the messages to be sent
-    messages = [
-      "emulation\n\r",
-        "ABC\n\r",
-        "reset target\n\r",
-        "!ABC\n\r",
-        "reset target\n\r",
-        "!A!BC\n\r",
-        "reset target\n\r",
-        "!A!B!C\n\r",
-        "reset target\n\r",
-        "!AB!C\n\r",
-        "reset target\n\r",
-        "AB!C\n\r",
-        "reset target\n\r",
-        "A!B!C\n\r",
-        "reset target\n\r",
-        "A!BC\n\r",
-        "reset target\n\r",
-        "BCA\n\r",
-        "reset target\n\r",
-        "!BCA\n\r",
-        "reset target\n\r",
-        "!B!CA\n\r",
-        "reset target\n\r",
-        "!B!C!A\n\r",
-        "reset target\n\r",
-        "!BC!A\n\r",
-        "reset target\n\r",
-        "BC!A\n\r",
-        "reset target\n\r",
-        "B!C!A\n\r",
-        "reset target\n\r",
-        "B!CA\n\r",
-        "reset target\n\r",
-        "CAB\n\r",
-        "reset target\n\r",
-        "!CAB\n\r",
-        "reset target\n\r",
-        "!C!AB\n\r",
-        "reset target\n\r",
-        "!C!A!B\n\r",
-        "reset target\n\r",
-        "!CA!B\n\r",
-        "reset target\n\r",
-        "CA!B\n\r",
-        "reset target\n\r",
-        "C!A!B\n\r",
-        "reset target\n\r",
-        "C!AB\n\r",
-        "reset target\n\r",
-        "ACB\n\r",
-        "reset target\n\r",
-        "!ACB\n\r",
-        "reset target\n\r",
-        "!A!CB\n\r",
-        "reset target\n\r",
-        "!A!C!B\n\r",
-        "reset target\n\r",
-        "!AC!B\n\r",
-        "reset target\n\r",
-        "AC!B\n\r",
-        "reset target\n\r",
-        "A!C!B\n\r",
-        "reset target\n\r",
-        "A!CB\n\r",
-        "reset target\n\r",
-        "BAC\n\r",
-        "reset target\n\r",
-        "!BAC\n\r",
-        "reset target\n\r",
-        "!B!AC\n\r",
-        "reset target\n\r",
-        "!B!A!C\n\r",
-        "reset target\n\r",
-        "!BA!C\n\r",
-        "reset target\n\r",
-        "BA!C\n\r",
-        "reset target\n\r",
-        "B!A!C\n\r",
-        "reset target\n\r",
-        "B!AC\n\r",
-        "reset target\n\r",
-        "CBA\n\r",
-        "reset target\n\r",
-        "!CBA\n\r",
-        "reset target\n\r",
-        "!C!BA\n\r",
-        "reset target\n\r",
-        "!C!B!A\n\r",
-        "reset target\n\r",
-        "!CB!A\n\r",
-        "reset target\n\r",
-        "CB!A\n\r",
-        "reset target\n\r",
-        "C!B!A\n\r",
-        "reset target\n\r",
-        "C!BA\n\r",
-        "reset target\n\r"
-    ]
     main()
 
 
