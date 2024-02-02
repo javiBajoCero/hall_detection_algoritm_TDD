@@ -15,6 +15,7 @@ serTarget = serial.Serial('/dev/ttyACM1', 115200, bytesize=8, parity='N', stopbi
 
 serTester.write(b'ABC/n/r')     # write a string
 line = serTester.readlines()   # read a '\n' terminated line
+line = serTester.readlines()   # read a '\n' terminated line
 print(line)
 
 
