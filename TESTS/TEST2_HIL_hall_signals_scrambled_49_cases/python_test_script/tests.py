@@ -49,7 +49,7 @@ def main():
     try:
         # Open the serial connection
         ser = serial.Serial('/dev/ttyACM1', 115200, bytesize=8, parity='N', stopbits=1, timeout=2, xonxoff=0, rtscts=0)
-        print(f"Serial connection opened on {serial_port} at {baud_rate} baud.")
+        print(f"Serial connection opened ")
 
         # Start a thread or a separate process to receive incoming messages
         import threading
