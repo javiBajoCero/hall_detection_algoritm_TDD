@@ -33,6 +33,9 @@ int32_t hall_orderC[number_of_phases]={0};
 
 uint32_t toggle[number_of_phases]={0};
 
+current_or_hall_measurements_struct *currents[number_of_phases]={&currA,&currB,&currC};
+current_or_hall_measurements_struct *halls[number_of_phases]={&hallA,&hallB,&hallC};
+
 //all functions declared inside this .c are listed here:
 void Hall_Identification_Test_measurement(
 		detection_state_enum* enabled_or_disabled,
@@ -371,63 +374,11 @@ int32_t absolute(int32_t x){
 */
 void assign_polarity(detection_results_struct* res){
 
-	if (res->hall_order[phase_A]==hall_A) {
-		if(hallA.zerocrossings_polarity[0]==currA.zerocrossings_polarity[0]){
-			res->hall_polarity[phase_A]=hall_direct;
+	for (uint32_t i = 0; i < number_of_phases; ++i) {
+		if(currents[res->hall_order[i]]->zerocrossings_polarity[0]==halls[i]->zerocrossings_polarity[0]){
+			res->hall_polarity[res->hall_order[i]]=hall_direct;
 		}else{
-			res->hall_polarity[phase_A]=hall_inverse;
-		}
-	}else if (res->hall_order[phase_A]==hall_B) {
-		if(hallA.zerocrossings_polarity[0]==currB.zerocrossings_polarity[0]){
-			res->hall_polarity[phase_A]=hall_direct;
-		}else{
-			res->hall_polarity[phase_A]=hall_inverse;
-		}
-	}else if (res->hall_order[phase_A]==hall_C) {
-		if(hallA.zerocrossings_polarity[0]==currC.zerocrossings_polarity[0]){
-			res->hall_polarity[phase_A]=hall_direct;
-		}else{
-			res->hall_polarity[phase_A]=hall_inverse;
-		}
-	}
-
-	if (res->hall_order[phase_B]==hall_A) {
-		if(hallB.zerocrossings_polarity[0]==currA.zerocrossings_polarity[0]){
-			res->hall_polarity[phase_B]=hall_direct;
-		}else{
-			res->hall_polarity[phase_B]=hall_inverse;
-		}
-	}else if (res->hall_order[phase_B]==hall_B) {
-		if(hallB.zerocrossings_polarity[0]==currB.zerocrossings_polarity[0]){
-			res->hall_polarity[phase_B]=hall_direct;
-		}else{
-			res->hall_polarity[phase_B]=hall_inverse;
-		}
-	}else if (res->hall_order[phase_B]==hall_C) {
-		if(hallB.zerocrossings_polarity[0]==currC.zerocrossings_polarity[0]){
-			res->hall_polarity[phase_B]=hall_direct;
-		}else{
-			res->hall_polarity[phase_B]=hall_inverse;
-		}
-	}
-
-	if (res->hall_order[phase_C]==hall_A) {
-		if(hallC.zerocrossings_polarity[0]==currA.zerocrossings_polarity[0]){
-			res->hall_polarity[phase_C]=hall_direct;
-		}else{
-			res->hall_polarity[phase_C]=hall_inverse;
-		}
-	}else if (res->hall_order[phase_C]==hall_B) {
-		if(hallC.zerocrossings_polarity[0]==currB.zerocrossings_polarity[0]){
-			res->hall_polarity[phase_C]=hall_direct;
-		}else{
-			res->hall_polarity[phase_C]=hall_inverse;
-		}
-	}else if (res->hall_order[phase_C]==hall_C) {
-		if(hallC.zerocrossings_polarity[0]==currC.zerocrossings_polarity[0]){
-			res->hall_polarity[phase_C]=hall_direct;
-		}else{
-			res->hall_polarity[phase_C]=hall_inverse;
+			res->hall_polarity[res->hall_order[i]]=hall_inverse;
 		}
 	}
 
@@ -451,13 +402,13 @@ void present_results(){
 
 	for (uint32_t i = 0; i < number_of_phases; ++i) {
 		if(results.hall_polarity[i]==hall_inverse){//the "inverse polarity" from the hall with the currents is actually the normal logic.
-			if(toggle[results.hall_order[i]]==0){
+			if(toggle[i]==0){
 				message[i*2]=' ';
 			}else{
 				message[i*2]='!';
 			}
 		}else if(results.hall_polarity[i]==hall_direct){
-			if(toggle[results.hall_order[i]]==0){
+			if(toggle[i]==0){
 				message[i*2]='!';
 			}else{
 				message[i*2]=' ';
