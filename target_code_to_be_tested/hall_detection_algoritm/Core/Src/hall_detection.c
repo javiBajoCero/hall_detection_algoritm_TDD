@@ -6,11 +6,12 @@
  */
 
 #include "hall_detection.h" 		/*!< contains all enums, structs and includes neccesary for this .c, it also exposes the run_hall_detection_inside_20Khz_interruption() function to the outside world */
-
+#include "usart.h"
 //local defines
 #define MAXTICKs 1000 								/*!< timeout for the algorithm, measured in 0.05s ticks , so 1000*0.05=50ms (it takes only 380 ticks to get 6/2=3 electric periods from torrot emulated) */
 #define lowpassfilter_ticks 10 						/*!< minimum number of ticks that should have passed in between zerocrossings (lowpassfilter) */
 #define currentAplusBplusC (uint32_t)(3*(4096)/2)	/*!< the sum of the average of each currents should be this number aprox, used to calculate currentC ortogonally*/
+#define messageLength (number_of_phases*2)+2
 
 //local variables
 uint32_t ticks=0; 								/*!< ticks are the time measurement unit of this algorithm, each run of the algorithm (0.05s) the tick is incremented +1 */
@@ -23,6 +24,14 @@ current_or_hall_measurements_struct hallB;		/*!< contains all variables relevant
 current_or_hall_measurements_struct hallC;		/*!< contains all variables relevant for hallC measurements*/
 detection_results_struct results;				/*!< once the algorithm finishes, the detection results will be stored in this struct*/
 
+uint8_t message[messageLength];
+
+
+int32_t hall_orderA[number_of_phases]={0};
+int32_t hall_orderB[number_of_phases]={0};
+int32_t hall_orderC[number_of_phases]={0};
+
+uint32_t toggle[number_of_phases]={0};
 
 //all functions declared inside this .c are listed here:
 void Hall_Identification_Test_measurement(
@@ -47,7 +56,7 @@ void calculateElectricPeriod_inTicks(uint32_t* resulting_period);
 void assign_closest_phase_to_hall(detection_results_struct* res);
 int32_t absolute(int32_t x);
 void assign_polarity(detection_results_struct* res);
-
+void present_results();
 
 /**
 * \brief
@@ -186,7 +195,8 @@ void evaluate_and_present_results(detection_state_enum* enabled_or_disabled,hall
 		calculateElectricPeriod_inTicks(&results.electricPeriod_ticks);
 		assign_closest_phase_to_hall(&results);
 		assign_polarity(&results);
-		swap_hall_gpios_with_detected_results(H1,H2,H3);
+		//swap_hall_gpios_with_detected_results(H1,H2,H3);
+		present_results();
 	}
 }
 
@@ -272,9 +282,7 @@ void calculateElectricPeriod_inTicks(uint32_t* resulting_period){
 * \param
 */
 void assign_closest_phase_to_hall(detection_results_struct* res){
-	int32_t hall_orderA[number_of_phases]={0};
-	int32_t hall_orderB[number_of_phases]={0};
-	int32_t hall_orderC[number_of_phases]={0};
+
 
 	for (uint32_t i = 0; i < MAXZEROCROSSINGS; ++i) {// all zerocrossings loop
 		hall_orderA[phase_A]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallA.zerocrossings_tick[i]);
@@ -297,14 +305,18 @@ void assign_closest_phase_to_hall(detection_results_struct* res){
 
 		if(hall_orderA[i]>((res->electricPeriod_ticks/2)-lowpassfilter_ticks) && hall_orderA[i]<(res->electricPeriod_ticks)){
 			hall_orderA[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+			toggle[hall_A]=1;
+
 		}
 
 		if(hall_orderB[i]>((res->electricPeriod_ticks/2)-lowpassfilter_ticks) && hall_orderB[i]<(res->electricPeriod_ticks)){
 			hall_orderB[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+			toggle[hall_B]=1;
 		}
 
 		if(hall_orderC[i]>((res->electricPeriod_ticks/2)-lowpassfilter_ticks) && hall_orderC[i]<(res->electricPeriod_ticks)){
 			hall_orderC[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+			toggle[hall_C]=1;
 		}
 	}
 
@@ -360,19 +372,19 @@ int32_t absolute(int32_t x){
 void assign_polarity(detection_results_struct* res){
 
 	if (res->hall_order[phase_A]==hall_A) {
-		if(currA.zerocrossings_polarity[0]==hallA.zerocrossings_polarity[0]){
+		if(hallA.zerocrossings_polarity[0]==currA.zerocrossings_polarity[0]){
 			res->hall_polarity[phase_A]=hall_direct;
 		}else{
 			res->hall_polarity[phase_A]=hall_inverse;
 		}
 	}else if (res->hall_order[phase_A]==hall_B) {
-		if(currA.zerocrossings_polarity[0]==hallB.zerocrossings_polarity[0]){
+		if(hallA.zerocrossings_polarity[0]==currB.zerocrossings_polarity[0]){
 			res->hall_polarity[phase_A]=hall_direct;
 		}else{
 			res->hall_polarity[phase_A]=hall_inverse;
 		}
 	}else if (res->hall_order[phase_A]==hall_C) {
-		if(currA.zerocrossings_polarity[0]==hallC.zerocrossings_polarity[0]){
+		if(hallA.zerocrossings_polarity[0]==currC.zerocrossings_polarity[0]){
 			res->hall_polarity[phase_A]=hall_direct;
 		}else{
 			res->hall_polarity[phase_A]=hall_inverse;
@@ -380,19 +392,19 @@ void assign_polarity(detection_results_struct* res){
 	}
 
 	if (res->hall_order[phase_B]==hall_A) {
-		if(currB.zerocrossings_polarity[0]==hallA.zerocrossings_polarity[0]){
+		if(hallB.zerocrossings_polarity[0]==currA.zerocrossings_polarity[0]){
 			res->hall_polarity[phase_B]=hall_direct;
 		}else{
 			res->hall_polarity[phase_B]=hall_inverse;
 		}
 	}else if (res->hall_order[phase_B]==hall_B) {
-		if(currB.zerocrossings_polarity[0]==hallB.zerocrossings_polarity[0]){
+		if(hallB.zerocrossings_polarity[0]==currB.zerocrossings_polarity[0]){
 			res->hall_polarity[phase_B]=hall_direct;
 		}else{
 			res->hall_polarity[phase_B]=hall_inverse;
 		}
 	}else if (res->hall_order[phase_B]==hall_C) {
-		if(currB.zerocrossings_polarity[0]==hallC.zerocrossings_polarity[0]){
+		if(hallB.zerocrossings_polarity[0]==currC.zerocrossings_polarity[0]){
 			res->hall_polarity[phase_B]=hall_direct;
 		}else{
 			res->hall_polarity[phase_B]=hall_inverse;
@@ -400,23 +412,62 @@ void assign_polarity(detection_results_struct* res){
 	}
 
 	if (res->hall_order[phase_C]==hall_A) {
-		if(currC.zerocrossings_polarity[0]==hallA.zerocrossings_polarity[0]){
+		if(hallC.zerocrossings_polarity[0]==currA.zerocrossings_polarity[0]){
 			res->hall_polarity[phase_C]=hall_direct;
 		}else{
 			res->hall_polarity[phase_C]=hall_inverse;
 		}
 	}else if (res->hall_order[phase_C]==hall_B) {
-		if(currC.zerocrossings_polarity[0]==hallB.zerocrossings_polarity[0]){
+		if(hallC.zerocrossings_polarity[0]==currB.zerocrossings_polarity[0]){
 			res->hall_polarity[phase_C]=hall_direct;
 		}else{
 			res->hall_polarity[phase_C]=hall_inverse;
 		}
 	}else if (res->hall_order[phase_C]==hall_C) {
-		if(currC.zerocrossings_polarity[0]==hallC.zerocrossings_polarity[0]){
+		if(hallC.zerocrossings_polarity[0]==currC.zerocrossings_polarity[0]){
 			res->hall_polarity[phase_C]=hall_direct;
 		}else{
 			res->hall_polarity[phase_C]=hall_inverse;
 		}
 	}
 
+}
+
+void present_results(){
+
+	for (uint32_t i = 0; i < messageLength; ++i) {
+		message[i]=' ';
+	}
+
+	for (uint32_t i = 0; i < number_of_phases; ++i) {
+		if(results.hall_order[i]==hall_A){
+			message[(i*2)+1]='A';
+		}else if(results.hall_order[i]==hall_B){
+			message[(i*2)+1]='B';
+		}else if(results.hall_order[i]==hall_C){
+			message[(i*2)+1]='C';
+		}
+	}
+
+	for (uint32_t i = 0; i < number_of_phases; ++i) {
+		if(results.hall_polarity[i]==hall_inverse){//the "inverse polarity" from the hall with the currents is actually the normal logic.
+			if(toggle[results.hall_order[i]]==0){
+				message[i*2]=' ';
+			}else{
+				message[i*2]='!';
+			}
+		}else if(results.hall_polarity[i]==hall_direct){
+			if(toggle[results.hall_order[i]]==0){
+				message[i*2]='!';
+			}else{
+				message[i*2]=' ';
+			}
+		}
+	}
+
+
+	message[messageLength-2]='\n';//two last characters
+	message[messageLength-1]='\r';
+
+	HAL_UART_Transmit_DMA(&huart2, &message, messageLength);
 }
