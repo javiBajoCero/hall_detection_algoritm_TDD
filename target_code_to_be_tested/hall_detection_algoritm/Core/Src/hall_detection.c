@@ -17,10 +17,10 @@
 #define MAXTICKs 1000 								/*!< timeout for the algorithm, measured in 0.05s ticks , so 1000*0.05=50ms (it takes only 380 ticks to get 6/2=3 electric periods from torrot emulated) */
 #define lowpassfilter_ticks 10 						/*!< minimum number of ticks that should have passed in between zerocrossings (lowpassfilter) */
 #define currentAplusBplusC (uint32_t)(3*(4096)/2)	/*!< the sum of the average of each currents should be this number aprox, used to calculate currentC ortogonally*/
-#define messageLength (number_of_phases*2)+2
+#define messageLength (number_of_phases*2)+2		/*!< ASCII results char array length to use with UART*/
 
 //local variables
-detection_state_enum detection_state=detection_DISABLED;
+detection_state_enum detection_state=detection_DISABLED;	/*!< main enable disable variable, when it flips to enabled it starts the detection, when the detection is finished it flips back to disabled*/
 
 uint32_t ticks=0; 								/*!< ticks are the time measurement unit of this algorithm, each run of the algorithm (0.05s) the tick is incremented +1 */
 uint32_t currentADCoffset=(4096-1)/2;			/*!< the current waves zerocross is assumed to be at 3,3v/2= 1,65V, because thats how its defined in the emulator */
@@ -32,7 +32,7 @@ current_or_hall_measurements_struct hallB;		/*!< contains all variables relevant
 current_or_hall_measurements_struct hallC;		/*!< contains all variables relevant for hallC measurements*/
 detection_results_struct results;				/*!< once the algorithm finishes, the detection results will be stored in this struct*/
 
-uint8_t message[messageLength];
+uint8_t message[messageLength];					/*!< ASCII results char array to use with UART*/
 
 
 int32_t hall_orderA[number_of_phases]={0};
@@ -82,11 +82,18 @@ int32_t absolute(int32_t x);
 void assign_polarity(detection_results_struct* res);
 void present_results();
 
-
+/**
+* \brief
+* \param
+*/
 void Hall_start_detection(){
 	detection_state=detection_ENABLED;
 }
 
+/**
+* \brief
+* \param
+*/
 uint32_t Hall_is_detection_finished(){
 	if(detection_state==detection_ENABLED){
 		return 0;
@@ -243,6 +250,10 @@ void evaluate_and_present_results(detection_state_enum* enabled_or_disabled,hall
 	}
 }
 
+/**
+* \brief
+* \param
+*/
 void swap_hall_gpios_with_detected_results(hall_pin_info* H1,hall_pin_info* H2,hall_pin_info* H3){
 	hall_pin_info _H1=*H1;
 	hall_pin_info _H2=*H2;
@@ -431,6 +442,10 @@ void assign_polarity(detection_results_struct* res){
 	}
 }
 
+/**
+* \brief
+* \param
+*/
 void present_results(){
 
 	for (uint32_t i = 0; i < messageLength; ++i) {
