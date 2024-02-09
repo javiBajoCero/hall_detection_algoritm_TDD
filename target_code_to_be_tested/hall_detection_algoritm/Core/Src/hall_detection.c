@@ -460,7 +460,7 @@ void present_results(){
 	message[messageLength-1]='\r';
 
 #ifdef TESTuart
-	HAL_UART_Transmit_DMA(&huart2, &message, messageLength);
+	HAL_UART_Transmit_DMA(&huart2, (const uint8_t *)&message, messageLength);
 #endif
 
 }

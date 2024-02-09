@@ -2432,7 +2432,7 @@ void present_results(){
  80012cc:	71da      	strb	r2, [r3, #7]
 
 #ifdef TESTuart
-	HAL_UART_Transmit_DMA(&huart2, &message, messageLength);
+	HAL_UART_Transmit_DMA(&huart2, (const uint8_t *)&message, messageLength);
  80012ce:	2208      	movs	r2, #8
  80012d0:	4903      	ldr	r1, [pc, #12]	; (80012e0 <present_results+0xe8>)
  80012d2:	4805      	ldr	r0, [pc, #20]	; (80012e8 <present_results+0xf0>)
@@ -2547,8 +2547,8 @@ int main(void)
  800135a:	4603      	mov	r3, r0
  800135c:	2b00      	cmp	r3, #0
  800135e:	d0fa      	beq.n	8001356 <main+0x6a>
-		  HAL_Delay(60);
- 8001360:	203c      	movs	r0, #60	; 0x3c
+		  HAL_Delay(65);
+ 8001360:	2041      	movs	r0, #65	; 0x41
  8001362:	f000 fadd 	bl	8001920 <HAL_Delay>
 		  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
  8001366:	2120      	movs	r1, #32
