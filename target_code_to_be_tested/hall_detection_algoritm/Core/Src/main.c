@@ -122,7 +122,7 @@ int main(void)
   while (1)
   {
 	  if(Hall_is_detection_finished()){
-		  HAL_Delay(60);
+		  HAL_Delay(65);
 		  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
 	  }
 
