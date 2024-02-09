@@ -123,7 +123,7 @@ def main():
     # List and open available serial ports
     find_out_tester_and_open_ports()
 
-    time.sleep(1000); #enough time for the nucleo boards to be ready
+    time.sleep(1); #enough time for the nucleo boards to be ready
     serial_target.flush();#flush again for good measure, sometimes we get garbage stuff send by the target board 
     serial_tester.flush();
 
