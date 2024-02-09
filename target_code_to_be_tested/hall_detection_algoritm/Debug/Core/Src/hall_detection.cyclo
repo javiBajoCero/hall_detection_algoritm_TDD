@@ -11,5 +11,5 @@
 ../Core/Src/hall_detection.c:307:6:calculateElectricPeriod_inTicks	2
 ../Core/Src/hall_detection.c:327:6:assign_closest_phase_to_hall	21
 ../Core/Src/hall_detection.c:407:9:absolute	1
-../Core/Src/hall_detection.c:415:6:assign_polarity	3
-../Core/Src/hall_detection.c:427:6:present_results	12
+../Core/Src/hall_detection.c:415:6:assign_polarity	5
+../Core/Src/hall_detection.c:434:6:present_results	9

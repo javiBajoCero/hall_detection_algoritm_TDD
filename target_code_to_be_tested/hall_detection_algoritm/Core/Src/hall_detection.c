@@ -39,7 +39,7 @@ int32_t hall_orderA[number_of_phases]={0};
 int32_t hall_orderB[number_of_phases]={0};
 int32_t hall_orderC[number_of_phases]={0};
 
-uint32_t toggle[number_of_phases]={0};
+uint32_t toggled_polarity[number_of_phases]={0};
 
 current_or_hall_measurements_struct *currents[number_of_phases]={&currA,&currB,&currC};
 current_or_hall_measurements_struct *halls[number_of_phases]={&hallA,&hallB,&hallC};
@@ -348,18 +348,18 @@ void assign_closest_phase_to_hall(detection_results_struct* res){
 
 		if(hall_orderA[i]>((res->electricPeriod_ticks/2)-lowpassfilter_ticks) && hall_orderA[i]<(res->electricPeriod_ticks)){
 			hall_orderA[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
-			toggle[hall_A]=1;
+			toggled_polarity[hall_A]=1;
 
 		}
 
 		if(hall_orderB[i]>((res->electricPeriod_ticks/2)-lowpassfilter_ticks) && hall_orderB[i]<(res->electricPeriod_ticks)){
 			hall_orderB[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
-			toggle[hall_B]=1;
+			toggled_polarity[hall_B]=1;
 		}
 
 		if(hall_orderC[i]>((res->electricPeriod_ticks/2)-lowpassfilter_ticks) && hall_orderC[i]<(res->electricPeriod_ticks)){
 			hall_orderC[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
-			toggle[hall_C]=1;
+			toggled_polarity[hall_C]=1;
 		}
 	}
 
@@ -416,13 +416,13 @@ void assign_polarity(detection_results_struct* res){
 
 	for (uint32_t i = 0; i < number_of_phases; ++i) {
 		if(currents[res->hall_order[i]]->zerocrossings_polarity[0]==halls[i]->zerocrossings_polarity[0]){
-			if(toggle[i]==0){
+			if(toggled_polarity[i]==0){
 				res->hall_polarity[res->hall_order[i]]=hall_direct;
 			}else{
 				res->hall_polarity[res->hall_order[i]]=hall_inverse;
 			}
 		}else{
-			if(toggle[i]==0){
+			if(toggled_polarity[i]==0){
 				res->hall_polarity[res->hall_order[i]]=hall_inverse;
 			}else{
 				res->hall_polarity[res->hall_order[i]]=hall_direct;

@@ -12,4 +12,4 @@
 ../Core/Src/hall_detection.c:327:6:assign_closest_phase_to_hall	56	static
 ../Core/Src/hall_detection.c:407:9:absolute	16	static
 ../Core/Src/hall_detection.c:415:6:assign_polarity	24	static
-../Core/Src/hall_detection.c:427:6:present_results	24	static
+../Core/Src/hall_detection.c:434:6:present_results	24	static
