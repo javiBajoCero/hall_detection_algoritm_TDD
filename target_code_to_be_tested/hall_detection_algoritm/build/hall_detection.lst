@@ -1,0 +1,3012 @@
+ARM GAS  /tmp/cc8kV50R.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"hall_detection.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.Hall_start_detection,"ax",%progbits
+  18              		.align	1
+  19              		.global	Hall_start_detection
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	Hall_start_detection:
+  27              	.LFB235:
+  28              		.file 1 "Core/Src/hall_detection.c"
+   1:Core/Src/hall_detection.c **** /*
+   2:Core/Src/hall_detection.c ****  * hall_detection.c
+   3:Core/Src/hall_detection.c ****  *
+   4:Core/Src/hall_detection.c ****  *  Created on: Jan 30, 2024
+   5:Core/Src/hall_detection.c ****  *      Author: javier.munoz.saez@upc.edu
+   6:Core/Src/hall_detection.c ****  */
+   7:Core/Src/hall_detection.c **** 
+   8:Core/Src/hall_detection.c **** #include "hall_detection.h" 		/*!< contains all enums, structs and includes neccesary for this .c, 
+   9:Core/Src/hall_detection.c **** 
+  10:Core/Src/hall_detection.c **** #define TESTuart
+  11:Core/Src/hall_detection.c **** 
+  12:Core/Src/hall_detection.c **** #ifdef TESTuart
+  13:Core/Src/hall_detection.c **** #include "usart.h"
+  14:Core/Src/hall_detection.c **** #endif
+  15:Core/Src/hall_detection.c **** 
+  16:Core/Src/hall_detection.c **** //local defines
+  17:Core/Src/hall_detection.c **** #define MAXTICKs 1000 								/*!< timeout for the algorithm, measured in 0.05s ticks , so 1000*0.0
+  18:Core/Src/hall_detection.c **** #define lowpassfilter_ticks 10 						/*!< minimum number of ticks that should have passed in betwee
+  19:Core/Src/hall_detection.c **** #define currentAplusBplusC (uint32_t)(3*(4096)/2)	/*!< the sum of the average of each currents shou
+  20:Core/Src/hall_detection.c **** #define messageLength (number_of_phases*2)+2
+  21:Core/Src/hall_detection.c **** 
+  22:Core/Src/hall_detection.c **** //local variables
+  23:Core/Src/hall_detection.c **** detection_state_enum detection_state=detection_DISABLED;
+  24:Core/Src/hall_detection.c **** 
+  25:Core/Src/hall_detection.c **** uint32_t ticks=0; 								/*!< ticks are the time measurement unit of this algorithm, each run of t
+  26:Core/Src/hall_detection.c **** uint32_t currentADCoffset=(4096-1)/2;			/*!< the current waves zerocross is assumed to be at 3,3v/2
+  27:Core/Src/hall_detection.c **** current_or_hall_measurements_struct currA;		/*!< contains all variables relevant for currA measurem
+  28:Core/Src/hall_detection.c **** current_or_hall_measurements_struct currB;		/*!< contains all variables relevant for currB measurem
+  29:Core/Src/hall_detection.c **** current_or_hall_measurements_struct currC;		/*!< contains all variables relevant for currC measurem
+  30:Core/Src/hall_detection.c **** current_or_hall_measurements_struct hallA;		/*!< contains all variables relevant for hallA measurem
+ARM GAS  /tmp/cc8kV50R.s 			page 2
+
+
+  31:Core/Src/hall_detection.c **** current_or_hall_measurements_struct hallB;		/*!< contains all variables relevant for hallB measurem
+  32:Core/Src/hall_detection.c **** current_or_hall_measurements_struct hallC;		/*!< contains all variables relevant for hallC measurem
+  33:Core/Src/hall_detection.c **** detection_results_struct results;				/*!< once the algorithm finishes, the detection results will b
+  34:Core/Src/hall_detection.c **** 
+  35:Core/Src/hall_detection.c **** uint8_t message[messageLength];
+  36:Core/Src/hall_detection.c **** 
+  37:Core/Src/hall_detection.c **** 
+  38:Core/Src/hall_detection.c **** int32_t hall_orderA[number_of_phases]={0};
+  39:Core/Src/hall_detection.c **** int32_t hall_orderB[number_of_phases]={0};
+  40:Core/Src/hall_detection.c **** int32_t hall_orderC[number_of_phases]={0};
+  41:Core/Src/hall_detection.c **** 
+  42:Core/Src/hall_detection.c **** uint32_t toggle[number_of_phases]={0};
+  43:Core/Src/hall_detection.c **** 
+  44:Core/Src/hall_detection.c **** current_or_hall_measurements_struct *currents[number_of_phases]={&currA,&currB,&currC};
+  45:Core/Src/hall_detection.c **** current_or_hall_measurements_struct *halls[number_of_phases]={&hallA,&hallB,&hallC};
+  46:Core/Src/hall_detection.c **** 
+  47:Core/Src/hall_detection.c **** //all functions declared inside this .c are listed here:
+  48:Core/Src/hall_detection.c **** void Hall_start_detection();
+  49:Core/Src/hall_detection.c **** uint32_t Hall_is_detection_finished();
+  50:Core/Src/hall_detection.c **** 
+  51:Core/Src/hall_detection.c **** void Hall_Identification_Test_measurement(
+  52:Core/Src/hall_detection.c **** 		hall_pin_info* H1,
+  53:Core/Src/hall_detection.c **** 		hall_pin_info* H2,
+  54:Core/Src/hall_detection.c **** 		hall_pin_info* H3,
+  55:Core/Src/hall_detection.c **** 		uint16_t* ADCcurrA,
+  56:Core/Src/hall_detection.c **** 		uint16_t* ADCcurrB
+  57:Core/Src/hall_detection.c **** 		);
+  58:Core/Src/hall_detection.c **** 
+  59:Core/Src/hall_detection.c **** void signals_adquisition(
+  60:Core/Src/hall_detection.c **** 		hall_pin_info* H1,
+  61:Core/Src/hall_detection.c **** 		hall_pin_info* H2,
+  62:Core/Src/hall_detection.c **** 		hall_pin_info* H3,
+  63:Core/Src/hall_detection.c **** 		uint16_t* ADCcurrA,
+  64:Core/Src/hall_detection.c **** 		uint16_t* ADCcurrB
+  65:Core/Src/hall_detection.c **** 		);
+  66:Core/Src/hall_detection.c **** 
+  67:Core/Src/hall_detection.c **** void detect_all_zerocrossings();
+  68:Core/Src/hall_detection.c **** void detect_current_zerocrossings(current_or_hall_measurements_struct* currx);
+  69:Core/Src/hall_detection.c **** void detect_hall_zerocrossings(current_or_hall_measurements_struct* hallx);
+  70:Core/Src/hall_detection.c **** void end_detection(detection_state_enum* enabled_or_disabled);
+  71:Core/Src/hall_detection.c **** 
+  72:Core/Src/hall_detection.c **** void evaluate_and_present_results(	detection_state_enum* enabled_or_disabled,
+  73:Core/Src/hall_detection.c **** 									hall_pin_info* H1,
+  74:Core/Src/hall_detection.c **** 									hall_pin_info* H2,
+  75:Core/Src/hall_detection.c **** 									hall_pin_info* H3
+  76:Core/Src/hall_detection.c **** 									);
+  77:Core/Src/hall_detection.c **** 
+  78:Core/Src/hall_detection.c **** void swap_hall_gpios_with_detected_results(hall_pin_info* H1,hall_pin_info* H2,hall_pin_info* H3);
+  79:Core/Src/hall_detection.c **** void calculateElectricPeriod_inTicks(uint32_t* resulting_period);
+  80:Core/Src/hall_detection.c **** void assign_closest_phase_to_hall(detection_results_struct* res);
+  81:Core/Src/hall_detection.c **** int32_t absolute(int32_t x);
+  82:Core/Src/hall_detection.c **** void assign_polarity(detection_results_struct* res);
+  83:Core/Src/hall_detection.c **** void present_results();
+  84:Core/Src/hall_detection.c **** 
+  85:Core/Src/hall_detection.c **** 
+  86:Core/Src/hall_detection.c **** void Hall_start_detection(){
+  29              		.loc 1 86 28 view -0
+ARM GAS  /tmp/cc8kV50R.s 			page 3
+
+
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  87:Core/Src/hall_detection.c **** 	detection_state=detection_ENABLED;
+  34              		.loc 1 87 2 view .LVU1
+  35              		.loc 1 87 17 is_stmt 0 view .LVU2
+  36 0000 014B     		ldr	r3, .L2
+  37 0002 0122     		movs	r2, #1
+  38 0004 1A70     		strb	r2, [r3]
+  88:Core/Src/hall_detection.c **** }
+  39              		.loc 1 88 1 view .LVU3
+  40 0006 7047     		bx	lr
+  41              	.L3:
+  42              		.align	2
+  43              	.L2:
+  44 0008 00000000 		.word	.LANCHOR0
+  45              		.cfi_endproc
+  46              	.LFE235:
+  48              		.section	.text.Hall_is_detection_finished,"ax",%progbits
+  49              		.align	1
+  50              		.global	Hall_is_detection_finished
+  51              		.syntax unified
+  52              		.thumb
+  53              		.thumb_func
+  54              		.fpu fpv4-sp-d16
+  56              	Hall_is_detection_finished:
+  57              	.LFB236:
+  89:Core/Src/hall_detection.c **** 
+  90:Core/Src/hall_detection.c **** uint32_t Hall_is_detection_finished(){
+  58              		.loc 1 90 38 is_stmt 1 view -0
+  59              		.cfi_startproc
+  60              		@ args = 0, pretend = 0, frame = 0
+  61              		@ frame_needed = 0, uses_anonymous_args = 0
+  62              		@ link register save eliminated.
+  91:Core/Src/hall_detection.c **** 	if(detection_state==detection_ENABLED){
+  63              		.loc 1 91 2 view .LVU5
+  64              		.loc 1 91 20 is_stmt 0 view .LVU6
+  65 0000 034B     		ldr	r3, .L8
+  66 0002 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  67              		.loc 1 91 4 view .LVU7
+  68 0004 012B     		cmp	r3, #1
+  69 0006 01D0     		beq	.L7
+  92:Core/Src/hall_detection.c **** 		return 0;
+  93:Core/Src/hall_detection.c **** 	}else{
+  94:Core/Src/hall_detection.c **** 		return 1;
+  70              		.loc 1 94 10 view .LVU8
+  71 0008 0120     		movs	r0, #1
+  95:Core/Src/hall_detection.c **** 	}
+  96:Core/Src/hall_detection.c **** }
+  72              		.loc 1 96 1 view .LVU9
+  73 000a 7047     		bx	lr
+  74              	.L7:
+  92:Core/Src/hall_detection.c **** 		return 0;
+  75              		.loc 1 92 10 view .LVU10
+  76 000c 0020     		movs	r0, #0
+  77 000e 7047     		bx	lr
+ARM GAS  /tmp/cc8kV50R.s 			page 4
+
+
+  78              	.L9:
+  79              		.align	2
+  80              	.L8:
+  81 0010 00000000 		.word	.LANCHOR0
+  82              		.cfi_endproc
+  83              	.LFE236:
+  85              		.section	.text.signals_adquisition,"ax",%progbits
+  86              		.align	1
+  87              		.global	signals_adquisition
+  88              		.syntax unified
+  89              		.thumb
+  90              		.thumb_func
+  91              		.fpu fpv4-sp-d16
+  93              	signals_adquisition:
+  94              	.LVL0:
+  95              	.LFB238:
+  97:Core/Src/hall_detection.c **** /**
+  98:Core/Src/hall_detection.c **** * \brief
+  99:Core/Src/hall_detection.c **** * \param
+ 100:Core/Src/hall_detection.c **** */
+ 101:Core/Src/hall_detection.c **** void Hall_Identification_Test_measurement(
+ 102:Core/Src/hall_detection.c **** 		hall_pin_info* H1,
+ 103:Core/Src/hall_detection.c **** 		hall_pin_info* H2,
+ 104:Core/Src/hall_detection.c **** 		hall_pin_info* H3,
+ 105:Core/Src/hall_detection.c **** 		uint16_t* ADCcurrA,
+ 106:Core/Src/hall_detection.c **** 		uint16_t* ADCcurrB
+ 107:Core/Src/hall_detection.c **** 		){
+ 108:Core/Src/hall_detection.c **** 	if(detection_state==detection_ENABLED){
+ 109:Core/Src/hall_detection.c **** 		signals_adquisition(H1,H2,H3,ADCcurrA,ADCcurrB);
+ 110:Core/Src/hall_detection.c **** 		detect_all_zerocrossings();
+ 111:Core/Src/hall_detection.c **** 		end_detection(&detection_state);
+ 112:Core/Src/hall_detection.c **** 		evaluate_and_present_results(&detection_state,H1,H2,H3);
+ 113:Core/Src/hall_detection.c **** 		ticks++;
+ 114:Core/Src/hall_detection.c **** 	}
+ 115:Core/Src/hall_detection.c **** 
+ 116:Core/Src/hall_detection.c **** }
+ 117:Core/Src/hall_detection.c **** 
+ 118:Core/Src/hall_detection.c **** /**
+ 119:Core/Src/hall_detection.c **** * \brief
+ 120:Core/Src/hall_detection.c **** * \param
+ 121:Core/Src/hall_detection.c **** */
+ 122:Core/Src/hall_detection.c **** void signals_adquisition(
+ 123:Core/Src/hall_detection.c **** 		hall_pin_info* H1,
+ 124:Core/Src/hall_detection.c **** 		hall_pin_info* H2,
+ 125:Core/Src/hall_detection.c **** 		hall_pin_info* H3,
+ 126:Core/Src/hall_detection.c **** 		uint16_t* ADCcurrA,
+ 127:Core/Src/hall_detection.c **** 		uint16_t* ADCcurrB
+ 128:Core/Src/hall_detection.c **** 		){
+  96              		.loc 1 128 4 is_stmt 1 view -0
+  97              		.cfi_startproc
+  98              		@ args = 4, pretend = 0, frame = 0
+  99              		@ frame_needed = 0, uses_anonymous_args = 0
+ 100              		.loc 1 128 4 is_stmt 0 view .LVU12
+ 101 0000 70B5     		push	{r4, r5, r6, lr}
+ 102              	.LCFI0:
+ 103              		.cfi_def_cfa_offset 16
+ 104              		.cfi_offset 4, -16
+ARM GAS  /tmp/cc8kV50R.s 			page 5
+
+
+ 105              		.cfi_offset 5, -12
+ 106              		.cfi_offset 6, -8
+ 107              		.cfi_offset 14, -4
+ 108 0002 0E46     		mov	r6, r1
+ 109 0004 1546     		mov	r5, r2
+ 110 0006 0499     		ldr	r1, [sp, #16]
+ 111              	.LVL1:
+ 129:Core/Src/hall_detection.c **** 	currA.two_samples_buffer[1]=currA.two_samples_buffer[0];
+ 112              		.loc 1 129 2 is_stmt 1 view .LVU13
+ 113              		.loc 1 129 54 is_stmt 0 view .LVU14
+ 114 0008 154A     		ldr	r2, .L12
+ 115              	.LVL2:
+ 116              		.loc 1 129 54 view .LVU15
+ 117 000a 1468     		ldr	r4, [r2]
+ 118              		.loc 1 129 29 view .LVU16
+ 119 000c 5460     		str	r4, [r2, #4]
+ 130:Core/Src/hall_detection.c **** 	currA.two_samples_buffer[0]= *ADCcurrA; //i suspect ADC measurements are one sample late, because 
+ 120              		.loc 1 130 2 is_stmt 1 view .LVU17
+ 121              		.loc 1 130 31 is_stmt 0 view .LVU18
+ 122 000e 1C88     		ldrh	r4, [r3]
+ 123              		.loc 1 130 29 view .LVU19
+ 124 0010 1460     		str	r4, [r2]
+ 131:Core/Src/hall_detection.c **** 
+ 132:Core/Src/hall_detection.c **** 	currB.two_samples_buffer[1]=currB.two_samples_buffer[0];
+ 125              		.loc 1 132 2 is_stmt 1 view .LVU20
+ 126              		.loc 1 132 54 is_stmt 0 view .LVU21
+ 127 0012 144A     		ldr	r2, .L12+4
+ 128 0014 1468     		ldr	r4, [r2]
+ 129              		.loc 1 132 29 view .LVU22
+ 130 0016 5460     		str	r4, [r2, #4]
+ 133:Core/Src/hall_detection.c **** 	currB.two_samples_buffer[0]= *ADCcurrB;
+ 131              		.loc 1 133 2 is_stmt 1 view .LVU23
+ 132              		.loc 1 133 31 is_stmt 0 view .LVU24
+ 133 0018 0C88     		ldrh	r4, [r1]
+ 134              		.loc 1 133 29 view .LVU25
+ 135 001a 1460     		str	r4, [r2]
+ 134:Core/Src/hall_detection.c **** 	//c=-a-b, NO REAL MEASUREMENT OF CURRENT C, assuming ABC currents ortogonality:
+ 135:Core/Src/hall_detection.c **** 	currC.two_samples_buffer[1]=currC.two_samples_buffer[0];
+ 136              		.loc 1 135 2 is_stmt 1 view .LVU26
+ 137              		.loc 1 135 54 is_stmt 0 view .LVU27
+ 138 001c 124A     		ldr	r2, .L12+8
+ 139 001e 1468     		ldr	r4, [r2]
+ 140              		.loc 1 135 29 view .LVU28
+ 141 0020 5460     		str	r4, [r2, #4]
+ 136:Core/Src/hall_detection.c **** 	currC.two_samples_buffer[0]= currentAplusBplusC-*ADCcurrA-*ADCcurrB;
+ 142              		.loc 1 136 2 is_stmt 1 view .LVU29
+ 143              		.loc 1 136 50 is_stmt 0 view .LVU30
+ 144 0022 1B88     		ldrh	r3, [r3]
+ 145              	.LVL3:
+ 146              		.loc 1 136 60 view .LVU31
+ 147 0024 0988     		ldrh	r1, [r1]
+ 148              		.loc 1 136 59 view .LVU32
+ 149 0026 0B44     		add	r3, r3, r1
+ 150 0028 C3F5C053 		rsb	r3, r3, #6144
+ 151              		.loc 1 136 29 view .LVU33
+ 152 002c 1360     		str	r3, [r2]
+ 137:Core/Src/hall_detection.c **** 
+ARM GAS  /tmp/cc8kV50R.s 			page 6
+
+
+ 138:Core/Src/hall_detection.c **** 	hallA.two_samples_buffer[1]=hallA.two_samples_buffer[0];
+ 153              		.loc 1 138 2 is_stmt 1 view .LVU34
+ 154              		.loc 1 138 54 is_stmt 0 view .LVU35
+ 155 002e 0F4C     		ldr	r4, .L12+12
+ 156 0030 2368     		ldr	r3, [r4]
+ 157              		.loc 1 138 29 view .LVU36
+ 158 0032 6360     		str	r3, [r4, #4]
+ 139:Core/Src/hall_detection.c **** 	hallA.two_samples_buffer[0]=HAL_GPIO_ReadPin(H1->gpio_port, H1->gpio_pin);
+ 159              		.loc 1 139 2 is_stmt 1 view .LVU37
+ 160              		.loc 1 139 30 is_stmt 0 view .LVU38
+ 161 0034 8188     		ldrh	r1, [r0, #4]
+ 162 0036 0068     		ldr	r0, [r0]
+ 163              	.LVL4:
+ 164              		.loc 1 139 30 view .LVU39
+ 165 0038 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 166              	.LVL5:
+ 167              		.loc 1 139 29 view .LVU40
+ 168 003c 2060     		str	r0, [r4]
+ 140:Core/Src/hall_detection.c **** 
+ 141:Core/Src/hall_detection.c **** 	hallB.two_samples_buffer[1]=hallB.two_samples_buffer[0];
+ 169              		.loc 1 141 2 is_stmt 1 view .LVU41
+ 170              		.loc 1 141 54 is_stmt 0 view .LVU42
+ 171 003e 0C4C     		ldr	r4, .L12+16
+ 172 0040 2368     		ldr	r3, [r4]
+ 173              		.loc 1 141 29 view .LVU43
+ 174 0042 6360     		str	r3, [r4, #4]
+ 142:Core/Src/hall_detection.c **** 	hallB.two_samples_buffer[0]=HAL_GPIO_ReadPin(H2->gpio_port, H2->gpio_pin);
+ 175              		.loc 1 142 2 is_stmt 1 view .LVU44
+ 176              		.loc 1 142 30 is_stmt 0 view .LVU45
+ 177 0044 B188     		ldrh	r1, [r6, #4]
+ 178 0046 3068     		ldr	r0, [r6]
+ 179 0048 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 180              	.LVL6:
+ 181              		.loc 1 142 29 view .LVU46
+ 182 004c 2060     		str	r0, [r4]
+ 143:Core/Src/hall_detection.c **** 
+ 144:Core/Src/hall_detection.c **** 	hallC.two_samples_buffer[1]=hallC.two_samples_buffer[0];
+ 183              		.loc 1 144 2 is_stmt 1 view .LVU47
+ 184              		.loc 1 144 54 is_stmt 0 view .LVU48
+ 185 004e 094C     		ldr	r4, .L12+20
+ 186 0050 2368     		ldr	r3, [r4]
+ 187              		.loc 1 144 29 view .LVU49
+ 188 0052 6360     		str	r3, [r4, #4]
+ 145:Core/Src/hall_detection.c **** 	hallC.two_samples_buffer[0]=HAL_GPIO_ReadPin(H3->gpio_port, H3->gpio_pin);
+ 189              		.loc 1 145 2 is_stmt 1 view .LVU50
+ 190              		.loc 1 145 30 is_stmt 0 view .LVU51
+ 191 0054 A988     		ldrh	r1, [r5, #4]
+ 192 0056 2868     		ldr	r0, [r5]
+ 193 0058 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 194              	.LVL7:
+ 195              		.loc 1 145 29 view .LVU52
+ 196 005c 2060     		str	r0, [r4]
+ 146:Core/Src/hall_detection.c **** }
+ 197              		.loc 1 146 1 view .LVU53
+ 198 005e 70BD     		pop	{r4, r5, r6, pc}
+ 199              	.LVL8:
+ 200              	.L13:
+ARM GAS  /tmp/cc8kV50R.s 			page 7
+
+
+ 201              		.loc 1 146 1 view .LVU54
+ 202              		.align	2
+ 203              	.L12:
+ 204 0060 00000000 		.word	currA
+ 205 0064 00000000 		.word	currB
+ 206 0068 00000000 		.word	currC
+ 207 006c 00000000 		.word	hallA
+ 208 0070 00000000 		.word	hallB
+ 209 0074 00000000 		.word	hallC
+ 210              		.cfi_endproc
+ 211              	.LFE238:
+ 213              		.section	.text.detect_current_zerocrossings,"ax",%progbits
+ 214              		.align	1
+ 215              		.global	detect_current_zerocrossings
+ 216              		.syntax unified
+ 217              		.thumb
+ 218              		.thumb_func
+ 219              		.fpu fpv4-sp-d16
+ 221              	detect_current_zerocrossings:
+ 222              	.LVL9:
+ 223              	.LFB240:
+ 147:Core/Src/hall_detection.c **** 
+ 148:Core/Src/hall_detection.c **** /**
+ 149:Core/Src/hall_detection.c **** * \brief
+ 150:Core/Src/hall_detection.c **** * \param
+ 151:Core/Src/hall_detection.c **** */
+ 152:Core/Src/hall_detection.c **** void detect_all_zerocrossings(){
+ 153:Core/Src/hall_detection.c **** 	if(ticks>2){ //skip the first two samples to fill the buffers
+ 154:Core/Src/hall_detection.c **** 		detect_current_zerocrossings(&currA);
+ 155:Core/Src/hall_detection.c **** 		detect_current_zerocrossings(&currB);
+ 156:Core/Src/hall_detection.c **** 		detect_current_zerocrossings(&currC);
+ 157:Core/Src/hall_detection.c **** 		detect_hall_zerocrossings(&hallA);
+ 158:Core/Src/hall_detection.c **** 		detect_hall_zerocrossings(&hallB);
+ 159:Core/Src/hall_detection.c **** 		detect_hall_zerocrossings(&hallC);
+ 160:Core/Src/hall_detection.c **** 	}
+ 161:Core/Src/hall_detection.c **** }
+ 162:Core/Src/hall_detection.c **** 
+ 163:Core/Src/hall_detection.c **** /**
+ 164:Core/Src/hall_detection.c **** * \brief
+ 165:Core/Src/hall_detection.c **** * \param
+ 166:Core/Src/hall_detection.c **** */
+ 167:Core/Src/hall_detection.c **** void detect_current_zerocrossings(current_or_hall_measurements_struct* currx){
+ 224              		.loc 1 167 78 is_stmt 1 view -0
+ 225              		.cfi_startproc
+ 226              		@ args = 0, pretend = 0, frame = 0
+ 227              		@ frame_needed = 0, uses_anonymous_args = 0
+ 228              		@ link register save eliminated.
+ 229              		.loc 1 167 78 is_stmt 0 view .LVU56
+ 230 0000 30B4     		push	{r4, r5}
+ 231              	.LCFI1:
+ 232              		.cfi_def_cfa_offset 8
+ 233              		.cfi_offset 4, -8
+ 234              		.cfi_offset 5, -4
+ 168:Core/Src/hall_detection.c **** 	if(	   (((int32_t)(currx->two_samples_buffer[0]-currentADCoffset)*
+ 235              		.loc 1 168 2 is_stmt 1 view .LVU57
+ 236              		.loc 1 168 46 is_stmt 0 view .LVU58
+ 237 0002 0168     		ldr	r1, [r0]
+ARM GAS  /tmp/cc8kV50R.s 			page 8
+
+
+ 238              		.loc 1 168 49 view .LVU59
+ 239 0004 1D4B     		ldr	r3, .L23
+ 240 0006 1B68     		ldr	r3, [r3]
+ 241 0008 CC1A     		subs	r4, r1, r3
+ 169:Core/Src/hall_detection.c **** 			 (int32_t)(currx->two_samples_buffer[1]-currentADCoffset))<=0)
+ 242              		.loc 1 169 40 view .LVU60
+ 243 000a 4268     		ldr	r2, [r0, #4]
+ 244              		.loc 1 169 43 view .LVU61
+ 245 000c D31A     		subs	r3, r2, r3
+ 168:Core/Src/hall_detection.c **** 	if(	   (((int32_t)(currx->two_samples_buffer[0]-currentADCoffset)*
+ 246              		.loc 1 168 67 view .LVU62
+ 247 000e 03FB04F3 		mul	r3, r3, r4
+ 168:Core/Src/hall_detection.c **** 	if(	   (((int32_t)(currx->two_samples_buffer[0]-currentADCoffset)*
+ 248              		.loc 1 168 4 view .LVU63
+ 249 0012 002B     		cmp	r3, #0
+ 250 0014 01DD     		ble	.L22
+ 251              	.L14:
+ 170:Core/Src/hall_detection.c **** 			 && currx->numberof_zerocrossings<MAXZEROCROSSINGS
+ 171:Core/Src/hall_detection.c **** 			){
+ 172:Core/Src/hall_detection.c **** 
+ 173:Core/Src/hall_detection.c **** 		if(currx->numberof_zerocrossings==0){			//only if this is the first zerocrossing detected
+ 174:Core/Src/hall_detection.c **** 					currx->zerocrossings_tick[currx->numberof_zerocrossings]=ticks;
+ 175:Core/Src/hall_detection.c **** 					if(currx->two_samples_buffer[0]>currx->two_samples_buffer[1]){
+ 176:Core/Src/hall_detection.c **** 						currx->zerocrossings_polarity[currx->numberof_zerocrossings]=rising_polarity;
+ 177:Core/Src/hall_detection.c **** 					}else{
+ 178:Core/Src/hall_detection.c **** 						currx->zerocrossings_polarity[currx->numberof_zerocrossings]=falling_polarity;
+ 179:Core/Src/hall_detection.c **** 					}
+ 180:Core/Src/hall_detection.c **** 					currx->numberof_zerocrossings++;
+ 181:Core/Src/hall_detection.c **** 		}else{
+ 182:Core/Src/hall_detection.c **** 			if((int32_t)(ticks-(currx->zerocrossings_tick[currx->numberof_zerocrossings-1]))>lowpassfilter_t
+ 183:Core/Src/hall_detection.c **** 					currx->zerocrossings_tick[currx->numberof_zerocrossings]=ticks;
+ 184:Core/Src/hall_detection.c **** 					if(currx->two_samples_buffer[0]>currx->two_samples_buffer[1]){
+ 185:Core/Src/hall_detection.c **** 						currx->zerocrossings_polarity[currx->numberof_zerocrossings]=rising_polarity;
+ 186:Core/Src/hall_detection.c **** 					}else{
+ 187:Core/Src/hall_detection.c **** 						currx->zerocrossings_polarity[currx->numberof_zerocrossings]=falling_polarity;
+ 188:Core/Src/hall_detection.c **** 					}
+ 189:Core/Src/hall_detection.c **** 					currx->numberof_zerocrossings++;
+ 190:Core/Src/hall_detection.c **** 			}
+ 191:Core/Src/hall_detection.c **** 		}
+ 192:Core/Src/hall_detection.c **** 	}
+ 193:Core/Src/hall_detection.c **** }
+ 252              		.loc 1 193 1 view .LVU64
+ 253 0016 30BC     		pop	{r4, r5}
+ 254              	.LCFI2:
+ 255              		.cfi_remember_state
+ 256              		.cfi_restore 5
+ 257              		.cfi_restore 4
+ 258              		.cfi_def_cfa_offset 0
+ 259 0018 7047     		bx	lr
+ 260              	.L22:
+ 261              	.LCFI3:
+ 262              		.cfi_restore_state
+ 170:Core/Src/hall_detection.c **** 			 && currx->numberof_zerocrossings<MAXZEROCROSSINGS
+ 263              		.loc 1 170 13 view .LVU65
+ 264 001a 836A     		ldr	r3, [r0, #40]
+ 170:Core/Src/hall_detection.c **** 			 && currx->numberof_zerocrossings<MAXZEROCROSSINGS
+ 265              		.loc 1 170 5 view .LVU66
+ARM GAS  /tmp/cc8kV50R.s 			page 9
+
+
+ 266 001c 052B     		cmp	r3, #5
+ 267 001e FAD8     		bhi	.L14
+ 173:Core/Src/hall_detection.c **** 					currx->zerocrossings_tick[currx->numberof_zerocrossings]=ticks;
+ 268              		.loc 1 173 3 is_stmt 1 view .LVU67
+ 173:Core/Src/hall_detection.c **** 					currx->zerocrossings_tick[currx->numberof_zerocrossings]=ticks;
+ 269              		.loc 1 173 5 is_stmt 0 view .LVU68
+ 270 0020 93B9     		cbnz	r3, .L16
+ 174:Core/Src/hall_detection.c **** 					if(currx->two_samples_buffer[0]>currx->two_samples_buffer[1]){
+ 271              		.loc 1 174 6 is_stmt 1 view .LVU69
+ 174:Core/Src/hall_detection.c **** 					if(currx->two_samples_buffer[0]>currx->two_samples_buffer[1]){
+ 272              		.loc 1 174 62 is_stmt 0 view .LVU70
+ 273 0022 9C1C     		adds	r4, r3, #2
+ 274 0024 164D     		ldr	r5, .L23+4
+ 275 0026 2D68     		ldr	r5, [r5]
+ 276 0028 40F82450 		str	r5, [r0, r4, lsl #2]
+ 175:Core/Src/hall_detection.c **** 						currx->zerocrossings_polarity[currx->numberof_zerocrossings]=rising_polarity;
+ 277              		.loc 1 175 6 is_stmt 1 view .LVU71
+ 175:Core/Src/hall_detection.c **** 						currx->zerocrossings_polarity[currx->numberof_zerocrossings]=rising_polarity;
+ 278              		.loc 1 175 8 is_stmt 0 view .LVU72
+ 279 002c 9142     		cmp	r1, r2
+ 280 002e 06D9     		bls	.L17
+ 176:Core/Src/hall_detection.c **** 					}else{
+ 281              		.loc 1 176 7 is_stmt 1 view .LVU73
+ 176:Core/Src/hall_detection.c **** 					}else{
+ 282              		.loc 1 176 67 is_stmt 0 view .LVU74
+ 283 0030 C218     		adds	r2, r0, r3
+ 284 0032 0021     		movs	r1, #0
+ 285 0034 82F82010 		strb	r1, [r2, #32]
+ 286              	.L18:
+ 180:Core/Src/hall_detection.c **** 		}else{
+ 287              		.loc 1 180 6 is_stmt 1 view .LVU75
+ 180:Core/Src/hall_detection.c **** 		}else{
+ 288              		.loc 1 180 35 is_stmt 0 view .LVU76
+ 289 0038 0133     		adds	r3, r3, #1
+ 290 003a 8362     		str	r3, [r0, #40]
+ 291 003c EBE7     		b	.L14
+ 292              	.L17:
+ 178:Core/Src/hall_detection.c **** 					}
+ 293              		.loc 1 178 7 is_stmt 1 view .LVU77
+ 178:Core/Src/hall_detection.c **** 					}
+ 294              		.loc 1 178 67 is_stmt 0 view .LVU78
+ 295 003e C218     		adds	r2, r0, r3
+ 296 0040 0121     		movs	r1, #1
+ 297 0042 82F82010 		strb	r1, [r2, #32]
+ 298 0046 F7E7     		b	.L18
+ 299              	.L16:
+ 182:Core/Src/hall_detection.c **** 					currx->zerocrossings_tick[currx->numberof_zerocrossings]=ticks;
+ 300              		.loc 1 182 4 is_stmt 1 view .LVU79
+ 182:Core/Src/hall_detection.c **** 					currx->zerocrossings_tick[currx->numberof_zerocrossings]=ticks;
+ 301              		.loc 1 182 22 is_stmt 0 view .LVU80
+ 302 0048 0D4C     		ldr	r4, .L23+4
+ 303 004a 2568     		ldr	r5, [r4]
+ 182:Core/Src/hall_detection.c **** 					currx->zerocrossings_tick[currx->numberof_zerocrossings]=ticks;
+ 304              		.loc 1 182 49 view .LVU81
+ 305 004c 5C1C     		adds	r4, r3, #1
+ 306 004e 50F82440 		ldr	r4, [r0, r4, lsl #2]
+ 182:Core/Src/hall_detection.c **** 					currx->zerocrossings_tick[currx->numberof_zerocrossings]=ticks;
+ARM GAS  /tmp/cc8kV50R.s 			page 10
+
+
+ 307              		.loc 1 182 22 view .LVU82
+ 308 0052 2C1B     		subs	r4, r5, r4
+ 182:Core/Src/hall_detection.c **** 					currx->zerocrossings_tick[currx->numberof_zerocrossings]=ticks;
+ 309              		.loc 1 182 6 view .LVU83
+ 310 0054 0A2C     		cmp	r4, #10
+ 311 0056 DEDD     		ble	.L14
+ 183:Core/Src/hall_detection.c **** 					if(currx->two_samples_buffer[0]>currx->two_samples_buffer[1]){
+ 312              		.loc 1 183 6 is_stmt 1 view .LVU84
+ 183:Core/Src/hall_detection.c **** 					if(currx->two_samples_buffer[0]>currx->two_samples_buffer[1]){
+ 313              		.loc 1 183 62 is_stmt 0 view .LVU85
+ 314 0058 9C1C     		adds	r4, r3, #2
+ 315 005a 40F82450 		str	r5, [r0, r4, lsl #2]
+ 184:Core/Src/hall_detection.c **** 						currx->zerocrossings_polarity[currx->numberof_zerocrossings]=rising_polarity;
+ 316              		.loc 1 184 6 is_stmt 1 view .LVU86
+ 184:Core/Src/hall_detection.c **** 						currx->zerocrossings_polarity[currx->numberof_zerocrossings]=rising_polarity;
+ 317              		.loc 1 184 8 is_stmt 0 view .LVU87
+ 318 005e 9142     		cmp	r1, r2
+ 319 0060 06D9     		bls	.L19
+ 185:Core/Src/hall_detection.c **** 					}else{
+ 320              		.loc 1 185 7 is_stmt 1 view .LVU88
+ 185:Core/Src/hall_detection.c **** 					}else{
+ 321              		.loc 1 185 67 is_stmt 0 view .LVU89
+ 322 0062 C218     		adds	r2, r0, r3
+ 323 0064 0021     		movs	r1, #0
+ 324 0066 82F82010 		strb	r1, [r2, #32]
+ 325              	.L20:
+ 189:Core/Src/hall_detection.c **** 			}
+ 326              		.loc 1 189 6 is_stmt 1 view .LVU90
+ 189:Core/Src/hall_detection.c **** 			}
+ 327              		.loc 1 189 35 is_stmt 0 view .LVU91
+ 328 006a 0133     		adds	r3, r3, #1
+ 329 006c 8362     		str	r3, [r0, #40]
+ 330              		.loc 1 193 1 view .LVU92
+ 331 006e D2E7     		b	.L14
+ 332              	.L19:
+ 187:Core/Src/hall_detection.c **** 					}
+ 333              		.loc 1 187 7 is_stmt 1 view .LVU93
+ 187:Core/Src/hall_detection.c **** 					}
+ 334              		.loc 1 187 67 is_stmt 0 view .LVU94
+ 335 0070 C218     		adds	r2, r0, r3
+ 336 0072 0121     		movs	r1, #1
+ 337 0074 82F82010 		strb	r1, [r2, #32]
+ 338 0078 F7E7     		b	.L20
+ 339              	.L24:
+ 340 007a 00BF     		.align	2
+ 341              	.L23:
+ 342 007c 00000000 		.word	.LANCHOR1
+ 343 0080 00000000 		.word	.LANCHOR2
+ 344              		.cfi_endproc
+ 345              	.LFE240:
+ 347              		.section	.text.detect_hall_zerocrossings,"ax",%progbits
+ 348              		.align	1
+ 349              		.global	detect_hall_zerocrossings
+ 350              		.syntax unified
+ 351              		.thumb
+ 352              		.thumb_func
+ 353              		.fpu fpv4-sp-d16
+ARM GAS  /tmp/cc8kV50R.s 			page 11
+
+
+ 355              	detect_hall_zerocrossings:
+ 356              	.LVL10:
+ 357              	.LFB241:
+ 194:Core/Src/hall_detection.c **** 
+ 195:Core/Src/hall_detection.c **** /**
+ 196:Core/Src/hall_detection.c **** * \brief
+ 197:Core/Src/hall_detection.c **** * \param
+ 198:Core/Src/hall_detection.c **** */
+ 199:Core/Src/hall_detection.c **** void detect_hall_zerocrossings(current_or_hall_measurements_struct* hallx){
+ 358              		.loc 1 199 75 is_stmt 1 view -0
+ 359              		.cfi_startproc
+ 360              		@ args = 0, pretend = 0, frame = 0
+ 361              		@ frame_needed = 0, uses_anonymous_args = 0
+ 362              		@ link register save eliminated.
+ 200:Core/Src/hall_detection.c **** 	if(hallx->two_samples_buffer[0]!=hallx->two_samples_buffer[1]){
+ 363              		.loc 1 200 2 view .LVU96
+ 364              		.loc 1 200 30 is_stmt 0 view .LVU97
+ 365 0000 0268     		ldr	r2, [r0]
+ 366              		.loc 1 200 60 view .LVU98
+ 367 0002 4368     		ldr	r3, [r0, #4]
+ 368              		.loc 1 200 4 view .LVU99
+ 369 0004 9A42     		cmp	r2, r3
+ 370 0006 18D0     		beq	.L30
+ 201:Core/Src/hall_detection.c **** 		if(hallx->numberof_zerocrossings<MAXZEROCROSSINGS){
+ 371              		.loc 1 201 3 is_stmt 1 view .LVU100
+ 372              		.loc 1 201 11 is_stmt 0 view .LVU101
+ 373 0008 836A     		ldr	r3, [r0, #40]
+ 374              		.loc 1 201 5 view .LVU102
+ 375 000a 052B     		cmp	r3, #5
+ 376 000c 15D8     		bhi	.L30
+ 199:Core/Src/hall_detection.c **** 	if(hallx->two_samples_buffer[0]!=hallx->two_samples_buffer[1]){
+ 377              		.loc 1 199 75 view .LVU103
+ 378 000e 10B4     		push	{r4}
+ 379              	.LCFI4:
+ 380              		.cfi_def_cfa_offset 4
+ 381              		.cfi_offset 4, -4
+ 202:Core/Src/hall_detection.c **** 			hallx->zerocrossings_tick[hallx->numberof_zerocrossings]=ticks;
+ 382              		.loc 1 202 4 is_stmt 1 view .LVU104
+ 383              		.loc 1 202 60 is_stmt 0 view .LVU105
+ 384 0010 991C     		adds	r1, r3, #2
+ 385 0012 0A4C     		ldr	r4, .L34
+ 386 0014 2468     		ldr	r4, [r4]
+ 387 0016 40F82140 		str	r4, [r0, r1, lsl #2]
+ 203:Core/Src/hall_detection.c **** 			if(hallx->two_samples_buffer[0]==GPIO_PIN_SET){
+ 388              		.loc 1 203 4 is_stmt 1 view .LVU106
+ 389              		.loc 1 203 6 is_stmt 0 view .LVU107
+ 390 001a 012A     		cmp	r2, #1
+ 391 001c 08D0     		beq	.L33
+ 204:Core/Src/hall_detection.c **** 				hallx->zerocrossings_polarity[hallx->numberof_zerocrossings]=rising_polarity;
+ 205:Core/Src/hall_detection.c **** 			}else{
+ 206:Core/Src/hall_detection.c **** 				hallx->zerocrossings_polarity[hallx->numberof_zerocrossings]=falling_polarity;
+ 392              		.loc 1 206 5 is_stmt 1 view .LVU108
+ 393              		.loc 1 206 65 is_stmt 0 view .LVU109
+ 394 001e C218     		adds	r2, r0, r3
+ 395 0020 0121     		movs	r1, #1
+ 396 0022 82F82010 		strb	r1, [r2, #32]
+ 397              	.L28:
+ARM GAS  /tmp/cc8kV50R.s 			page 12
+
+
+ 207:Core/Src/hall_detection.c **** 			}
+ 208:Core/Src/hall_detection.c **** 			hallx->numberof_zerocrossings++;
+ 398              		.loc 1 208 4 is_stmt 1 view .LVU110
+ 399              		.loc 1 208 33 is_stmt 0 view .LVU111
+ 400 0026 0133     		adds	r3, r3, #1
+ 401 0028 8362     		str	r3, [r0, #40]
+ 209:Core/Src/hall_detection.c **** 		}
+ 210:Core/Src/hall_detection.c **** 	}
+ 211:Core/Src/hall_detection.c **** }
+ 402              		.loc 1 211 1 view .LVU112
+ 403 002a 5DF8044B 		ldr	r4, [sp], #4
+ 404              	.LCFI5:
+ 405              		.cfi_remember_state
+ 406              		.cfi_restore 4
+ 407              		.cfi_def_cfa_offset 0
+ 408 002e 7047     		bx	lr
+ 409              	.L33:
+ 410              	.LCFI6:
+ 411              		.cfi_restore_state
+ 204:Core/Src/hall_detection.c **** 			}else{
+ 412              		.loc 1 204 5 is_stmt 1 view .LVU113
+ 204:Core/Src/hall_detection.c **** 			}else{
+ 413              		.loc 1 204 65 is_stmt 0 view .LVU114
+ 414 0030 C218     		adds	r2, r0, r3
+ 415 0032 0021     		movs	r1, #0
+ 416 0034 82F82010 		strb	r1, [r2, #32]
+ 417 0038 F5E7     		b	.L28
+ 418              	.L30:
+ 419              	.LCFI7:
+ 420              		.cfi_def_cfa_offset 0
+ 421              		.cfi_restore 4
+ 204:Core/Src/hall_detection.c **** 			}else{
+ 422              		.loc 1 204 65 view .LVU115
+ 423 003a 7047     		bx	lr
+ 424              	.L35:
+ 425              		.align	2
+ 426              	.L34:
+ 427 003c 00000000 		.word	.LANCHOR2
+ 428              		.cfi_endproc
+ 429              	.LFE241:
+ 431              		.section	.text.detect_all_zerocrossings,"ax",%progbits
+ 432              		.align	1
+ 433              		.global	detect_all_zerocrossings
+ 434              		.syntax unified
+ 435              		.thumb
+ 436              		.thumb_func
+ 437              		.fpu fpv4-sp-d16
+ 439              	detect_all_zerocrossings:
+ 440              	.LFB239:
+ 152:Core/Src/hall_detection.c **** 	if(ticks>2){ //skip the first two samples to fill the buffers
+ 441              		.loc 1 152 32 is_stmt 1 view -0
+ 442              		.cfi_startproc
+ 443              		@ args = 0, pretend = 0, frame = 0
+ 444              		@ frame_needed = 0, uses_anonymous_args = 0
+ 445 0000 08B5     		push	{r3, lr}
+ 446              	.LCFI8:
+ 447              		.cfi_def_cfa_offset 8
+ARM GAS  /tmp/cc8kV50R.s 			page 13
+
+
+ 448              		.cfi_offset 3, -8
+ 449              		.cfi_offset 14, -4
+ 153:Core/Src/hall_detection.c **** 		detect_current_zerocrossings(&currA);
+ 450              		.loc 1 153 2 view .LVU117
+ 153:Core/Src/hall_detection.c **** 		detect_current_zerocrossings(&currA);
+ 451              		.loc 1 153 10 is_stmt 0 view .LVU118
+ 452 0002 0C4B     		ldr	r3, .L40
+ 453 0004 1B68     		ldr	r3, [r3]
+ 153:Core/Src/hall_detection.c **** 		detect_current_zerocrossings(&currA);
+ 454              		.loc 1 153 4 view .LVU119
+ 455 0006 022B     		cmp	r3, #2
+ 456 0008 00D8     		bhi	.L39
+ 457              	.L36:
+ 161:Core/Src/hall_detection.c **** 
+ 458              		.loc 1 161 1 view .LVU120
+ 459 000a 08BD     		pop	{r3, pc}
+ 460              	.L39:
+ 154:Core/Src/hall_detection.c **** 		detect_current_zerocrossings(&currB);
+ 461              		.loc 1 154 3 is_stmt 1 view .LVU121
+ 462 000c 0A48     		ldr	r0, .L40+4
+ 463 000e FFF7FEFF 		bl	detect_current_zerocrossings
+ 464              	.LVL11:
+ 155:Core/Src/hall_detection.c **** 		detect_current_zerocrossings(&currC);
+ 465              		.loc 1 155 3 view .LVU122
+ 466 0012 0A48     		ldr	r0, .L40+8
+ 467 0014 FFF7FEFF 		bl	detect_current_zerocrossings
+ 468              	.LVL12:
+ 156:Core/Src/hall_detection.c **** 		detect_hall_zerocrossings(&hallA);
+ 469              		.loc 1 156 3 view .LVU123
+ 470 0018 0948     		ldr	r0, .L40+12
+ 471 001a FFF7FEFF 		bl	detect_current_zerocrossings
+ 472              	.LVL13:
+ 157:Core/Src/hall_detection.c **** 		detect_hall_zerocrossings(&hallB);
+ 473              		.loc 1 157 3 view .LVU124
+ 474 001e 0948     		ldr	r0, .L40+16
+ 475 0020 FFF7FEFF 		bl	detect_hall_zerocrossings
+ 476              	.LVL14:
+ 158:Core/Src/hall_detection.c **** 		detect_hall_zerocrossings(&hallC);
+ 477              		.loc 1 158 3 view .LVU125
+ 478 0024 0848     		ldr	r0, .L40+20
+ 479 0026 FFF7FEFF 		bl	detect_hall_zerocrossings
+ 480              	.LVL15:
+ 159:Core/Src/hall_detection.c **** 	}
+ 481              		.loc 1 159 3 view .LVU126
+ 482 002a 0848     		ldr	r0, .L40+24
+ 483 002c FFF7FEFF 		bl	detect_hall_zerocrossings
+ 484              	.LVL16:
+ 161:Core/Src/hall_detection.c **** 
+ 485              		.loc 1 161 1 is_stmt 0 view .LVU127
+ 486 0030 EBE7     		b	.L36
+ 487              	.L41:
+ 488 0032 00BF     		.align	2
+ 489              	.L40:
+ 490 0034 00000000 		.word	.LANCHOR2
+ 491 0038 00000000 		.word	currA
+ 492 003c 00000000 		.word	currB
+ 493 0040 00000000 		.word	currC
+ARM GAS  /tmp/cc8kV50R.s 			page 14
+
+
+ 494 0044 00000000 		.word	hallA
+ 495 0048 00000000 		.word	hallB
+ 496 004c 00000000 		.word	hallC
+ 497              		.cfi_endproc
+ 498              	.LFE239:
+ 500              		.section	.text.end_detection,"ax",%progbits
+ 501              		.align	1
+ 502              		.global	end_detection
+ 503              		.syntax unified
+ 504              		.thumb
+ 505              		.thumb_func
+ 506              		.fpu fpv4-sp-d16
+ 508              	end_detection:
+ 509              	.LVL17:
+ 510              	.LFB242:
+ 212:Core/Src/hall_detection.c **** 
+ 213:Core/Src/hall_detection.c **** /**
+ 214:Core/Src/hall_detection.c **** * \brief
+ 215:Core/Src/hall_detection.c **** * \param
+ 216:Core/Src/hall_detection.c **** */
+ 217:Core/Src/hall_detection.c **** void end_detection(detection_state_enum* enabled_or_disabled){
+ 511              		.loc 1 217 62 is_stmt 1 view -0
+ 512              		.cfi_startproc
+ 513              		@ args = 0, pretend = 0, frame = 0
+ 514              		@ frame_needed = 0, uses_anonymous_args = 0
+ 515              		@ link register save eliminated.
+ 218:Core/Src/hall_detection.c **** 	if(
+ 516              		.loc 1 218 2 view .LVU129
+ 219:Core/Src/hall_detection.c **** 			(currA.numberof_zerocrossings>=MAXZEROCROSSINGS) &&
+ 517              		.loc 1 219 10 is_stmt 0 view .LVU130
+ 518 0000 114B     		ldr	r3, .L45
+ 519 0002 9B6A     		ldr	r3, [r3, #40]
+ 218:Core/Src/hall_detection.c **** 	if(
+ 520              		.loc 1 218 4 view .LVU131
+ 521 0004 052B     		cmp	r3, #5
+ 522 0006 16D9     		bls	.L43
+ 220:Core/Src/hall_detection.c **** 			(currB.numberof_zerocrossings>=MAXZEROCROSSINGS) &&
+ 523              		.loc 1 220 10 view .LVU132
+ 524 0008 104B     		ldr	r3, .L45+4
+ 525 000a 9B6A     		ldr	r3, [r3, #40]
+ 219:Core/Src/hall_detection.c **** 			(currA.numberof_zerocrossings>=MAXZEROCROSSINGS) &&
+ 526              		.loc 1 219 53 view .LVU133
+ 527 000c 052B     		cmp	r3, #5
+ 528 000e 12D9     		bls	.L43
+ 221:Core/Src/hall_detection.c **** 			(currC.numberof_zerocrossings>=MAXZEROCROSSINGS) &&
+ 529              		.loc 1 221 10 view .LVU134
+ 530 0010 0F4B     		ldr	r3, .L45+8
+ 531 0012 9B6A     		ldr	r3, [r3, #40]
+ 220:Core/Src/hall_detection.c **** 			(currB.numberof_zerocrossings>=MAXZEROCROSSINGS) &&
+ 532              		.loc 1 220 53 view .LVU135
+ 533 0014 052B     		cmp	r3, #5
+ 534 0016 0ED9     		bls	.L43
+ 222:Core/Src/hall_detection.c **** 			(hallA.numberof_zerocrossings>=MAXZEROCROSSINGS) &&
+ 535              		.loc 1 222 10 view .LVU136
+ 536 0018 0E4B     		ldr	r3, .L45+12
+ 537 001a 9B6A     		ldr	r3, [r3, #40]
+ 221:Core/Src/hall_detection.c **** 			(currC.numberof_zerocrossings>=MAXZEROCROSSINGS) &&
+ARM GAS  /tmp/cc8kV50R.s 			page 15
+
+
+ 538              		.loc 1 221 53 view .LVU137
+ 539 001c 052B     		cmp	r3, #5
+ 540 001e 0AD9     		bls	.L43
+ 223:Core/Src/hall_detection.c **** 			(hallB.numberof_zerocrossings>=MAXZEROCROSSINGS) &&
+ 541              		.loc 1 223 10 view .LVU138
+ 542 0020 0D4B     		ldr	r3, .L45+16
+ 543 0022 9B6A     		ldr	r3, [r3, #40]
+ 222:Core/Src/hall_detection.c **** 			(hallA.numberof_zerocrossings>=MAXZEROCROSSINGS) &&
+ 544              		.loc 1 222 53 view .LVU139
+ 545 0024 052B     		cmp	r3, #5
+ 546 0026 06D9     		bls	.L43
+ 224:Core/Src/hall_detection.c **** 			(hallC.numberof_zerocrossings>=MAXZEROCROSSINGS)
+ 547              		.loc 1 224 10 view .LVU140
+ 548 0028 0C4B     		ldr	r3, .L45+20
+ 549 002a 9B6A     		ldr	r3, [r3, #40]
+ 223:Core/Src/hall_detection.c **** 			(hallB.numberof_zerocrossings>=MAXZEROCROSSINGS) &&
+ 550              		.loc 1 223 53 view .LVU141
+ 551 002c 052B     		cmp	r3, #5
+ 552 002e 02D9     		bls	.L43
+ 225:Core/Src/hall_detection.c **** 	){
+ 226:Core/Src/hall_detection.c **** 		*enabled_or_disabled=detection_DISABLED; //end of detection because the zerocrossing buffers are 
+ 553              		.loc 1 226 3 is_stmt 1 view .LVU142
+ 554              		.loc 1 226 23 is_stmt 0 view .LVU143
+ 555 0030 0023     		movs	r3, #0
+ 556 0032 0370     		strb	r3, [r0]
+ 557 0034 7047     		bx	lr
+ 558              	.L43:
+ 227:Core/Src/hall_detection.c **** 	}else if(ticks>=MAXTICKs){
+ 559              		.loc 1 227 8 is_stmt 1 view .LVU144
+ 560              		.loc 1 227 16 is_stmt 0 view .LVU145
+ 561 0036 0A4B     		ldr	r3, .L45+24
+ 562 0038 1B68     		ldr	r3, [r3]
+ 563              		.loc 1 227 10 view .LVU146
+ 564 003a B3F57A7F 		cmp	r3, #1000
+ 565 003e 01D3     		bcc	.L42
+ 228:Core/Src/hall_detection.c **** 		*enabled_or_disabled=detection_DISABLED; //end of detection because of timeout
+ 566              		.loc 1 228 3 is_stmt 1 view .LVU147
+ 567              		.loc 1 228 23 is_stmt 0 view .LVU148
+ 568 0040 0023     		movs	r3, #0
+ 569 0042 0370     		strb	r3, [r0]
+ 570              	.L42:
+ 229:Core/Src/hall_detection.c **** 	}
+ 230:Core/Src/hall_detection.c **** }
+ 571              		.loc 1 230 1 view .LVU149
+ 572 0044 7047     		bx	lr
+ 573              	.L46:
+ 574 0046 00BF     		.align	2
+ 575              	.L45:
+ 576 0048 00000000 		.word	currA
+ 577 004c 00000000 		.word	currB
+ 578 0050 00000000 		.word	currC
+ 579 0054 00000000 		.word	hallA
+ 580 0058 00000000 		.word	hallB
+ 581 005c 00000000 		.word	hallC
+ 582 0060 00000000 		.word	.LANCHOR2
+ 583              		.cfi_endproc
+ 584              	.LFE242:
+ARM GAS  /tmp/cc8kV50R.s 			page 16
+
+
+ 586              		.section	.text.swap_hall_gpios_with_detected_results,"ax",%progbits
+ 587              		.align	1
+ 588              		.global	swap_hall_gpios_with_detected_results
+ 589              		.syntax unified
+ 590              		.thumb
+ 591              		.thumb_func
+ 592              		.fpu fpv4-sp-d16
+ 594              	swap_hall_gpios_with_detected_results:
+ 595              	.LVL18:
+ 596              	.LFB244:
+ 231:Core/Src/hall_detection.c **** 
+ 232:Core/Src/hall_detection.c **** /**
+ 233:Core/Src/hall_detection.c **** * \brief
+ 234:Core/Src/hall_detection.c **** * \param
+ 235:Core/Src/hall_detection.c **** */
+ 236:Core/Src/hall_detection.c **** void evaluate_and_present_results(detection_state_enum* enabled_or_disabled,hall_pin_info* H1,hall_
+ 237:Core/Src/hall_detection.c **** 	if(*enabled_or_disabled==detection_DISABLED){
+ 238:Core/Src/hall_detection.c **** 		calculateElectricPeriod_inTicks(&results.electricPeriod_ticks);
+ 239:Core/Src/hall_detection.c **** 		assign_closest_phase_to_hall(&results);
+ 240:Core/Src/hall_detection.c **** 		assign_polarity(&results);
+ 241:Core/Src/hall_detection.c **** 		//swap_hall_gpios_with_detected_results(H1,H2,H3);
+ 242:Core/Src/hall_detection.c **** 		present_results();
+ 243:Core/Src/hall_detection.c **** 	}
+ 244:Core/Src/hall_detection.c **** }
+ 245:Core/Src/hall_detection.c **** 
+ 246:Core/Src/hall_detection.c **** void swap_hall_gpios_with_detected_results(hall_pin_info* H1,hall_pin_info* H2,hall_pin_info* H3){
+ 597              		.loc 1 246 98 is_stmt 1 view -0
+ 598              		.cfi_startproc
+ 599              		@ args = 0, pretend = 0, frame = 24
+ 600              		@ frame_needed = 0, uses_anonymous_args = 0
+ 601              		@ link register save eliminated.
+ 602              		.loc 1 246 98 is_stmt 0 view .LVU151
+ 603 0000 30B4     		push	{r4, r5}
+ 604              	.LCFI9:
+ 605              		.cfi_def_cfa_offset 8
+ 606              		.cfi_offset 4, -8
+ 607              		.cfi_offset 5, -4
+ 608 0002 86B0     		sub	sp, sp, #24
+ 609              	.LCFI10:
+ 610              		.cfi_def_cfa_offset 32
+ 611 0004 0446     		mov	r4, r0
+ 612 0006 0B46     		mov	r3, r1
+ 247:Core/Src/hall_detection.c **** 	hall_pin_info _H1=*H1;
+ 613              		.loc 1 247 2 is_stmt 1 view .LVU152
+ 614              		.loc 1 247 16 is_stmt 0 view .LVU153
+ 615 0008 D0E90001 		ldrd	r0, r1, [r0]
+ 616              	.LVL19:
+ 617              		.loc 1 247 16 view .LVU154
+ 618 000c 06AD     		add	r5, sp, #24
+ 619 000e 05E90300 		stmdb	r5, {r0, r1}
+ 248:Core/Src/hall_detection.c **** 	hall_pin_info _H2=*H2;
+ 620              		.loc 1 248 2 is_stmt 1 view .LVU155
+ 621              		.loc 1 248 16 is_stmt 0 view .LVU156
+ 622 0012 02AD     		add	r5, sp, #8
+ 623 0014 93E80300 		ldm	r3, {r0, r1}
+ 624 0018 85E80300 		stm	r5, {r0, r1}
+ 249:Core/Src/hall_detection.c **** 	hall_pin_info _H3=*H3;
+ARM GAS  /tmp/cc8kV50R.s 			page 17
+
+
+ 625              		.loc 1 249 2 is_stmt 1 view .LVU157
+ 626              		.loc 1 249 16 is_stmt 0 view .LVU158
+ 627 001c 6D46     		mov	r5, sp
+ 628 001e 92E80300 		ldm	r2, {r0, r1}
+ 629 0022 85E80300 		stm	r5, {r0, r1}
+ 250:Core/Src/hall_detection.c **** 
+ 251:Core/Src/hall_detection.c **** 	switch (results.hall_order[phase_A]) {
+ 630              		.loc 1 251 2 is_stmt 1 view .LVU159
+ 631              		.loc 1 251 28 is_stmt 0 view .LVU160
+ 632 0026 3449     		ldr	r1, .L61
+ 633 0028 0979     		ldrb	r1, [r1, #4]	@ zero_extendqisi2
+ 634              		.loc 1 251 2 view .LVU161
+ 635 002a 0129     		cmp	r1, #1
+ 636 002c 20D0     		beq	.L48
+ 637 002e 48B2     		sxtb	r0, r1
+ 638 0030 A8B1     		cbz	r0, .L49
+ 639 0032 0229     		cmp	r1, #2
+ 640 0034 24D0     		beq	.L50
+ 641              	.L51:
+ 252:Core/Src/hall_detection.c **** 		case hall_A:
+ 253:Core/Src/hall_detection.c **** 			*H1=_H1;
+ 254:Core/Src/hall_detection.c **** 			H1->polarity=results.hall_polarity[hall_A];
+ 255:Core/Src/hall_detection.c **** 			break;
+ 256:Core/Src/hall_detection.c **** 		case hall_B:
+ 257:Core/Src/hall_detection.c **** 			*H1=_H2;
+ 258:Core/Src/hall_detection.c **** 			H1->polarity=results.hall_polarity[hall_B];
+ 259:Core/Src/hall_detection.c **** 			break;
+ 260:Core/Src/hall_detection.c **** 		case hall_C:
+ 261:Core/Src/hall_detection.c **** 			*H1=_H3;
+ 262:Core/Src/hall_detection.c **** 			H1->polarity=results.hall_polarity[hall_C];
+ 263:Core/Src/hall_detection.c **** 			break;
+ 264:Core/Src/hall_detection.c **** 		default:
+ 265:Core/Src/hall_detection.c **** 			break;
+ 266:Core/Src/hall_detection.c **** 	}
+ 267:Core/Src/hall_detection.c **** 
+ 268:Core/Src/hall_detection.c **** 	switch (results.hall_order[phase_B]) {
+ 642              		.loc 1 268 2 is_stmt 1 view .LVU162
+ 643              		.loc 1 268 28 is_stmt 0 view .LVU163
+ 644 0036 3049     		ldr	r1, .L61
+ 645 0038 4979     		ldrb	r1, [r1, #5]	@ zero_extendqisi2
+ 646              		.loc 1 268 2 view .LVU164
+ 647 003a 0129     		cmp	r1, #1
+ 648 003c 31D0     		beq	.L52
+ 649 003e 48B2     		sxtb	r0, r1
+ 650 0040 30B3     		cbz	r0, .L53
+ 651 0042 0229     		cmp	r1, #2
+ 652 0044 35D0     		beq	.L54
+ 653              	.L55:
+ 269:Core/Src/hall_detection.c **** 		case hall_A:
+ 270:Core/Src/hall_detection.c **** 			*H2=_H1;
+ 271:Core/Src/hall_detection.c **** 			H2->polarity=results.hall_polarity[hall_A];
+ 272:Core/Src/hall_detection.c **** 			break;
+ 273:Core/Src/hall_detection.c **** 		case hall_B:
+ 274:Core/Src/hall_detection.c **** 			*H2=_H2;
+ 275:Core/Src/hall_detection.c **** 			H2->polarity=results.hall_polarity[hall_B];
+ 276:Core/Src/hall_detection.c **** 			break;
+ 277:Core/Src/hall_detection.c **** 		case hall_C:
+ARM GAS  /tmp/cc8kV50R.s 			page 18
+
+
+ 278:Core/Src/hall_detection.c **** 			*H2=_H3;
+ 279:Core/Src/hall_detection.c **** 			H2->polarity=results.hall_polarity[hall_C];
+ 280:Core/Src/hall_detection.c **** 			break;
+ 281:Core/Src/hall_detection.c **** 		default:
+ 282:Core/Src/hall_detection.c **** 			break;
+ 283:Core/Src/hall_detection.c **** 	}
+ 284:Core/Src/hall_detection.c **** 
+ 285:Core/Src/hall_detection.c **** 	switch (results.hall_order[phase_C]) {
+ 654              		.loc 1 285 2 is_stmt 1 view .LVU165
+ 655              		.loc 1 285 28 is_stmt 0 view .LVU166
+ 656 0046 2C4B     		ldr	r3, .L61
+ 657              	.LVL20:
+ 658              		.loc 1 285 28 view .LVU167
+ 659 0048 9B79     		ldrb	r3, [r3, #6]	@ zero_extendqisi2
+ 660              		.loc 1 285 2 view .LVU168
+ 661 004a 012B     		cmp	r3, #1
+ 662 004c 42D0     		beq	.L56
+ 663 004e 59B2     		sxtb	r1, r3
+ 664 0050 0029     		cmp	r1, #0
+ 665 0052 36D0     		beq	.L57
+ 666 0054 022B     		cmp	r3, #2
+ 667 0056 46D0     		beq	.L58
+ 668              	.L47:
+ 286:Core/Src/hall_detection.c **** 		case hall_A:
+ 287:Core/Src/hall_detection.c **** 			*H3=_H1;
+ 288:Core/Src/hall_detection.c **** 			H3->polarity=results.hall_polarity[hall_A];
+ 289:Core/Src/hall_detection.c **** 			break;
+ 290:Core/Src/hall_detection.c **** 		case hall_B:
+ 291:Core/Src/hall_detection.c **** 			*H3=_H2;
+ 292:Core/Src/hall_detection.c **** 			H3->polarity=results.hall_polarity[hall_B];
+ 293:Core/Src/hall_detection.c **** 			break;
+ 294:Core/Src/hall_detection.c **** 		case hall_C:
+ 295:Core/Src/hall_detection.c **** 			*H3=_H3;
+ 296:Core/Src/hall_detection.c **** 			H3->polarity=results.hall_polarity[hall_C];
+ 297:Core/Src/hall_detection.c **** 			break;
+ 298:Core/Src/hall_detection.c **** 		default:
+ 299:Core/Src/hall_detection.c **** 			break;
+ 300:Core/Src/hall_detection.c **** 	}
+ 301:Core/Src/hall_detection.c **** 
+ 302:Core/Src/hall_detection.c **** }
+ 669              		.loc 1 302 1 view .LVU169
+ 670 0058 06B0     		add	sp, sp, #24
+ 671              	.LCFI11:
+ 672              		.cfi_remember_state
+ 673              		.cfi_def_cfa_offset 8
+ 674              		@ sp needed
+ 675 005a 30BC     		pop	{r4, r5}
+ 676              	.LCFI12:
+ 677              		.cfi_restore 5
+ 678              		.cfi_restore 4
+ 679              		.cfi_def_cfa_offset 0
+ 680              	.LVL21:
+ 681              		.loc 1 302 1 view .LVU170
+ 682 005c 7047     		bx	lr
+ 683              	.LVL22:
+ 684              	.L49:
+ 685              	.LCFI13:
+ARM GAS  /tmp/cc8kV50R.s 			page 19
+
+
+ 686              		.cfi_restore_state
+ 253:Core/Src/hall_detection.c **** 			H1->polarity=results.hall_polarity[hall_A];
+ 687              		.loc 1 253 4 is_stmt 1 view .LVU171
+ 253:Core/Src/hall_detection.c **** 			H1->polarity=results.hall_polarity[hall_A];
+ 688              		.loc 1 253 7 is_stmt 0 view .LVU172
+ 689 005e 06A9     		add	r1, sp, #24
+ 690 0060 11E90300 		ldmdb	r1, {r0, r1}
+ 691 0064 84E80300 		stm	r4, {r0, r1}
+ 254:Core/Src/hall_detection.c **** 			break;
+ 692              		.loc 1 254 4 is_stmt 1 view .LVU173
+ 254:Core/Src/hall_detection.c **** 			break;
+ 693              		.loc 1 254 38 is_stmt 0 view .LVU174
+ 694 0068 2349     		ldr	r1, .L61
+ 695 006a C979     		ldrb	r1, [r1, #7]	@ zero_extendqisi2
+ 254:Core/Src/hall_detection.c **** 			break;
+ 696              		.loc 1 254 16 view .LVU175
+ 697 006c A171     		strb	r1, [r4, #6]
+ 255:Core/Src/hall_detection.c **** 		case hall_B:
+ 698              		.loc 1 255 4 is_stmt 1 view .LVU176
+ 699 006e E2E7     		b	.L51
+ 700              	.L48:
+ 257:Core/Src/hall_detection.c **** 			H1->polarity=results.hall_polarity[hall_B];
+ 701              		.loc 1 257 4 view .LVU177
+ 257:Core/Src/hall_detection.c **** 			H1->polarity=results.hall_polarity[hall_B];
+ 702              		.loc 1 257 7 is_stmt 0 view .LVU178
+ 703 0070 02A9     		add	r1, sp, #8
+ 704 0072 03C9     		ldm	r1, {r0, r1}
+ 705 0074 84E80300 		stm	r4, {r0, r1}
+ 258:Core/Src/hall_detection.c **** 			break;
+ 706              		.loc 1 258 4 is_stmt 1 view .LVU179
+ 258:Core/Src/hall_detection.c **** 			break;
+ 707              		.loc 1 258 38 is_stmt 0 view .LVU180
+ 708 0078 1F49     		ldr	r1, .L61
+ 709 007a 097A     		ldrb	r1, [r1, #8]	@ zero_extendqisi2
+ 258:Core/Src/hall_detection.c **** 			break;
+ 710              		.loc 1 258 16 view .LVU181
+ 711 007c A171     		strb	r1, [r4, #6]
+ 259:Core/Src/hall_detection.c **** 		case hall_C:
+ 712              		.loc 1 259 4 is_stmt 1 view .LVU182
+ 713 007e DAE7     		b	.L51
+ 714              	.L50:
+ 261:Core/Src/hall_detection.c **** 			H1->polarity=results.hall_polarity[hall_C];
+ 715              		.loc 1 261 4 view .LVU183
+ 261:Core/Src/hall_detection.c **** 			H1->polarity=results.hall_polarity[hall_C];
+ 716              		.loc 1 261 7 is_stmt 0 view .LVU184
+ 717 0080 D5E90001 		ldrd	r0, r1, [r5]
+ 718 0084 84E80300 		stm	r4, {r0, r1}
+ 262:Core/Src/hall_detection.c **** 			break;
+ 719              		.loc 1 262 4 is_stmt 1 view .LVU185
+ 262:Core/Src/hall_detection.c **** 			break;
+ 720              		.loc 1 262 38 is_stmt 0 view .LVU186
+ 721 0088 1B49     		ldr	r1, .L61
+ 722 008a 497A     		ldrb	r1, [r1, #9]	@ zero_extendqisi2
+ 262:Core/Src/hall_detection.c **** 			break;
+ 723              		.loc 1 262 16 view .LVU187
+ 724 008c A171     		strb	r1, [r4, #6]
+ 263:Core/Src/hall_detection.c **** 		default:
+ARM GAS  /tmp/cc8kV50R.s 			page 20
+
+
+ 725              		.loc 1 263 4 is_stmt 1 view .LVU188
+ 726 008e D2E7     		b	.L51
+ 727              	.L53:
+ 270:Core/Src/hall_detection.c **** 			H2->polarity=results.hall_polarity[hall_A];
+ 728              		.loc 1 270 4 view .LVU189
+ 270:Core/Src/hall_detection.c **** 			H2->polarity=results.hall_polarity[hall_A];
+ 729              		.loc 1 270 7 is_stmt 0 view .LVU190
+ 730 0090 06A9     		add	r1, sp, #24
+ 731 0092 11E90300 		ldmdb	r1, {r0, r1}
+ 732 0096 83E80300 		stm	r3, {r0, r1}
+ 271:Core/Src/hall_detection.c **** 			break;
+ 733              		.loc 1 271 4 is_stmt 1 view .LVU191
+ 271:Core/Src/hall_detection.c **** 			break;
+ 734              		.loc 1 271 38 is_stmt 0 view .LVU192
+ 735 009a 1749     		ldr	r1, .L61
+ 736 009c C979     		ldrb	r1, [r1, #7]	@ zero_extendqisi2
+ 271:Core/Src/hall_detection.c **** 			break;
+ 737              		.loc 1 271 16 view .LVU193
+ 738 009e 9971     		strb	r1, [r3, #6]
+ 272:Core/Src/hall_detection.c **** 		case hall_B:
+ 739              		.loc 1 272 4 is_stmt 1 view .LVU194
+ 740 00a0 D1E7     		b	.L55
+ 741              	.L52:
+ 274:Core/Src/hall_detection.c **** 			H2->polarity=results.hall_polarity[hall_B];
+ 742              		.loc 1 274 4 view .LVU195
+ 274:Core/Src/hall_detection.c **** 			H2->polarity=results.hall_polarity[hall_B];
+ 743              		.loc 1 274 7 is_stmt 0 view .LVU196
+ 744 00a2 02A9     		add	r1, sp, #8
+ 745 00a4 03C9     		ldm	r1, {r0, r1}
+ 746 00a6 83E80300 		stm	r3, {r0, r1}
+ 275:Core/Src/hall_detection.c **** 			break;
+ 747              		.loc 1 275 4 is_stmt 1 view .LVU197
+ 275:Core/Src/hall_detection.c **** 			break;
+ 748              		.loc 1 275 38 is_stmt 0 view .LVU198
+ 749 00aa 1349     		ldr	r1, .L61
+ 750 00ac 097A     		ldrb	r1, [r1, #8]	@ zero_extendqisi2
+ 275:Core/Src/hall_detection.c **** 			break;
+ 751              		.loc 1 275 16 view .LVU199
+ 752 00ae 9971     		strb	r1, [r3, #6]
+ 276:Core/Src/hall_detection.c **** 		case hall_C:
+ 753              		.loc 1 276 4 is_stmt 1 view .LVU200
+ 754 00b0 C9E7     		b	.L55
+ 755              	.L54:
+ 278:Core/Src/hall_detection.c **** 			H2->polarity=results.hall_polarity[hall_C];
+ 756              		.loc 1 278 4 view .LVU201
+ 278:Core/Src/hall_detection.c **** 			H2->polarity=results.hall_polarity[hall_C];
+ 757              		.loc 1 278 7 is_stmt 0 view .LVU202
+ 758 00b2 6946     		mov	r1, sp
+ 759 00b4 03C9     		ldm	r1, {r0, r1}
+ 760 00b6 83E80300 		stm	r3, {r0, r1}
+ 279:Core/Src/hall_detection.c **** 			break;
+ 761              		.loc 1 279 4 is_stmt 1 view .LVU203
+ 279:Core/Src/hall_detection.c **** 			break;
+ 762              		.loc 1 279 38 is_stmt 0 view .LVU204
+ 763 00ba 0F49     		ldr	r1, .L61
+ 764 00bc 497A     		ldrb	r1, [r1, #9]	@ zero_extendqisi2
+ 279:Core/Src/hall_detection.c **** 			break;
+ARM GAS  /tmp/cc8kV50R.s 			page 21
+
+
+ 765              		.loc 1 279 16 view .LVU205
+ 766 00be 9971     		strb	r1, [r3, #6]
+ 280:Core/Src/hall_detection.c **** 		default:
+ 767              		.loc 1 280 4 is_stmt 1 view .LVU206
+ 768 00c0 C1E7     		b	.L55
+ 769              	.LVL23:
+ 770              	.L57:
+ 287:Core/Src/hall_detection.c **** 			H3->polarity=results.hall_polarity[hall_A];
+ 771              		.loc 1 287 4 view .LVU207
+ 287:Core/Src/hall_detection.c **** 			H3->polarity=results.hall_polarity[hall_A];
+ 772              		.loc 1 287 7 is_stmt 0 view .LVU208
+ 773 00c2 06AB     		add	r3, sp, #24
+ 774 00c4 13E90300 		ldmdb	r3, {r0, r1}
+ 775 00c8 82E80300 		stm	r2, {r0, r1}
+ 288:Core/Src/hall_detection.c **** 			break;
+ 776              		.loc 1 288 4 is_stmt 1 view .LVU209
+ 288:Core/Src/hall_detection.c **** 			break;
+ 777              		.loc 1 288 38 is_stmt 0 view .LVU210
+ 778 00cc 0A4B     		ldr	r3, .L61
+ 779 00ce DB79     		ldrb	r3, [r3, #7]	@ zero_extendqisi2
+ 288:Core/Src/hall_detection.c **** 			break;
+ 780              		.loc 1 288 16 view .LVU211
+ 781 00d0 9371     		strb	r3, [r2, #6]
+ 289:Core/Src/hall_detection.c **** 		case hall_B:
+ 782              		.loc 1 289 4 is_stmt 1 view .LVU212
+ 783 00d2 C1E7     		b	.L47
+ 784              	.L56:
+ 291:Core/Src/hall_detection.c **** 			H3->polarity=results.hall_polarity[hall_B];
+ 785              		.loc 1 291 4 view .LVU213
+ 291:Core/Src/hall_detection.c **** 			H3->polarity=results.hall_polarity[hall_B];
+ 786              		.loc 1 291 7 is_stmt 0 view .LVU214
+ 787 00d4 02AB     		add	r3, sp, #8
+ 788 00d6 93E80300 		ldm	r3, {r0, r1}
+ 789 00da 82E80300 		stm	r2, {r0, r1}
+ 292:Core/Src/hall_detection.c **** 			break;
+ 790              		.loc 1 292 4 is_stmt 1 view .LVU215
+ 292:Core/Src/hall_detection.c **** 			break;
+ 791              		.loc 1 292 38 is_stmt 0 view .LVU216
+ 792 00de 064B     		ldr	r3, .L61
+ 793 00e0 1B7A     		ldrb	r3, [r3, #8]	@ zero_extendqisi2
+ 292:Core/Src/hall_detection.c **** 			break;
+ 794              		.loc 1 292 16 view .LVU217
+ 795 00e2 9371     		strb	r3, [r2, #6]
+ 293:Core/Src/hall_detection.c **** 		case hall_C:
+ 796              		.loc 1 293 4 is_stmt 1 view .LVU218
+ 797 00e4 B8E7     		b	.L47
+ 798              	.L58:
+ 295:Core/Src/hall_detection.c **** 			H3->polarity=results.hall_polarity[hall_C];
+ 799              		.loc 1 295 4 view .LVU219
+ 295:Core/Src/hall_detection.c **** 			H3->polarity=results.hall_polarity[hall_C];
+ 800              		.loc 1 295 7 is_stmt 0 view .LVU220
+ 801 00e6 6B46     		mov	r3, sp
+ 802 00e8 93E80300 		ldm	r3, {r0, r1}
+ 803 00ec 82E80300 		stm	r2, {r0, r1}
+ 296:Core/Src/hall_detection.c **** 			break;
+ 804              		.loc 1 296 4 is_stmt 1 view .LVU221
+ 296:Core/Src/hall_detection.c **** 			break;
+ARM GAS  /tmp/cc8kV50R.s 			page 22
+
+
+ 805              		.loc 1 296 38 is_stmt 0 view .LVU222
+ 806 00f0 014B     		ldr	r3, .L61
+ 807 00f2 5B7A     		ldrb	r3, [r3, #9]	@ zero_extendqisi2
+ 296:Core/Src/hall_detection.c **** 			break;
+ 808              		.loc 1 296 16 view .LVU223
+ 809 00f4 9371     		strb	r3, [r2, #6]
+ 297:Core/Src/hall_detection.c **** 		default:
+ 810              		.loc 1 297 4 is_stmt 1 view .LVU224
+ 811              		.loc 1 302 1 is_stmt 0 view .LVU225
+ 812 00f6 AFE7     		b	.L47
+ 813              	.L62:
+ 814              		.align	2
+ 815              	.L61:
+ 816 00f8 00000000 		.word	results
+ 817              		.cfi_endproc
+ 818              	.LFE244:
+ 820              		.section	.text.calculateElectricPeriod_inTicks,"ax",%progbits
+ 821              		.align	1
+ 822              		.global	calculateElectricPeriod_inTicks
+ 823              		.syntax unified
+ 824              		.thumb
+ 825              		.thumb_func
+ 826              		.fpu fpv4-sp-d16
+ 828              	calculateElectricPeriod_inTicks:
+ 829              	.LVL24:
+ 830              	.LFB245:
+ 303:Core/Src/hall_detection.c **** /**
+ 304:Core/Src/hall_detection.c **** * \brief
+ 305:Core/Src/hall_detection.c **** * \param
+ 306:Core/Src/hall_detection.c **** */
+ 307:Core/Src/hall_detection.c **** void calculateElectricPeriod_inTicks(uint32_t* resulting_period){
+ 831              		.loc 1 307 65 is_stmt 1 view -0
+ 832              		.cfi_startproc
+ 833              		@ args = 0, pretend = 0, frame = 0
+ 834              		@ frame_needed = 0, uses_anonymous_args = 0
+ 835              		@ link register save eliminated.
+ 836              		.loc 1 307 65 is_stmt 0 view .LVU227
+ 837 0000 70B4     		push	{r4, r5, r6}
+ 838              	.LCFI14:
+ 839              		.cfi_def_cfa_offset 12
+ 840              		.cfi_offset 4, -12
+ 841              		.cfi_offset 5, -8
+ 842              		.cfi_offset 6, -4
+ 308:Core/Src/hall_detection.c **** 	uint32_t averagedsemiPeriod=0;
+ 843              		.loc 1 308 2 is_stmt 1 view .LVU228
+ 844              	.LVL25:
+ 309:Core/Src/hall_detection.c **** 	for (uint32_t i = 0; i < MAXZEROCROSSINGS-1; ++i) {
+ 845              		.loc 1 309 2 view .LVU229
+ 846              	.LBB2:
+ 847              		.loc 1 309 7 view .LVU230
+ 848              		.loc 1 309 16 is_stmt 0 view .LVU231
+ 849 0002 0025     		movs	r5, #0
+ 850              	.LBE2:
+ 308:Core/Src/hall_detection.c **** 	uint32_t averagedsemiPeriod=0;
+ 851              		.loc 1 308 11 view .LVU232
+ 852 0004 2B46     		mov	r3, r5
+ 853              	.LVL26:
+ARM GAS  /tmp/cc8kV50R.s 			page 23
+
+
+ 854              	.L64:
+ 855              	.LBB3:
+ 856              		.loc 1 309 2 discriminator 1 view .LVU233
+ 857 0006 042D     		cmp	r5, #4
+ 858 0008 26D8     		bhi	.L67
+ 310:Core/Src/hall_detection.c **** 		averagedsemiPeriod+=(currA.zerocrossings_tick[i+1]-currA.zerocrossings_tick[i]);
+ 859              		.loc 1 310 3 is_stmt 1 discriminator 3 view .LVU234
+ 860              		.loc 1 310 48 is_stmt 0 discriminator 3 view .LVU235
+ 861 000a 174E     		ldr	r6, .L68
+ 862 000c EC1C     		adds	r4, r5, #3
+ 863 000e 56F82420 		ldr	r2, [r6, r4, lsl #2]
+ 864              		.loc 1 310 78 discriminator 3 view .LVU236
+ 865 0012 A91C     		adds	r1, r5, #2
+ 866 0014 56F82160 		ldr	r6, [r6, r1, lsl #2]
+ 867              		.loc 1 310 53 discriminator 3 view .LVU237
+ 868 0018 921B     		subs	r2, r2, r6
+ 869              		.loc 1 310 21 discriminator 3 view .LVU238
+ 870 001a 1344     		add	r3, r3, r2
+ 871              	.LVL27:
+ 311:Core/Src/hall_detection.c **** 		averagedsemiPeriod+=(currB.zerocrossings_tick[i+1]-currB.zerocrossings_tick[i]);
+ 872              		.loc 1 311 3 is_stmt 1 discriminator 3 view .LVU239
+ 873              		.loc 1 311 48 is_stmt 0 discriminator 3 view .LVU240
+ 874 001c 134E     		ldr	r6, .L68+4
+ 875 001e 56F82420 		ldr	r2, [r6, r4, lsl #2]
+ 876              		.loc 1 311 78 discriminator 3 view .LVU241
+ 877 0022 56F82160 		ldr	r6, [r6, r1, lsl #2]
+ 878              		.loc 1 311 53 discriminator 3 view .LVU242
+ 879 0026 921B     		subs	r2, r2, r6
+ 880              		.loc 1 311 21 discriminator 3 view .LVU243
+ 881 0028 1344     		add	r3, r3, r2
+ 882              	.LVL28:
+ 312:Core/Src/hall_detection.c **** 		averagedsemiPeriod+=(hallA.zerocrossings_tick[i+1]-hallA.zerocrossings_tick[i]);
+ 883              		.loc 1 312 3 is_stmt 1 discriminator 3 view .LVU244
+ 884              		.loc 1 312 48 is_stmt 0 discriminator 3 view .LVU245
+ 885 002a 114E     		ldr	r6, .L68+8
+ 886 002c 56F82420 		ldr	r2, [r6, r4, lsl #2]
+ 887              		.loc 1 312 78 discriminator 3 view .LVU246
+ 888 0030 56F82160 		ldr	r6, [r6, r1, lsl #2]
+ 889              		.loc 1 312 53 discriminator 3 view .LVU247
+ 890 0034 921B     		subs	r2, r2, r6
+ 891              		.loc 1 312 21 discriminator 3 view .LVU248
+ 892 0036 1A44     		add	r2, r2, r3
+ 893              	.LVL29:
+ 313:Core/Src/hall_detection.c **** 		averagedsemiPeriod+=(hallB.zerocrossings_tick[i+1]-hallB.zerocrossings_tick[i]);
+ 894              		.loc 1 313 3 is_stmt 1 discriminator 3 view .LVU249
+ 895              		.loc 1 313 48 is_stmt 0 discriminator 3 view .LVU250
+ 896 0038 0E4E     		ldr	r6, .L68+12
+ 897 003a 56F82430 		ldr	r3, [r6, r4, lsl #2]
+ 898              		.loc 1 313 78 discriminator 3 view .LVU251
+ 899 003e 56F82160 		ldr	r6, [r6, r1, lsl #2]
+ 900              		.loc 1 313 53 discriminator 3 view .LVU252
+ 901 0042 9B1B     		subs	r3, r3, r6
+ 902              		.loc 1 313 21 discriminator 3 view .LVU253
+ 903 0044 1A44     		add	r2, r2, r3
+ 904              	.LVL30:
+ 314:Core/Src/hall_detection.c **** 		averagedsemiPeriod+=(hallC.zerocrossings_tick[i+1]-hallC.zerocrossings_tick[i]);
+ 905              		.loc 1 314 3 is_stmt 1 discriminator 3 view .LVU254
+ARM GAS  /tmp/cc8kV50R.s 			page 24
+
+
+ 906              		.loc 1 314 48 is_stmt 0 discriminator 3 view .LVU255
+ 907 0046 0C4E     		ldr	r6, .L68+16
+ 908 0048 56F82430 		ldr	r3, [r6, r4, lsl #2]
+ 909              		.loc 1 314 78 discriminator 3 view .LVU256
+ 910 004c 56F82110 		ldr	r1, [r6, r1, lsl #2]
+ 911              		.loc 1 314 53 discriminator 3 view .LVU257
+ 912 0050 5B1A     		subs	r3, r3, r1
+ 913              		.loc 1 314 21 discriminator 3 view .LVU258
+ 914 0052 1344     		add	r3, r3, r2
+ 915              	.LVL31:
+ 309:Core/Src/hall_detection.c **** 		averagedsemiPeriod+=(currA.zerocrossings_tick[i+1]-currA.zerocrossings_tick[i]);
+ 916              		.loc 1 309 47 discriminator 3 view .LVU259
+ 917 0054 0135     		adds	r5, r5, #1
+ 918              	.LVL32:
+ 309:Core/Src/hall_detection.c **** 		averagedsemiPeriod+=(currA.zerocrossings_tick[i+1]-currA.zerocrossings_tick[i]);
+ 919              		.loc 1 309 47 discriminator 3 view .LVU260
+ 920 0056 D6E7     		b	.L64
+ 921              	.L67:
+ 309:Core/Src/hall_detection.c **** 		averagedsemiPeriod+=(currA.zerocrossings_tick[i+1]-currA.zerocrossings_tick[i]);
+ 922              		.loc 1 309 47 discriminator 3 view .LVU261
+ 923              	.LBE3:
+ 315:Core/Src/hall_detection.c **** 	}
+ 316:Core/Src/hall_detection.c **** 
+ 317:Core/Src/hall_detection.c **** 	averagedsemiPeriod/=(MAXZEROCROSSINGS-1);
+ 924              		.loc 1 317 2 is_stmt 1 view .LVU262
+ 925              	.LVL33:
+ 318:Core/Src/hall_detection.c **** 	averagedsemiPeriod/=5;
+ 926              		.loc 1 318 2 view .LVU263
+ 927              		.loc 1 318 20 is_stmt 0 view .LVU264
+ 928 0058 084A     		ldr	r2, .L68+20
+ 929 005a A2FB0323 		umull	r2, r3, r2, r3
+ 930              	.LVL34:
+ 931              		.loc 1 318 20 view .LVU265
+ 932 005e DB08     		lsrs	r3, r3, #3
+ 933              	.LVL35:
+ 319:Core/Src/hall_detection.c **** 
+ 320:Core/Src/hall_detection.c **** 	*resulting_period=averagedsemiPeriod*2; //FOR torrot emulated this should be 66*2
+ 934              		.loc 1 320 2 is_stmt 1 view .LVU266
+ 935              		.loc 1 320 38 is_stmt 0 view .LVU267
+ 936 0060 5B00     		lsls	r3, r3, #1
+ 937              	.LVL36:
+ 938              		.loc 1 320 19 view .LVU268
+ 939 0062 0360     		str	r3, [r0]
+ 321:Core/Src/hall_detection.c **** }
+ 940              		.loc 1 321 1 view .LVU269
+ 941 0064 70BC     		pop	{r4, r5, r6}
+ 942              	.LCFI15:
+ 943              		.cfi_restore 6
+ 944              		.cfi_restore 5
+ 945              		.cfi_restore 4
+ 946              		.cfi_def_cfa_offset 0
+ 947              	.LVL37:
+ 948              		.loc 1 321 1 view .LVU270
+ 949 0066 7047     		bx	lr
+ 950              	.L69:
+ 951              		.align	2
+ 952              	.L68:
+ARM GAS  /tmp/cc8kV50R.s 			page 25
+
+
+ 953 0068 00000000 		.word	currA
+ 954 006c 00000000 		.word	currB
+ 955 0070 00000000 		.word	hallA
+ 956 0074 00000000 		.word	hallB
+ 957 0078 00000000 		.word	hallC
+ 958 007c 1F85EB51 		.word	1374389535
+ 959              		.cfi_endproc
+ 960              	.LFE245:
+ 962              		.section	.text.absolute,"ax",%progbits
+ 963              		.align	1
+ 964              		.global	absolute
+ 965              		.syntax unified
+ 966              		.thumb
+ 967              		.thumb_func
+ 968              		.fpu fpv4-sp-d16
+ 970              	absolute:
+ 971              	.LVL38:
+ 972              	.LFB247:
+ 322:Core/Src/hall_detection.c **** 
+ 323:Core/Src/hall_detection.c **** /**
+ 324:Core/Src/hall_detection.c **** * \brief
+ 325:Core/Src/hall_detection.c **** * \param
+ 326:Core/Src/hall_detection.c **** */
+ 327:Core/Src/hall_detection.c **** void assign_closest_phase_to_hall(detection_results_struct* res){
+ 328:Core/Src/hall_detection.c **** 
+ 329:Core/Src/hall_detection.c **** 
+ 330:Core/Src/hall_detection.c **** 	for (uint32_t i = 0; i < MAXZEROCROSSINGS; ++i) {// all zerocrossings loop
+ 331:Core/Src/hall_detection.c **** 		hall_orderA[phase_A]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallA.zerocrossings_
+ 332:Core/Src/hall_detection.c **** 		hall_orderA[phase_B]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_
+ 333:Core/Src/hall_detection.c **** 		hall_orderA[phase_C]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_
+ 334:Core/Src/hall_detection.c **** 
+ 335:Core/Src/hall_detection.c **** 		hall_orderB[phase_A]+=absolute((int32_t)currB.zerocrossings_tick[i]-(int32_t)hallA.zerocrossings_
+ 336:Core/Src/hall_detection.c **** 		hall_orderB[phase_B]+=absolute((int32_t)currB.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_
+ 337:Core/Src/hall_detection.c **** 		hall_orderB[phase_C]+=absolute((int32_t)currB.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_
+ 338:Core/Src/hall_detection.c **** 
+ 339:Core/Src/hall_detection.c **** 		hall_orderC[phase_A]+=absolute((int32_t)currC.zerocrossings_tick[i]-(int32_t)hallA.zerocrossings_
+ 340:Core/Src/hall_detection.c **** 		hall_orderC[phase_B]+=absolute((int32_t)currC.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_
+ 341:Core/Src/hall_detection.c **** 		hall_orderC[phase_C]+=absolute((int32_t)currC.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_
+ 342:Core/Src/hall_detection.c **** 	}
+ 343:Core/Src/hall_detection.c **** 
+ 344:Core/Src/hall_detection.c **** 	for (uint32_t i = 0; i < number_of_phases; ++i) {
+ 345:Core/Src/hall_detection.c **** 		hall_orderA[i]/=MAXZEROCROSSINGS;
+ 346:Core/Src/hall_detection.c **** 		hall_orderB[i]/=MAXZEROCROSSINGS;
+ 347:Core/Src/hall_detection.c **** 		hall_orderC[i]/=MAXZEROCROSSINGS;
+ 348:Core/Src/hall_detection.c **** 
+ 349:Core/Src/hall_detection.c **** 		if(hall_orderA[i]>((res->electricPeriod_ticks/2)-lowpassfilter_ticks) && hall_orderA[i]<(res->ele
+ 350:Core/Src/hall_detection.c **** 			hall_orderA[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+ 351:Core/Src/hall_detection.c **** 			toggle[hall_A]=1;
+ 352:Core/Src/hall_detection.c **** 
+ 353:Core/Src/hall_detection.c **** 		}
+ 354:Core/Src/hall_detection.c **** 
+ 355:Core/Src/hall_detection.c **** 		if(hall_orderB[i]>((res->electricPeriod_ticks/2)-lowpassfilter_ticks) && hall_orderB[i]<(res->ele
+ 356:Core/Src/hall_detection.c **** 			hall_orderB[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+ 357:Core/Src/hall_detection.c **** 			toggle[hall_B]=1;
+ 358:Core/Src/hall_detection.c **** 		}
+ 359:Core/Src/hall_detection.c **** 
+ 360:Core/Src/hall_detection.c **** 		if(hall_orderC[i]>((res->electricPeriod_ticks/2)-lowpassfilter_ticks) && hall_orderC[i]<(res->ele
+ARM GAS  /tmp/cc8kV50R.s 			page 26
+
+
+ 361:Core/Src/hall_detection.c **** 			hall_orderC[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+ 362:Core/Src/hall_detection.c **** 			toggle[hall_C]=1;
+ 363:Core/Src/hall_detection.c **** 		}
+ 364:Core/Src/hall_detection.c **** 	}
+ 365:Core/Src/hall_detection.c **** 
+ 366:Core/Src/hall_detection.c **** 	int32_t minimum=0xFF;
+ 367:Core/Src/hall_detection.c **** 	for (uint32_t i = 0; i < number_of_phases; ++i) {
+ 368:Core/Src/hall_detection.c **** 		if(hall_orderA[i]<minimum){
+ 369:Core/Src/hall_detection.c **** 			minimum=hall_orderA[i];
+ 370:Core/Src/hall_detection.c **** 		}
+ 371:Core/Src/hall_detection.c **** 	}
+ 372:Core/Src/hall_detection.c **** 	for (uint32_t i = 0; i < number_of_phases; ++i) {
+ 373:Core/Src/hall_detection.c **** 		if(hall_orderA[i]==minimum){
+ 374:Core/Src/hall_detection.c **** 			res->hall_order[i]=phase_A;
+ 375:Core/Src/hall_detection.c **** 		}
+ 376:Core/Src/hall_detection.c **** 	}
+ 377:Core/Src/hall_detection.c **** 
+ 378:Core/Src/hall_detection.c **** 	minimum=0xFF;
+ 379:Core/Src/hall_detection.c **** 	for (uint32_t i = 0; i < number_of_phases; ++i) {
+ 380:Core/Src/hall_detection.c **** 		if(hall_orderB[i]<minimum){
+ 381:Core/Src/hall_detection.c **** 			minimum=hall_orderB[i];
+ 382:Core/Src/hall_detection.c **** 		}
+ 383:Core/Src/hall_detection.c **** 	}
+ 384:Core/Src/hall_detection.c **** 	for (uint32_t i = 0; i < number_of_phases; ++i) {
+ 385:Core/Src/hall_detection.c **** 		if(hall_orderB[i]==minimum){
+ 386:Core/Src/hall_detection.c **** 			res->hall_order[i]=phase_B;
+ 387:Core/Src/hall_detection.c **** 		}
+ 388:Core/Src/hall_detection.c **** 	}
+ 389:Core/Src/hall_detection.c **** 
+ 390:Core/Src/hall_detection.c **** 	minimum=0xFF;
+ 391:Core/Src/hall_detection.c **** 	for (uint32_t i = 0; i < number_of_phases; ++i) {
+ 392:Core/Src/hall_detection.c **** 		if(hall_orderC[i]<minimum){
+ 393:Core/Src/hall_detection.c **** 			minimum=hall_orderC[i];
+ 394:Core/Src/hall_detection.c **** 		}
+ 395:Core/Src/hall_detection.c **** 	}
+ 396:Core/Src/hall_detection.c **** 	for (uint32_t i = 0; i < number_of_phases; ++i) {
+ 397:Core/Src/hall_detection.c **** 		if(hall_orderC[i]==minimum){
+ 398:Core/Src/hall_detection.c **** 			res->hall_order[i]=phase_C;
+ 399:Core/Src/hall_detection.c **** 		}
+ 400:Core/Src/hall_detection.c **** 	}
+ 401:Core/Src/hall_detection.c **** }
+ 402:Core/Src/hall_detection.c **** 
+ 403:Core/Src/hall_detection.c **** /**
+ 404:Core/Src/hall_detection.c **** * \brief
+ 405:Core/Src/hall_detection.c **** * \param
+ 406:Core/Src/hall_detection.c **** */
+ 407:Core/Src/hall_detection.c **** int32_t absolute(int32_t x){
+ 973              		.loc 1 407 28 is_stmt 1 view -0
+ 974              		.cfi_startproc
+ 975              		@ args = 0, pretend = 0, frame = 0
+ 976              		@ frame_needed = 0, uses_anonymous_args = 0
+ 977              		@ link register save eliminated.
+ 408:Core/Src/hall_detection.c ****     return (int32_t)x < (int32_t)0 ? -x : x;
+ 978              		.loc 1 408 5 view .LVU272
+ 409:Core/Src/hall_detection.c **** }
+ 979              		.loc 1 409 1 is_stmt 0 view .LVU273
+ 980 0000 0028     		cmp	r0, #0
+ARM GAS  /tmp/cc8kV50R.s 			page 27
+
+
+ 981 0002 B8BF     		it	lt
+ 982 0004 4042     		rsblt	r0, r0, #0
+ 983              	.LVL39:
+ 984              		.loc 1 409 1 view .LVU274
+ 985 0006 7047     		bx	lr
+ 986              		.cfi_endproc
+ 987              	.LFE247:
+ 989              		.section	.text.assign_closest_phase_to_hall,"ax",%progbits
+ 990              		.align	1
+ 991              		.global	assign_closest_phase_to_hall
+ 992              		.syntax unified
+ 993              		.thumb
+ 994              		.thumb_func
+ 995              		.fpu fpv4-sp-d16
+ 997              	assign_closest_phase_to_hall:
+ 998              	.LVL40:
+ 999              	.LFB246:
+ 327:Core/Src/hall_detection.c **** 
+ 1000              		.loc 1 327 65 is_stmt 1 view -0
+ 1001              		.cfi_startproc
+ 1002              		@ args = 0, pretend = 0, frame = 0
+ 1003              		@ frame_needed = 0, uses_anonymous_args = 0
+ 327:Core/Src/hall_detection.c **** 
+ 1004              		.loc 1 327 65 is_stmt 0 view .LVU276
+ 1005 0000 2DE9F84F 		push	{r3, r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 1006              	.LCFI16:
+ 1007              		.cfi_def_cfa_offset 40
+ 1008              		.cfi_offset 3, -40
+ 1009              		.cfi_offset 4, -36
+ 1010              		.cfi_offset 5, -32
+ 1011              		.cfi_offset 6, -28
+ 1012              		.cfi_offset 7, -24
+ 1013              		.cfi_offset 8, -20
+ 1014              		.cfi_offset 9, -16
+ 1015              		.cfi_offset 10, -12
+ 1016              		.cfi_offset 11, -8
+ 1017              		.cfi_offset 14, -4
+ 1018 0004 0746     		mov	r7, r0
+ 330:Core/Src/hall_detection.c **** 		hall_orderA[phase_A]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallA.zerocrossings_
+ 1019              		.loc 1 330 2 is_stmt 1 view .LVU277
+ 1020              	.LBB4:
+ 330:Core/Src/hall_detection.c **** 		hall_orderA[phase_A]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallA.zerocrossings_
+ 1021              		.loc 1 330 7 view .LVU278
+ 1022              	.LVL41:
+ 330:Core/Src/hall_detection.c **** 		hall_orderA[phase_A]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallA.zerocrossings_
+ 1023              		.loc 1 330 16 is_stmt 0 view .LVU279
+ 1024 0006 0026     		movs	r6, #0
+ 1025              	.LVL42:
+ 1026              	.L72:
+ 330:Core/Src/hall_detection.c **** 		hall_orderA[phase_A]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallA.zerocrossings_
+ 1027              		.loc 1 330 2 discriminator 1 view .LVU280
+ 1028 0008 052E     		cmp	r6, #5
+ 1029 000a 56D8     		bhi	.L101
+ 331:Core/Src/hall_detection.c **** 		hall_orderA[phase_B]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_
+ 1030              		.loc 1 331 3 is_stmt 1 discriminator 3 view .LVU281
+ 331:Core/Src/hall_detection.c **** 		hall_orderA[phase_B]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_
+ 1031              		.loc 1 331 67 is_stmt 0 discriminator 3 view .LVU282
+ARM GAS  /tmp/cc8kV50R.s 			page 28
+
+
+ 1032 000c B41C     		adds	r4, r6, #2
+ 1033 000e 864B     		ldr	r3, .L109
+ 1034 0010 53F824B0 		ldr	fp, [r3, r4, lsl #2]
+ 331:Core/Src/hall_detection.c **** 		hall_orderA[phase_B]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_
+ 1035              		.loc 1 331 104 discriminator 3 view .LVU283
+ 1036 0014 854B     		ldr	r3, .L109+4
+ 1037 0016 53F824A0 		ldr	r10, [r3, r4, lsl #2]
+ 331:Core/Src/hall_detection.c **** 		hall_orderA[phase_B]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_
+ 1038              		.loc 1 331 25 discriminator 3 view .LVU284
+ 1039 001a ABEB0A00 		sub	r0, fp, r10
+ 1040 001e FFF7FEFF 		bl	absolute
+ 1041              	.LVL43:
+ 331:Core/Src/hall_detection.c **** 		hall_orderA[phase_B]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_
+ 1042              		.loc 1 331 23 discriminator 3 view .LVU285
+ 1043 0022 834D     		ldr	r5, .L109+8
+ 1044 0024 2B68     		ldr	r3, [r5]
+ 1045 0026 1844     		add	r0, r0, r3
+ 1046 0028 2860     		str	r0, [r5]
+ 332:Core/Src/hall_detection.c **** 		hall_orderA[phase_C]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_
+ 1047              		.loc 1 332 3 is_stmt 1 discriminator 3 view .LVU286
+ 332:Core/Src/hall_detection.c **** 		hall_orderA[phase_C]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_
+ 1048              		.loc 1 332 104 is_stmt 0 discriminator 3 view .LVU287
+ 1049 002a 824B     		ldr	r3, .L109+12
+ 1050 002c 53F82490 		ldr	r9, [r3, r4, lsl #2]
+ 332:Core/Src/hall_detection.c **** 		hall_orderA[phase_C]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_
+ 1051              		.loc 1 332 25 discriminator 3 view .LVU288
+ 1052 0030 ABEB0900 		sub	r0, fp, r9
+ 1053 0034 FFF7FEFF 		bl	absolute
+ 1054              	.LVL44:
+ 332:Core/Src/hall_detection.c **** 		hall_orderA[phase_C]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_
+ 1055              		.loc 1 332 23 discriminator 3 view .LVU289
+ 1056 0038 6B68     		ldr	r3, [r5, #4]
+ 1057 003a 1844     		add	r0, r0, r3
+ 1058 003c 6860     		str	r0, [r5, #4]
+ 333:Core/Src/hall_detection.c **** 
+ 1059              		.loc 1 333 3 is_stmt 1 discriminator 3 view .LVU290
+ 333:Core/Src/hall_detection.c **** 
+ 1060              		.loc 1 333 104 is_stmt 0 discriminator 3 view .LVU291
+ 1061 003e 7E4B     		ldr	r3, .L109+16
+ 1062 0040 53F82480 		ldr	r8, [r3, r4, lsl #2]
+ 333:Core/Src/hall_detection.c **** 
+ 1063              		.loc 1 333 25 discriminator 3 view .LVU292
+ 1064 0044 ABEB0800 		sub	r0, fp, r8
+ 1065 0048 FFF7FEFF 		bl	absolute
+ 1066              	.LVL45:
+ 333:Core/Src/hall_detection.c **** 
+ 1067              		.loc 1 333 23 discriminator 3 view .LVU293
+ 1068 004c AB68     		ldr	r3, [r5, #8]
+ 1069 004e 1844     		add	r0, r0, r3
+ 1070 0050 A860     		str	r0, [r5, #8]
+ 335:Core/Src/hall_detection.c **** 		hall_orderB[phase_B]+=absolute((int32_t)currB.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_
+ 1071              		.loc 1 335 3 is_stmt 1 discriminator 3 view .LVU294
+ 335:Core/Src/hall_detection.c **** 		hall_orderB[phase_B]+=absolute((int32_t)currB.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_
+ 1072              		.loc 1 335 67 is_stmt 0 discriminator 3 view .LVU295
+ 1073 0052 7A4B     		ldr	r3, .L109+20
+ 1074 0054 53F824B0 		ldr	fp, [r3, r4, lsl #2]
+ 335:Core/Src/hall_detection.c **** 		hall_orderB[phase_B]+=absolute((int32_t)currB.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_
+ARM GAS  /tmp/cc8kV50R.s 			page 29
+
+
+ 1075              		.loc 1 335 25 discriminator 3 view .LVU296
+ 1076 0058 ABEB0A00 		sub	r0, fp, r10
+ 1077 005c FFF7FEFF 		bl	absolute
+ 1078              	.LVL46:
+ 335:Core/Src/hall_detection.c **** 		hall_orderB[phase_B]+=absolute((int32_t)currB.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_
+ 1079              		.loc 1 335 23 discriminator 3 view .LVU297
+ 1080 0060 774D     		ldr	r5, .L109+24
+ 1081 0062 2B68     		ldr	r3, [r5]
+ 1082 0064 1844     		add	r0, r0, r3
+ 1083 0066 2860     		str	r0, [r5]
+ 336:Core/Src/hall_detection.c **** 		hall_orderB[phase_C]+=absolute((int32_t)currB.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_
+ 1084              		.loc 1 336 3 is_stmt 1 discriminator 3 view .LVU298
+ 336:Core/Src/hall_detection.c **** 		hall_orderB[phase_C]+=absolute((int32_t)currB.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_
+ 1085              		.loc 1 336 25 is_stmt 0 discriminator 3 view .LVU299
+ 1086 0068 ABEB0900 		sub	r0, fp, r9
+ 1087 006c FFF7FEFF 		bl	absolute
+ 1088              	.LVL47:
+ 336:Core/Src/hall_detection.c **** 		hall_orderB[phase_C]+=absolute((int32_t)currB.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_
+ 1089              		.loc 1 336 23 discriminator 3 view .LVU300
+ 1090 0070 6B68     		ldr	r3, [r5, #4]
+ 1091 0072 1844     		add	r0, r0, r3
+ 1092 0074 6860     		str	r0, [r5, #4]
+ 337:Core/Src/hall_detection.c **** 
+ 1093              		.loc 1 337 3 is_stmt 1 discriminator 3 view .LVU301
+ 337:Core/Src/hall_detection.c **** 
+ 1094              		.loc 1 337 25 is_stmt 0 discriminator 3 view .LVU302
+ 1095 0076 ABEB0800 		sub	r0, fp, r8
+ 1096 007a FFF7FEFF 		bl	absolute
+ 1097              	.LVL48:
+ 337:Core/Src/hall_detection.c **** 
+ 1098              		.loc 1 337 23 discriminator 3 view .LVU303
+ 1099 007e AB68     		ldr	r3, [r5, #8]
+ 1100 0080 1844     		add	r0, r0, r3
+ 1101 0082 A860     		str	r0, [r5, #8]
+ 339:Core/Src/hall_detection.c **** 		hall_orderC[phase_B]+=absolute((int32_t)currC.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_
+ 1102              		.loc 1 339 3 is_stmt 1 discriminator 3 view .LVU304
+ 339:Core/Src/hall_detection.c **** 		hall_orderC[phase_B]+=absolute((int32_t)currC.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_
+ 1103              		.loc 1 339 67 is_stmt 0 discriminator 3 view .LVU305
+ 1104 0084 6F4B     		ldr	r3, .L109+28
+ 1105 0086 53F82450 		ldr	r5, [r3, r4, lsl #2]
+ 339:Core/Src/hall_detection.c **** 		hall_orderC[phase_B]+=absolute((int32_t)currC.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_
+ 1106              		.loc 1 339 25 discriminator 3 view .LVU306
+ 1107 008a A5EB0A00 		sub	r0, r5, r10
+ 1108 008e FFF7FEFF 		bl	absolute
+ 1109              	.LVL49:
+ 339:Core/Src/hall_detection.c **** 		hall_orderC[phase_B]+=absolute((int32_t)currC.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_
+ 1110              		.loc 1 339 23 discriminator 3 view .LVU307
+ 1111 0092 6D4C     		ldr	r4, .L109+32
+ 1112 0094 2368     		ldr	r3, [r4]
+ 1113 0096 1844     		add	r0, r0, r3
+ 1114 0098 2060     		str	r0, [r4]
+ 340:Core/Src/hall_detection.c **** 		hall_orderC[phase_C]+=absolute((int32_t)currC.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_
+ 1115              		.loc 1 340 3 is_stmt 1 discriminator 3 view .LVU308
+ 340:Core/Src/hall_detection.c **** 		hall_orderC[phase_C]+=absolute((int32_t)currC.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_
+ 1116              		.loc 1 340 25 is_stmt 0 discriminator 3 view .LVU309
+ 1117 009a A5EB0900 		sub	r0, r5, r9
+ 1118 009e FFF7FEFF 		bl	absolute
+ARM GAS  /tmp/cc8kV50R.s 			page 30
+
+
+ 1119              	.LVL50:
+ 340:Core/Src/hall_detection.c **** 		hall_orderC[phase_C]+=absolute((int32_t)currC.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_
+ 1120              		.loc 1 340 23 discriminator 3 view .LVU310
+ 1121 00a2 6368     		ldr	r3, [r4, #4]
+ 1122 00a4 1844     		add	r0, r0, r3
+ 1123 00a6 6060     		str	r0, [r4, #4]
+ 341:Core/Src/hall_detection.c **** 	}
+ 1124              		.loc 1 341 3 is_stmt 1 discriminator 3 view .LVU311
+ 341:Core/Src/hall_detection.c **** 	}
+ 1125              		.loc 1 341 25 is_stmt 0 discriminator 3 view .LVU312
+ 1126 00a8 A5EB0800 		sub	r0, r5, r8
+ 1127 00ac FFF7FEFF 		bl	absolute
+ 1128              	.LVL51:
+ 341:Core/Src/hall_detection.c **** 	}
+ 1129              		.loc 1 341 23 discriminator 3 view .LVU313
+ 1130 00b0 A368     		ldr	r3, [r4, #8]
+ 1131 00b2 1844     		add	r0, r0, r3
+ 1132 00b4 A060     		str	r0, [r4, #8]
+ 330:Core/Src/hall_detection.c **** 		hall_orderA[phase_A]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallA.zerocrossings_
+ 1133              		.loc 1 330 45 discriminator 3 view .LVU314
+ 1134 00b6 0136     		adds	r6, r6, #1
+ 1135              	.LVL52:
+ 330:Core/Src/hall_detection.c **** 		hall_orderA[phase_A]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallA.zerocrossings_
+ 1136              		.loc 1 330 45 discriminator 3 view .LVU315
+ 1137 00b8 A6E7     		b	.L72
+ 1138              	.L101:
+ 330:Core/Src/hall_detection.c **** 		hall_orderA[phase_A]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallA.zerocrossings_
+ 1139              		.loc 1 330 45 discriminator 3 view .LVU316
+ 1140              	.LBE4:
+ 1141              	.LBB5:
+ 344:Core/Src/hall_detection.c **** 		hall_orderA[i]/=MAXZEROCROSSINGS;
+ 1142              		.loc 1 344 16 view .LVU317
+ 1143 00ba 0023     		movs	r3, #0
+ 1144 00bc 00E0     		b	.L74
+ 1145              	.LVL53:
+ 1146              	.L77:
+ 344:Core/Src/hall_detection.c **** 		hall_orderA[i]/=MAXZEROCROSSINGS;
+ 1147              		.loc 1 344 45 discriminator 2 view .LVU318
+ 1148 00be 0133     		adds	r3, r3, #1
+ 1149              	.LVL54:
+ 1150              	.L74:
+ 344:Core/Src/hall_detection.c **** 		hall_orderA[i]/=MAXZEROCROSSINGS;
+ 1151              		.loc 1 344 2 discriminator 1 view .LVU319
+ 1152 00c0 022B     		cmp	r3, #2
+ 1153 00c2 5ED8     		bhi	.L102
+ 345:Core/Src/hall_detection.c **** 		hall_orderB[i]/=MAXZEROCROSSINGS;
+ 1154              		.loc 1 345 3 is_stmt 1 view .LVU320
+ 345:Core/Src/hall_detection.c **** 		hall_orderB[i]/=MAXZEROCROSSINGS;
+ 1155              		.loc 1 345 17 is_stmt 0 view .LVU321
+ 1156 00c4 5A49     		ldr	r1, .L109+8
+ 1157 00c6 51F82300 		ldr	r0, [r1, r3, lsl #2]
+ 1158 00ca 604A     		ldr	r2, .L109+36
+ 1159 00cc 82FB0054 		smull	r5, r4, r2, r0
+ 1160 00d0 A4EBE070 		sub	r0, r4, r0, asr #31
+ 1161 00d4 41F82300 		str	r0, [r1, r3, lsl #2]
+ 346:Core/Src/hall_detection.c **** 		hall_orderC[i]/=MAXZEROCROSSINGS;
+ 1162              		.loc 1 346 3 is_stmt 1 view .LVU322
+ARM GAS  /tmp/cc8kV50R.s 			page 31
+
+
+ 346:Core/Src/hall_detection.c **** 		hall_orderC[i]/=MAXZEROCROSSINGS;
+ 1163              		.loc 1 346 17 is_stmt 0 view .LVU323
+ 1164 00d8 594C     		ldr	r4, .L109+24
+ 1165 00da 54F82310 		ldr	r1, [r4, r3, lsl #2]
+ 1166 00de 82FB0165 		smull	r6, r5, r2, r1
+ 1167 00e2 A5EBE171 		sub	r1, r5, r1, asr #31
+ 1168 00e6 44F82310 		str	r1, [r4, r3, lsl #2]
+ 347:Core/Src/hall_detection.c **** 
+ 1169              		.loc 1 347 3 is_stmt 1 view .LVU324
+ 347:Core/Src/hall_detection.c **** 
+ 1170              		.loc 1 347 17 is_stmt 0 view .LVU325
+ 1171 00ea 574C     		ldr	r4, .L109+32
+ 1172 00ec 54F82350 		ldr	r5, [r4, r3, lsl #2]
+ 1173 00f0 82FB0562 		smull	r6, r2, r2, r5
+ 1174 00f4 A2EBE572 		sub	r2, r2, r5, asr #31
+ 1175 00f8 44F82320 		str	r2, [r4, r3, lsl #2]
+ 349:Core/Src/hall_detection.c **** 			hall_orderA[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+ 1176              		.loc 1 349 3 is_stmt 1 view .LVU326
+ 349:Core/Src/hall_detection.c **** 			hall_orderA[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+ 1177              		.loc 1 349 26 is_stmt 0 view .LVU327
+ 1178 00fc 3D68     		ldr	r5, [r7]
+ 349:Core/Src/hall_detection.c **** 			hall_orderA[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+ 1179              		.loc 1 349 48 view .LVU328
+ 1180 00fe 6C08     		lsrs	r4, r5, #1
+ 349:Core/Src/hall_detection.c **** 			hall_orderA[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+ 1181              		.loc 1 349 51 view .LVU329
+ 1182 0100 A4F10A06 		sub	r6, r4, #10
+ 349:Core/Src/hall_detection.c **** 			hall_orderA[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+ 1183              		.loc 1 349 5 view .LVU330
+ 1184 0104 B042     		cmp	r0, r6
+ 1185 0106 0FD9     		bls	.L75
+ 349:Core/Src/hall_detection.c **** 			hall_orderA[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+ 1186              		.loc 1 349 73 discriminator 1 view .LVU331
+ 1187 0108 A842     		cmp	r0, r5
+ 1188 010a 0DD2     		bcs	.L75
+ 350:Core/Src/hall_detection.c **** 			toggle[hall_A]=1;
+ 1189              		.loc 1 350 4 is_stmt 1 view .LVU332
+ 350:Core/Src/hall_detection.c **** 			toggle[hall_A]=1;
+ 1190              		.loc 1 350 48 is_stmt 0 view .LVU333
+ 1191 010c 5048     		ldr	r0, .L109+40
+ 1192 010e A0FB0450 		umull	r5, r0, r0, r4
+ 1193 0112 C008     		lsrs	r0, r0, #3
+ 1194 0114 00EB8000 		add	r0, r0, r0, lsl #2
+ 1195 0118 4500     		lsls	r5, r0, #1
+ 1196 011a 601B     		subs	r0, r4, r5
+ 350:Core/Src/hall_detection.c **** 			toggle[hall_A]=1;
+ 1197              		.loc 1 350 18 view .LVU334
+ 1198 011c 444C     		ldr	r4, .L109+8
+ 1199 011e 44F82300 		str	r0, [r4, r3, lsl #2]
+ 351:Core/Src/hall_detection.c **** 
+ 1200              		.loc 1 351 4 is_stmt 1 view .LVU335
+ 351:Core/Src/hall_detection.c **** 
+ 1201              		.loc 1 351 18 is_stmt 0 view .LVU336
+ 1202 0122 4C48     		ldr	r0, .L109+44
+ 1203 0124 0124     		movs	r4, #1
+ 1204 0126 0460     		str	r4, [r0]
+ 1205              	.L75:
+ARM GAS  /tmp/cc8kV50R.s 			page 32
+
+
+ 355:Core/Src/hall_detection.c **** 			hall_orderB[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+ 1206              		.loc 1 355 3 is_stmt 1 view .LVU337
+ 355:Core/Src/hall_detection.c **** 			hall_orderB[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+ 1207              		.loc 1 355 26 is_stmt 0 view .LVU338
+ 1208 0128 3C68     		ldr	r4, [r7]
+ 355:Core/Src/hall_detection.c **** 			hall_orderB[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+ 1209              		.loc 1 355 48 view .LVU339
+ 1210 012a 6008     		lsrs	r0, r4, #1
+ 355:Core/Src/hall_detection.c **** 			hall_orderB[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+ 1211              		.loc 1 355 51 view .LVU340
+ 1212 012c A0F10A05 		sub	r5, r0, #10
+ 355:Core/Src/hall_detection.c **** 			hall_orderB[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+ 1213              		.loc 1 355 5 view .LVU341
+ 1214 0130 A942     		cmp	r1, r5
+ 1215 0132 0FD9     		bls	.L76
+ 355:Core/Src/hall_detection.c **** 			hall_orderB[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+ 1216              		.loc 1 355 73 discriminator 1 view .LVU342
+ 1217 0134 A142     		cmp	r1, r4
+ 1218 0136 0DD2     		bcs	.L76
+ 356:Core/Src/hall_detection.c **** 			toggle[hall_B]=1;
+ 1219              		.loc 1 356 4 is_stmt 1 view .LVU343
+ 356:Core/Src/hall_detection.c **** 			toggle[hall_B]=1;
+ 1220              		.loc 1 356 48 is_stmt 0 view .LVU344
+ 1221 0138 4549     		ldr	r1, .L109+40
+ 1222 013a A1FB0041 		umull	r4, r1, r1, r0
+ 1223 013e C908     		lsrs	r1, r1, #3
+ 1224 0140 01EB8101 		add	r1, r1, r1, lsl #2
+ 1225 0144 4C00     		lsls	r4, r1, #1
+ 1226 0146 011B     		subs	r1, r0, r4
+ 356:Core/Src/hall_detection.c **** 			toggle[hall_B]=1;
+ 1227              		.loc 1 356 18 view .LVU345
+ 1228 0148 3D48     		ldr	r0, .L109+24
+ 1229 014a 40F82310 		str	r1, [r0, r3, lsl #2]
+ 357:Core/Src/hall_detection.c **** 		}
+ 1230              		.loc 1 357 4 is_stmt 1 view .LVU346
+ 357:Core/Src/hall_detection.c **** 		}
+ 1231              		.loc 1 357 18 is_stmt 0 view .LVU347
+ 1232 014e 4149     		ldr	r1, .L109+44
+ 1233 0150 0120     		movs	r0, #1
+ 1234 0152 4860     		str	r0, [r1, #4]
+ 1235              	.L76:
+ 360:Core/Src/hall_detection.c **** 			hall_orderC[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+ 1236              		.loc 1 360 3 is_stmt 1 view .LVU348
+ 360:Core/Src/hall_detection.c **** 			hall_orderC[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+ 1237              		.loc 1 360 26 is_stmt 0 view .LVU349
+ 1238 0154 3868     		ldr	r0, [r7]
+ 360:Core/Src/hall_detection.c **** 			hall_orderC[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+ 1239              		.loc 1 360 48 view .LVU350
+ 1240 0156 4108     		lsrs	r1, r0, #1
+ 360:Core/Src/hall_detection.c **** 			hall_orderC[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+ 1241              		.loc 1 360 51 view .LVU351
+ 1242 0158 A1F10A04 		sub	r4, r1, #10
+ 360:Core/Src/hall_detection.c **** 			hall_orderC[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+ 1243              		.loc 1 360 5 view .LVU352
+ 1244 015c A242     		cmp	r2, r4
+ 1245 015e AED9     		bls	.L77
+ 360:Core/Src/hall_detection.c **** 			hall_orderC[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+ARM GAS  /tmp/cc8kV50R.s 			page 33
+
+
+ 1246              		.loc 1 360 73 discriminator 1 view .LVU353
+ 1247 0160 8242     		cmp	r2, r0
+ 1248 0162 ACD2     		bcs	.L77
+ 361:Core/Src/hall_detection.c **** 			toggle[hall_C]=1;
+ 1249              		.loc 1 361 4 is_stmt 1 view .LVU354
+ 361:Core/Src/hall_detection.c **** 			toggle[hall_C]=1;
+ 1250              		.loc 1 361 48 is_stmt 0 view .LVU355
+ 1251 0164 3A4A     		ldr	r2, .L109+40
+ 1252 0166 A2FB0102 		umull	r0, r2, r2, r1
+ 1253 016a D208     		lsrs	r2, r2, #3
+ 1254 016c 02EB8202 		add	r2, r2, r2, lsl #2
+ 1255 0170 5000     		lsls	r0, r2, #1
+ 1256 0172 0A1A     		subs	r2, r1, r0
+ 361:Core/Src/hall_detection.c **** 			toggle[hall_C]=1;
+ 1257              		.loc 1 361 18 view .LVU356
+ 1258 0174 3449     		ldr	r1, .L109+32
+ 1259 0176 41F82320 		str	r2, [r1, r3, lsl #2]
+ 362:Core/Src/hall_detection.c **** 		}
+ 1260              		.loc 1 362 4 is_stmt 1 view .LVU357
+ 362:Core/Src/hall_detection.c **** 		}
+ 1261              		.loc 1 362 18 is_stmt 0 view .LVU358
+ 1262 017a 364A     		ldr	r2, .L109+44
+ 1263 017c 0121     		movs	r1, #1
+ 1264 017e 9160     		str	r1, [r2, #8]
+ 1265 0180 9DE7     		b	.L77
+ 1266              	.L102:
+ 362:Core/Src/hall_detection.c **** 		}
+ 1267              		.loc 1 362 18 view .LVU359
+ 1268              	.LBE5:
+ 1269              	.LBB6:
+ 367:Core/Src/hall_detection.c **** 		if(hall_orderA[i]<minimum){
+ 1270              		.loc 1 367 16 view .LVU360
+ 1271 0182 0023     		movs	r3, #0
+ 1272              	.LVL55:
+ 367:Core/Src/hall_detection.c **** 		if(hall_orderA[i]<minimum){
+ 1273              		.loc 1 367 16 view .LVU361
+ 1274              	.LBE6:
+ 366:Core/Src/hall_detection.c **** 	for (uint32_t i = 0; i < number_of_phases; ++i) {
+ 1275              		.loc 1 366 10 view .LVU362
+ 1276 0184 FF22     		movs	r2, #255
+ 1277 0186 00E0     		b	.L79
+ 1278              	.LVL56:
+ 1279              	.L80:
+ 1280              	.LBB7:
+ 367:Core/Src/hall_detection.c **** 		if(hall_orderA[i]<minimum){
+ 1281              		.loc 1 367 45 discriminator 2 view .LVU363
+ 1282 0188 0133     		adds	r3, r3, #1
+ 1283              	.LVL57:
+ 1284              	.L79:
+ 367:Core/Src/hall_detection.c **** 		if(hall_orderA[i]<minimum){
+ 1285              		.loc 1 367 2 discriminator 1 view .LVU364
+ 1286 018a 022B     		cmp	r3, #2
+ 1287 018c 06D8     		bhi	.L103
+ 368:Core/Src/hall_detection.c **** 			minimum=hall_orderA[i];
+ 1288              		.loc 1 368 3 is_stmt 1 view .LVU365
+ 368:Core/Src/hall_detection.c **** 			minimum=hall_orderA[i];
+ 1289              		.loc 1 368 17 is_stmt 0 view .LVU366
+ARM GAS  /tmp/cc8kV50R.s 			page 34
+
+
+ 1290 018e 2849     		ldr	r1, .L109+8
+ 1291 0190 51F82310 		ldr	r1, [r1, r3, lsl #2]
+ 368:Core/Src/hall_detection.c **** 			minimum=hall_orderA[i];
+ 1292              		.loc 1 368 5 view .LVU367
+ 1293 0194 9142     		cmp	r1, r2
+ 1294 0196 F7DA     		bge	.L80
+ 369:Core/Src/hall_detection.c **** 		}
+ 1295              		.loc 1 369 11 view .LVU368
+ 1296 0198 0A46     		mov	r2, r1
+ 1297              	.LVL58:
+ 369:Core/Src/hall_detection.c **** 		}
+ 1298              		.loc 1 369 11 view .LVU369
+ 1299 019a F5E7     		b	.L80
+ 1300              	.LVL59:
+ 1301              	.L103:
+ 369:Core/Src/hall_detection.c **** 		}
+ 1302              		.loc 1 369 11 view .LVU370
+ 1303              	.LBE7:
+ 1304              	.LBB8:
+ 372:Core/Src/hall_detection.c **** 		if(hall_orderA[i]==minimum){
+ 1305              		.loc 1 372 16 view .LVU371
+ 1306 019c 0023     		movs	r3, #0
+ 1307              	.LVL60:
+ 372:Core/Src/hall_detection.c **** 		if(hall_orderA[i]==minimum){
+ 1308              		.loc 1 372 16 view .LVU372
+ 1309 019e 00E0     		b	.L82
+ 1310              	.LVL61:
+ 1311              	.L83:
+ 372:Core/Src/hall_detection.c **** 		if(hall_orderA[i]==minimum){
+ 1312              		.loc 1 372 45 discriminator 2 view .LVU373
+ 1313 01a0 0133     		adds	r3, r3, #1
+ 1314              	.LVL62:
+ 1315              	.L82:
+ 372:Core/Src/hall_detection.c **** 		if(hall_orderA[i]==minimum){
+ 1316              		.loc 1 372 2 discriminator 1 view .LVU374
+ 1317 01a2 022B     		cmp	r3, #2
+ 1318 01a4 08D8     		bhi	.L104
+ 373:Core/Src/hall_detection.c **** 			res->hall_order[i]=phase_A;
+ 1319              		.loc 1 373 3 is_stmt 1 view .LVU375
+ 373:Core/Src/hall_detection.c **** 			res->hall_order[i]=phase_A;
+ 1320              		.loc 1 373 17 is_stmt 0 view .LVU376
+ 1321 01a6 2249     		ldr	r1, .L109+8
+ 1322 01a8 51F82310 		ldr	r1, [r1, r3, lsl #2]
+ 373:Core/Src/hall_detection.c **** 			res->hall_order[i]=phase_A;
+ 1323              		.loc 1 373 5 view .LVU377
+ 1324 01ac 9142     		cmp	r1, r2
+ 1325 01ae F7D1     		bne	.L83
+ 374:Core/Src/hall_detection.c **** 		}
+ 1326              		.loc 1 374 4 is_stmt 1 view .LVU378
+ 374:Core/Src/hall_detection.c **** 		}
+ 1327              		.loc 1 374 22 is_stmt 0 view .LVU379
+ 1328 01b0 F918     		adds	r1, r7, r3
+ 1329 01b2 0020     		movs	r0, #0
+ 1330 01b4 0871     		strb	r0, [r1, #4]
+ 1331 01b6 F3E7     		b	.L83
+ 1332              	.L104:
+ 374:Core/Src/hall_detection.c **** 		}
+ARM GAS  /tmp/cc8kV50R.s 			page 35
+
+
+ 1333              		.loc 1 374 22 view .LVU380
+ 1334              	.LBE8:
+ 1335              	.LBB9:
+ 379:Core/Src/hall_detection.c **** 		if(hall_orderB[i]<minimum){
+ 1336              		.loc 1 379 16 view .LVU381
+ 1337 01b8 0023     		movs	r3, #0
+ 1338              	.LVL63:
+ 379:Core/Src/hall_detection.c **** 		if(hall_orderB[i]<minimum){
+ 1339              		.loc 1 379 16 view .LVU382
+ 1340              	.LBE9:
+ 378:Core/Src/hall_detection.c **** 	for (uint32_t i = 0; i < number_of_phases; ++i) {
+ 1341              		.loc 1 378 9 view .LVU383
+ 1342 01ba FF22     		movs	r2, #255
+ 1343              	.LVL64:
+ 378:Core/Src/hall_detection.c **** 	for (uint32_t i = 0; i < number_of_phases; ++i) {
+ 1344              		.loc 1 378 9 view .LVU384
+ 1345 01bc 00E0     		b	.L85
+ 1346              	.LVL65:
+ 1347              	.L86:
+ 1348              	.LBB10:
+ 379:Core/Src/hall_detection.c **** 		if(hall_orderB[i]<minimum){
+ 1349              		.loc 1 379 45 discriminator 2 view .LVU385
+ 1350 01be 0133     		adds	r3, r3, #1
+ 1351              	.LVL66:
+ 1352              	.L85:
+ 379:Core/Src/hall_detection.c **** 		if(hall_orderB[i]<minimum){
+ 1353              		.loc 1 379 2 discriminator 1 view .LVU386
+ 1354 01c0 022B     		cmp	r3, #2
+ 1355 01c2 06D8     		bhi	.L105
+ 380:Core/Src/hall_detection.c **** 			minimum=hall_orderB[i];
+ 1356              		.loc 1 380 3 is_stmt 1 view .LVU387
+ 380:Core/Src/hall_detection.c **** 			minimum=hall_orderB[i];
+ 1357              		.loc 1 380 17 is_stmt 0 view .LVU388
+ 1358 01c4 1E49     		ldr	r1, .L109+24
+ 1359 01c6 51F82310 		ldr	r1, [r1, r3, lsl #2]
+ 380:Core/Src/hall_detection.c **** 			minimum=hall_orderB[i];
+ 1360              		.loc 1 380 5 view .LVU389
+ 1361 01ca 9142     		cmp	r1, r2
+ 1362 01cc F7DA     		bge	.L86
+ 381:Core/Src/hall_detection.c **** 		}
+ 1363              		.loc 1 381 11 view .LVU390
+ 1364 01ce 0A46     		mov	r2, r1
+ 1365              	.LVL67:
+ 381:Core/Src/hall_detection.c **** 		}
+ 1366              		.loc 1 381 11 view .LVU391
+ 1367 01d0 F5E7     		b	.L86
+ 1368              	.LVL68:
+ 1369              	.L105:
+ 381:Core/Src/hall_detection.c **** 		}
+ 1370              		.loc 1 381 11 view .LVU392
+ 1371              	.LBE10:
+ 1372              	.LBB11:
+ 384:Core/Src/hall_detection.c **** 		if(hall_orderB[i]==minimum){
+ 1373              		.loc 1 384 16 view .LVU393
+ 1374 01d2 0023     		movs	r3, #0
+ 1375              	.LVL69:
+ 384:Core/Src/hall_detection.c **** 		if(hall_orderB[i]==minimum){
+ARM GAS  /tmp/cc8kV50R.s 			page 36
+
+
+ 1376              		.loc 1 384 16 view .LVU394
+ 1377 01d4 00E0     		b	.L88
+ 1378              	.LVL70:
+ 1379              	.L89:
+ 384:Core/Src/hall_detection.c **** 		if(hall_orderB[i]==minimum){
+ 1380              		.loc 1 384 45 discriminator 2 view .LVU395
+ 1381 01d6 0133     		adds	r3, r3, #1
+ 1382              	.LVL71:
+ 1383              	.L88:
+ 384:Core/Src/hall_detection.c **** 		if(hall_orderB[i]==minimum){
+ 1384              		.loc 1 384 2 discriminator 1 view .LVU396
+ 1385 01d8 022B     		cmp	r3, #2
+ 1386 01da 08D8     		bhi	.L106
+ 385:Core/Src/hall_detection.c **** 			res->hall_order[i]=phase_B;
+ 1387              		.loc 1 385 3 is_stmt 1 view .LVU397
+ 385:Core/Src/hall_detection.c **** 			res->hall_order[i]=phase_B;
+ 1388              		.loc 1 385 17 is_stmt 0 view .LVU398
+ 1389 01dc 1849     		ldr	r1, .L109+24
+ 1390 01de 51F82310 		ldr	r1, [r1, r3, lsl #2]
+ 385:Core/Src/hall_detection.c **** 			res->hall_order[i]=phase_B;
+ 1391              		.loc 1 385 5 view .LVU399
+ 1392 01e2 9142     		cmp	r1, r2
+ 1393 01e4 F7D1     		bne	.L89
+ 386:Core/Src/hall_detection.c **** 		}
+ 1394              		.loc 1 386 4 is_stmt 1 view .LVU400
+ 386:Core/Src/hall_detection.c **** 		}
+ 1395              		.loc 1 386 22 is_stmt 0 view .LVU401
+ 1396 01e6 F918     		adds	r1, r7, r3
+ 1397 01e8 0120     		movs	r0, #1
+ 1398 01ea 0871     		strb	r0, [r1, #4]
+ 1399 01ec F3E7     		b	.L89
+ 1400              	.L106:
+ 386:Core/Src/hall_detection.c **** 		}
+ 1401              		.loc 1 386 22 view .LVU402
+ 1402              	.LBE11:
+ 1403              	.LBB12:
+ 391:Core/Src/hall_detection.c **** 		if(hall_orderC[i]<minimum){
+ 1404              		.loc 1 391 16 view .LVU403
+ 1405 01ee 0023     		movs	r3, #0
+ 1406              	.LVL72:
+ 391:Core/Src/hall_detection.c **** 		if(hall_orderC[i]<minimum){
+ 1407              		.loc 1 391 16 view .LVU404
+ 1408              	.LBE12:
+ 390:Core/Src/hall_detection.c **** 	for (uint32_t i = 0; i < number_of_phases; ++i) {
+ 1409              		.loc 1 390 9 view .LVU405
+ 1410 01f0 FF22     		movs	r2, #255
+ 1411              	.LVL73:
+ 390:Core/Src/hall_detection.c **** 	for (uint32_t i = 0; i < number_of_phases; ++i) {
+ 1412              		.loc 1 390 9 view .LVU406
+ 1413 01f2 00E0     		b	.L91
+ 1414              	.LVL74:
+ 1415              	.L92:
+ 1416              	.LBB13:
+ 391:Core/Src/hall_detection.c **** 		if(hall_orderC[i]<minimum){
+ 1417              		.loc 1 391 45 discriminator 2 view .LVU407
+ 1418 01f4 0133     		adds	r3, r3, #1
+ 1419              	.LVL75:
+ARM GAS  /tmp/cc8kV50R.s 			page 37
+
+
+ 1420              	.L91:
+ 391:Core/Src/hall_detection.c **** 		if(hall_orderC[i]<minimum){
+ 1421              		.loc 1 391 2 discriminator 1 view .LVU408
+ 1422 01f6 022B     		cmp	r3, #2
+ 1423 01f8 06D8     		bhi	.L107
+ 392:Core/Src/hall_detection.c **** 			minimum=hall_orderC[i];
+ 1424              		.loc 1 392 3 is_stmt 1 view .LVU409
+ 392:Core/Src/hall_detection.c **** 			minimum=hall_orderC[i];
+ 1425              		.loc 1 392 17 is_stmt 0 view .LVU410
+ 1426 01fa 1349     		ldr	r1, .L109+32
+ 1427 01fc 51F82310 		ldr	r1, [r1, r3, lsl #2]
+ 392:Core/Src/hall_detection.c **** 			minimum=hall_orderC[i];
+ 1428              		.loc 1 392 5 view .LVU411
+ 1429 0200 9142     		cmp	r1, r2
+ 1430 0202 F7DA     		bge	.L92
+ 393:Core/Src/hall_detection.c **** 		}
+ 1431              		.loc 1 393 11 view .LVU412
+ 1432 0204 0A46     		mov	r2, r1
+ 1433              	.LVL76:
+ 393:Core/Src/hall_detection.c **** 		}
+ 1434              		.loc 1 393 11 view .LVU413
+ 1435 0206 F5E7     		b	.L92
+ 1436              	.LVL77:
+ 1437              	.L107:
+ 393:Core/Src/hall_detection.c **** 		}
+ 1438              		.loc 1 393 11 view .LVU414
+ 1439              	.LBE13:
+ 1440              	.LBB14:
+ 396:Core/Src/hall_detection.c **** 		if(hall_orderC[i]==minimum){
+ 1441              		.loc 1 396 16 view .LVU415
+ 1442 0208 0023     		movs	r3, #0
+ 1443              	.LVL78:
+ 396:Core/Src/hall_detection.c **** 		if(hall_orderC[i]==minimum){
+ 1444              		.loc 1 396 16 view .LVU416
+ 1445 020a 00E0     		b	.L94
+ 1446              	.LVL79:
+ 1447              	.L95:
+ 396:Core/Src/hall_detection.c **** 		if(hall_orderC[i]==minimum){
+ 1448              		.loc 1 396 45 discriminator 2 view .LVU417
+ 1449 020c 0133     		adds	r3, r3, #1
+ 1450              	.LVL80:
+ 1451              	.L94:
+ 396:Core/Src/hall_detection.c **** 		if(hall_orderC[i]==minimum){
+ 1452              		.loc 1 396 2 discriminator 1 view .LVU418
+ 1453 020e 022B     		cmp	r3, #2
+ 1454 0210 08D8     		bhi	.L108
+ 397:Core/Src/hall_detection.c **** 			res->hall_order[i]=phase_C;
+ 1455              		.loc 1 397 3 is_stmt 1 view .LVU419
+ 397:Core/Src/hall_detection.c **** 			res->hall_order[i]=phase_C;
+ 1456              		.loc 1 397 17 is_stmt 0 view .LVU420
+ 1457 0212 0D49     		ldr	r1, .L109+32
+ 1458 0214 51F82310 		ldr	r1, [r1, r3, lsl #2]
+ 397:Core/Src/hall_detection.c **** 			res->hall_order[i]=phase_C;
+ 1459              		.loc 1 397 5 view .LVU421
+ 1460 0218 9142     		cmp	r1, r2
+ 1461 021a F7D1     		bne	.L95
+ 398:Core/Src/hall_detection.c **** 		}
+ARM GAS  /tmp/cc8kV50R.s 			page 38
+
+
+ 1462              		.loc 1 398 4 is_stmt 1 view .LVU422
+ 398:Core/Src/hall_detection.c **** 		}
+ 1463              		.loc 1 398 22 is_stmt 0 view .LVU423
+ 1464 021c F918     		adds	r1, r7, r3
+ 1465 021e 0220     		movs	r0, #2
+ 1466 0220 0871     		strb	r0, [r1, #4]
+ 1467 0222 F3E7     		b	.L95
+ 1468              	.L108:
+ 398:Core/Src/hall_detection.c **** 		}
+ 1469              		.loc 1 398 22 view .LVU424
+ 1470              	.LBE14:
+ 401:Core/Src/hall_detection.c **** 
+ 1471              		.loc 1 401 1 view .LVU425
+ 1472 0224 BDE8F88F 		pop	{r3, r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 1473              	.LVL81:
+ 1474              	.L110:
+ 401:Core/Src/hall_detection.c **** 
+ 1475              		.loc 1 401 1 view .LVU426
+ 1476              		.align	2
+ 1477              	.L109:
+ 1478 0228 00000000 		.word	currA
+ 1479 022c 00000000 		.word	hallA
+ 1480 0230 00000000 		.word	.LANCHOR3
+ 1481 0234 00000000 		.word	hallB
+ 1482 0238 00000000 		.word	hallC
+ 1483 023c 00000000 		.word	currB
+ 1484 0240 00000000 		.word	.LANCHOR4
+ 1485 0244 00000000 		.word	currC
+ 1486 0248 00000000 		.word	.LANCHOR5
+ 1487 024c ABAAAA2A 		.word	715827883
+ 1488 0250 CDCCCCCC 		.word	-858993459
+ 1489 0254 00000000 		.word	.LANCHOR6
+ 1490              		.cfi_endproc
+ 1491              	.LFE246:
+ 1493              		.section	.text.assign_polarity,"ax",%progbits
+ 1494              		.align	1
+ 1495              		.global	assign_polarity
+ 1496              		.syntax unified
+ 1497              		.thumb
+ 1498              		.thumb_func
+ 1499              		.fpu fpv4-sp-d16
+ 1501              	assign_polarity:
+ 1502              	.LVL82:
+ 1503              	.LFB248:
+ 410:Core/Src/hall_detection.c **** 
+ 411:Core/Src/hall_detection.c **** /**
+ 412:Core/Src/hall_detection.c **** * \brief
+ 413:Core/Src/hall_detection.c **** * \param
+ 414:Core/Src/hall_detection.c **** */
+ 415:Core/Src/hall_detection.c **** void assign_polarity(detection_results_struct* res){
+ 1504              		.loc 1 415 52 is_stmt 1 view -0
+ 1505              		.cfi_startproc
+ 1506              		@ args = 0, pretend = 0, frame = 0
+ 1507              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1508              		@ link register save eliminated.
+ 416:Core/Src/hall_detection.c **** 
+ 417:Core/Src/hall_detection.c **** 	for (uint32_t i = 0; i < number_of_phases; ++i) {
+ARM GAS  /tmp/cc8kV50R.s 			page 39
+
+
+ 1509              		.loc 1 417 2 view .LVU428
+ 1510              	.LBB15:
+ 1511              		.loc 1 417 7 view .LVU429
+ 1512              		.loc 1 417 16 is_stmt 0 view .LVU430
+ 1513 0000 0023     		movs	r3, #0
+ 1514              	.LVL83:
+ 1515              		.loc 1 417 2 view .LVU431
+ 1516 0002 022B     		cmp	r3, #2
+ 1517 0004 1CD8     		bhi	.L119
+ 1518              	.LBE15:
+ 415:Core/Src/hall_detection.c **** 
+ 1519              		.loc 1 415 52 view .LVU432
+ 1520 0006 10B4     		push	{r4}
+ 1521              	.LCFI17:
+ 1522              		.cfi_def_cfa_offset 4
+ 1523              		.cfi_offset 4, -4
+ 1524 0008 05E0     		b	.L115
+ 1525              	.L113:
+ 1526              	.LBB16:
+ 418:Core/Src/hall_detection.c **** 		if(currents[res->hall_order[i]]->zerocrossings_polarity[0]==halls[i]->zerocrossings_polarity[0]){
+ 419:Core/Src/hall_detection.c **** 			res->hall_polarity[res->hall_order[i]]=hall_direct;
+ 420:Core/Src/hall_detection.c **** 		}else{
+ 421:Core/Src/hall_detection.c **** 			res->hall_polarity[res->hall_order[i]]=hall_inverse;
+ 1527              		.loc 1 421 4 is_stmt 1 view .LVU433
+ 1528              		.loc 1 421 42 is_stmt 0 view .LVU434
+ 1529 000a 0244     		add	r2, r2, r0
+ 1530 000c 0121     		movs	r1, #1
+ 1531 000e D171     		strb	r1, [r2, #7]
+ 1532              	.L114:
+ 417:Core/Src/hall_detection.c **** 		if(currents[res->hall_order[i]]->zerocrossings_polarity[0]==halls[i]->zerocrossings_polarity[0]){
+ 1533              		.loc 1 417 45 discriminator 2 view .LVU435
+ 1534 0010 0133     		adds	r3, r3, #1
+ 1535              	.LVL84:
+ 417:Core/Src/hall_detection.c **** 		if(currents[res->hall_order[i]]->zerocrossings_polarity[0]==halls[i]->zerocrossings_polarity[0]){
+ 1536              		.loc 1 417 2 discriminator 2 view .LVU436
+ 1537 0012 022B     		cmp	r3, #2
+ 1538 0014 11D8     		bhi	.L120
+ 1539              	.L115:
+ 418:Core/Src/hall_detection.c **** 		if(currents[res->hall_order[i]]->zerocrossings_polarity[0]==halls[i]->zerocrossings_polarity[0]){
+ 1540              		.loc 1 418 3 is_stmt 1 view .LVU437
+ 418:Core/Src/hall_detection.c **** 		if(currents[res->hall_order[i]]->zerocrossings_polarity[0]==halls[i]->zerocrossings_polarity[0]){
+ 1541              		.loc 1 418 30 is_stmt 0 view .LVU438
+ 1542 0016 C218     		adds	r2, r0, r3
+ 1543 0018 1279     		ldrb	r2, [r2, #4]	@ zero_extendqisi2
+ 418:Core/Src/hall_detection.c **** 		if(currents[res->hall_order[i]]->zerocrossings_polarity[0]==halls[i]->zerocrossings_polarity[0]){
+ 1544              		.loc 1 418 14 view .LVU439
+ 1545 001a 0A49     		ldr	r1, .L121
+ 1546 001c 51F82210 		ldr	r1, [r1, r2, lsl #2]
+ 418:Core/Src/hall_detection.c **** 		if(currents[res->hall_order[i]]->zerocrossings_polarity[0]==halls[i]->zerocrossings_polarity[0]){
+ 1547              		.loc 1 418 58 view .LVU440
+ 1548 0020 91F82040 		ldrb	r4, [r1, #32]	@ zero_extendqisi2
+ 418:Core/Src/hall_detection.c **** 		if(currents[res->hall_order[i]]->zerocrossings_polarity[0]==halls[i]->zerocrossings_polarity[0]){
+ 1549              		.loc 1 418 68 view .LVU441
+ 1550 0024 0849     		ldr	r1, .L121+4
+ 1551 0026 51F82310 		ldr	r1, [r1, r3, lsl #2]
+ 418:Core/Src/hall_detection.c **** 		if(currents[res->hall_order[i]]->zerocrossings_polarity[0]==halls[i]->zerocrossings_polarity[0]){
+ 1552              		.loc 1 418 95 view .LVU442
+ARM GAS  /tmp/cc8kV50R.s 			page 40
+
+
+ 1553 002a 91F82010 		ldrb	r1, [r1, #32]	@ zero_extendqisi2
+ 418:Core/Src/hall_detection.c **** 		if(currents[res->hall_order[i]]->zerocrossings_polarity[0]==halls[i]->zerocrossings_polarity[0]){
+ 1554              		.loc 1 418 5 view .LVU443
+ 1555 002e 8C42     		cmp	r4, r1
+ 1556 0030 EBD1     		bne	.L113
+ 419:Core/Src/hall_detection.c **** 		}else{
+ 1557              		.loc 1 419 4 is_stmt 1 view .LVU444
+ 419:Core/Src/hall_detection.c **** 		}else{
+ 1558              		.loc 1 419 42 is_stmt 0 view .LVU445
+ 1559 0032 0244     		add	r2, r2, r0
+ 1560 0034 0021     		movs	r1, #0
+ 1561 0036 D171     		strb	r1, [r2, #7]
+ 1562 0038 EAE7     		b	.L114
+ 1563              	.L120:
+ 419:Core/Src/hall_detection.c **** 		}else{
+ 1564              		.loc 1 419 42 view .LVU446
+ 1565              	.LBE16:
+ 422:Core/Src/hall_detection.c **** 		}
+ 423:Core/Src/hall_detection.c **** 	}
+ 424:Core/Src/hall_detection.c **** 
+ 425:Core/Src/hall_detection.c **** }
+ 1566              		.loc 1 425 1 view .LVU447
+ 1567 003a 5DF8044B 		ldr	r4, [sp], #4
+ 1568              	.LCFI18:
+ 1569              		.cfi_restore 4
+ 1570              		.cfi_def_cfa_offset 0
+ 1571 003e 7047     		bx	lr
+ 1572              	.L119:
+ 1573              		.loc 1 425 1 view .LVU448
+ 1574 0040 7047     		bx	lr
+ 1575              	.L122:
+ 1576 0042 00BF     		.align	2
+ 1577              	.L121:
+ 1578 0044 00000000 		.word	.LANCHOR7
+ 1579 0048 00000000 		.word	.LANCHOR8
+ 1580              		.cfi_endproc
+ 1581              	.LFE248:
+ 1583              		.section	.text.present_results,"ax",%progbits
+ 1584              		.align	1
+ 1585              		.global	present_results
+ 1586              		.syntax unified
+ 1587              		.thumb
+ 1588              		.thumb_func
+ 1589              		.fpu fpv4-sp-d16
+ 1591              	present_results:
+ 1592              	.LFB249:
+ 426:Core/Src/hall_detection.c **** 
+ 427:Core/Src/hall_detection.c **** void present_results(){
+ 1593              		.loc 1 427 23 is_stmt 1 view -0
+ 1594              		.cfi_startproc
+ 1595              		@ args = 0, pretend = 0, frame = 0
+ 1596              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1597 0000 08B5     		push	{r3, lr}
+ 1598              	.LCFI19:
+ 1599              		.cfi_def_cfa_offset 8
+ 1600              		.cfi_offset 3, -8
+ 1601              		.cfi_offset 14, -4
+ARM GAS  /tmp/cc8kV50R.s 			page 41
+
+
+ 428:Core/Src/hall_detection.c **** 
+ 429:Core/Src/hall_detection.c **** 	for (uint32_t i = 0; i < messageLength; ++i) {
+ 1602              		.loc 1 429 2 view .LVU450
+ 1603              	.LBB17:
+ 1604              		.loc 1 429 7 view .LVU451
+ 1605              	.LVL85:
+ 1606              		.loc 1 429 16 is_stmt 0 view .LVU452
+ 1607 0002 0023     		movs	r3, #0
+ 1608              		.loc 1 429 2 view .LVU453
+ 1609 0004 03E0     		b	.L124
+ 1610              	.LVL86:
+ 1611              	.L125:
+ 430:Core/Src/hall_detection.c **** 		message[i]=' ';
+ 1612              		.loc 1 430 3 is_stmt 1 discriminator 3 view .LVU454
+ 1613              		.loc 1 430 13 is_stmt 0 discriminator 3 view .LVU455
+ 1614 0006 2B4A     		ldr	r2, .L143
+ 1615 0008 2021     		movs	r1, #32
+ 1616 000a D154     		strb	r1, [r2, r3]
+ 429:Core/Src/hall_detection.c **** 		message[i]=' ';
+ 1617              		.loc 1 429 42 discriminator 3 view .LVU456
+ 1618 000c 0133     		adds	r3, r3, #1
+ 1619              	.LVL87:
+ 1620              	.L124:
+ 429:Core/Src/hall_detection.c **** 		message[i]=' ';
+ 1621              		.loc 1 429 2 discriminator 1 view .LVU457
+ 1622 000e 072B     		cmp	r3, #7
+ 1623 0010 F9D9     		bls	.L125
+ 1624              	.LBE17:
+ 1625              	.LBB18:
+ 431:Core/Src/hall_detection.c **** 	}
+ 432:Core/Src/hall_detection.c **** 
+ 433:Core/Src/hall_detection.c **** 	for (uint32_t i = 0; i < number_of_phases; ++i) {
+ 1626              		.loc 1 433 16 view .LVU458
+ 1627 0012 0023     		movs	r3, #0
+ 1628              	.LVL88:
+ 1629              		.loc 1 433 16 view .LVU459
+ 1630 0014 04E0     		b	.L126
+ 1631              	.LVL89:
+ 1632              	.L127:
+ 434:Core/Src/hall_detection.c **** 		if(results.hall_order[i]==hall_A){
+ 435:Core/Src/hall_detection.c **** 			message[(i*2)+1]='A';
+ 436:Core/Src/hall_detection.c **** 		}else if(results.hall_order[i]==hall_B){
+ 1633              		.loc 1 436 9 is_stmt 1 view .LVU460
+ 1634              		.loc 1 436 11 is_stmt 0 view .LVU461
+ 1635 0016 012A     		cmp	r2, #1
+ 1636 0018 0FD0     		beq	.L138
+ 437:Core/Src/hall_detection.c **** 			message[(i*2)+1]='B';
+ 438:Core/Src/hall_detection.c **** 		}else if(results.hall_order[i]==hall_C){
+ 1637              		.loc 1 438 9 is_stmt 1 view .LVU462
+ 1638              		.loc 1 438 11 is_stmt 0 view .LVU463
+ 1639 001a 022A     		cmp	r2, #2
+ 1640 001c 13D0     		beq	.L139
+ 1641              	.L128:
+ 433:Core/Src/hall_detection.c **** 		if(results.hall_order[i]==hall_A){
+ 1642              		.loc 1 433 45 discriminator 2 view .LVU464
+ 1643 001e 0133     		adds	r3, r3, #1
+ 1644              	.LVL90:
+ARM GAS  /tmp/cc8kV50R.s 			page 42
+
+
+ 1645              	.L126:
+ 433:Core/Src/hall_detection.c **** 		if(results.hall_order[i]==hall_A){
+ 1646              		.loc 1 433 2 discriminator 1 view .LVU465
+ 1647 0020 022B     		cmp	r3, #2
+ 1648 0022 16D8     		bhi	.L140
+ 434:Core/Src/hall_detection.c **** 		if(results.hall_order[i]==hall_A){
+ 1649              		.loc 1 434 3 is_stmt 1 view .LVU466
+ 434:Core/Src/hall_detection.c **** 		if(results.hall_order[i]==hall_A){
+ 1650              		.loc 1 434 24 is_stmt 0 view .LVU467
+ 1651 0024 244A     		ldr	r2, .L143+4
+ 1652 0026 1A44     		add	r2, r2, r3
+ 1653 0028 1279     		ldrb	r2, [r2, #4]	@ zero_extendqisi2
+ 434:Core/Src/hall_detection.c **** 		if(results.hall_order[i]==hall_A){
+ 1654              		.loc 1 434 5 view .LVU468
+ 1655 002a 002A     		cmp	r2, #0
+ 1656 002c F3D1     		bne	.L127
+ 435:Core/Src/hall_detection.c **** 		}else if(results.hall_order[i]==hall_B){
+ 1657              		.loc 1 435 4 is_stmt 1 view .LVU469
+ 435:Core/Src/hall_detection.c **** 		}else if(results.hall_order[i]==hall_B){
+ 1658              		.loc 1 435 14 is_stmt 0 view .LVU470
+ 1659 002e 5A00     		lsls	r2, r3, #1
+ 435:Core/Src/hall_detection.c **** 		}else if(results.hall_order[i]==hall_B){
+ 1660              		.loc 1 435 17 view .LVU471
+ 1661 0030 0132     		adds	r2, r2, #1
+ 435:Core/Src/hall_detection.c **** 		}else if(results.hall_order[i]==hall_B){
+ 1662              		.loc 1 435 20 view .LVU472
+ 1663 0032 2049     		ldr	r1, .L143
+ 1664 0034 4120     		movs	r0, #65
+ 1665 0036 8854     		strb	r0, [r1, r2]
+ 1666 0038 F1E7     		b	.L128
+ 1667              	.L138:
+ 437:Core/Src/hall_detection.c **** 			message[(i*2)+1]='B';
+ 1668              		.loc 1 437 4 is_stmt 1 view .LVU473
+ 437:Core/Src/hall_detection.c **** 			message[(i*2)+1]='B';
+ 1669              		.loc 1 437 14 is_stmt 0 view .LVU474
+ 1670 003a 5A00     		lsls	r2, r3, #1
+ 437:Core/Src/hall_detection.c **** 			message[(i*2)+1]='B';
+ 1671              		.loc 1 437 17 view .LVU475
+ 1672 003c 0132     		adds	r2, r2, #1
+ 437:Core/Src/hall_detection.c **** 			message[(i*2)+1]='B';
+ 1673              		.loc 1 437 20 view .LVU476
+ 1674 003e 1D49     		ldr	r1, .L143
+ 1675 0040 4220     		movs	r0, #66
+ 1676 0042 8854     		strb	r0, [r1, r2]
+ 1677 0044 EBE7     		b	.L128
+ 1678              	.L139:
+ 439:Core/Src/hall_detection.c **** 			message[(i*2)+1]='C';
+ 1679              		.loc 1 439 4 is_stmt 1 view .LVU477
+ 1680              		.loc 1 439 14 is_stmt 0 view .LVU478
+ 1681 0046 5A00     		lsls	r2, r3, #1
+ 1682              		.loc 1 439 17 view .LVU479
+ 1683 0048 0132     		adds	r2, r2, #1
+ 1684              		.loc 1 439 20 view .LVU480
+ 1685 004a 1A49     		ldr	r1, .L143
+ 1686 004c 4320     		movs	r0, #67
+ 1687 004e 8854     		strb	r0, [r1, r2]
+ 1688 0050 E5E7     		b	.L128
+ARM GAS  /tmp/cc8kV50R.s 			page 43
+
+
+ 1689              	.L140:
+ 1690              		.loc 1 439 20 view .LVU481
+ 1691              	.LBE18:
+ 1692              	.LBB19:
+ 440:Core/Src/hall_detection.c **** 		}
+ 441:Core/Src/hall_detection.c **** 	}
+ 442:Core/Src/hall_detection.c **** 
+ 443:Core/Src/hall_detection.c **** 	for (uint32_t i = 0; i < number_of_phases; ++i) {
+ 1693              		.loc 1 443 16 view .LVU482
+ 1694 0052 0023     		movs	r3, #0
+ 1695              	.LVL91:
+ 1696              		.loc 1 443 16 view .LVU483
+ 1697 0054 08E0     		b	.L131
+ 1698              	.LVL92:
+ 1699              	.L142:
+ 444:Core/Src/hall_detection.c **** 		if(results.hall_polarity[i]==hall_inverse){//the "inverse polarity" from the hall with the curren
+ 445:Core/Src/hall_detection.c **** 			if(toggle[i]==0){
+ 1700              		.loc 1 445 4 is_stmt 1 view .LVU484
+ 1701              		.loc 1 445 13 is_stmt 0 view .LVU485
+ 1702 0056 194A     		ldr	r2, .L143+8
+ 1703 0058 52F82320 		ldr	r2, [r2, r3, lsl #2]
+ 1704              		.loc 1 445 6 view .LVU486
+ 1705 005c B2B9     		cbnz	r2, .L133
+ 446:Core/Src/hall_detection.c **** 				message[i*2]=' ';
+ 1706              		.loc 1 446 5 is_stmt 1 view .LVU487
+ 1707              		.loc 1 446 17 is_stmt 0 view .LVU488
+ 1708 005e 154A     		ldr	r2, .L143
+ 1709 0060 2021     		movs	r1, #32
+ 1710 0062 02F81310 		strb	r1, [r2, r3, lsl #1]
+ 1711              	.L134:
+ 443:Core/Src/hall_detection.c **** 		if(results.hall_polarity[i]==hall_inverse){//the "inverse polarity" from the hall with the curren
+ 1712              		.loc 1 443 45 discriminator 2 view .LVU489
+ 1713 0066 0133     		adds	r3, r3, #1
+ 1714              	.LVL93:
+ 1715              	.L131:
+ 443:Core/Src/hall_detection.c **** 		if(results.hall_polarity[i]==hall_inverse){//the "inverse polarity" from the hall with the curren
+ 1716              		.loc 1 443 2 discriminator 1 view .LVU490
+ 1717 0068 022B     		cmp	r3, #2
+ 1718 006a 19D8     		bhi	.L141
+ 444:Core/Src/hall_detection.c **** 		if(results.hall_polarity[i]==hall_inverse){//the "inverse polarity" from the hall with the curren
+ 1719              		.loc 1 444 3 is_stmt 1 view .LVU491
+ 444:Core/Src/hall_detection.c **** 		if(results.hall_polarity[i]==hall_inverse){//the "inverse polarity" from the hall with the curren
+ 1720              		.loc 1 444 27 is_stmt 0 view .LVU492
+ 1721 006c 124A     		ldr	r2, .L143+4
+ 1722 006e 1A44     		add	r2, r2, r3
+ 1723 0070 D279     		ldrb	r2, [r2, #7]	@ zero_extendqisi2
+ 444:Core/Src/hall_detection.c **** 		if(results.hall_polarity[i]==hall_inverse){//the "inverse polarity" from the hall with the curren
+ 1724              		.loc 1 444 5 view .LVU493
+ 1725 0072 012A     		cmp	r2, #1
+ 1726 0074 EFD0     		beq	.L142
+ 447:Core/Src/hall_detection.c **** 			}else{
+ 448:Core/Src/hall_detection.c **** 				message[i*2]='!';
+ 449:Core/Src/hall_detection.c **** 			}
+ 450:Core/Src/hall_detection.c **** 		}else if(results.hall_polarity[i]==hall_direct){
+ 1727              		.loc 1 450 9 is_stmt 1 view .LVU494
+ 1728              		.loc 1 450 11 is_stmt 0 view .LVU495
+ 1729 0076 002A     		cmp	r2, #0
+ARM GAS  /tmp/cc8kV50R.s 			page 44
+
+
+ 1730 0078 F5D1     		bne	.L134
+ 451:Core/Src/hall_detection.c **** 			if(toggle[i]==0){
+ 1731              		.loc 1 451 4 is_stmt 1 view .LVU496
+ 1732              		.loc 1 451 13 is_stmt 0 view .LVU497
+ 1733 007a 104A     		ldr	r2, .L143+8
+ 1734 007c 52F82320 		ldr	r2, [r2, r3, lsl #2]
+ 1735              		.loc 1 451 6 view .LVU498
+ 1736 0080 4AB9     		cbnz	r2, .L135
+ 452:Core/Src/hall_detection.c **** 				message[i*2]='!';
+ 1737              		.loc 1 452 5 is_stmt 1 view .LVU499
+ 1738              		.loc 1 452 17 is_stmt 0 view .LVU500
+ 1739 0082 0C4A     		ldr	r2, .L143
+ 1740 0084 2121     		movs	r1, #33
+ 1741 0086 02F81310 		strb	r1, [r2, r3, lsl #1]
+ 1742 008a ECE7     		b	.L134
+ 1743              	.L133:
+ 448:Core/Src/hall_detection.c **** 			}
+ 1744              		.loc 1 448 5 is_stmt 1 view .LVU501
+ 448:Core/Src/hall_detection.c **** 			}
+ 1745              		.loc 1 448 17 is_stmt 0 view .LVU502
+ 1746 008c 094A     		ldr	r2, .L143
+ 1747 008e 2121     		movs	r1, #33
+ 1748 0090 02F81310 		strb	r1, [r2, r3, lsl #1]
+ 1749 0094 E7E7     		b	.L134
+ 1750              	.L135:
+ 453:Core/Src/hall_detection.c **** 			}else{
+ 454:Core/Src/hall_detection.c **** 				message[i*2]=' ';
+ 1751              		.loc 1 454 5 is_stmt 1 view .LVU503
+ 1752              		.loc 1 454 17 is_stmt 0 view .LVU504
+ 1753 0096 074A     		ldr	r2, .L143
+ 1754 0098 2021     		movs	r1, #32
+ 1755 009a 02F81310 		strb	r1, [r2, r3, lsl #1]
+ 1756 009e E2E7     		b	.L134
+ 1757              	.L141:
+ 1758              		.loc 1 454 17 view .LVU505
+ 1759              	.LBE19:
+ 455:Core/Src/hall_detection.c **** 			}
+ 456:Core/Src/hall_detection.c **** 		}
+ 457:Core/Src/hall_detection.c **** 	}
+ 458:Core/Src/hall_detection.c **** 
+ 459:Core/Src/hall_detection.c **** 
+ 460:Core/Src/hall_detection.c **** 	message[messageLength-2]='\n';//two last characters
+ 1760              		.loc 1 460 2 is_stmt 1 view .LVU506
+ 1761              		.loc 1 460 26 is_stmt 0 view .LVU507
+ 1762 00a0 0449     		ldr	r1, .L143
+ 1763 00a2 0A23     		movs	r3, #10
+ 1764              	.LVL94:
+ 1765              		.loc 1 460 26 view .LVU508
+ 1766 00a4 8B71     		strb	r3, [r1, #6]
+ 461:Core/Src/hall_detection.c **** 	message[messageLength-1]='\r';
+ 1767              		.loc 1 461 2 is_stmt 1 view .LVU509
+ 1768              		.loc 1 461 26 is_stmt 0 view .LVU510
+ 1769 00a6 0D23     		movs	r3, #13
+ 1770 00a8 CB71     		strb	r3, [r1, #7]
+ 462:Core/Src/hall_detection.c **** 
+ 463:Core/Src/hall_detection.c **** #ifdef TESTuart
+ 464:Core/Src/hall_detection.c **** 	HAL_UART_Transmit_DMA(&huart2, &message, messageLength);
+ARM GAS  /tmp/cc8kV50R.s 			page 45
+
+
+ 1771              		.loc 1 464 2 is_stmt 1 view .LVU511
+ 1772 00aa 0822     		movs	r2, #8
+ 1773 00ac 0448     		ldr	r0, .L143+12
+ 1774 00ae FFF7FEFF 		bl	HAL_UART_Transmit_DMA
+ 1775              	.LVL95:
+ 465:Core/Src/hall_detection.c **** #endif
+ 466:Core/Src/hall_detection.c **** 
+ 467:Core/Src/hall_detection.c **** }
+ 1776              		.loc 1 467 1 is_stmt 0 view .LVU512
+ 1777 00b2 08BD     		pop	{r3, pc}
+ 1778              	.L144:
+ 1779              		.align	2
+ 1780              	.L143:
+ 1781 00b4 00000000 		.word	message
+ 1782 00b8 00000000 		.word	results
+ 1783 00bc 00000000 		.word	.LANCHOR6
+ 1784 00c0 00000000 		.word	huart2
+ 1785              		.cfi_endproc
+ 1786              	.LFE249:
+ 1788              		.section	.text.evaluate_and_present_results,"ax",%progbits
+ 1789              		.align	1
+ 1790              		.global	evaluate_and_present_results
+ 1791              		.syntax unified
+ 1792              		.thumb
+ 1793              		.thumb_func
+ 1794              		.fpu fpv4-sp-d16
+ 1796              	evaluate_and_present_results:
+ 1797              	.LVL96:
+ 1798              	.LFB243:
+ 236:Core/Src/hall_detection.c **** 	if(*enabled_or_disabled==detection_DISABLED){
+ 1799              		.loc 1 236 131 is_stmt 1 view -0
+ 1800              		.cfi_startproc
+ 1801              		@ args = 0, pretend = 0, frame = 0
+ 1802              		@ frame_needed = 0, uses_anonymous_args = 0
+ 237:Core/Src/hall_detection.c **** 		calculateElectricPeriod_inTicks(&results.electricPeriod_ticks);
+ 1803              		.loc 1 237 2 view .LVU514
+ 237:Core/Src/hall_detection.c **** 		calculateElectricPeriod_inTicks(&results.electricPeriod_ticks);
+ 1804              		.loc 1 237 5 is_stmt 0 view .LVU515
+ 1805 0000 0378     		ldrb	r3, [r0]	@ zero_extendqisi2
+ 1806              	.LVL97:
+ 237:Core/Src/hall_detection.c **** 		calculateElectricPeriod_inTicks(&results.electricPeriod_ticks);
+ 1807              		.loc 1 237 4 view .LVU516
+ 1808 0002 03B1     		cbz	r3, .L151
+ 1809 0004 7047     		bx	lr
+ 1810              	.L151:
+ 236:Core/Src/hall_detection.c **** 	if(*enabled_or_disabled==detection_DISABLED){
+ 1811              		.loc 1 236 131 view .LVU517
+ 1812 0006 10B5     		push	{r4, lr}
+ 1813              	.LCFI20:
+ 1814              		.cfi_def_cfa_offset 8
+ 1815              		.cfi_offset 4, -8
+ 1816              		.cfi_offset 14, -4
+ 238:Core/Src/hall_detection.c **** 		assign_closest_phase_to_hall(&results);
+ 1817              		.loc 1 238 3 is_stmt 1 view .LVU518
+ 1818 0008 064C     		ldr	r4, .L152
+ 1819 000a 2046     		mov	r0, r4
+ 1820              	.LVL98:
+ARM GAS  /tmp/cc8kV50R.s 			page 46
+
+
+ 238:Core/Src/hall_detection.c **** 		assign_closest_phase_to_hall(&results);
+ 1821              		.loc 1 238 3 is_stmt 0 view .LVU519
+ 1822 000c FFF7FEFF 		bl	calculateElectricPeriod_inTicks
+ 1823              	.LVL99:
+ 239:Core/Src/hall_detection.c **** 		assign_polarity(&results);
+ 1824              		.loc 1 239 3 is_stmt 1 view .LVU520
+ 1825 0010 2046     		mov	r0, r4
+ 1826 0012 FFF7FEFF 		bl	assign_closest_phase_to_hall
+ 1827              	.LVL100:
+ 240:Core/Src/hall_detection.c **** 		//swap_hall_gpios_with_detected_results(H1,H2,H3);
+ 1828              		.loc 1 240 3 view .LVU521
+ 1829 0016 2046     		mov	r0, r4
+ 1830 0018 FFF7FEFF 		bl	assign_polarity
+ 1831              	.LVL101:
+ 242:Core/Src/hall_detection.c **** 	}
+ 1832              		.loc 1 242 3 view .LVU522
+ 1833 001c FFF7FEFF 		bl	present_results
+ 1834              	.LVL102:
+ 244:Core/Src/hall_detection.c **** 
+ 1835              		.loc 1 244 1 is_stmt 0 view .LVU523
+ 1836 0020 10BD     		pop	{r4, pc}
+ 1837              	.L153:
+ 1838 0022 00BF     		.align	2
+ 1839              	.L152:
+ 1840 0024 00000000 		.word	results
+ 1841              		.cfi_endproc
+ 1842              	.LFE243:
+ 1844              		.section	.text.Hall_Identification_Test_measurement,"ax",%progbits
+ 1845              		.align	1
+ 1846              		.global	Hall_Identification_Test_measurement
+ 1847              		.syntax unified
+ 1848              		.thumb
+ 1849              		.thumb_func
+ 1850              		.fpu fpv4-sp-d16
+ 1852              	Hall_Identification_Test_measurement:
+ 1853              	.LVL103:
+ 1854              	.LFB237:
+ 107:Core/Src/hall_detection.c **** 	if(detection_state==detection_ENABLED){
+ 1855              		.loc 1 107 4 is_stmt 1 view -0
+ 1856              		.cfi_startproc
+ 1857              		@ args = 4, pretend = 0, frame = 0
+ 1858              		@ frame_needed = 0, uses_anonymous_args = 0
+ 107:Core/Src/hall_detection.c **** 	if(detection_state==detection_ENABLED){
+ 1859              		.loc 1 107 4 is_stmt 0 view .LVU525
+ 1860 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 1861              	.LCFI21:
+ 1862              		.cfi_def_cfa_offset 20
+ 1863              		.cfi_offset 4, -20
+ 1864              		.cfi_offset 5, -16
+ 1865              		.cfi_offset 6, -12
+ 1866              		.cfi_offset 7, -8
+ 1867              		.cfi_offset 14, -4
+ 1868 0002 83B0     		sub	sp, sp, #12
+ 1869              	.LCFI22:
+ 1870              		.cfi_def_cfa_offset 32
+ 108:Core/Src/hall_detection.c **** 		signals_adquisition(H1,H2,H3,ADCcurrA,ADCcurrB);
+ 1871              		.loc 1 108 2 is_stmt 1 view .LVU526
+ARM GAS  /tmp/cc8kV50R.s 			page 47
+
+
+ 108:Core/Src/hall_detection.c **** 		signals_adquisition(H1,H2,H3,ADCcurrA,ADCcurrB);
+ 1872              		.loc 1 108 20 is_stmt 0 view .LVU527
+ 1873 0004 0F4C     		ldr	r4, .L158
+ 1874 0006 2478     		ldrb	r4, [r4]	@ zero_extendqisi2
+ 108:Core/Src/hall_detection.c **** 		signals_adquisition(H1,H2,H3,ADCcurrA,ADCcurrB);
+ 1875              		.loc 1 108 4 view .LVU528
+ 1876 0008 012C     		cmp	r4, #1
+ 1877 000a 01D0     		beq	.L157
+ 1878              	.LVL104:
+ 1879              	.L154:
+ 116:Core/Src/hall_detection.c **** 
+ 1880              		.loc 1 116 1 view .LVU529
+ 1881 000c 03B0     		add	sp, sp, #12
+ 1882              	.LCFI23:
+ 1883              		.cfi_remember_state
+ 1884              		.cfi_def_cfa_offset 20
+ 1885              		@ sp needed
+ 1886 000e F0BD     		pop	{r4, r5, r6, r7, pc}
+ 1887              	.LVL105:
+ 1888              	.L157:
+ 1889              	.LCFI24:
+ 1890              		.cfi_restore_state
+ 116:Core/Src/hall_detection.c **** 
+ 1891              		.loc 1 116 1 view .LVU530
+ 1892 0010 1646     		mov	r6, r2
+ 1893 0012 0D46     		mov	r5, r1
+ 1894 0014 0446     		mov	r4, r0
+ 109:Core/Src/hall_detection.c **** 		detect_all_zerocrossings();
+ 1895              		.loc 1 109 3 is_stmt 1 view .LVU531
+ 1896 0016 089A     		ldr	r2, [sp, #32]
+ 1897              	.LVL106:
+ 109:Core/Src/hall_detection.c **** 		detect_all_zerocrossings();
+ 1898              		.loc 1 109 3 is_stmt 0 view .LVU532
+ 1899 0018 0092     		str	r2, [sp]
+ 1900 001a 3246     		mov	r2, r6
+ 1901 001c FFF7FEFF 		bl	signals_adquisition
+ 1902              	.LVL107:
+ 110:Core/Src/hall_detection.c **** 		end_detection(&detection_state);
+ 1903              		.loc 1 110 3 is_stmt 1 view .LVU533
+ 1904 0020 FFF7FEFF 		bl	detect_all_zerocrossings
+ 1905              	.LVL108:
+ 111:Core/Src/hall_detection.c **** 		evaluate_and_present_results(&detection_state,H1,H2,H3);
+ 1906              		.loc 1 111 3 view .LVU534
+ 1907 0024 074F     		ldr	r7, .L158
+ 1908 0026 3846     		mov	r0, r7
+ 1909 0028 FFF7FEFF 		bl	end_detection
+ 1910              	.LVL109:
+ 112:Core/Src/hall_detection.c **** 		ticks++;
+ 1911              		.loc 1 112 3 view .LVU535
+ 1912 002c 3346     		mov	r3, r6
+ 1913 002e 2A46     		mov	r2, r5
+ 1914 0030 2146     		mov	r1, r4
+ 1915 0032 3846     		mov	r0, r7
+ 1916 0034 FFF7FEFF 		bl	evaluate_and_present_results
+ 1917              	.LVL110:
+ 113:Core/Src/hall_detection.c **** 	}
+ 1918              		.loc 1 113 3 view .LVU536
+ARM GAS  /tmp/cc8kV50R.s 			page 48
+
+
+ 113:Core/Src/hall_detection.c **** 	}
+ 1919              		.loc 1 113 8 is_stmt 0 view .LVU537
+ 1920 0038 034A     		ldr	r2, .L158+4
+ 1921 003a 1368     		ldr	r3, [r2]
+ 1922 003c 0133     		adds	r3, r3, #1
+ 1923 003e 1360     		str	r3, [r2]
+ 116:Core/Src/hall_detection.c **** 
+ 1924              		.loc 1 116 1 view .LVU538
+ 1925 0040 E4E7     		b	.L154
+ 1926              	.L159:
+ 1927 0042 00BF     		.align	2
+ 1928              	.L158:
+ 1929 0044 00000000 		.word	.LANCHOR0
+ 1930 0048 00000000 		.word	.LANCHOR2
+ 1931              		.cfi_endproc
+ 1932              	.LFE237:
+ 1934              		.global	halls
+ 1935              		.global	currents
+ 1936              		.global	toggle
+ 1937              		.global	hall_orderC
+ 1938              		.global	hall_orderB
+ 1939              		.global	hall_orderA
+ 1940              		.comm	message,8,4
+ 1941              		.comm	results,12,4
+ 1942              		.comm	hallC,44,4
+ 1943              		.comm	hallB,44,4
+ 1944              		.comm	hallA,44,4
+ 1945              		.comm	currC,44,4
+ 1946              		.comm	currB,44,4
+ 1947              		.comm	currA,44,4
+ 1948              		.global	currentADCoffset
+ 1949              		.global	ticks
+ 1950              		.global	detection_state
+ 1951              		.section	.bss.detection_state,"aw",%nobits
+ 1952              		.set	.LANCHOR0,. + 0
+ 1955              	detection_state:
+ 1956 0000 00       		.space	1
+ 1957              		.section	.bss.hall_orderA,"aw",%nobits
+ 1958              		.align	2
+ 1959              		.set	.LANCHOR3,. + 0
+ 1962              	hall_orderA:
+ 1963 0000 00000000 		.space	12
+ 1963      00000000 
+ 1963      00000000 
+ 1964              		.section	.bss.hall_orderB,"aw",%nobits
+ 1965              		.align	2
+ 1966              		.set	.LANCHOR4,. + 0
+ 1969              	hall_orderB:
+ 1970 0000 00000000 		.space	12
+ 1970      00000000 
+ 1970      00000000 
+ 1971              		.section	.bss.hall_orderC,"aw",%nobits
+ 1972              		.align	2
+ 1973              		.set	.LANCHOR5,. + 0
+ 1976              	hall_orderC:
+ 1977 0000 00000000 		.space	12
+ 1977      00000000 
+ARM GAS  /tmp/cc8kV50R.s 			page 49
+
+
+ 1977      00000000 
+ 1978              		.section	.bss.ticks,"aw",%nobits
+ 1979              		.align	2
+ 1980              		.set	.LANCHOR2,. + 0
+ 1983              	ticks:
+ 1984 0000 00000000 		.space	4
+ 1985              		.section	.bss.toggle,"aw",%nobits
+ 1986              		.align	2
+ 1987              		.set	.LANCHOR6,. + 0
+ 1990              	toggle:
+ 1991 0000 00000000 		.space	12
+ 1991      00000000 
+ 1991      00000000 
+ 1992              		.section	.data.currentADCoffset,"aw"
+ 1993              		.align	2
+ 1994              		.set	.LANCHOR1,. + 0
+ 1997              	currentADCoffset:
+ 1998 0000 FF070000 		.word	2047
+ 1999              		.section	.data.currents,"aw"
+ 2000              		.align	2
+ 2001              		.set	.LANCHOR7,. + 0
+ 2004              	currents:
+ 2005 0000 00000000 		.word	currA
+ 2006 0004 00000000 		.word	currB
+ 2007 0008 00000000 		.word	currC
+ 2008              		.section	.data.halls,"aw"
+ 2009              		.align	2
+ 2010              		.set	.LANCHOR8,. + 0
+ 2013              	halls:
+ 2014 0000 00000000 		.word	hallA
+ 2015 0004 00000000 		.word	hallB
+ 2016 0008 00000000 		.word	hallC
+ 2017              		.text
+ 2018              	.Letext0:
+ 2019              		.file 2 "/usr/lib/gcc/arm-none-eabi/8.3.1/include/stdint.h"
+ 2020              		.file 3 "Drivers/CMSIS/Include/core_cm4.h"
+ 2021              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
+ 2022              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f446xx.h"
+ 2023              		.file 6 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 2024              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+ 2025              		.file 8 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 2026              		.file 9 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h"
+ 2027              		.file 10 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ 2028              		.file 11 "Core/Inc/main.h"
+ 2029              		.file 12 "Core/Inc/hall_detection.h"
+ 2030              		.file 13 "Core/Inc/usart.h"
+ARM GAS  /tmp/cc8kV50R.s 			page 50
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 hall_detection.c
+     /tmp/cc8kV50R.s:18     .text.Hall_start_detection:0000000000000000 $t
+     /tmp/cc8kV50R.s:26     .text.Hall_start_detection:0000000000000000 Hall_start_detection
+     /tmp/cc8kV50R.s:44     .text.Hall_start_detection:0000000000000008 $d
+     /tmp/cc8kV50R.s:49     .text.Hall_is_detection_finished:0000000000000000 $t
+     /tmp/cc8kV50R.s:56     .text.Hall_is_detection_finished:0000000000000000 Hall_is_detection_finished
+     /tmp/cc8kV50R.s:81     .text.Hall_is_detection_finished:0000000000000010 $d
+     /tmp/cc8kV50R.s:86     .text.signals_adquisition:0000000000000000 $t
+     /tmp/cc8kV50R.s:93     .text.signals_adquisition:0000000000000000 signals_adquisition
+     /tmp/cc8kV50R.s:204    .text.signals_adquisition:0000000000000060 $d
+                            *COM*:000000000000002c currA
+                            *COM*:000000000000002c currB
+                            *COM*:000000000000002c currC
+                            *COM*:000000000000002c hallA
+                            *COM*:000000000000002c hallB
+                            *COM*:000000000000002c hallC
+     /tmp/cc8kV50R.s:214    .text.detect_current_zerocrossings:0000000000000000 $t
+     /tmp/cc8kV50R.s:221    .text.detect_current_zerocrossings:0000000000000000 detect_current_zerocrossings
+     /tmp/cc8kV50R.s:342    .text.detect_current_zerocrossings:000000000000007c $d
+     /tmp/cc8kV50R.s:348    .text.detect_hall_zerocrossings:0000000000000000 $t
+     /tmp/cc8kV50R.s:355    .text.detect_hall_zerocrossings:0000000000000000 detect_hall_zerocrossings
+     /tmp/cc8kV50R.s:427    .text.detect_hall_zerocrossings:000000000000003c $d
+     /tmp/cc8kV50R.s:432    .text.detect_all_zerocrossings:0000000000000000 $t
+     /tmp/cc8kV50R.s:439    .text.detect_all_zerocrossings:0000000000000000 detect_all_zerocrossings
+     /tmp/cc8kV50R.s:490    .text.detect_all_zerocrossings:0000000000000034 $d
+     /tmp/cc8kV50R.s:501    .text.end_detection:0000000000000000 $t
+     /tmp/cc8kV50R.s:508    .text.end_detection:0000000000000000 end_detection
+     /tmp/cc8kV50R.s:576    .text.end_detection:0000000000000048 $d
+     /tmp/cc8kV50R.s:587    .text.swap_hall_gpios_with_detected_results:0000000000000000 $t
+     /tmp/cc8kV50R.s:594    .text.swap_hall_gpios_with_detected_results:0000000000000000 swap_hall_gpios_with_detected_results
+     /tmp/cc8kV50R.s:816    .text.swap_hall_gpios_with_detected_results:00000000000000f8 $d
+                            *COM*:000000000000000c results
+     /tmp/cc8kV50R.s:821    .text.calculateElectricPeriod_inTicks:0000000000000000 $t
+     /tmp/cc8kV50R.s:828    .text.calculateElectricPeriod_inTicks:0000000000000000 calculateElectricPeriod_inTicks
+     /tmp/cc8kV50R.s:953    .text.calculateElectricPeriod_inTicks:0000000000000068 $d
+     /tmp/cc8kV50R.s:963    .text.absolute:0000000000000000 $t
+     /tmp/cc8kV50R.s:970    .text.absolute:0000000000000000 absolute
+     /tmp/cc8kV50R.s:990    .text.assign_closest_phase_to_hall:0000000000000000 $t
+     /tmp/cc8kV50R.s:997    .text.assign_closest_phase_to_hall:0000000000000000 assign_closest_phase_to_hall
+     /tmp/cc8kV50R.s:1478   .text.assign_closest_phase_to_hall:0000000000000228 $d
+     /tmp/cc8kV50R.s:1494   .text.assign_polarity:0000000000000000 $t
+     /tmp/cc8kV50R.s:1501   .text.assign_polarity:0000000000000000 assign_polarity
+     /tmp/cc8kV50R.s:1578   .text.assign_polarity:0000000000000044 $d
+     /tmp/cc8kV50R.s:1584   .text.present_results:0000000000000000 $t
+     /tmp/cc8kV50R.s:1591   .text.present_results:0000000000000000 present_results
+     /tmp/cc8kV50R.s:1781   .text.present_results:00000000000000b4 $d
+                            *COM*:0000000000000008 message
+     /tmp/cc8kV50R.s:1789   .text.evaluate_and_present_results:0000000000000000 $t
+     /tmp/cc8kV50R.s:1796   .text.evaluate_and_present_results:0000000000000000 evaluate_and_present_results
+     /tmp/cc8kV50R.s:1840   .text.evaluate_and_present_results:0000000000000024 $d
+     /tmp/cc8kV50R.s:1845   .text.Hall_Identification_Test_measurement:0000000000000000 $t
+     /tmp/cc8kV50R.s:1852   .text.Hall_Identification_Test_measurement:0000000000000000 Hall_Identification_Test_measurement
+     /tmp/cc8kV50R.s:1929   .text.Hall_Identification_Test_measurement:0000000000000044 $d
+     /tmp/cc8kV50R.s:2013   .data.halls:0000000000000000 halls
+     /tmp/cc8kV50R.s:2004   .data.currents:0000000000000000 currents
+     /tmp/cc8kV50R.s:1990   .bss.toggle:0000000000000000 toggle
+ARM GAS  /tmp/cc8kV50R.s 			page 51
+
+
+     /tmp/cc8kV50R.s:1976   .bss.hall_orderC:0000000000000000 hall_orderC
+     /tmp/cc8kV50R.s:1969   .bss.hall_orderB:0000000000000000 hall_orderB
+     /tmp/cc8kV50R.s:1962   .bss.hall_orderA:0000000000000000 hall_orderA
+     /tmp/cc8kV50R.s:1997   .data.currentADCoffset:0000000000000000 currentADCoffset
+     /tmp/cc8kV50R.s:1983   .bss.ticks:0000000000000000 ticks
+     /tmp/cc8kV50R.s:1955   .bss.detection_state:0000000000000000 detection_state
+     /tmp/cc8kV50R.s:1956   .bss.detection_state:0000000000000000 $d
+     /tmp/cc8kV50R.s:1958   .bss.hall_orderA:0000000000000000 $d
+     /tmp/cc8kV50R.s:1965   .bss.hall_orderB:0000000000000000 $d
+     /tmp/cc8kV50R.s:1972   .bss.hall_orderC:0000000000000000 $d
+     /tmp/cc8kV50R.s:1979   .bss.ticks:0000000000000000 $d
+     /tmp/cc8kV50R.s:1986   .bss.toggle:0000000000000000 $d
+     /tmp/cc8kV50R.s:1993   .data.currentADCoffset:0000000000000000 $d
+     /tmp/cc8kV50R.s:2000   .data.currents:0000000000000000 $d
+     /tmp/cc8kV50R.s:2009   .data.halls:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_ReadPin
+HAL_UART_Transmit_DMA
+huart2

@@ -1,0 +1,122 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Cppcheck - HTML report - htmlREPORTcppcheck</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+
+    </style>
+    <script>
+      function getStyle(el, styleProp) {
+        var y;
+
+        if (el.currentStyle) {
+          y = el.currentStyle[styleProp];
+        } else if (window.getComputedStyle) {
+          y = document.defaultView.getComputedStyle(el, null).getPropertyValue(styleProp);
+        }
+
+        return y;
+      }
+
+      function toggle() {
+        var el = this.expandable_content;
+        var mark = this.expandable_marker;
+
+        if (el.style.display === "block") {
+          el.style.display = "none";
+          mark.textContent = "[+]";
+        } else {
+          el.style.display = "block";
+          mark.textContent = "[-]";
+        }
+      }
+
+      function initExpandables() {
+        var elements = document.querySelectorAll(".expandable");
+
+        for (var i = 0, len = elements.length; i < len; i++) {
+          var el = elements[i];
+          var clickable = el.querySelector("span");
+          var marker = clickable.querySelector(".marker");
+          var content = el.querySelector(".content");
+          var width = clickable.clientWidth - parseInt(getStyle(content, "padding-left")) - parseInt(getStyle(content, "padding-right"));
+          content.style.width = width + "px";
+          clickable.expandable_content = content;
+          clickable.expandable_marker = marker;
+          clickable.addEventListener("click", toggle);
+        }
+      }
+
+      function toggleDisplay(id) {
+        var elements = document.querySelectorAll("." + id);
+
+        for (var i = 0, len = elements.length; i < len; i++) {
+          elements[i].classList.toggle("d-none");
+        }
+      }
+
+      function toggleAll() {
+        var elements = document.querySelectorAll("input");
+
+        // starting from 1 since 0 is the "toggle all" input
+        for (var i = 1, len = elements.length; i < len; i++) {
+          var el = elements[i];
+
+          if (el.checked) {
+            el.checked = false;
+          } else {
+            el.checked = true;
+          }
+
+          toggleDisplay(el.id);
+        }
+      }
+      window.addEventListener("load", initExpandables);
+    </script>
+  </head>
+  <body>
+    <div id="header" class="header">
+      <h1>Cppcheck report - htmlREPORTcppcheck: Statistics</h1>
+    </div>
+    <div class="wrapper">
+      <div id="menu_index">
+       <p id="filename"><a href="index.html">Back to summary</a> </p>
+
+    </div>
+    <div id="content_index">
+<p>Top 10 files for style severity, total findings: 386<br>
+&#160;&#160;&#160;84&#160;<a href="10.html">  target_code_to_be_tested/hall_detection_algoritm/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c</a><br>
+&#160;&#160;&#160;43&#160;<a href="12.html">  target_code_to_be_tested/hall_detection_algoritm/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c</a><br>
+&#160;&#160;&#160;42&#160;<a href="11.html">  target_code_to_be_tested/hall_detection_algoritm/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c</a><br>
+&#160;&#160;&#160;22&#160;<a href="14.html">  target_code_to_be_tested/hall_detection_algoritm/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c</a><br>
+&#160;&#160;&#160;21&#160;<a href="2.html">  target_code_to_be_tested/hall_detection_algoritm/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.c</a><br>
+&#160;&#160;&#160;17&#160;<a href="21.html">  target_code_to_be_tested/hall_detection_algoritm/Core/Src/syscalls.c</a><br>
+&#160;&#160;&#160;16&#160;<a href="19.html">  target_code_to_be_tested/hall_detection_algoritm/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c</a><br>
+&#160;&#160;&#160;14&#160;<a href="7.html">  target_code_to_be_tested/hall_detection_algoritm/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c</a><br>
+&#160;&#160;&#160;13&#160;<a href="5.html">  target_code_to_be_tested/hall_detection_algoritm/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c</a><br>
+&#160;&#160;&#160;13&#160;<a href="1.html">  target_code_to_be_tested/hall_detection_algoritm/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.c</a><br>
+</p>
+<p>Top 10 files for information severity, total findings: 31<br>
+&#160;&#160;&#160;14&#160;<a href="9.html">  target_code_to_be_tested/hall_detection_algoritm/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c</a><br>
+&#160;&#160;&#160;6&#160;&#160;<a href="1.html">  target_code_to_be_tested/hall_detection_algoritm/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.c</a><br>
+&#160;&#160;&#160;4&#160;&#160;<a href="12.html">  target_code_to_be_tested/hall_detection_algoritm/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c</a><br>
+&#160;&#160;&#160;3&#160;&#160;<a href="11.html">  target_code_to_be_tested/hall_detection_algoritm/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c</a><br>
+&#160;&#160;&#160;3&#160;&#160;<a href="8.html">  target_code_to_be_tested/hall_detection_algoritm/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c</a><br>
+&#160;&#160;&#160;1&#160;&#160;<a href="0.html">  target_code_to_be_tested/hall_detection_algoritm/Core/Src/system_stm32f4xx.c</a><br>
+</p>
+
+      </div> <!-- /.wrapper -->
+    </div>
+    <div id="footer" class="footer">
+      <p>
+        Cppcheck 2.3 - a tool for static C/C++ code analysis<br>
+        <br>
+        Internet: <a href="http://cppcheck.net">http://cppcheck.net</a><br>
+        IRC: <a href="irc://irc.freenode.net/cppcheck">irc://irc.freenode.net/cppcheck</a><br>
+      </p>
+    </div>
+  </body>
+</html>

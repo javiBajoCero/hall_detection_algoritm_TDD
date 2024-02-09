@@ -1,0 +1,634 @@
+ARM GAS  /tmp/ccdHclEJ.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"hall_swapper.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.read_input_signals,"ax",%progbits
+  18              		.align	1
+  19              		.global	read_input_signals
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	read_input_signals:
+  27              	.LFB133:
+  28              		.file 1 "Core/Src/hall_swapper.c"
+   1:Core/Src/hall_swapper.c **** /*
+   2:Core/Src/hall_swapper.c ****  * emulator_GPIOS_and_DACs.c
+   3:Core/Src/hall_swapper.c ****  *
+   4:Core/Src/hall_swapper.c ****  *  Created on: Nov 17, 2023
+   5:Core/Src/hall_swapper.c ****  *      Author: javier
+   6:Core/Src/hall_swapper.c ****  */
+   7:Core/Src/hall_swapper.c **** #include "hall_swapper.h"
+   8:Core/Src/hall_swapper.c **** 
+   9:Core/Src/hall_swapper.c **** #include "wave_emulator.h"
+  10:Core/Src/hall_swapper.c **** 
+  11:Core/Src/hall_swapper.c **** #include "gpio.h" /*!< to access all those HAL_GPIO... functions */
+  12:Core/Src/hall_swapper.c **** 
+  13:Core/Src/hall_swapper.c **** hall_signals_order 		signal_order[3]		={hall_A,hall_B,hall_C};	            /*!< HALL signals order 
+  14:Core/Src/hall_swapper.c **** hall_signals_polarity 	signal_polarity[3]	={hall_direct,hall_direct,hall_direct};	/*!< HALL signals
+  15:Core/Src/hall_swapper.c **** 
+  16:Core/Src/hall_swapper.c **** GPIO_PinState signal_inputs[3]	={GPIO_PIN_RESET,GPIO_PIN_RESET,GPIO_PIN_RESET};	/*!< once we read g
+  17:Core/Src/hall_swapper.c **** GPIO_PinState signal_outputs[3]	={GPIO_PIN_RESET,GPIO_PIN_RESET,GPIO_PIN_RESET};	/*!< contains our 
+  18:Core/Src/hall_swapper.c **** 
+  19:Core/Src/hall_swapper.c **** 
+  20:Core/Src/hall_swapper.c **** 
+  21:Core/Src/hall_swapper.c **** //all funtions inside this .c are listed here:
+  22:Core/Src/hall_swapper.c **** void hall_swapper_twentyKHzinterruptionIRQ( void );
+  23:Core/Src/hall_swapper.c **** void read_input_signals(void);
+  24:Core/Src/hall_swapper.c **** void emulated_read_input_signals(void);
+  25:Core/Src/hall_swapper.c **** void polarice_signals(hall_signals_order hall_x);
+  26:Core/Src/hall_swapper.c **** void swap_signals(hall_signals_order hall_x);
+  27:Core/Src/hall_swapper.c **** void write_output_signals();
+  28:Core/Src/hall_swapper.c **** 
+  29:Core/Src/hall_swapper.c **** 
+  30:Core/Src/hall_swapper.c **** 
+ARM GAS  /tmp/ccdHclEJ.s 			page 2
+
+
+  31:Core/Src/hall_swapper.c **** /**
+  32:Core/Src/hall_swapper.c **** * \brief does the hall swapping and polarizing thing
+  33:Core/Src/hall_swapper.c **** *   this function should be called inside a 20Khz TIM interruption, in our case inside TIM8_UP_IRQH
+  34:Core/Src/hall_swapper.c **** */
+  35:Core/Src/hall_swapper.c **** void hall_swapper_twentyKHzinterruptionIRQ( void ){
+  36:Core/Src/hall_swapper.c **** 
+  37:Core/Src/hall_swapper.c **** 	if(emulator_enabled==0){
+  38:Core/Src/hall_swapper.c **** 		read_input_signals();		//read all gpio inputs into signal_inputs
+  39:Core/Src/hall_swapper.c **** 	}else{
+  40:Core/Src/hall_swapper.c **** 		emulated_read_input_signals();
+  41:Core/Src/hall_swapper.c **** 	}
+  42:Core/Src/hall_swapper.c **** 
+  43:Core/Src/hall_swapper.c **** 	polarice_signals(hall_A);	//apply signal inversions, polarice should come first
+  44:Core/Src/hall_swapper.c **** 	polarice_signals(hall_B);
+  45:Core/Src/hall_swapper.c **** 	polarice_signals(hall_C);
+  46:Core/Src/hall_swapper.c **** 	swap_signals(hall_A);		//apply signal order swapping, swapping should come second
+  47:Core/Src/hall_swapper.c **** 	swap_signals(hall_B);
+  48:Core/Src/hall_swapper.c **** 	swap_signals(hall_C);
+  49:Core/Src/hall_swapper.c **** 
+  50:Core/Src/hall_swapper.c **** 	write_output_signals();		//write signal outputs into signal_outputs
+  51:Core/Src/hall_swapper.c **** 
+  52:Core/Src/hall_swapper.c **** }
+  53:Core/Src/hall_swapper.c **** 
+  54:Core/Src/hall_swapper.c **** /**
+  55:Core/Src/hall_swapper.c **** * \brief simple GPIO read of all halll signals, stores readings into signal_inputs
+  56:Core/Src/hall_swapper.c **** */
+  57:Core/Src/hall_swapper.c **** void read_input_signals(void){
+  29              		.loc 1 57 30 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 38B5     		push	{r3, r4, r5, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 16
+  36              		.cfi_offset 3, -16
+  37              		.cfi_offset 4, -12
+  38              		.cfi_offset 5, -8
+  39              		.cfi_offset 14, -4
+  58:Core/Src/hall_swapper.c **** 	signal_inputs[hall_A]=HAL_GPIO_ReadPin(input_HALLA_GPIO_Port, input_HALLA_Pin);
+  40              		.loc 1 58 2 view .LVU1
+  41              		.loc 1 58 24 is_stmt 0 view .LVU2
+  42 0002 0121     		movs	r1, #1
+  43 0004 0848     		ldr	r0, .L3
+  44 0006 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+  45              	.LVL0:
+  46              		.loc 1 58 23 view .LVU3
+  47 000a 084C     		ldr	r4, .L3+4
+  48 000c 2070     		strb	r0, [r4]
+  59:Core/Src/hall_swapper.c **** 	signal_inputs[hall_B]=HAL_GPIO_ReadPin(input_HALLB_GPIO_Port, input_HALLB_Pin);
+  49              		.loc 1 59 2 is_stmt 1 view .LVU4
+  50              		.loc 1 59 24 is_stmt 0 view .LVU5
+  51 000e 084D     		ldr	r5, .L3+8
+  52 0010 0221     		movs	r1, #2
+  53 0012 2846     		mov	r0, r5
+  54 0014 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+  55              	.LVL1:
+  56              		.loc 1 59 23 view .LVU6
+ARM GAS  /tmp/ccdHclEJ.s 			page 3
+
+
+  57 0018 6070     		strb	r0, [r4, #1]
+  60:Core/Src/hall_swapper.c **** 	signal_inputs[hall_C]=HAL_GPIO_ReadPin(input_HALLC_GPIO_Port, input_HALLC_Pin);
+  58              		.loc 1 60 2 is_stmt 1 view .LVU7
+  59              		.loc 1 60 24 is_stmt 0 view .LVU8
+  60 001a 0121     		movs	r1, #1
+  61 001c 2846     		mov	r0, r5
+  62 001e FFF7FEFF 		bl	HAL_GPIO_ReadPin
+  63              	.LVL2:
+  64              		.loc 1 60 23 view .LVU9
+  65 0022 A070     		strb	r0, [r4, #2]
+  61:Core/Src/hall_swapper.c **** }
+  66              		.loc 1 61 1 view .LVU10
+  67 0024 38BD     		pop	{r3, r4, r5, pc}
+  68              	.L4:
+  69 0026 00BF     		.align	2
+  70              	.L3:
+  71 0028 00040048 		.word	1207960576
+  72 002c 00000000 		.word	.LANCHOR0
+  73 0030 00080048 		.word	1207961600
+  74              		.cfi_endproc
+  75              	.LFE133:
+  77              		.section	.text.emulated_read_input_signals,"ax",%progbits
+  78              		.align	1
+  79              		.global	emulated_read_input_signals
+  80              		.syntax unified
+  81              		.thumb
+  82              		.thumb_func
+  83              		.fpu fpv4-sp-d16
+  85              	emulated_read_input_signals:
+  86              	.LFB134:
+  62:Core/Src/hall_swapper.c **** 
+  63:Core/Src/hall_swapper.c **** /**
+  64:Core/Src/hall_swapper.c **** * \brief simple GPIO read of all halll signals, stores readings into signal_inputs
+  65:Core/Src/hall_swapper.c **** */
+  66:Core/Src/hall_swapper.c **** void emulated_read_input_signals(void){
+  87              		.loc 1 66 39 is_stmt 1 view -0
+  88              		.cfi_startproc
+  89              		@ args = 0, pretend = 0, frame = 0
+  90              		@ frame_needed = 0, uses_anonymous_args = 0
+  91              		@ link register save eliminated.
+  67:Core/Src/hall_swapper.c **** 	signal_inputs[hall_A]=HALL_A[dma_index];
+  92              		.loc 1 67 2 view .LVU12
+  93              		.loc 1 67 30 is_stmt 0 view .LVU13
+  94 0000 0A4B     		ldr	r3, .L8
+  95 0002 1B68     		ldr	r3, [r3]
+  96 0004 0A4A     		ldr	r2, .L8+4
+  97 0006 D15C     		ldrb	r1, [r2, r3]	@ zero_extendqisi2
+  98              		.loc 1 67 23 view .LVU14
+  99 0008 0A4A     		ldr	r2, .L8+8
+ 100 000a 1170     		strb	r1, [r2]
+  68:Core/Src/hall_swapper.c **** 	signal_inputs[hall_B]=HALL_B[dma_index];
+ 101              		.loc 1 68 2 is_stmt 1 view .LVU15
+ 102              		.loc 1 68 30 is_stmt 0 view .LVU16
+ 103 000c 0A49     		ldr	r1, .L8+12
+ 104 000e C95C     		ldrb	r1, [r1, r3]	@ zero_extendqisi2
+ 105              		.loc 1 68 23 view .LVU17
+ 106 0010 5170     		strb	r1, [r2, #1]
+ARM GAS  /tmp/ccdHclEJ.s 			page 4
+
+
+  69:Core/Src/hall_swapper.c **** 	signal_inputs[hall_C]=HALL_C[dma_index];
+ 107              		.loc 1 69 2 is_stmt 1 view .LVU18
+ 108              		.loc 1 69 30 is_stmt 0 view .LVU19
+ 109 0012 0A49     		ldr	r1, .L8+16
+ 110 0014 C95C     		ldrb	r1, [r1, r3]	@ zero_extendqisi2
+ 111              		.loc 1 69 23 view .LVU20
+ 112 0016 9170     		strb	r1, [r2, #2]
+  70:Core/Src/hall_swapper.c **** 
+  71:Core/Src/hall_swapper.c **** 	if(dma_index>=(sizeof(HALL_A)/sizeof(HALL_A[0]))-1){//taking care of the circular buffer index res
+ 113              		.loc 1 71 2 is_stmt 1 view .LVU21
+ 114              		.loc 1 71 4 is_stmt 0 view .LVU22
+ 115 0018 822B     		cmp	r3, #130
+ 116 001a 03D9     		bls	.L6
+  72:Core/Src/hall_swapper.c **** 		dma_index=0;
+ 117              		.loc 1 72 3 is_stmt 1 view .LVU23
+ 118              		.loc 1 72 12 is_stmt 0 view .LVU24
+ 119 001c 034B     		ldr	r3, .L8
+ 120 001e 0022     		movs	r2, #0
+ 121 0020 1A60     		str	r2, [r3]
+ 122 0022 7047     		bx	lr
+ 123              	.L6:
+  73:Core/Src/hall_swapper.c **** 	}else{
+  74:Core/Src/hall_swapper.c **** 		dma_index++;
+ 124              		.loc 1 74 3 is_stmt 1 view .LVU25
+ 125              		.loc 1 74 12 is_stmt 0 view .LVU26
+ 126 0024 0133     		adds	r3, r3, #1
+ 127 0026 014A     		ldr	r2, .L8
+ 128 0028 1360     		str	r3, [r2]
+  75:Core/Src/hall_swapper.c **** 	}
+  76:Core/Src/hall_swapper.c **** }
+ 129              		.loc 1 76 1 view .LVU27
+ 130 002a 7047     		bx	lr
+ 131              	.L9:
+ 132              		.align	2
+ 133              	.L8:
+ 134 002c 00000000 		.word	dma_index
+ 135 0030 00000000 		.word	HALL_A
+ 136 0034 00000000 		.word	.LANCHOR0
+ 137 0038 00000000 		.word	HALL_B
+ 138 003c 00000000 		.word	HALL_C
+ 139              		.cfi_endproc
+ 140              	.LFE134:
+ 142              		.section	.text.polarice_signals,"ax",%progbits
+ 143              		.align	1
+ 144              		.global	polarice_signals
+ 145              		.syntax unified
+ 146              		.thumb
+ 147              		.thumb_func
+ 148              		.fpu fpv4-sp-d16
+ 150              	polarice_signals:
+ 151              	.LVL3:
+ 152              	.LFB135:
+  77:Core/Src/hall_swapper.c **** 
+  78:Core/Src/hall_swapper.c **** /**
+  79:Core/Src/hall_swapper.c **** * \brief For a single hall_x signal: apply to signal_inputs the polarization noted by signal_polari
+  80:Core/Src/hall_swapper.c **** * polarizing should come before swapping.
+  81:Core/Src/hall_swapper.c **** * \param hall_signals_order hall_x , reffers to the hall signal, could be hall_A/B/C
+ARM GAS  /tmp/ccdHclEJ.s 			page 5
+
+
+  82:Core/Src/hall_swapper.c **** */
+  83:Core/Src/hall_swapper.c **** void polarice_signals(hall_signals_order hall_x){
+ 153              		.loc 1 83 49 is_stmt 1 view -0
+ 154              		.cfi_startproc
+ 155              		@ args = 0, pretend = 0, frame = 0
+ 156              		@ frame_needed = 0, uses_anonymous_args = 0
+ 157              		@ link register save eliminated.
+  84:Core/Src/hall_swapper.c **** 
+  85:Core/Src/hall_swapper.c **** 	if(signal_polarity[hall_x]==hall_inverse){		//check for inverse polarity flag
+ 158              		.loc 1 85 2 view .LVU29
+ 159              		.loc 1 85 20 is_stmt 0 view .LVU30
+ 160 0000 084B     		ldr	r3, .L14
+ 161 0002 33F81030 		ldrh	r3, [r3, r0, lsl #1]
+ 162              		.loc 1 85 4 view .LVU31
+ 163 0006 012B     		cmp	r3, #1
+ 164 0008 00D0     		beq	.L13
+ 165              	.L10:
+  86:Core/Src/hall_swapper.c **** 		if( signal_inputs[hall_x]==GPIO_PIN_RESET){	//inverted signal
+  87:Core/Src/hall_swapper.c **** 			signal_inputs[hall_x]=GPIO_PIN_SET;
+  88:Core/Src/hall_swapper.c **** 		}else{
+  89:Core/Src/hall_swapper.c **** 			signal_inputs[hall_x]=GPIO_PIN_RESET;
+  90:Core/Src/hall_swapper.c **** 		}
+  91:Core/Src/hall_swapper.c **** 	}else{											//polarity is not inverted
+  92:Core/Src/hall_swapper.c **** 		//not inverted signal
+  93:Core/Src/hall_swapper.c **** 	}
+  94:Core/Src/hall_swapper.c **** 
+  95:Core/Src/hall_swapper.c **** }
+ 166              		.loc 1 95 1 view .LVU32
+ 167 000a 7047     		bx	lr
+ 168              	.L13:
+  86:Core/Src/hall_swapper.c **** 		if( signal_inputs[hall_x]==GPIO_PIN_RESET){	//inverted signal
+ 169              		.loc 1 86 3 is_stmt 1 view .LVU33
+  86:Core/Src/hall_swapper.c **** 		if( signal_inputs[hall_x]==GPIO_PIN_RESET){	//inverted signal
+ 170              		.loc 1 86 20 is_stmt 0 view .LVU34
+ 171 000c 064B     		ldr	r3, .L14+4
+ 172 000e 1B5C     		ldrb	r3, [r3, r0]	@ zero_extendqisi2
+  86:Core/Src/hall_swapper.c **** 		if( signal_inputs[hall_x]==GPIO_PIN_RESET){	//inverted signal
+ 173              		.loc 1 86 5 view .LVU35
+ 174 0010 1BB9     		cbnz	r3, .L12
+  87:Core/Src/hall_swapper.c **** 		}else{
+ 175              		.loc 1 87 4 is_stmt 1 view .LVU36
+  87:Core/Src/hall_swapper.c **** 		}else{
+ 176              		.loc 1 87 25 is_stmt 0 view .LVU37
+ 177 0012 054B     		ldr	r3, .L14+4
+ 178 0014 0122     		movs	r2, #1
+ 179 0016 1A54     		strb	r2, [r3, r0]
+ 180 0018 7047     		bx	lr
+ 181              	.L12:
+  89:Core/Src/hall_swapper.c **** 		}
+ 182              		.loc 1 89 4 is_stmt 1 view .LVU38
+  89:Core/Src/hall_swapper.c **** 		}
+ 183              		.loc 1 89 25 is_stmt 0 view .LVU39
+ 184 001a 034B     		ldr	r3, .L14+4
+ 185 001c 0022     		movs	r2, #0
+ 186 001e 1A54     		strb	r2, [r3, r0]
+  93:Core/Src/hall_swapper.c **** 
+ 187              		.loc 1 93 2 is_stmt 1 view .LVU40
+ARM GAS  /tmp/ccdHclEJ.s 			page 6
+
+
+ 188              		.loc 1 95 1 is_stmt 0 view .LVU41
+ 189 0020 F3E7     		b	.L10
+ 190              	.L15:
+ 191 0022 00BF     		.align	2
+ 192              	.L14:
+ 193 0024 00000000 		.word	.LANCHOR1
+ 194 0028 00000000 		.word	.LANCHOR0
+ 195              		.cfi_endproc
+ 196              	.LFE135:
+ 198              		.section	.text.swap_signals,"ax",%progbits
+ 199              		.align	1
+ 200              		.global	swap_signals
+ 201              		.syntax unified
+ 202              		.thumb
+ 203              		.thumb_func
+ 204              		.fpu fpv4-sp-d16
+ 206              	swap_signals:
+ 207              	.LVL4:
+ 208              	.LFB136:
+  96:Core/Src/hall_swapper.c **** 
+  97:Core/Src/hall_swapper.c **** /**
+  98:Core/Src/hall_swapper.c **** * \brief For a single hall_x signal: load signal_outputs with  signal_inputs values in the order no
+  99:Core/Src/hall_swapper.c **** * swapping should come after polarizing
+ 100:Core/Src/hall_swapper.c **** * \param hall_signals_order hall_x , reffers to the hall signal, could be hall_A/B/C
+ 101:Core/Src/hall_swapper.c **** */
+ 102:Core/Src/hall_swapper.c **** void swap_signals(hall_signals_order hall_x){
+ 209              		.loc 1 102 45 is_stmt 1 view -0
+ 210              		.cfi_startproc
+ 211              		@ args = 0, pretend = 0, frame = 0
+ 212              		@ frame_needed = 0, uses_anonymous_args = 0
+ 213              		@ link register save eliminated.
+ 103:Core/Src/hall_swapper.c **** 	if(signal_order[hall_x]==hall_A){
+ 214              		.loc 1 103 2 view .LVU43
+ 215              		.loc 1 103 17 is_stmt 0 view .LVU44
+ 216 0000 0B4B     		ldr	r3, .L22
+ 217 0002 33F81030 		ldrh	r3, [r3, r0, lsl #1]
+ 218              		.loc 1 103 4 view .LVU45
+ 219 0006 23B9     		cbnz	r3, .L17
+ 104:Core/Src/hall_swapper.c **** 		signal_outputs[hall_x]=signal_inputs[hall_A];
+ 220              		.loc 1 104 3 is_stmt 1 view .LVU46
+ 221              		.loc 1 104 39 is_stmt 0 view .LVU47
+ 222 0008 0A4B     		ldr	r3, .L22+4
+ 223 000a 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 224              		.loc 1 104 25 view .LVU48
+ 225 000c 0A4B     		ldr	r3, .L22+8
+ 226 000e 1A54     		strb	r2, [r3, r0]
+ 227 0010 7047     		bx	lr
+ 228              	.L17:
+ 105:Core/Src/hall_swapper.c **** 	}else if(signal_order[hall_x]==hall_B){
+ 229              		.loc 1 105 8 is_stmt 1 view .LVU49
+ 230              		.loc 1 105 10 is_stmt 0 view .LVU50
+ 231 0012 012B     		cmp	r3, #1
+ 232 0014 02D0     		beq	.L20
+ 106:Core/Src/hall_swapper.c **** 		signal_outputs[hall_x]=signal_inputs[hall_B];
+ 107:Core/Src/hall_swapper.c **** 	}else if(signal_order[hall_x]==hall_C){
+ 233              		.loc 1 107 8 is_stmt 1 view .LVU51
+ 234              		.loc 1 107 10 is_stmt 0 view .LVU52
+ARM GAS  /tmp/ccdHclEJ.s 			page 7
+
+
+ 235 0016 022B     		cmp	r3, #2
+ 236 0018 05D0     		beq	.L21
+ 237              	.L16:
+ 108:Core/Src/hall_swapper.c **** 		signal_outputs[hall_x]=signal_inputs[hall_C];
+ 109:Core/Src/hall_swapper.c **** 	}
+ 110:Core/Src/hall_swapper.c **** }
+ 238              		.loc 1 110 1 view .LVU53
+ 239 001a 7047     		bx	lr
+ 240              	.L20:
+ 106:Core/Src/hall_swapper.c **** 		signal_outputs[hall_x]=signal_inputs[hall_B];
+ 241              		.loc 1 106 3 is_stmt 1 view .LVU54
+ 106:Core/Src/hall_swapper.c **** 		signal_outputs[hall_x]=signal_inputs[hall_B];
+ 242              		.loc 1 106 39 is_stmt 0 view .LVU55
+ 243 001c 054B     		ldr	r3, .L22+4
+ 244 001e 5A78     		ldrb	r2, [r3, #1]	@ zero_extendqisi2
+ 106:Core/Src/hall_swapper.c **** 		signal_outputs[hall_x]=signal_inputs[hall_B];
+ 245              		.loc 1 106 25 view .LVU56
+ 246 0020 054B     		ldr	r3, .L22+8
+ 247 0022 1A54     		strb	r2, [r3, r0]
+ 248 0024 7047     		bx	lr
+ 249              	.L21:
+ 108:Core/Src/hall_swapper.c **** 		signal_outputs[hall_x]=signal_inputs[hall_C];
+ 250              		.loc 1 108 3 is_stmt 1 view .LVU57
+ 108:Core/Src/hall_swapper.c **** 		signal_outputs[hall_x]=signal_inputs[hall_C];
+ 251              		.loc 1 108 39 is_stmt 0 view .LVU58
+ 252 0026 034B     		ldr	r3, .L22+4
+ 253 0028 9A78     		ldrb	r2, [r3, #2]	@ zero_extendqisi2
+ 108:Core/Src/hall_swapper.c **** 		signal_outputs[hall_x]=signal_inputs[hall_C];
+ 254              		.loc 1 108 25 view .LVU59
+ 255 002a 034B     		ldr	r3, .L22+8
+ 256 002c 1A54     		strb	r2, [r3, r0]
+ 257              		.loc 1 110 1 view .LVU60
+ 258 002e F4E7     		b	.L16
+ 259              	.L23:
+ 260              		.align	2
+ 261              	.L22:
+ 262 0030 00000000 		.word	.LANCHOR2
+ 263 0034 00000000 		.word	.LANCHOR0
+ 264 0038 00000000 		.word	.LANCHOR3
+ 265              		.cfi_endproc
+ 266              	.LFE136:
+ 268              		.section	.text.write_output_signals,"ax",%progbits
+ 269              		.align	1
+ 270              		.global	write_output_signals
+ 271              		.syntax unified
+ 272              		.thumb
+ 273              		.thumb_func
+ 274              		.fpu fpv4-sp-d16
+ 276              	write_output_signals:
+ 277              	.LFB137:
+ 111:Core/Src/hall_swapper.c **** 
+ 112:Core/Src/hall_swapper.c **** /**
+ 113:Core/Src/hall_swapper.c **** * \brief simple GPIO write of all hall signals, writes gpios with signal_outputs values
+ 114:Core/Src/hall_swapper.c **** */
+ 115:Core/Src/hall_swapper.c **** void write_output_signals(){
+ 278              		.loc 1 115 28 is_stmt 1 view -0
+ 279              		.cfi_startproc
+ARM GAS  /tmp/ccdHclEJ.s 			page 8
+
+
+ 280              		@ args = 0, pretend = 0, frame = 0
+ 281              		@ frame_needed = 0, uses_anonymous_args = 0
+ 282 0000 38B5     		push	{r3, r4, r5, lr}
+ 283              	.LCFI1:
+ 284              		.cfi_def_cfa_offset 16
+ 285              		.cfi_offset 3, -16
+ 286              		.cfi_offset 4, -12
+ 287              		.cfi_offset 5, -8
+ 288              		.cfi_offset 14, -4
+ 116:Core/Src/hall_swapper.c **** 	HAL_GPIO_WritePin(output_HALLA_GPIO_Port, output_HALLA_Pin, signal_outputs[hall_A]);
+ 289              		.loc 1 116 2 view .LVU62
+ 290 0002 094D     		ldr	r5, .L26
+ 291 0004 094C     		ldr	r4, .L26+4
+ 292 0006 2A78     		ldrb	r2, [r5]	@ zero_extendqisi2
+ 293 0008 1021     		movs	r1, #16
+ 294 000a 2046     		mov	r0, r4
+ 295 000c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 296              	.LVL5:
+ 117:Core/Src/hall_swapper.c **** 	HAL_GPIO_WritePin(output_HALLB_GPIO_Port, output_HALLB_Pin, signal_outputs[hall_B]);
+ 297              		.loc 1 117 2 view .LVU63
+ 298 0010 6A78     		ldrb	r2, [r5, #1]	@ zero_extendqisi2
+ 299 0012 2021     		movs	r1, #32
+ 300 0014 2046     		mov	r0, r4
+ 301 0016 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 302              	.LVL6:
+ 118:Core/Src/hall_swapper.c **** 	HAL_GPIO_WritePin(output_HALLC_GPIO_Port, output_HALLC_Pin, signal_outputs[hall_C]);
+ 303              		.loc 1 118 2 view .LVU64
+ 304 001a AA78     		ldrb	r2, [r5, #2]	@ zero_extendqisi2
+ 305 001c 0821     		movs	r1, #8
+ 306 001e 2046     		mov	r0, r4
+ 307 0020 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 308              	.LVL7:
+ 119:Core/Src/hall_swapper.c **** }
+ 309              		.loc 1 119 1 is_stmt 0 view .LVU65
+ 310 0024 38BD     		pop	{r3, r4, r5, pc}
+ 311              	.L27:
+ 312 0026 00BF     		.align	2
+ 313              	.L26:
+ 314 0028 00000000 		.word	.LANCHOR3
+ 315 002c 00040048 		.word	1207960576
+ 316              		.cfi_endproc
+ 317              	.LFE137:
+ 319              		.section	.text.hall_swapper_twentyKHzinterruptionIRQ,"ax",%progbits
+ 320              		.align	1
+ 321              		.global	hall_swapper_twentyKHzinterruptionIRQ
+ 322              		.syntax unified
+ 323              		.thumb
+ 324              		.thumb_func
+ 325              		.fpu fpv4-sp-d16
+ 327              	hall_swapper_twentyKHzinterruptionIRQ:
+ 328              	.LFB132:
+  35:Core/Src/hall_swapper.c **** 
+ 329              		.loc 1 35 51 is_stmt 1 view -0
+ 330              		.cfi_startproc
+ 331              		@ args = 0, pretend = 0, frame = 0
+ 332              		@ frame_needed = 0, uses_anonymous_args = 0
+ 333 0000 08B5     		push	{r3, lr}
+ARM GAS  /tmp/ccdHclEJ.s 			page 9
+
+
+ 334              	.LCFI2:
+ 335              		.cfi_def_cfa_offset 8
+ 336              		.cfi_offset 3, -8
+ 337              		.cfi_offset 14, -4
+  37:Core/Src/hall_swapper.c **** 		read_input_signals();		//read all gpio inputs into signal_inputs
+ 338              		.loc 1 37 2 view .LVU67
+  37:Core/Src/hall_swapper.c **** 		read_input_signals();		//read all gpio inputs into signal_inputs
+ 339              		.loc 1 37 21 is_stmt 0 view .LVU68
+ 340 0002 0E4B     		ldr	r3, .L32
+ 341 0004 1B68     		ldr	r3, [r3]
+  37:Core/Src/hall_swapper.c **** 		read_input_signals();		//read all gpio inputs into signal_inputs
+ 342              		.loc 1 37 4 view .LVU69
+ 343 0006 B3B9     		cbnz	r3, .L29
+  38:Core/Src/hall_swapper.c **** 	}else{
+ 344              		.loc 1 38 3 is_stmt 1 view .LVU70
+ 345 0008 FFF7FEFF 		bl	read_input_signals
+ 346              	.LVL8:
+ 347              	.L30:
+  43:Core/Src/hall_swapper.c **** 	polarice_signals(hall_B);
+ 348              		.loc 1 43 2 view .LVU71
+ 349 000c 0020     		movs	r0, #0
+ 350 000e FFF7FEFF 		bl	polarice_signals
+ 351              	.LVL9:
+  44:Core/Src/hall_swapper.c **** 	polarice_signals(hall_C);
+ 352              		.loc 1 44 2 view .LVU72
+ 353 0012 0120     		movs	r0, #1
+ 354 0014 FFF7FEFF 		bl	polarice_signals
+ 355              	.LVL10:
+  45:Core/Src/hall_swapper.c **** 	swap_signals(hall_A);		//apply signal order swapping, swapping should come second
+ 356              		.loc 1 45 2 view .LVU73
+ 357 0018 0220     		movs	r0, #2
+ 358 001a FFF7FEFF 		bl	polarice_signals
+ 359              	.LVL11:
+  46:Core/Src/hall_swapper.c **** 	swap_signals(hall_B);
+ 360              		.loc 1 46 2 view .LVU74
+ 361 001e 0020     		movs	r0, #0
+ 362 0020 FFF7FEFF 		bl	swap_signals
+ 363              	.LVL12:
+  47:Core/Src/hall_swapper.c **** 	swap_signals(hall_C);
+ 364              		.loc 1 47 2 view .LVU75
+ 365 0024 0120     		movs	r0, #1
+ 366 0026 FFF7FEFF 		bl	swap_signals
+ 367              	.LVL13:
+  48:Core/Src/hall_swapper.c **** 
+ 368              		.loc 1 48 2 view .LVU76
+ 369 002a 0220     		movs	r0, #2
+ 370 002c FFF7FEFF 		bl	swap_signals
+ 371              	.LVL14:
+  50:Core/Src/hall_swapper.c **** 
+ 372              		.loc 1 50 2 view .LVU77
+ 373 0030 FFF7FEFF 		bl	write_output_signals
+ 374              	.LVL15:
+  52:Core/Src/hall_swapper.c **** 
+ 375              		.loc 1 52 1 is_stmt 0 view .LVU78
+ 376 0034 08BD     		pop	{r3, pc}
+ 377              	.L29:
+  40:Core/Src/hall_swapper.c **** 	}
+ARM GAS  /tmp/ccdHclEJ.s 			page 10
+
+
+ 378              		.loc 1 40 3 is_stmt 1 view .LVU79
+ 379 0036 FFF7FEFF 		bl	emulated_read_input_signals
+ 380              	.LVL16:
+ 381 003a E7E7     		b	.L30
+ 382              	.L33:
+ 383              		.align	2
+ 384              	.L32:
+ 385 003c 00000000 		.word	emulator_enabled
+ 386              		.cfi_endproc
+ 387              	.LFE132:
+ 389              		.global	signal_outputs
+ 390              		.global	signal_inputs
+ 391              		.global	signal_polarity
+ 392              		.global	signal_order
+ 393              		.section	.bss.signal_inputs,"aw",%nobits
+ 394              		.align	2
+ 395              		.set	.LANCHOR0,. + 0
+ 398              	signal_inputs:
+ 399 0000 000000   		.space	3
+ 400              		.section	.bss.signal_outputs,"aw",%nobits
+ 401              		.align	2
+ 402              		.set	.LANCHOR3,. + 0
+ 405              	signal_outputs:
+ 406 0000 000000   		.space	3
+ 407              		.section	.bss.signal_polarity,"aw",%nobits
+ 408              		.align	2
+ 409              		.set	.LANCHOR1,. + 0
+ 412              	signal_polarity:
+ 413 0000 00000000 		.space	6
+ 413      0000
+ 414              		.section	.data.signal_order,"aw"
+ 415              		.align	2
+ 416              		.set	.LANCHOR2,. + 0
+ 419              	signal_order:
+ 420 0000 0000     		.short	0
+ 421 0002 0100     		.short	1
+ 422 0004 0200     		.short	2
+ 423              		.text
+ 424              	.Letext0:
+ 425              		.file 2 "/usr/lib/gcc/arm-none-eabi/8.3.1/include/stdint.h"
+ 426              		.file 3 "Drivers/CMSIS/Include/core_cm4.h"
+ 427              		.file 4 "Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h"
+ 428              		.file 5 "Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g431xx.h"
+ 429              		.file 6 "Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h"
+ 430              		.file 7 "Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio.h"
+ 431              		.file 8 "Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h"
+ 432              		.file 9 "Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h"
+ 433              		.file 10 "Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h"
+ 434              		.file 11 "Core/Inc/hall_swapper.h"
+ 435              		.file 12 "Core/Inc/real_waveforms.h"
+ 436              		.file 13 "Core/Inc/wave_emulator.h"
+ARM GAS  /tmp/ccdHclEJ.s 			page 11
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 hall_swapper.c
+     /tmp/ccdHclEJ.s:18     .text.read_input_signals:0000000000000000 $t
+     /tmp/ccdHclEJ.s:26     .text.read_input_signals:0000000000000000 read_input_signals
+     /tmp/ccdHclEJ.s:71     .text.read_input_signals:0000000000000028 $d
+     /tmp/ccdHclEJ.s:78     .text.emulated_read_input_signals:0000000000000000 $t
+     /tmp/ccdHclEJ.s:85     .text.emulated_read_input_signals:0000000000000000 emulated_read_input_signals
+     /tmp/ccdHclEJ.s:134    .text.emulated_read_input_signals:000000000000002c $d
+     /tmp/ccdHclEJ.s:143    .text.polarice_signals:0000000000000000 $t
+     /tmp/ccdHclEJ.s:150    .text.polarice_signals:0000000000000000 polarice_signals
+     /tmp/ccdHclEJ.s:193    .text.polarice_signals:0000000000000024 $d
+     /tmp/ccdHclEJ.s:199    .text.swap_signals:0000000000000000 $t
+     /tmp/ccdHclEJ.s:206    .text.swap_signals:0000000000000000 swap_signals
+     /tmp/ccdHclEJ.s:262    .text.swap_signals:0000000000000030 $d
+     /tmp/ccdHclEJ.s:269    .text.write_output_signals:0000000000000000 $t
+     /tmp/ccdHclEJ.s:276    .text.write_output_signals:0000000000000000 write_output_signals
+     /tmp/ccdHclEJ.s:314    .text.write_output_signals:0000000000000028 $d
+     /tmp/ccdHclEJ.s:320    .text.hall_swapper_twentyKHzinterruptionIRQ:0000000000000000 $t
+     /tmp/ccdHclEJ.s:327    .text.hall_swapper_twentyKHzinterruptionIRQ:0000000000000000 hall_swapper_twentyKHzinterruptionIRQ
+     /tmp/ccdHclEJ.s:385    .text.hall_swapper_twentyKHzinterruptionIRQ:000000000000003c $d
+     /tmp/ccdHclEJ.s:405    .bss.signal_outputs:0000000000000000 signal_outputs
+     /tmp/ccdHclEJ.s:398    .bss.signal_inputs:0000000000000000 signal_inputs
+     /tmp/ccdHclEJ.s:412    .bss.signal_polarity:0000000000000000 signal_polarity
+     /tmp/ccdHclEJ.s:419    .data.signal_order:0000000000000000 signal_order
+     /tmp/ccdHclEJ.s:394    .bss.signal_inputs:0000000000000000 $d
+     /tmp/ccdHclEJ.s:401    .bss.signal_outputs:0000000000000000 $d
+     /tmp/ccdHclEJ.s:408    .bss.signal_polarity:0000000000000000 $d
+     /tmp/ccdHclEJ.s:415    .data.signal_order:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_ReadPin
+dma_index
+HALL_A
+HALL_B
+HALL_C
+HAL_GPIO_WritePin
+emulator_enabled

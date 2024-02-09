@@ -1,0 +1,2118 @@
+ARM GAS  /tmp/cc2grnrp.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"user_interface.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.ui_uart_transmit_initial_message,"ax",%progbits
+  18              		.align	1
+  19              		.global	ui_uart_transmit_initial_message
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	ui_uart_transmit_initial_message:
+  27              	.LFB133:
+  28              		.file 1 "Core/Src/user_interface.c"
+   1:Core/Src/user_interface.c **** /*
+   2:Core/Src/user_interface.c ****  * user_interface.c
+   3:Core/Src/user_interface.c ****  *
+   4:Core/Src/user_interface.c ****  *  Created on: Nov 17, 2023
+   5:Core/Src/user_interface.c ****  *      Author: javi
+   6:Core/Src/user_interface.c ****  */
+   7:Core/Src/user_interface.c **** 
+   8:Core/Src/user_interface.c **** 
+   9:Core/Src/user_interface.c **** #include "usart.h"
+  10:Core/Src/user_interface.c **** 
+  11:Core/Src/user_interface.c **** #include <string.h> //only for strstr()
+  12:Core/Src/user_interface.c **** 
+  13:Core/Src/user_interface.c **** #include "user_interface.h"
+  14:Core/Src/user_interface.c **** #include "hall_swapper.h"   //to access the variables signal_order and  signal_polarity
+  15:Core/Src/user_interface.c **** #include "wave_emulator.h"
+  16:Core/Src/user_interface.c **** #include "main.h" //for the reset pin
+  17:Core/Src/user_interface.c **** 
+  18:Core/Src/user_interface.c **** const uint8_t initialmessage[]=
+  19:Core/Src/user_interface.c **** 		"\n\r%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%HOLA%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\r
+  20:Core/Src/user_interface.c **** 		"This code \"hall_error_emulator\" was made by javier.munoz.saez@upc.edu\n\r"
+  21:Core/Src/user_interface.c **** 		"compiled on: 22-nov-2023\n\r"
+  22:Core/Src/user_interface.c **** 		"stored in the internal CITCEA's gitlab repo: \n\r "
+  23:Core/Src/user_interface.c **** 		"http://serv-citcea-100.upc.edu:30000/javi/algoritmo_para_determinar_errores_en_sensores_hall\n\r
+  24:Core/Src/user_interface.c **** 		"\n\r"
+  25:Core/Src/user_interface.c **** 		"This code is meant to be run in a NUCLEO-FG431RB board and has two main functions:\n\r"
+  26:Core/Src/user_interface.c **** 		"1-swap real incoming hall signals changing its order and/or polarity"
+  27:Core/Src/user_interface.c **** 		"2-emulate a constant speed motor with all three halls and two real current signals"
+  28:Core/Src/user_interface.c **** 		"-INPUTS: uart-USB(stlink) bridge from the user with text commands\n\r"
+  29:Core/Src/user_interface.c **** 		"-INPUTS: three (alegedly healthy) square signals from three real hall sensors\n\r"
+  30:Core/Src/user_interface.c **** 		"-OUTPUTS: same three square signals with the designated order,polarity, and phase errors\n\r"
+ARM GAS  /tmp/cc2grnrp.s 			page 2
+
+
+  31:Core/Src/user_interface.c **** 		"\n\r%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\r
+  32:Core/Src/user_interface.c **** 		;
+  33:Core/Src/user_interface.c **** const uint8_t helpcommand[]="help";
+  34:Core/Src/user_interface.c **** const uint8_t helpmessage[]=
+  35:Core/Src/user_interface.c **** 		"\n\r%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%HELP%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\r
+  36:Core/Src/user_interface.c **** 		"How to use this hall_error_emulator:\n\r"
+  37:Core/Src/user_interface.c **** 		"type \"ABC\" + enter for the emulator to foward the hall signals as they come, no errors\n\r"
+  38:Core/Src/user_interface.c **** 		"-order error: \"BAC\" + enter for the emulator to swap A and B inputs\n\r"
+  39:Core/Src/user_interface.c **** 		"-polarity error: \"!ABC\" + enter for the emulator to logically negate input A and leave inputs 
+  40:Core/Src/user_interface.c **** 		"example: typing \"!AC!B\"+ enter will swap the order of signals B and C and negate signals A and
+  41:Core/Src/user_interface.c **** 		"\n\r%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\r
+  42:Core/Src/user_interface.c **** 		;
+  43:Core/Src/user_interface.c **** const uint8_t emulationcommand[]="emulation";
+  44:Core/Src/user_interface.c **** const uint8_t on_emulationmessage[]=">>    emulation on\n\r";
+  45:Core/Src/user_interface.c **** const uint8_t off_emulationmessage[]=">>    emulation off\n\r";
+  46:Core/Src/user_interface.c **** 
+  47:Core/Src/user_interface.c **** const uint8_t resetcommand[]="reset target";
+  48:Core/Src/user_interface.c **** const uint8_t resetmessage[]=">>	target just reseted\n\r";
+  49:Core/Src/user_interface.c **** 
+  50:Core/Src/user_interface.c **** const uint8_t okmessage[]=		">>    ok\n\r";
+  51:Core/Src/user_interface.c **** const uint8_t notokmessage[]=	">>    what was that?, try again\n\r";
+  52:Core/Src/user_interface.c **** 
+  53:Core/Src/user_interface.c **** #define RX_BUFFER_SIZE 0x100 //0x100 is a quarter kilobyte or 256 uint8_t
+  54:Core/Src/user_interface.c **** uint8_t rx_buffer[RX_BUFFER_SIZE]={0};
+  55:Core/Src/user_interface.c **** uint8_t rx_flag=0;	//1= we received some data
+  56:Core/Src/user_interface.c **** uint8_t rx_size=0;	//size
+  57:Core/Src/user_interface.c **** uint8_t echoed_size=0;
+  58:Core/Src/user_interface.c **** 
+  59:Core/Src/user_interface.c **** char hall_status_string[]={" A B C"};
+  60:Core/Src/user_interface.c **** 
+  61:Core/Src/user_interface.c **** 
+  62:Core/Src/user_interface.c **** 
+  63:Core/Src/user_interface.c **** //functions within this .c file
+  64:Core/Src/user_interface.c **** void ui_uart_init();
+  65:Core/Src/user_interface.c **** void ui_uart_transmit_initial_message();
+  66:Core/Src/user_interface.c **** void ui_uart_listen();
+  67:Core/Src/user_interface.c **** uint32_t ui_uart_echo_and_breaklinedetect_rx();
+  68:Core/Src/user_interface.c **** 
+  69:Core/Src/user_interface.c **** uint32_t decode_ABCcommands(uint8_t *pData, uint16_t Size);
+  70:Core/Src/user_interface.c **** uint32_t decode_othercommands(uint8_t *pData, uint16_t Size);
+  71:Core/Src/user_interface.c **** uint16_t apply_delete_character_to_buffer(uint8_t *pData, uint16_t Size);
+  72:Core/Src/user_interface.c **** hall_signals_order decode_char_to_hall_signals_order(uint8_t *pData);
+  73:Core/Src/user_interface.c **** hall_signals_polarity decode_char_to_hall_signals_polarity(uint8_t *pData);
+  74:Core/Src/user_interface.c **** void reset_or_start_uart_DMA_communications();
+  75:Core/Src/user_interface.c **** 
+  76:Core/Src/user_interface.c **** 
+  77:Core/Src/user_interface.c **** void ui_uart_init(){
+  78:Core/Src/user_interface.c **** 	__HAL_DMA_DISABLE_IT(&hdma_lpuart1_tx,DMA_IT_HT);						//disable DMA half transfer interruption
+  79:Core/Src/user_interface.c **** 	__HAL_DMA_DISABLE_IT(&hdma_lpuart1_rx,DMA_IT_HT);						//disable DMA half transfer interruption
+  80:Core/Src/user_interface.c **** 	reset_or_start_uart_DMA_communications();
+  81:Core/Src/user_interface.c **** 	ui_uart_transmit_initial_message();
+  82:Core/Src/user_interface.c **** }
+  83:Core/Src/user_interface.c **** 
+  84:Core/Src/user_interface.c **** void ui_uart_transmit_initial_message(){
+  29              		.loc 1 84 40 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  /tmp/cc2grnrp.s 			page 3
+
+
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 08B5     		push	{r3, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 3, -8
+  37              		.cfi_offset 14, -4
+  85:Core/Src/user_interface.c **** 	HAL_UART_Transmit_DMA(&hlpuart1, initialmessage, sizeof(initialmessage));	//just order the DMA to 
+  38              		.loc 1 85 2 view .LVU1
+  39 0002 4FF46072 		mov	r2, #896
+  40 0006 0249     		ldr	r1, .L3
+  41 0008 0248     		ldr	r0, .L3+4
+  42 000a FFF7FEFF 		bl	HAL_UART_Transmit_DMA
+  43              	.LVL0:
+  86:Core/Src/user_interface.c **** }
+  44              		.loc 1 86 1 is_stmt 0 view .LVU2
+  45 000e 08BD     		pop	{r3, pc}
+  46              	.L4:
+  47              		.align	2
+  48              	.L3:
+  49 0010 00000000 		.word	.LANCHOR0
+  50 0014 00000000 		.word	hlpuart1
+  51              		.cfi_endproc
+  52              	.LFE133:
+  54              		.section	.text.ui_uart_echo_and_breaklinedetect_rx,"ax",%progbits
+  55              		.align	1
+  56              		.global	ui_uart_echo_and_breaklinedetect_rx
+  57              		.syntax unified
+  58              		.thumb
+  59              		.thumb_func
+  60              		.fpu fpv4-sp-d16
+  62              	ui_uart_echo_and_breaklinedetect_rx:
+  63              	.LFB135:
+  87:Core/Src/user_interface.c **** 
+  88:Core/Src/user_interface.c **** void ui_uart_listen(){
+  89:Core/Src/user_interface.c **** 	if(ui_uart_echo_and_breaklinedetect_rx()==1){
+  90:Core/Src/user_interface.c **** 
+  91:Core/Src/user_interface.c **** 		if(decode_othercommands(rx_buffer, echoed_size)!=1){
+  92:Core/Src/user_interface.c **** 			decode_ABCcommands(rx_buffer, echoed_size);
+  93:Core/Src/user_interface.c **** 		}
+  94:Core/Src/user_interface.c **** 		rx_size=0;
+  95:Core/Src/user_interface.c **** 		echoed_size=0;
+  96:Core/Src/user_interface.c **** 		reset_or_start_uart_DMA_communications();
+  97:Core/Src/user_interface.c **** 	}
+  98:Core/Src/user_interface.c **** }
+  99:Core/Src/user_interface.c **** 
+ 100:Core/Src/user_interface.c **** uint32_t ui_uart_echo_and_breaklinedetect_rx(){
+  64              		.loc 1 100 47 is_stmt 1 view -0
+  65              		.cfi_startproc
+  66              		@ args = 0, pretend = 0, frame = 0
+  67              		@ frame_needed = 0, uses_anonymous_args = 0
+  68 0000 38B5     		push	{r3, r4, r5, lr}
+  69              	.LCFI1:
+  70              		.cfi_def_cfa_offset 16
+  71              		.cfi_offset 3, -16
+  72              		.cfi_offset 4, -12
+  73              		.cfi_offset 5, -8
+  74              		.cfi_offset 14, -4
+ARM GAS  /tmp/cc2grnrp.s 			page 4
+
+
+ 101:Core/Src/user_interface.c **** 	uint32_t linejumpdetected_flag=0;//1= we detected a line jump
+  75              		.loc 1 101 2 view .LVU4
+  76              	.LVL1:
+ 102:Core/Src/user_interface.c **** 
+ 103:Core/Src/user_interface.c **** 	if(rx_flag==1){											//uart received something
+  77              		.loc 1 103 2 view .LVU5
+  78              		.loc 1 103 12 is_stmt 0 view .LVU6
+  79 0002 1F4B     		ldr	r3, .L20
+  80 0004 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  81              		.loc 1 103 4 view .LVU7
+  82 0006 012B     		cmp	r3, #1
+  83 0008 02D0     		beq	.L16
+ 101:Core/Src/user_interface.c **** 	uint32_t linejumpdetected_flag=0;//1= we detected a line jump
+  84              		.loc 1 101 11 view .LVU8
+  85 000a 0024     		movs	r4, #0
+ 104:Core/Src/user_interface.c **** 		if((rx_size-echoed_size)>0){						//check only that new something not the whole RX buffer each ti
+ 105:Core/Src/user_interface.c **** 			for(uint32_t i=0;i<rx_size-echoed_size;i++){
+ 106:Core/Src/user_interface.c **** 				if(rx_buffer[echoed_size+i]=='\r'){			//detect a breakline from the user, that means start deco
+ 107:Core/Src/user_interface.c **** 					linejumpdetected_flag=1;
+ 108:Core/Src/user_interface.c **** 					break;
+ 109:Core/Src/user_interface.c **** 				}
+ 110:Core/Src/user_interface.c **** 			}
+ 111:Core/Src/user_interface.c **** 
+ 112:Core/Src/user_interface.c **** 			if(linejumpdetected_flag==1){
+ 113:Core/Src/user_interface.c **** 				rx_buffer[rx_size]='\n';
+ 114:Core/Src/user_interface.c **** 				HAL_UART_Transmit_DMA(&hlpuart1, &rx_buffer[echoed_size], (rx_size-echoed_size)+1);	//the line 
+ 115:Core/Src/user_interface.c **** 				HAL_Delay(25);
+ 116:Core/Src/user_interface.c **** 			}else{
+ 117:Core/Src/user_interface.c **** 				HAL_UART_Transmit_DMA(&hlpuart1, &rx_buffer[echoed_size], (rx_size-echoed_size));
+ 118:Core/Src/user_interface.c **** 				HAL_Delay(25);
+ 119:Core/Src/user_interface.c **** 			}
+ 120:Core/Src/user_interface.c **** 		}
+ 121:Core/Src/user_interface.c **** 		echoed_size+=rx_size-echoed_size;				//actualise already echoed and checked for breakline buffer.
+ 122:Core/Src/user_interface.c **** 		rx_flag=0;										//reset the uart received flag
+ 123:Core/Src/user_interface.c **** 	}
+ 124:Core/Src/user_interface.c **** 
+ 125:Core/Src/user_interface.c **** 	return linejumpdetected_flag;
+  86              		.loc 1 125 2 is_stmt 1 view .LVU9
+  87              	.LVL2:
+  88              	.L5:
+ 126:Core/Src/user_interface.c **** 
+ 127:Core/Src/user_interface.c **** }
+  89              		.loc 1 127 1 is_stmt 0 view .LVU10
+  90 000c 2046     		mov	r0, r4
+  91 000e 38BD     		pop	{r3, r4, r5, pc}
+  92              	.LVL3:
+  93              	.L16:
+ 104:Core/Src/user_interface.c **** 		if((rx_size-echoed_size)>0){						//check only that new something not the whole RX buffer each ti
+  94              		.loc 1 104 3 is_stmt 1 view .LVU11
+ 104:Core/Src/user_interface.c **** 		if((rx_size-echoed_size)>0){						//check only that new something not the whole RX buffer each ti
+  95              		.loc 1 104 14 is_stmt 0 view .LVU12
+  96 0010 1C4B     		ldr	r3, .L20+4
+  97 0012 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+  98 0014 1C4B     		ldr	r3, .L20+8
+  99 0016 1978     		ldrb	r1, [r3]	@ zero_extendqisi2
+ 100 0018 551A     		subs	r5, r2, r1
+ 104:Core/Src/user_interface.c **** 		if((rx_size-echoed_size)>0){						//check only that new something not the whole RX buffer each ti
+ARM GAS  /tmp/cc2grnrp.s 			page 5
+
+
+ 101              		.loc 1 104 5 view .LVU13
+ 102 001a 002D     		cmp	r5, #0
+ 103 001c 09DD     		ble	.L17
+ 104              	.LBB2:
+ 105:Core/Src/user_interface.c **** 				if(rx_buffer[echoed_size+i]=='\r'){			//detect a breakline from the user, that means start deco
+ 105              		.loc 1 105 17 view .LVU14
+ 106 001e 0023     		movs	r3, #0
+ 107              	.L7:
+ 108              	.LVL4:
+ 105:Core/Src/user_interface.c **** 				if(rx_buffer[echoed_size+i]=='\r'){			//detect a breakline from the user, that means start deco
+ 109              		.loc 1 105 4 discriminator 1 view .LVU15
+ 110 0020 9D42     		cmp	r5, r3
+ 111 0022 0FD9     		bls	.L18
+ 106:Core/Src/user_interface.c **** 					linejumpdetected_flag=1;
+ 112              		.loc 1 106 5 is_stmt 1 view .LVU16
+ 106:Core/Src/user_interface.c **** 					linejumpdetected_flag=1;
+ 113              		.loc 1 106 29 is_stmt 0 view .LVU17
+ 114 0024 C818     		adds	r0, r1, r3
+ 106:Core/Src/user_interface.c **** 					linejumpdetected_flag=1;
+ 115              		.loc 1 106 17 view .LVU18
+ 116 0026 194C     		ldr	r4, .L20+12
+ 117 0028 205C     		ldrb	r0, [r4, r0]	@ zero_extendqisi2
+ 106:Core/Src/user_interface.c **** 					linejumpdetected_flag=1;
+ 118              		.loc 1 106 7 view .LVU19
+ 119 002a 0D28     		cmp	r0, #13
+ 120 002c 17D0     		beq	.L14
+ 105:Core/Src/user_interface.c **** 				if(rx_buffer[echoed_size+i]=='\r'){			//detect a breakline from the user, that means start deco
+ 121              		.loc 1 105 44 discriminator 2 view .LVU20
+ 122 002e 0133     		adds	r3, r3, #1
+ 123              	.LVL5:
+ 105:Core/Src/user_interface.c **** 				if(rx_buffer[echoed_size+i]=='\r'){			//detect a breakline from the user, that means start deco
+ 124              		.loc 1 105 44 discriminator 2 view .LVU21
+ 125 0030 F6E7     		b	.L7
+ 126              	.LVL6:
+ 127              	.L17:
+ 105:Core/Src/user_interface.c **** 				if(rx_buffer[echoed_size+i]=='\r'){			//detect a breakline from the user, that means start deco
+ 128              		.loc 1 105 44 discriminator 2 view .LVU22
+ 129              	.LBE2:
+ 101:Core/Src/user_interface.c **** 
+ 130              		.loc 1 101 11 view .LVU23
+ 131 0032 0024     		movs	r4, #0
+ 132              	.LVL7:
+ 133              	.L8:
+ 121:Core/Src/user_interface.c **** 		rx_flag=0;										//reset the uart received flag
+ 134              		.loc 1 121 3 is_stmt 1 view .LVU24
+ 121:Core/Src/user_interface.c **** 		rx_flag=0;										//reset the uart received flag
+ 135              		.loc 1 121 14 is_stmt 0 view .LVU25
+ 136 0034 134B     		ldr	r3, .L20+4
+ 137 0036 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 138 0038 134B     		ldr	r3, .L20+8
+ 139 003a 1A70     		strb	r2, [r3]
+ 122:Core/Src/user_interface.c **** 	}
+ 140              		.loc 1 122 3 is_stmt 1 view .LVU26
+ 122:Core/Src/user_interface.c **** 	}
+ 141              		.loc 1 122 10 is_stmt 0 view .LVU27
+ 142 003c 104B     		ldr	r3, .L20
+ 143 003e 0022     		movs	r2, #0
+ARM GAS  /tmp/cc2grnrp.s 			page 6
+
+
+ 144 0040 1A70     		strb	r2, [r3]
+ 145 0042 E3E7     		b	.L5
+ 146              	.LVL8:
+ 147              	.L18:
+ 101:Core/Src/user_interface.c **** 
+ 148              		.loc 1 101 11 view .LVU28
+ 149 0044 0024     		movs	r4, #0
+ 150              	.L9:
+ 151              	.LVL9:
+ 112:Core/Src/user_interface.c **** 				rx_buffer[rx_size]='\n';
+ 152              		.loc 1 112 4 is_stmt 1 view .LVU29
+ 112:Core/Src/user_interface.c **** 				rx_buffer[rx_size]='\n';
+ 153              		.loc 1 112 6 is_stmt 0 view .LVU30
+ 154 0046 64B9     		cbnz	r4, .L19
+ 117:Core/Src/user_interface.c **** 				HAL_Delay(25);
+ 155              		.loc 1 117 5 is_stmt 1 view .LVU31
+ 156 0048 521A     		subs	r2, r2, r1
+ 157 004a 92B2     		uxth	r2, r2
+ 158 004c 0F4B     		ldr	r3, .L20+12
+ 159              	.LVL10:
+ 117:Core/Src/user_interface.c **** 				HAL_Delay(25);
+ 160              		.loc 1 117 5 is_stmt 0 view .LVU32
+ 161 004e 1944     		add	r1, r1, r3
+ 162 0050 0F48     		ldr	r0, .L20+16
+ 163 0052 FFF7FEFF 		bl	HAL_UART_Transmit_DMA
+ 164              	.LVL11:
+ 118:Core/Src/user_interface.c **** 			}
+ 165              		.loc 1 118 5 is_stmt 1 view .LVU33
+ 166 0056 1920     		movs	r0, #25
+ 167 0058 FFF7FEFF 		bl	HAL_Delay
+ 168              	.LVL12:
+ 169 005c EAE7     		b	.L8
+ 170              	.LVL13:
+ 171              	.L14:
+ 172              	.LBB3:
+ 107:Core/Src/user_interface.c **** 					break;
+ 173              		.loc 1 107 27 is_stmt 0 view .LVU34
+ 174 005e 0124     		movs	r4, #1
+ 175 0060 F1E7     		b	.L9
+ 176              	.LVL14:
+ 177              	.L19:
+ 107:Core/Src/user_interface.c **** 					break;
+ 178              		.loc 1 107 27 view .LVU35
+ 179              	.LBE3:
+ 113:Core/Src/user_interface.c **** 				HAL_UART_Transmit_DMA(&hlpuart1, &rx_buffer[echoed_size], (rx_size-echoed_size)+1);	//the line 
+ 180              		.loc 1 113 5 is_stmt 1 view .LVU36
+ 113:Core/Src/user_interface.c **** 				HAL_UART_Transmit_DMA(&hlpuart1, &rx_buffer[echoed_size], (rx_size-echoed_size)+1);	//the line 
+ 181              		.loc 1 113 23 is_stmt 0 view .LVU37
+ 182 0062 0A4B     		ldr	r3, .L20+12
+ 183              	.LVL15:
+ 113:Core/Src/user_interface.c **** 				HAL_UART_Transmit_DMA(&hlpuart1, &rx_buffer[echoed_size], (rx_size-echoed_size)+1);	//the line 
+ 184              		.loc 1 113 23 view .LVU38
+ 185 0064 0A20     		movs	r0, #10
+ 186 0066 9854     		strb	r0, [r3, r2]
+ 114:Core/Src/user_interface.c **** 				HAL_Delay(25);
+ 187              		.loc 1 114 5 is_stmt 1 view .LVU39
+ 114:Core/Src/user_interface.c **** 				HAL_Delay(25);
+ARM GAS  /tmp/cc2grnrp.s 			page 7
+
+
+ 188              		.loc 1 114 71 is_stmt 0 view .LVU40
+ 189 0068 521A     		subs	r2, r2, r1
+ 190 006a 92B2     		uxth	r2, r2
+ 114:Core/Src/user_interface.c **** 				HAL_Delay(25);
+ 191              		.loc 1 114 5 view .LVU41
+ 192 006c 0132     		adds	r2, r2, #1
+ 193 006e 92B2     		uxth	r2, r2
+ 194 0070 1944     		add	r1, r1, r3
+ 195 0072 0748     		ldr	r0, .L20+16
+ 196 0074 FFF7FEFF 		bl	HAL_UART_Transmit_DMA
+ 197              	.LVL16:
+ 115:Core/Src/user_interface.c **** 			}else{
+ 198              		.loc 1 115 5 is_stmt 1 view .LVU42
+ 199 0078 1920     		movs	r0, #25
+ 200 007a FFF7FEFF 		bl	HAL_Delay
+ 201              	.LVL17:
+ 202 007e D9E7     		b	.L8
+ 203              	.L21:
+ 204              		.align	2
+ 205              	.L20:
+ 206 0080 00000000 		.word	.LANCHOR1
+ 207 0084 00000000 		.word	.LANCHOR2
+ 208 0088 00000000 		.word	.LANCHOR3
+ 209 008c 00000000 		.word	.LANCHOR4
+ 210 0090 00000000 		.word	hlpuart1
+ 211              		.cfi_endproc
+ 212              	.LFE135:
+ 214              		.section	.text.decode_othercommands,"ax",%progbits
+ 215              		.align	1
+ 216              		.global	decode_othercommands
+ 217              		.syntax unified
+ 218              		.thumb
+ 219              		.thumb_func
+ 220              		.fpu fpv4-sp-d16
+ 222              	decode_othercommands:
+ 223              	.LVL18:
+ 224              	.LFB137:
+ 128:Core/Src/user_interface.c **** 
+ 129:Core/Src/user_interface.c **** uint32_t decode_ABCcommands(uint8_t *pData, uint16_t Size){
+ 130:Core/Src/user_interface.c **** 
+ 131:Core/Src/user_interface.c **** 	hall_signals_order aux_signal_order[3]={hall_order_unknown, hall_order_unknown, hall_order_unknown
+ 132:Core/Src/user_interface.c **** 	hall_signals_polarity aux_signal_polarity[3]={hall_polarity_unknown, hall_polarity_unknown, hall_p
+ 133:Core/Src/user_interface.c **** 	uint32_t number_of_identified_phases=0;
+ 134:Core/Src/user_interface.c **** 
+ 135:Core/Src/user_interface.c **** 	uint32_t hall_order_unknown_flag=0;
+ 136:Core/Src/user_interface.c **** 	uint32_t hall_polarity_unknown_flag=0;
+ 137:Core/Src/user_interface.c **** 
+ 138:Core/Src/user_interface.c **** 	uint16_t newSize_after_all_deletions=apply_delete_character_to_buffer(pData,Size);
+ 139:Core/Src/user_interface.c **** 
+ 140:Core/Src/user_interface.c **** 
+ 141:Core/Src/user_interface.c **** 	for (uint32_t i = 0; i < newSize_after_all_deletions; ++i) {
+ 142:Core/Src/user_interface.c **** 		hall_signals_order just_identified_hall_order=decode_char_to_hall_signals_order((uint8_t *)&pData
+ 143:Core/Src/user_interface.c **** 		if(just_identified_hall_order!=hall_order_unknown){//we got a phase character match!
+ 144:Core/Src/user_interface.c **** 			aux_signal_order[number_of_identified_phases]=just_identified_hall_order;
+ 145:Core/Src/user_interface.c **** 			if(i==0){//take care of the 0 index, we dont want to access the array out of bounds
+ 146:Core/Src/user_interface.c **** 				aux_signal_polarity[number_of_identified_phases]=hall_direct;
+ 147:Core/Src/user_interface.c **** 			}else{
+ARM GAS  /tmp/cc2grnrp.s 			page 8
+
+
+ 148:Core/Src/user_interface.c **** 				aux_signal_polarity[number_of_identified_phases]=decode_char_to_hall_signals_polarity((uint8_t 
+ 149:Core/Src/user_interface.c **** 			}
+ 150:Core/Src/user_interface.c **** 
+ 151:Core/Src/user_interface.c **** 			number_of_identified_phases++;
+ 152:Core/Src/user_interface.c **** 		}
+ 153:Core/Src/user_interface.c **** 	}
+ 154:Core/Src/user_interface.c **** 
+ 155:Core/Src/user_interface.c **** 	for (uint32_t i = 0; i < 3; ++i) {//check if all values are acceptable
+ 156:Core/Src/user_interface.c **** 		if(aux_signal_order[i]==hall_order_unknown){
+ 157:Core/Src/user_interface.c **** 			hall_order_unknown_flag=1;
+ 158:Core/Src/user_interface.c **** 			break;			//we found an unacceptable value, early break
+ 159:Core/Src/user_interface.c **** 		}
+ 160:Core/Src/user_interface.c **** 
+ 161:Core/Src/user_interface.c **** 		if(aux_signal_polarity[i]==hall_polarity_unknown){
+ 162:Core/Src/user_interface.c **** 			hall_polarity_unknown_flag=1;
+ 163:Core/Src/user_interface.c **** 			break;			//we found an unacceptable value, early break
+ 164:Core/Src/user_interface.c **** 		}
+ 165:Core/Src/user_interface.c **** 	}
+ 166:Core/Src/user_interface.c **** 
+ 167:Core/Src/user_interface.c **** 	if(number_of_identified_phases==3 && hall_order_unknown_flag==0 && hall_polarity_unknown_flag==0){
+ 168:Core/Src/user_interface.c **** 		//everything went well, unload out new values into the real order and polarity arrays
+ 169:Core/Src/user_interface.c **** 		for(uint32_t i = 0; i < 3; ++i){
+ 170:Core/Src/user_interface.c **** 			signal_order[i]=aux_signal_order[i];
+ 171:Core/Src/user_interface.c **** 			signal_polarity[i]=aux_signal_polarity[i];
+ 172:Core/Src/user_interface.c **** 		}
+ 173:Core/Src/user_interface.c **** 		HAL_Delay(50);
+ 174:Core/Src/user_interface.c **** 		HAL_UART_Transmit_DMA(&hlpuart1, okmessage, sizeof(okmessage));
+ 175:Core/Src/user_interface.c **** 		return 1;
+ 176:Core/Src/user_interface.c **** 	}else{
+ 177:Core/Src/user_interface.c **** 		HAL_Delay(50);
+ 178:Core/Src/user_interface.c **** 		HAL_UART_Transmit_DMA(&hlpuart1, notokmessage, sizeof(notokmessage));
+ 179:Core/Src/user_interface.c **** 		return 0;
+ 180:Core/Src/user_interface.c **** 	}
+ 181:Core/Src/user_interface.c **** 
+ 182:Core/Src/user_interface.c **** }
+ 183:Core/Src/user_interface.c **** 
+ 184:Core/Src/user_interface.c **** uint32_t decode_othercommands(uint8_t *pData, uint16_t Size){
+ 225              		.loc 1 184 61 view -0
+ 226              		.cfi_startproc
+ 227              		@ args = 0, pretend = 0, frame = 0
+ 228              		@ frame_needed = 0, uses_anonymous_args = 0
+ 229              		.loc 1 184 61 is_stmt 0 view .LVU44
+ 230 0000 10B5     		push	{r4, lr}
+ 231              	.LCFI2:
+ 232              		.cfi_def_cfa_offset 8
+ 233              		.cfi_offset 4, -8
+ 234              		.cfi_offset 14, -4
+ 235 0002 0446     		mov	r4, r0
+ 185:Core/Src/user_interface.c **** 	char* aux_variable_searching_strings=NULL;
+ 236              		.loc 1 185 2 is_stmt 1 view .LVU45
+ 237              	.LVL19:
+ 186:Core/Src/user_interface.c **** 	//check for the help command
+ 187:Core/Src/user_interface.c **** 	aux_variable_searching_strings=strstr((char *)pData, (char *)helpcommand);
+ 238              		.loc 1 187 2 view .LVU46
+ 239              		.loc 1 187 33 is_stmt 0 view .LVU47
+ 240 0004 2849     		ldr	r1, .L32
+ 241              	.LVL20:
+ARM GAS  /tmp/cc2grnrp.s 			page 9
+
+
+ 242              		.loc 1 187 33 view .LVU48
+ 243 0006 FFF7FEFF 		bl	strstr
+ 244              	.LVL21:
+ 188:Core/Src/user_interface.c **** 	if(aux_variable_searching_strings!=NULL){
+ 245              		.loc 1 188 2 is_stmt 1 view .LVU49
+ 246              		.loc 1 188 4 is_stmt 0 view .LVU50
+ 247 000a D0B9     		cbnz	r0, .L30
+ 189:Core/Src/user_interface.c **** 		HAL_Delay(50);
+ 190:Core/Src/user_interface.c **** 		HAL_UART_Transmit_DMA(&hlpuart1, helpmessage, sizeof(helpmessage));
+ 191:Core/Src/user_interface.c **** 		return 1;
+ 192:Core/Src/user_interface.c **** 	}
+ 193:Core/Src/user_interface.c **** 
+ 194:Core/Src/user_interface.c **** 	aux_variable_searching_strings=strstr((char *)pData, (char *)resetcommand);
+ 248              		.loc 1 194 2 is_stmt 1 view .LVU51
+ 249              		.loc 1 194 33 is_stmt 0 view .LVU52
+ 250 000c 2749     		ldr	r1, .L32+4
+ 251 000e 2046     		mov	r0, r4
+ 252              	.LVL22:
+ 253              		.loc 1 194 33 view .LVU53
+ 254 0010 FFF7FEFF 		bl	strstr
+ 255              	.LVL23:
+ 195:Core/Src/user_interface.c **** 	if(aux_variable_searching_strings!=NULL){
+ 256              		.loc 1 195 2 is_stmt 1 view .LVU54
+ 257              		.loc 1 195 4 is_stmt 0 view .LVU55
+ 258 0014 00BB     		cbnz	r0, .L31
+ 196:Core/Src/user_interface.c **** 		HAL_Delay(50);
+ 197:Core/Src/user_interface.c **** 		HAL_UART_Transmit_DMA(&hlpuart1, resetmessage, sizeof(resetmessage));
+ 198:Core/Src/user_interface.c **** 		HAL_GPIO_WritePin(RESET_TARGET_BOARD_GPIO_Port, RESET_TARGET_BOARD_Pin,GPIO_PIN_RESET);
+ 199:Core/Src/user_interface.c **** 		HAL_Delay(100);
+ 200:Core/Src/user_interface.c **** 		HAL_GPIO_WritePin(RESET_TARGET_BOARD_GPIO_Port, RESET_TARGET_BOARD_Pin,GPIO_PIN_SET);
+ 201:Core/Src/user_interface.c **** 		return 1;
+ 202:Core/Src/user_interface.c **** 	}
+ 203:Core/Src/user_interface.c **** 
+ 204:Core/Src/user_interface.c **** 	aux_variable_searching_strings=strstr((char *)pData, (char *)emulationcommand);
+ 259              		.loc 1 204 2 is_stmt 1 view .LVU56
+ 260              		.loc 1 204 33 is_stmt 0 view .LVU57
+ 261 0016 2649     		ldr	r1, .L32+8
+ 262 0018 2046     		mov	r0, r4
+ 263              	.LVL24:
+ 264              		.loc 1 204 33 view .LVU58
+ 265 001a FFF7FEFF 		bl	strstr
+ 266              	.LVL25:
+ 205:Core/Src/user_interface.c **** 	if(aux_variable_searching_strings!=NULL){
+ 267              		.loc 1 205 2 is_stmt 1 view .LVU59
+ 268              		.loc 1 205 4 is_stmt 0 view .LVU60
+ 269 001e 0028     		cmp	r0, #0
+ 270 0020 40D0     		beq	.L28
+ 206:Core/Src/user_interface.c **** 		if(emulator_enabled==0){
+ 271              		.loc 1 206 3 is_stmt 1 view .LVU61
+ 272              		.loc 1 206 22 is_stmt 0 view .LVU62
+ 273 0022 244B     		ldr	r3, .L32+12
+ 274 0024 1B68     		ldr	r3, [r3]
+ 275              		.loc 1 206 5 view .LVU63
+ 276 0026 8BBB     		cbnz	r3, .L26
+ 207:Core/Src/user_interface.c **** 			emulator_enabled=1;
+ 277              		.loc 1 207 4 is_stmt 1 view .LVU64
+ 278              		.loc 1 207 20 is_stmt 0 view .LVU65
+ARM GAS  /tmp/cc2grnrp.s 			page 10
+
+
+ 279 0028 224B     		ldr	r3, .L32+12
+ 280 002a 0122     		movs	r2, #1
+ 281 002c 1A60     		str	r2, [r3]
+ 208:Core/Src/user_interface.c **** 			HAL_Delay(50);
+ 282              		.loc 1 208 4 is_stmt 1 view .LVU66
+ 283 002e 3220     		movs	r0, #50
+ 284              	.LVL26:
+ 285              		.loc 1 208 4 is_stmt 0 view .LVU67
+ 286 0030 FFF7FEFF 		bl	HAL_Delay
+ 287              	.LVL27:
+ 209:Core/Src/user_interface.c **** 			HAL_UART_Transmit_DMA(&hlpuart1, on_emulationmessage, sizeof(on_emulationmessage));
+ 288              		.loc 1 209 4 is_stmt 1 view .LVU68
+ 289 0034 1522     		movs	r2, #21
+ 290 0036 2049     		ldr	r1, .L32+16
+ 291 0038 2048     		ldr	r0, .L32+20
+ 292 003a FFF7FEFF 		bl	HAL_UART_Transmit_DMA
+ 293              	.LVL28:
+ 294              	.L27:
+ 210:Core/Src/user_interface.c **** 		}else{
+ 211:Core/Src/user_interface.c **** 			emulator_enabled=0;
+ 212:Core/Src/user_interface.c **** 			HAL_Delay(50);
+ 213:Core/Src/user_interface.c **** 			HAL_UART_Transmit_DMA(&hlpuart1, off_emulationmessage, sizeof(off_emulationmessage));
+ 214:Core/Src/user_interface.c **** 		}
+ 215:Core/Src/user_interface.c **** 		return 1;
+ 295              		.loc 1 215 3 view .LVU69
+ 296              		.loc 1 215 10 is_stmt 0 view .LVU70
+ 297 003e 0120     		movs	r0, #1
+ 298 0040 09E0     		b	.L22
+ 299              	.LVL29:
+ 300              	.L30:
+ 189:Core/Src/user_interface.c **** 		HAL_UART_Transmit_DMA(&hlpuart1, helpmessage, sizeof(helpmessage));
+ 301              		.loc 1 189 3 is_stmt 1 view .LVU71
+ 302 0042 3220     		movs	r0, #50
+ 303              	.LVL30:
+ 189:Core/Src/user_interface.c **** 		HAL_UART_Transmit_DMA(&hlpuart1, helpmessage, sizeof(helpmessage));
+ 304              		.loc 1 189 3 is_stmt 0 view .LVU72
+ 305 0044 FFF7FEFF 		bl	HAL_Delay
+ 306              	.LVL31:
+ 190:Core/Src/user_interface.c **** 		return 1;
+ 307              		.loc 1 190 3 is_stmt 1 view .LVU73
+ 308 0048 40F25322 		movw	r2, #595
+ 309 004c 1C49     		ldr	r1, .L32+24
+ 310 004e 1B48     		ldr	r0, .L32+20
+ 311 0050 FFF7FEFF 		bl	HAL_UART_Transmit_DMA
+ 312              	.LVL32:
+ 191:Core/Src/user_interface.c **** 	}
+ 313              		.loc 1 191 3 view .LVU74
+ 191:Core/Src/user_interface.c **** 	}
+ 314              		.loc 1 191 10 is_stmt 0 view .LVU75
+ 315 0054 0120     		movs	r0, #1
+ 316              	.LVL33:
+ 317              	.L22:
+ 216:Core/Src/user_interface.c **** 	}
+ 217:Core/Src/user_interface.c **** 
+ 218:Core/Src/user_interface.c **** 	return 0;
+ 219:Core/Src/user_interface.c **** }
+ 318              		.loc 1 219 1 view .LVU76
+ARM GAS  /tmp/cc2grnrp.s 			page 11
+
+
+ 319 0056 10BD     		pop	{r4, pc}
+ 320              	.LVL34:
+ 321              	.L31:
+ 196:Core/Src/user_interface.c **** 		HAL_UART_Transmit_DMA(&hlpuart1, resetmessage, sizeof(resetmessage));
+ 322              		.loc 1 196 3 is_stmt 1 view .LVU77
+ 323 0058 3220     		movs	r0, #50
+ 324              	.LVL35:
+ 196:Core/Src/user_interface.c **** 		HAL_UART_Transmit_DMA(&hlpuart1, resetmessage, sizeof(resetmessage));
+ 325              		.loc 1 196 3 is_stmt 0 view .LVU78
+ 326 005a FFF7FEFF 		bl	HAL_Delay
+ 327              	.LVL36:
+ 197:Core/Src/user_interface.c **** 		HAL_GPIO_WritePin(RESET_TARGET_BOARD_GPIO_Port, RESET_TARGET_BOARD_Pin,GPIO_PIN_RESET);
+ 328              		.loc 1 197 3 is_stmt 1 view .LVU79
+ 329 005e 1922     		movs	r2, #25
+ 330 0060 1849     		ldr	r1, .L32+28
+ 331 0062 1648     		ldr	r0, .L32+20
+ 332 0064 FFF7FEFF 		bl	HAL_UART_Transmit_DMA
+ 333              	.LVL37:
+ 198:Core/Src/user_interface.c **** 		HAL_Delay(100);
+ 334              		.loc 1 198 3 view .LVU80
+ 335 0068 174C     		ldr	r4, .L32+32
+ 336              	.LVL38:
+ 198:Core/Src/user_interface.c **** 		HAL_Delay(100);
+ 337              		.loc 1 198 3 is_stmt 0 view .LVU81
+ 338 006a 0022     		movs	r2, #0
+ 339 006c 4FF40071 		mov	r1, #512
+ 340 0070 2046     		mov	r0, r4
+ 341 0072 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 342              	.LVL39:
+ 199:Core/Src/user_interface.c **** 		HAL_GPIO_WritePin(RESET_TARGET_BOARD_GPIO_Port, RESET_TARGET_BOARD_Pin,GPIO_PIN_SET);
+ 343              		.loc 1 199 3 is_stmt 1 view .LVU82
+ 344 0076 6420     		movs	r0, #100
+ 345 0078 FFF7FEFF 		bl	HAL_Delay
+ 346              	.LVL40:
+ 200:Core/Src/user_interface.c **** 		return 1;
+ 347              		.loc 1 200 3 view .LVU83
+ 348 007c 0122     		movs	r2, #1
+ 349 007e 4FF40071 		mov	r1, #512
+ 350 0082 2046     		mov	r0, r4
+ 351 0084 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 352              	.LVL41:
+ 201:Core/Src/user_interface.c **** 	}
+ 353              		.loc 1 201 3 view .LVU84
+ 201:Core/Src/user_interface.c **** 	}
+ 354              		.loc 1 201 10 is_stmt 0 view .LVU85
+ 355 0088 0120     		movs	r0, #1
+ 356 008a E4E7     		b	.L22
+ 357              	.LVL42:
+ 358              	.L26:
+ 211:Core/Src/user_interface.c **** 			HAL_Delay(50);
+ 359              		.loc 1 211 4 is_stmt 1 view .LVU86
+ 211:Core/Src/user_interface.c **** 			HAL_Delay(50);
+ 360              		.loc 1 211 20 is_stmt 0 view .LVU87
+ 361 008c 094B     		ldr	r3, .L32+12
+ 362 008e 0022     		movs	r2, #0
+ 363 0090 1A60     		str	r2, [r3]
+ 212:Core/Src/user_interface.c **** 			HAL_UART_Transmit_DMA(&hlpuart1, off_emulationmessage, sizeof(off_emulationmessage));
+ARM GAS  /tmp/cc2grnrp.s 			page 12
+
+
+ 364              		.loc 1 212 4 is_stmt 1 view .LVU88
+ 365 0092 3220     		movs	r0, #50
+ 366              	.LVL43:
+ 212:Core/Src/user_interface.c **** 			HAL_UART_Transmit_DMA(&hlpuart1, off_emulationmessage, sizeof(off_emulationmessage));
+ 367              		.loc 1 212 4 is_stmt 0 view .LVU89
+ 368 0094 FFF7FEFF 		bl	HAL_Delay
+ 369              	.LVL44:
+ 213:Core/Src/user_interface.c **** 		}
+ 370              		.loc 1 213 4 is_stmt 1 view .LVU90
+ 371 0098 1622     		movs	r2, #22
+ 372 009a 0C49     		ldr	r1, .L32+36
+ 373 009c 0748     		ldr	r0, .L32+20
+ 374 009e FFF7FEFF 		bl	HAL_UART_Transmit_DMA
+ 375              	.LVL45:
+ 376 00a2 CCE7     		b	.L27
+ 377              	.LVL46:
+ 378              	.L28:
+ 218:Core/Src/user_interface.c **** }
+ 379              		.loc 1 218 9 is_stmt 0 view .LVU91
+ 380 00a4 0020     		movs	r0, #0
+ 381              	.LVL47:
+ 218:Core/Src/user_interface.c **** }
+ 382              		.loc 1 218 9 view .LVU92
+ 383 00a6 D6E7     		b	.L22
+ 384              	.L33:
+ 385              		.align	2
+ 386              	.L32:
+ 387 00a8 00000000 		.word	.LANCHOR5
+ 388 00ac 00000000 		.word	.LANCHOR7
+ 389 00b0 00000000 		.word	.LANCHOR9
+ 390 00b4 00000000 		.word	emulator_enabled
+ 391 00b8 00000000 		.word	.LANCHOR10
+ 392 00bc 00000000 		.word	hlpuart1
+ 393 00c0 00000000 		.word	.LANCHOR6
+ 394 00c4 00000000 		.word	.LANCHOR8
+ 395 00c8 00040048 		.word	1207960576
+ 396 00cc 00000000 		.word	.LANCHOR11
+ 397              		.cfi_endproc
+ 398              	.LFE137:
+ 400              		.section	.text.apply_delete_character_to_buffer,"ax",%progbits
+ 401              		.align	1
+ 402              		.global	apply_delete_character_to_buffer
+ 403              		.syntax unified
+ 404              		.thumb
+ 405              		.thumb_func
+ 406              		.fpu fpv4-sp-d16
+ 408              	apply_delete_character_to_buffer:
+ 409              	.LVL48:
+ 410              	.LFB138:
+ 220:Core/Src/user_interface.c **** 
+ 221:Core/Src/user_interface.c **** 
+ 222:Core/Src/user_interface.c **** uint16_t apply_delete_character_to_buffer(uint8_t *pData, uint16_t Size){
+ 411              		.loc 1 222 73 is_stmt 1 view -0
+ 412              		.cfi_startproc
+ 413              		@ args = 0, pretend = 0, frame = 0
+ 414              		@ frame_needed = 0, uses_anonymous_args = 0
+ 415              		@ link register save eliminated.
+ARM GAS  /tmp/cc2grnrp.s 			page 13
+
+
+ 416              		.loc 1 222 73 is_stmt 0 view .LVU94
+ 417 0000 F0B4     		push	{r4, r5, r6, r7}
+ 418              	.LCFI3:
+ 419              		.cfi_def_cfa_offset 16
+ 420              		.cfi_offset 4, -16
+ 421              		.cfi_offset 5, -12
+ 422              		.cfi_offset 6, -8
+ 423              		.cfi_offset 7, -4
+ 424 0002 0246     		mov	r2, r0
+ 223:Core/Src/user_interface.c **** 	uint16_t newSize_after_all_deletions=Size;
+ 425              		.loc 1 223 2 is_stmt 1 view .LVU95
+ 426              	.LVL49:
+ 224:Core/Src/user_interface.c **** 	for (uint32_t i = 0; i < Size; ++i) { //apply the "delete"=='/127' characters to received buffer
+ 427              		.loc 1 224 2 view .LVU96
+ 428              	.LBB4:
+ 429              		.loc 1 224 7 view .LVU97
+ 430              		.loc 1 224 7 is_stmt 0 view .LVU98
+ 431              	.LBE4:
+ 223:Core/Src/user_interface.c **** 	uint16_t newSize_after_all_deletions=Size;
+ 432              		.loc 1 223 11 view .LVU99
+ 433 0004 0846     		mov	r0, r1
+ 434              	.LVL50:
+ 435              	.LBB7:
+ 436              		.loc 1 224 16 view .LVU100
+ 437 0006 0024     		movs	r4, #0
+ 438              		.loc 1 224 2 view .LVU101
+ 439 0008 01E0     		b	.L35
+ 440              	.LVL51:
+ 441              	.L45:
+ 225:Core/Src/user_interface.c **** 		if(pData[i]=='\177'){		//delete found
+ 226:Core/Src/user_interface.c **** 			if(i==0){				//if the delete was right at the start of the buffer
+ 227:Core/Src/user_interface.c **** 				newSize_after_all_deletions-=1;
+ 228:Core/Src/user_interface.c **** 				for (uint32_t j = i; j < Size; ++j) {
+ 229:Core/Src/user_interface.c **** 					pData[j]=pData[j+1]; //just shift the entire buffer effectively deleting the 'delete' characte
+ 230:Core/Src/user_interface.c **** 				}
+ 231:Core/Src/user_interface.c **** 				i--;					 //recheck this index, it might have yet another 'del'
+ 442              		.loc 1 231 5 is_stmt 1 view .LVU102
+ 443              		.loc 1 231 6 is_stmt 0 view .LVU103
+ 444 000a 013C     		subs	r4, r4, #1
+ 445              	.LVL52:
+ 446              	.L36:
+ 224:Core/Src/user_interface.c **** 	for (uint32_t i = 0; i < Size; ++i) { //apply the "delete"=='/127' characters to received buffer
+ 447              		.loc 1 224 33 discriminator 2 view .LVU104
+ 448 000c 0134     		adds	r4, r4, #1
+ 449              	.LVL53:
+ 450              	.L35:
+ 224:Core/Src/user_interface.c **** 	for (uint32_t i = 0; i < Size; ++i) { //apply the "delete"=='/127' characters to received buffer
+ 451              		.loc 1 224 25 discriminator 1 view .LVU105
+ 452 000e 0D46     		mov	r5, r1
+ 224:Core/Src/user_interface.c **** 	for (uint32_t i = 0; i < Size; ++i) { //apply the "delete"=='/127' characters to received buffer
+ 453              		.loc 1 224 2 discriminator 1 view .LVU106
+ 454 0010 A142     		cmp	r1, r4
+ 455 0012 18D9     		bls	.L44
+ 225:Core/Src/user_interface.c **** 		if(pData[i]=='\177'){		//delete found
+ 456              		.loc 1 225 3 is_stmt 1 view .LVU107
+ 225:Core/Src/user_interface.c **** 		if(pData[i]=='\177'){		//delete found
+ 457              		.loc 1 225 11 is_stmt 0 view .LVU108
+ARM GAS  /tmp/cc2grnrp.s 			page 14
+
+
+ 458 0014 135D     		ldrb	r3, [r2, r4]	@ zero_extendqisi2
+ 225:Core/Src/user_interface.c **** 		if(pData[i]=='\177'){		//delete found
+ 459              		.loc 1 225 5 view .LVU109
+ 460 0016 7F2B     		cmp	r3, #127
+ 461 0018 F8D1     		bne	.L36
+ 226:Core/Src/user_interface.c **** 				newSize_after_all_deletions-=1;
+ 462              		.loc 1 226 4 is_stmt 1 view .LVU110
+ 226:Core/Src/user_interface.c **** 				newSize_after_all_deletions-=1;
+ 463              		.loc 1 226 6 is_stmt 0 view .LVU111
+ 464 001a 4CB9     		cbnz	r4, .L37
+ 227:Core/Src/user_interface.c **** 				for (uint32_t j = i; j < Size; ++j) {
+ 465              		.loc 1 227 5 is_stmt 1 view .LVU112
+ 227:Core/Src/user_interface.c **** 				for (uint32_t j = i; j < Size; ++j) {
+ 466              		.loc 1 227 32 is_stmt 0 view .LVU113
+ 467 001c 0138     		subs	r0, r0, #1
+ 468              	.LVL54:
+ 227:Core/Src/user_interface.c **** 				for (uint32_t j = i; j < Size; ++j) {
+ 469              		.loc 1 227 32 view .LVU114
+ 470 001e 80B2     		uxth	r0, r0
+ 471              	.LVL55:
+ 228:Core/Src/user_interface.c **** 					pData[j]=pData[j+1]; //just shift the entire buffer effectively deleting the 'delete' characte
+ 472              		.loc 1 228 5 is_stmt 1 view .LVU115
+ 473              	.LBB5:
+ 228:Core/Src/user_interface.c **** 					pData[j]=pData[j+1]; //just shift the entire buffer effectively deleting the 'delete' characte
+ 474              		.loc 1 228 10 view .LVU116
+ 228:Core/Src/user_interface.c **** 					pData[j]=pData[j+1]; //just shift the entire buffer effectively deleting the 'delete' characte
+ 475              		.loc 1 228 19 is_stmt 0 view .LVU117
+ 476 0020 2346     		mov	r3, r4
+ 477              	.LVL56:
+ 478              	.L38:
+ 228:Core/Src/user_interface.c **** 					pData[j]=pData[j+1]; //just shift the entire buffer effectively deleting the 'delete' characte
+ 479              		.loc 1 228 5 discriminator 1 view .LVU118
+ 480 0022 9D42     		cmp	r5, r3
+ 481 0024 F1D9     		bls	.L45
+ 229:Core/Src/user_interface.c **** 				}
+ 482              		.loc 1 229 6 is_stmt 1 discriminator 3 view .LVU119
+ 229:Core/Src/user_interface.c **** 				}
+ 483              		.loc 1 229 20 is_stmt 0 discriminator 3 view .LVU120
+ 484 0026 5E1C     		adds	r6, r3, #1
+ 485 0028 975D     		ldrb	r7, [r2, r6]	@ zero_extendqisi2
+ 229:Core/Src/user_interface.c **** 				}
+ 486              		.loc 1 229 14 discriminator 3 view .LVU121
+ 487 002a D754     		strb	r7, [r2, r3]
+ 488              	.LVL57:
+ 228:Core/Src/user_interface.c **** 					pData[j]=pData[j+1]; //just shift the entire buffer effectively deleting the 'delete' characte
+ 489              		.loc 1 228 36 discriminator 3 view .LVU122
+ 490 002c 3346     		mov	r3, r6
+ 491 002e F8E7     		b	.L38
+ 492              	.LVL58:
+ 493              	.L37:
+ 228:Core/Src/user_interface.c **** 					pData[j]=pData[j+1]; //just shift the entire buffer effectively deleting the 'delete' characte
+ 494              		.loc 1 228 36 discriminator 3 view .LVU123
+ 495              	.LBE5:
+ 232:Core/Src/user_interface.c **** 			}else{					//if the delete was NOT at the start of the buffer
+ 233:Core/Src/user_interface.c **** 				newSize_after_all_deletions-=2;
+ 496              		.loc 1 233 5 is_stmt 1 view .LVU124
+ 497              		.loc 1 233 32 is_stmt 0 view .LVU125
+ARM GAS  /tmp/cc2grnrp.s 			page 15
+
+
+ 498 0030 0238     		subs	r0, r0, #2
+ 499              	.LVL59:
+ 500              		.loc 1 233 32 view .LVU126
+ 501 0032 80B2     		uxth	r0, r0
+ 502              	.LVL60:
+ 234:Core/Src/user_interface.c **** 				for (uint32_t j = i; j < Size; ++j) {
+ 503              		.loc 1 234 5 is_stmt 1 view .LVU127
+ 504              	.LBB6:
+ 505              		.loc 1 234 10 view .LVU128
+ 506              		.loc 1 234 19 is_stmt 0 view .LVU129
+ 507 0034 2346     		mov	r3, r4
+ 508              	.LVL61:
+ 509              	.L40:
+ 510              		.loc 1 234 5 discriminator 1 view .LVU130
+ 511 0036 9D42     		cmp	r5, r3
+ 512 0038 E8D9     		bls	.L36
+ 235:Core/Src/user_interface.c **** 					pData[j-1]=pData[j+1]; //shift the entire buffer effectively deleting the 'delete' character a
+ 513              		.loc 1 235 6 is_stmt 1 discriminator 3 view .LVU131
+ 514              		.loc 1 235 22 is_stmt 0 discriminator 3 view .LVU132
+ 515 003a 5E1C     		adds	r6, r3, #1
+ 516              		.loc 1 235 11 discriminator 3 view .LVU133
+ 517 003c 013B     		subs	r3, r3, #1
+ 518              	.LVL62:
+ 519              		.loc 1 235 22 discriminator 3 view .LVU134
+ 520 003e 975D     		ldrb	r7, [r2, r6]	@ zero_extendqisi2
+ 521              		.loc 1 235 16 discriminator 3 view .LVU135
+ 522 0040 D754     		strb	r7, [r2, r3]
+ 523              	.LVL63:
+ 234:Core/Src/user_interface.c **** 				for (uint32_t j = i; j < Size; ++j) {
+ 524              		.loc 1 234 36 discriminator 3 view .LVU136
+ 525 0042 3346     		mov	r3, r6
+ 526 0044 F7E7     		b	.L40
+ 527              	.LVL64:
+ 528              	.L44:
+ 234:Core/Src/user_interface.c **** 				for (uint32_t j = i; j < Size; ++j) {
+ 529              		.loc 1 234 36 discriminator 3 view .LVU137
+ 530              	.LBE6:
+ 531              	.LBE7:
+ 236:Core/Src/user_interface.c **** 				}
+ 237:Core/Src/user_interface.c **** 			}
+ 238:Core/Src/user_interface.c **** 		}
+ 239:Core/Src/user_interface.c **** 	}
+ 240:Core/Src/user_interface.c **** 	return newSize_after_all_deletions;
+ 241:Core/Src/user_interface.c **** }
+ 532              		.loc 1 241 1 view .LVU138
+ 533 0046 F0BC     		pop	{r4, r5, r6, r7}
+ 534              	.LCFI4:
+ 535              		.cfi_restore 7
+ 536              		.cfi_restore 6
+ 537              		.cfi_restore 5
+ 538              		.cfi_restore 4
+ 539              		.cfi_def_cfa_offset 0
+ 540              	.LVL65:
+ 541              		.loc 1 241 1 view .LVU139
+ 542 0048 7047     		bx	lr
+ 543              		.cfi_endproc
+ 544              	.LFE138:
+ARM GAS  /tmp/cc2grnrp.s 			page 16
+
+
+ 546              		.section	.text.decode_char_to_hall_signals_order,"ax",%progbits
+ 547              		.align	1
+ 548              		.global	decode_char_to_hall_signals_order
+ 549              		.syntax unified
+ 550              		.thumb
+ 551              		.thumb_func
+ 552              		.fpu fpv4-sp-d16
+ 554              	decode_char_to_hall_signals_order:
+ 555              	.LVL66:
+ 556              	.LFB139:
+ 242:Core/Src/user_interface.c **** 
+ 243:Core/Src/user_interface.c **** hall_signals_order decode_char_to_hall_signals_order(uint8_t *pData){
+ 557              		.loc 1 243 69 is_stmt 1 view -0
+ 558              		.cfi_startproc
+ 559              		@ args = 0, pretend = 0, frame = 0
+ 560              		@ frame_needed = 0, uses_anonymous_args = 0
+ 561              		@ link register save eliminated.
+ 244:Core/Src/user_interface.c **** 	hall_signals_order returning_hallx=hall_order_unknown;
+ 562              		.loc 1 244 2 view .LVU141
+ 245:Core/Src/user_interface.c **** 
+ 246:Core/Src/user_interface.c **** 	switch (*pData) {
+ 563              		.loc 1 246 2 view .LVU142
+ 564              		.loc 1 246 10 is_stmt 0 view .LVU143
+ 565 0000 0378     		ldrb	r3, [r0]	@ zero_extendqisi2
+ 566              		.loc 1 246 2 view .LVU144
+ 567 0002 413B     		subs	r3, r3, #65
+ 568 0004 222B     		cmp	r3, #34
+ 569 0006 17D8     		bhi	.L47
+ 570 0008 DFE803F0 		tbb	[pc, r3]
+ 571              	.L49:
+ 572 000c 12       		.byte	(.L51-.L49)/2
+ 573 000d 19       		.byte	(.L52-.L49)/2
+ 574 000e 14       		.byte	(.L48-.L49)/2
+ 575 000f 16       		.byte	(.L47-.L49)/2
+ 576 0010 16       		.byte	(.L47-.L49)/2
+ 577 0011 16       		.byte	(.L47-.L49)/2
+ 578 0012 16       		.byte	(.L47-.L49)/2
+ 579 0013 16       		.byte	(.L47-.L49)/2
+ 580 0014 16       		.byte	(.L47-.L49)/2
+ 581 0015 16       		.byte	(.L47-.L49)/2
+ 582 0016 16       		.byte	(.L47-.L49)/2
+ 583 0017 16       		.byte	(.L47-.L49)/2
+ 584 0018 16       		.byte	(.L47-.L49)/2
+ 585 0019 16       		.byte	(.L47-.L49)/2
+ 586 001a 16       		.byte	(.L47-.L49)/2
+ 587 001b 16       		.byte	(.L47-.L49)/2
+ 588 001c 16       		.byte	(.L47-.L49)/2
+ 589 001d 16       		.byte	(.L47-.L49)/2
+ 590 001e 16       		.byte	(.L47-.L49)/2
+ 591 001f 16       		.byte	(.L47-.L49)/2
+ 592 0020 16       		.byte	(.L47-.L49)/2
+ 593 0021 16       		.byte	(.L47-.L49)/2
+ 594 0022 16       		.byte	(.L47-.L49)/2
+ 595 0023 16       		.byte	(.L47-.L49)/2
+ 596 0024 16       		.byte	(.L47-.L49)/2
+ 597 0025 16       		.byte	(.L47-.L49)/2
+ 598 0026 16       		.byte	(.L47-.L49)/2
+ARM GAS  /tmp/cc2grnrp.s 			page 17
+
+
+ 599 0027 16       		.byte	(.L47-.L49)/2
+ 600 0028 16       		.byte	(.L47-.L49)/2
+ 601 0029 16       		.byte	(.L47-.L49)/2
+ 602 002a 16       		.byte	(.L47-.L49)/2
+ 603 002b 16       		.byte	(.L47-.L49)/2
+ 604 002c 12       		.byte	(.L51-.L49)/2
+ 605 002d 19       		.byte	(.L52-.L49)/2
+ 606 002e 14       		.byte	(.L48-.L49)/2
+ 607 002f 00       		.p2align 1
+ 608              	.L51:
+ 247:Core/Src/user_interface.c **** 		case 'a':
+ 248:Core/Src/user_interface.c **** 		case 'A':
+ 249:Core/Src/user_interface.c **** 			returning_hallx=hall_A;
+ 609              		.loc 1 249 19 view .LVU145
+ 610 0030 0020     		movs	r0, #0
+ 611              	.LVL67:
+ 612              		.loc 1 249 19 view .LVU146
+ 613 0032 7047     		bx	lr
+ 614              	.LVL68:
+ 615              	.L48:
+ 250:Core/Src/user_interface.c **** 			break;
+ 251:Core/Src/user_interface.c **** 		case 'b':
+ 252:Core/Src/user_interface.c **** 		case 'B':
+ 253:Core/Src/user_interface.c **** 			returning_hallx=hall_B;
+ 254:Core/Src/user_interface.c **** 			break;
+ 255:Core/Src/user_interface.c **** 		case 'c':
+ 256:Core/Src/user_interface.c **** 		case 'C':
+ 257:Core/Src/user_interface.c **** 			returning_hallx=hall_C;
+ 616              		.loc 1 257 4 is_stmt 1 view .LVU147
+ 258:Core/Src/user_interface.c **** 			break;
+ 617              		.loc 1 258 4 view .LVU148
+ 257:Core/Src/user_interface.c **** 			break;
+ 618              		.loc 1 257 19 is_stmt 0 view .LVU149
+ 619 0034 0220     		movs	r0, #2
+ 620              	.LVL69:
+ 621              		.loc 1 258 4 view .LVU150
+ 622 0036 7047     		bx	lr
+ 623              	.LVL70:
+ 624              	.L47:
+ 259:Core/Src/user_interface.c **** 		default:
+ 260:Core/Src/user_interface.c **** 			returning_hallx=hall_order_unknown;
+ 625              		.loc 1 260 4 is_stmt 1 view .LVU151
+ 261:Core/Src/user_interface.c **** 			break;
+ 626              		.loc 1 261 4 view .LVU152
+ 260:Core/Src/user_interface.c **** 			break;
+ 627              		.loc 1 260 19 is_stmt 0 view .LVU153
+ 628 0038 4FF6FF70 		movw	r0, #65535
+ 629              	.LVL71:
+ 630              		.loc 1 261 4 view .LVU154
+ 631 003c 7047     		bx	lr
+ 632              	.LVL72:
+ 633              	.L52:
+ 253:Core/Src/user_interface.c **** 			break;
+ 634              		.loc 1 253 19 view .LVU155
+ 635 003e 0120     		movs	r0, #1
+ 636              	.LVL73:
+ 262:Core/Src/user_interface.c **** 	}
+ARM GAS  /tmp/cc2grnrp.s 			page 18
+
+
+ 263:Core/Src/user_interface.c **** 
+ 264:Core/Src/user_interface.c **** 	return returning_hallx;
+ 637              		.loc 1 264 2 is_stmt 1 view .LVU156
+ 265:Core/Src/user_interface.c **** }
+ 638              		.loc 1 265 1 is_stmt 0 view .LVU157
+ 639 0040 7047     		bx	lr
+ 640              		.cfi_endproc
+ 641              	.LFE139:
+ 643              		.section	.text.decode_char_to_hall_signals_polarity,"ax",%progbits
+ 644              		.align	1
+ 645              		.global	decode_char_to_hall_signals_polarity
+ 646              		.syntax unified
+ 647              		.thumb
+ 648              		.thumb_func
+ 649              		.fpu fpv4-sp-d16
+ 651              	decode_char_to_hall_signals_polarity:
+ 652              	.LVL74:
+ 653              	.LFB140:
+ 266:Core/Src/user_interface.c **** 
+ 267:Core/Src/user_interface.c **** hall_signals_polarity decode_char_to_hall_signals_polarity(uint8_t *pData){
+ 654              		.loc 1 267 75 is_stmt 1 view -0
+ 655              		.cfi_startproc
+ 656              		@ args = 0, pretend = 0, frame = 0
+ 657              		@ frame_needed = 0, uses_anonymous_args = 0
+ 658              		@ link register save eliminated.
+ 268:Core/Src/user_interface.c **** 	hall_signals_polarity returning_hall_polarity=hall_polarity_unknown;
+ 659              		.loc 1 268 2 view .LVU159
+ 269:Core/Src/user_interface.c **** 
+ 270:Core/Src/user_interface.c **** 	switch (*pData) {
+ 660              		.loc 1 270 2 view .LVU160
+ 661              		.loc 1 270 10 is_stmt 0 view .LVU161
+ 662 0000 0378     		ldrb	r3, [r0]	@ zero_extendqisi2
+ 663              		.loc 1 270 2 view .LVU162
+ 664 0002 212B     		cmp	r3, #33
+ 665 0004 01D0     		beq	.L56
+ 271:Core/Src/user_interface.c **** 		case '!':
+ 272:Core/Src/user_interface.c **** 			returning_hall_polarity=hall_inverse;
+ 273:Core/Src/user_interface.c **** 			break;
+ 274:Core/Src/user_interface.c **** 		default:
+ 275:Core/Src/user_interface.c **** 			returning_hall_polarity=hall_direct;
+ 666              		.loc 1 275 27 view .LVU163
+ 667 0006 0020     		movs	r0, #0
+ 668              	.LVL75:
+ 276:Core/Src/user_interface.c **** 			break;
+ 277:Core/Src/user_interface.c **** 	}
+ 278:Core/Src/user_interface.c **** 
+ 279:Core/Src/user_interface.c **** 	return returning_hall_polarity;
+ 669              		.loc 1 279 2 is_stmt 1 view .LVU164
+ 280:Core/Src/user_interface.c **** }
+ 670              		.loc 1 280 1 is_stmt 0 view .LVU165
+ 671 0008 7047     		bx	lr
+ 672              	.LVL76:
+ 673              	.L56:
+ 272:Core/Src/user_interface.c **** 			break;
+ 674              		.loc 1 272 27 view .LVU166
+ 675 000a 0120     		movs	r0, #1
+ 676              	.LVL77:
+ARM GAS  /tmp/cc2grnrp.s 			page 19
+
+
+ 272:Core/Src/user_interface.c **** 			break;
+ 677              		.loc 1 272 27 view .LVU167
+ 678 000c 7047     		bx	lr
+ 679              		.cfi_endproc
+ 680              	.LFE140:
+ 682              		.section	.text.decode_ABCcommands,"ax",%progbits
+ 683              		.align	1
+ 684              		.global	decode_ABCcommands
+ 685              		.syntax unified
+ 686              		.thumb
+ 687              		.thumb_func
+ 688              		.fpu fpv4-sp-d16
+ 690              	decode_ABCcommands:
+ 691              	.LVL78:
+ 692              	.LFB136:
+ 129:Core/Src/user_interface.c **** 
+ 693              		.loc 1 129 59 is_stmt 1 view -0
+ 694              		.cfi_startproc
+ 695              		@ args = 0, pretend = 0, frame = 16
+ 696              		@ frame_needed = 0, uses_anonymous_args = 0
+ 129:Core/Src/user_interface.c **** 
+ 697              		.loc 1 129 59 is_stmt 0 view .LVU169
+ 698 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 699              	.LCFI5:
+ 700              		.cfi_def_cfa_offset 20
+ 701              		.cfi_offset 4, -20
+ 702              		.cfi_offset 5, -16
+ 703              		.cfi_offset 6, -12
+ 704              		.cfi_offset 7, -8
+ 705              		.cfi_offset 14, -4
+ 706 0002 85B0     		sub	sp, sp, #20
+ 707              	.LCFI6:
+ 708              		.cfi_def_cfa_offset 40
+ 709 0004 0646     		mov	r6, r0
+ 710 0006 0A46     		mov	r2, r1
+ 131:Core/Src/user_interface.c **** 	hall_signals_polarity aux_signal_polarity[3]={hall_polarity_unknown, hall_polarity_unknown, hall_p
+ 711              		.loc 1 131 2 is_stmt 1 view .LVU170
+ 131:Core/Src/user_interface.c **** 	hall_signals_polarity aux_signal_polarity[3]={hall_polarity_unknown, hall_polarity_unknown, hall_p
+ 712              		.loc 1 131 21 is_stmt 0 view .LVU171
+ 713 0008 3D4B     		ldr	r3, .L75
+ 714 000a 93E80300 		ldm	r3, {r0, r1}
+ 715              	.LVL79:
+ 131:Core/Src/user_interface.c **** 	hall_signals_polarity aux_signal_polarity[3]={hall_polarity_unknown, hall_polarity_unknown, hall_p
+ 716              		.loc 1 131 21 view .LVU172
+ 717 000e 0290     		str	r0, [sp, #8]
+ 718 0010 ADF80C10 		strh	r1, [sp, #12]	@ movhi
+ 132:Core/Src/user_interface.c **** 	uint32_t number_of_identified_phases=0;
+ 719              		.loc 1 132 2 is_stmt 1 view .LVU173
+ 132:Core/Src/user_interface.c **** 	uint32_t number_of_identified_phases=0;
+ 720              		.loc 1 132 24 is_stmt 0 view .LVU174
+ 721 0014 0090     		str	r0, [sp]
+ 722 0016 ADF80410 		strh	r1, [sp, #4]	@ movhi
+ 133:Core/Src/user_interface.c **** 
+ 723              		.loc 1 133 2 is_stmt 1 view .LVU175
+ 724              	.LVL80:
+ 135:Core/Src/user_interface.c **** 	uint32_t hall_polarity_unknown_flag=0;
+ 725              		.loc 1 135 2 view .LVU176
+ARM GAS  /tmp/cc2grnrp.s 			page 20
+
+
+ 136:Core/Src/user_interface.c **** 
+ 726              		.loc 1 136 2 view .LVU177
+ 138:Core/Src/user_interface.c **** 
+ 727              		.loc 1 138 2 view .LVU178
+ 138:Core/Src/user_interface.c **** 
+ 728              		.loc 1 138 39 is_stmt 0 view .LVU179
+ 729 001a 1146     		mov	r1, r2
+ 730 001c 3046     		mov	r0, r6
+ 731 001e FFF7FEFF 		bl	apply_delete_character_to_buffer
+ 732              	.LVL81:
+ 733 0022 0746     		mov	r7, r0
+ 734              	.LVL82:
+ 141:Core/Src/user_interface.c **** 		hall_signals_order just_identified_hall_order=decode_char_to_hall_signals_order((uint8_t *)&pData
+ 735              		.loc 1 141 2 is_stmt 1 view .LVU180
+ 736              	.LBB8:
+ 141:Core/Src/user_interface.c **** 		hall_signals_order just_identified_hall_order=decode_char_to_hall_signals_order((uint8_t *)&pData
+ 737              		.loc 1 141 7 view .LVU181
+ 141:Core/Src/user_interface.c **** 		hall_signals_order just_identified_hall_order=decode_char_to_hall_signals_order((uint8_t *)&pData
+ 738              		.loc 1 141 16 is_stmt 0 view .LVU182
+ 739 0024 0024     		movs	r4, #0
+ 740              	.LBE8:
+ 133:Core/Src/user_interface.c **** 
+ 741              		.loc 1 133 11 view .LVU183
+ 742 0026 2546     		mov	r5, r4
+ 743              	.LBB11:
+ 141:Core/Src/user_interface.c **** 		hall_signals_order just_identified_hall_order=decode_char_to_hall_signals_order((uint8_t *)&pData
+ 744              		.loc 1 141 2 view .LVU184
+ 745 0028 0AE0     		b	.L58
+ 746              	.LVL83:
+ 747              	.L60:
+ 748              	.LBB9:
+ 148:Core/Src/user_interface.c **** 			}
+ 749              		.loc 1 148 5 is_stmt 1 view .LVU185
+ 148:Core/Src/user_interface.c **** 			}
+ 750              		.loc 1 148 108 is_stmt 0 view .LVU186
+ 751 002a 601E     		subs	r0, r4, #1
+ 752              	.LVL84:
+ 148:Core/Src/user_interface.c **** 			}
+ 753              		.loc 1 148 54 view .LVU187
+ 754 002c 3044     		add	r0, r0, r6
+ 755 002e FFF7FEFF 		bl	decode_char_to_hall_signals_polarity
+ 756              	.LVL85:
+ 148:Core/Src/user_interface.c **** 			}
+ 757              		.loc 1 148 53 view .LVU188
+ 758 0032 04AB     		add	r3, sp, #16
+ 759              	.LVL86:
+ 148:Core/Src/user_interface.c **** 			}
+ 760              		.loc 1 148 53 view .LVU189
+ 761 0034 03EB4503 		add	r3, r3, r5, lsl #1
+ 762              	.LVL87:
+ 148:Core/Src/user_interface.c **** 			}
+ 763              		.loc 1 148 53 view .LVU190
+ 764 0038 23F8100C 		strh	r0, [r3, #-16]	@ movhi
+ 765              	.L61:
+ 151:Core/Src/user_interface.c **** 		}
+ 766              		.loc 1 151 4 is_stmt 1 view .LVU191
+ 151:Core/Src/user_interface.c **** 		}
+ARM GAS  /tmp/cc2grnrp.s 			page 21
+
+
+ 767              		.loc 1 151 31 is_stmt 0 view .LVU192
+ 768 003c 0135     		adds	r5, r5, #1
+ 769              	.LVL88:
+ 770              	.L59:
+ 151:Core/Src/user_interface.c **** 		}
+ 771              		.loc 1 151 31 view .LVU193
+ 772              	.LBE9:
+ 141:Core/Src/user_interface.c **** 		hall_signals_order just_identified_hall_order=decode_char_to_hall_signals_order((uint8_t *)&pData
+ 773              		.loc 1 141 56 discriminator 2 view .LVU194
+ 774 003e 0134     		adds	r4, r4, #1
+ 775              	.LVL89:
+ 776              	.L58:
+ 141:Core/Src/user_interface.c **** 		hall_signals_order just_identified_hall_order=decode_char_to_hall_signals_order((uint8_t *)&pData
+ 777              		.loc 1 141 2 discriminator 1 view .LVU195
+ 778 0040 A742     		cmp	r7, r4
+ 779 0042 14D9     		bls	.L73
+ 780              	.LBB10:
+ 142:Core/Src/user_interface.c **** 		if(just_identified_hall_order!=hall_order_unknown){//we got a phase character match!
+ 781              		.loc 1 142 3 is_stmt 1 view .LVU196
+ 142:Core/Src/user_interface.c **** 		if(just_identified_hall_order!=hall_order_unknown){//we got a phase character match!
+ 782              		.loc 1 142 49 is_stmt 0 view .LVU197
+ 783 0044 3019     		adds	r0, r6, r4
+ 784 0046 FFF7FEFF 		bl	decode_char_to_hall_signals_order
+ 785              	.LVL90:
+ 143:Core/Src/user_interface.c **** 			aux_signal_order[number_of_identified_phases]=just_identified_hall_order;
+ 786              		.loc 1 143 3 is_stmt 1 view .LVU198
+ 143:Core/Src/user_interface.c **** 			aux_signal_order[number_of_identified_phases]=just_identified_hall_order;
+ 787              		.loc 1 143 5 is_stmt 0 view .LVU199
+ 788 004a 4FF6FF73 		movw	r3, #65535
+ 789 004e 9842     		cmp	r0, r3
+ 790 0050 F5D0     		beq	.L59
+ 144:Core/Src/user_interface.c **** 			if(i==0){//take care of the 0 index, we dont want to access the array out of bounds
+ 791              		.loc 1 144 4 is_stmt 1 view .LVU200
+ 144:Core/Src/user_interface.c **** 			if(i==0){//take care of the 0 index, we dont want to access the array out of bounds
+ 792              		.loc 1 144 49 is_stmt 0 view .LVU201
+ 793 0052 04AB     		add	r3, sp, #16
+ 794 0054 03EB4503 		add	r3, r3, r5, lsl #1
+ 795 0058 23F8080C 		strh	r0, [r3, #-8]	@ movhi
+ 145:Core/Src/user_interface.c **** 				aux_signal_polarity[number_of_identified_phases]=hall_direct;
+ 796              		.loc 1 145 4 is_stmt 1 view .LVU202
+ 145:Core/Src/user_interface.c **** 				aux_signal_polarity[number_of_identified_phases]=hall_direct;
+ 797              		.loc 1 145 6 is_stmt 0 view .LVU203
+ 798 005c 002C     		cmp	r4, #0
+ 799 005e E4D1     		bne	.L60
+ 146:Core/Src/user_interface.c **** 			}else{
+ 800              		.loc 1 146 5 is_stmt 1 view .LVU204
+ 146:Core/Src/user_interface.c **** 			}else{
+ 801              		.loc 1 146 53 is_stmt 0 view .LVU205
+ 802 0060 0022     		movs	r2, #0
+ 803 0062 04AB     		add	r3, sp, #16
+ 804 0064 03EB4503 		add	r3, r3, r5, lsl #1
+ 805 0068 23F8102C 		strh	r2, [r3, #-16]	@ movhi
+ 806 006c E6E7     		b	.L61
+ 807              	.LVL91:
+ 808              	.L73:
+ 146:Core/Src/user_interface.c **** 			}else{
+ 809              		.loc 1 146 53 view .LVU206
+ARM GAS  /tmp/cc2grnrp.s 			page 22
+
+
+ 810              	.LBE10:
+ 811              	.LBE11:
+ 812              	.LBB12:
+ 155:Core/Src/user_interface.c **** 		if(aux_signal_order[i]==hall_order_unknown){
+ 813              		.loc 1 155 16 view .LVU207
+ 814 006e 0023     		movs	r3, #0
+ 815              	.L63:
+ 816              	.LVL92:
+ 155:Core/Src/user_interface.c **** 		if(aux_signal_order[i]==hall_order_unknown){
+ 817              		.loc 1 155 2 discriminator 1 view .LVU208
+ 818 0070 022B     		cmp	r3, #2
+ 819 0072 13D8     		bhi	.L74
+ 156:Core/Src/user_interface.c **** 			hall_order_unknown_flag=1;
+ 820              		.loc 1 156 3 is_stmt 1 view .LVU209
+ 156:Core/Src/user_interface.c **** 			hall_order_unknown_flag=1;
+ 821              		.loc 1 156 22 is_stmt 0 view .LVU210
+ 822 0074 04AA     		add	r2, sp, #16
+ 823 0076 02EB4302 		add	r2, r2, r3, lsl #1
+ 824 007a 32F8081C 		ldrh	r1, [r2, #-8]
+ 156:Core/Src/user_interface.c **** 			hall_order_unknown_flag=1;
+ 825              		.loc 1 156 5 view .LVU211
+ 826 007e 4FF6FF72 		movw	r2, #65535
+ 827 0082 9142     		cmp	r1, r2
+ 828 0084 1BD0     		beq	.L70
+ 161:Core/Src/user_interface.c **** 			hall_polarity_unknown_flag=1;
+ 829              		.loc 1 161 3 is_stmt 1 view .LVU212
+ 161:Core/Src/user_interface.c **** 			hall_polarity_unknown_flag=1;
+ 830              		.loc 1 161 25 is_stmt 0 view .LVU213
+ 831 0086 04AA     		add	r2, sp, #16
+ 832 0088 02EB4302 		add	r2, r2, r3, lsl #1
+ 833 008c 32F8101C 		ldrh	r1, [r2, #-16]
+ 161:Core/Src/user_interface.c **** 			hall_polarity_unknown_flag=1;
+ 834              		.loc 1 161 5 view .LVU214
+ 835 0090 4FF6FF72 		movw	r2, #65535
+ 836 0094 9142     		cmp	r1, r2
+ 837 0096 15D0     		beq	.L71
+ 155:Core/Src/user_interface.c **** 		if(aux_signal_order[i]==hall_order_unknown){
+ 838              		.loc 1 155 30 discriminator 2 view .LVU215
+ 839 0098 0133     		adds	r3, r3, #1
+ 840              	.LVL93:
+ 155:Core/Src/user_interface.c **** 		if(aux_signal_order[i]==hall_order_unknown){
+ 841              		.loc 1 155 30 discriminator 2 view .LVU216
+ 842 009a E9E7     		b	.L63
+ 843              	.L74:
+ 155:Core/Src/user_interface.c **** 		if(aux_signal_order[i]==hall_order_unknown){
+ 844              		.loc 1 155 30 discriminator 2 view .LVU217
+ 845              	.LBE12:
+ 136:Core/Src/user_interface.c **** 
+ 846              		.loc 1 136 11 view .LVU218
+ 847 009c 0023     		movs	r3, #0
+ 848              	.LVL94:
+ 135:Core/Src/user_interface.c **** 	uint32_t hall_polarity_unknown_flag=0;
+ 849              		.loc 1 135 11 view .LVU219
+ 850 009e 1A46     		mov	r2, r3
+ 851              	.L64:
+ 852              	.LVL95:
+ 167:Core/Src/user_interface.c **** 		//everything went well, unload out new values into the real order and polarity arrays
+ARM GAS  /tmp/cc2grnrp.s 			page 23
+
+
+ 853              		.loc 1 167 2 is_stmt 1 view .LVU220
+ 167:Core/Src/user_interface.c **** 		//everything went well, unload out new values into the real order and polarity arrays
+ 854              		.loc 1 167 4 is_stmt 0 view .LVU221
+ 855 00a0 032D     		cmp	r5, #3
+ 856 00a2 01D1     		bne	.L66
+ 167:Core/Src/user_interface.c **** 		//everything went well, unload out new values into the real order and polarity arrays
+ 857              		.loc 1 167 36 discriminator 1 view .LVU222
+ 858 00a4 02B9     		cbnz	r2, .L66
+ 167:Core/Src/user_interface.c **** 		//everything went well, unload out new values into the real order and polarity arrays
+ 859              		.loc 1 167 66 discriminator 2 view .LVU223
+ 860 00a6 F3B1     		cbz	r3, .L67
+ 861              	.L66:
+ 177:Core/Src/user_interface.c **** 		HAL_UART_Transmit_DMA(&hlpuart1, notokmessage, sizeof(notokmessage));
+ 862              		.loc 1 177 3 is_stmt 1 view .LVU224
+ 863 00a8 3220     		movs	r0, #50
+ 864 00aa FFF7FEFF 		bl	HAL_Delay
+ 865              	.LVL96:
+ 178:Core/Src/user_interface.c **** 		return 0;
+ 866              		.loc 1 178 3 view .LVU225
+ 867 00ae 2222     		movs	r2, #34
+ 868 00b0 1449     		ldr	r1, .L75+4
+ 869 00b2 1548     		ldr	r0, .L75+8
+ 870 00b4 FFF7FEFF 		bl	HAL_UART_Transmit_DMA
+ 871              	.LVL97:
+ 179:Core/Src/user_interface.c **** 	}
+ 872              		.loc 1 179 3 view .LVU226
+ 179:Core/Src/user_interface.c **** 	}
+ 873              		.loc 1 179 10 is_stmt 0 view .LVU227
+ 874 00b8 0020     		movs	r0, #0
+ 875              	.L57:
+ 182:Core/Src/user_interface.c **** 
+ 876              		.loc 1 182 1 view .LVU228
+ 877 00ba 05B0     		add	sp, sp, #20
+ 878              	.LCFI7:
+ 879              		.cfi_remember_state
+ 880              		.cfi_def_cfa_offset 20
+ 881              		@ sp needed
+ 882 00bc F0BD     		pop	{r4, r5, r6, r7, pc}
+ 883              	.LVL98:
+ 884              	.L70:
+ 885              	.LCFI8:
+ 886              		.cfi_restore_state
+ 136:Core/Src/user_interface.c **** 
+ 887              		.loc 1 136 11 view .LVU229
+ 888 00be 0023     		movs	r3, #0
+ 889              	.LVL99:
+ 890              	.LBB13:
+ 157:Core/Src/user_interface.c **** 			break;			//we found an unacceptable value, early break
+ 891              		.loc 1 157 27 view .LVU230
+ 892 00c0 0122     		movs	r2, #1
+ 893 00c2 EDE7     		b	.L64
+ 894              	.LVL100:
+ 895              	.L71:
+ 162:Core/Src/user_interface.c **** 			break;			//we found an unacceptable value, early break
+ 896              		.loc 1 162 30 view .LVU231
+ 897 00c4 0123     		movs	r3, #1
+ 898              	.LVL101:
+ARM GAS  /tmp/cc2grnrp.s 			page 24
+
+
+ 162:Core/Src/user_interface.c **** 			break;			//we found an unacceptable value, early break
+ 899              		.loc 1 162 30 view .LVU232
+ 900              	.LBE13:
+ 135:Core/Src/user_interface.c **** 	uint32_t hall_polarity_unknown_flag=0;
+ 901              		.loc 1 135 11 view .LVU233
+ 902 00c6 0022     		movs	r2, #0
+ 903 00c8 EAE7     		b	.L64
+ 904              	.LVL102:
+ 905              	.L68:
+ 906              	.LBB14:
+ 170:Core/Src/user_interface.c **** 			signal_polarity[i]=aux_signal_polarity[i];
+ 907              		.loc 1 170 4 is_stmt 1 discriminator 3 view .LVU234
+ 170:Core/Src/user_interface.c **** 			signal_polarity[i]=aux_signal_polarity[i];
+ 908              		.loc 1 170 36 is_stmt 0 discriminator 3 view .LVU235
+ 909 00ca 04AA     		add	r2, sp, #16
+ 910 00cc 02EB4302 		add	r2, r2, r3, lsl #1
+ 911 00d0 32F8080C 		ldrh	r0, [r2, #-8]
+ 170:Core/Src/user_interface.c **** 			signal_polarity[i]=aux_signal_polarity[i];
+ 912              		.loc 1 170 19 discriminator 3 view .LVU236
+ 913 00d4 0D49     		ldr	r1, .L75+12
+ 914 00d6 21F81300 		strh	r0, [r1, r3, lsl #1]	@ movhi
+ 171:Core/Src/user_interface.c **** 		}
+ 915              		.loc 1 171 4 is_stmt 1 discriminator 3 view .LVU237
+ 171:Core/Src/user_interface.c **** 		}
+ 916              		.loc 1 171 42 is_stmt 0 discriminator 3 view .LVU238
+ 917 00da 32F8101C 		ldrh	r1, [r2, #-16]
+ 171:Core/Src/user_interface.c **** 		}
+ 918              		.loc 1 171 22 discriminator 3 view .LVU239
+ 919 00de 0C4A     		ldr	r2, .L75+16
+ 920 00e0 22F81310 		strh	r1, [r2, r3, lsl #1]	@ movhi
+ 169:Core/Src/user_interface.c **** 			signal_order[i]=aux_signal_order[i];
+ 921              		.loc 1 169 30 discriminator 3 view .LVU240
+ 922 00e4 0133     		adds	r3, r3, #1
+ 923              	.LVL103:
+ 924              	.L67:
+ 169:Core/Src/user_interface.c **** 			signal_order[i]=aux_signal_order[i];
+ 925              		.loc 1 169 3 discriminator 1 view .LVU241
+ 926 00e6 022B     		cmp	r3, #2
+ 927 00e8 EFD9     		bls	.L68
+ 928              	.LBE14:
+ 173:Core/Src/user_interface.c **** 		HAL_UART_Transmit_DMA(&hlpuart1, okmessage, sizeof(okmessage));
+ 929              		.loc 1 173 3 is_stmt 1 view .LVU242
+ 930 00ea 3220     		movs	r0, #50
+ 931 00ec FFF7FEFF 		bl	HAL_Delay
+ 932              	.LVL104:
+ 174:Core/Src/user_interface.c **** 		return 1;
+ 933              		.loc 1 174 3 view .LVU243
+ 934 00f0 0B22     		movs	r2, #11
+ 935 00f2 0849     		ldr	r1, .L75+20
+ 936 00f4 0448     		ldr	r0, .L75+8
+ 937 00f6 FFF7FEFF 		bl	HAL_UART_Transmit_DMA
+ 938              	.LVL105:
+ 175:Core/Src/user_interface.c **** 	}else{
+ 939              		.loc 1 175 3 view .LVU244
+ 175:Core/Src/user_interface.c **** 	}else{
+ 940              		.loc 1 175 10 is_stmt 0 view .LVU245
+ 941 00fa 0120     		movs	r0, #1
+ARM GAS  /tmp/cc2grnrp.s 			page 25
+
+
+ 942 00fc DDE7     		b	.L57
+ 943              	.L76:
+ 944 00fe 00BF     		.align	2
+ 945              	.L75:
+ 946 0100 00000000 		.word	.LANCHOR12
+ 947 0104 00000000 		.word	.LANCHOR14
+ 948 0108 00000000 		.word	hlpuart1
+ 949 010c 00000000 		.word	signal_order
+ 950 0110 00000000 		.word	signal_polarity
+ 951 0114 00000000 		.word	.LANCHOR13
+ 952              		.cfi_endproc
+ 953              	.LFE136:
+ 955              		.section	.text.reset_or_start_uart_DMA_communications,"ax",%progbits
+ 956              		.align	1
+ 957              		.global	reset_or_start_uart_DMA_communications
+ 958              		.syntax unified
+ 959              		.thumb
+ 960              		.thumb_func
+ 961              		.fpu fpv4-sp-d16
+ 963              	reset_or_start_uart_DMA_communications:
+ 964              	.LFB141:
+ 281:Core/Src/user_interface.c **** 
+ 282:Core/Src/user_interface.c **** void reset_or_start_uart_DMA_communications(){
+ 965              		.loc 1 282 46 is_stmt 1 view -0
+ 966              		.cfi_startproc
+ 967              		@ args = 0, pretend = 0, frame = 0
+ 968              		@ frame_needed = 0, uses_anonymous_args = 0
+ 969 0000 10B5     		push	{r4, lr}
+ 970              	.LCFI9:
+ 971              		.cfi_def_cfa_offset 8
+ 972              		.cfi_offset 4, -8
+ 973              		.cfi_offset 14, -4
+ 283:Core/Src/user_interface.c **** 	HAL_UART_AbortReceive(&hlpuart1);
+ 974              		.loc 1 283 2 view .LVU247
+ 975 0002 074C     		ldr	r4, .L79
+ 976 0004 2046     		mov	r0, r4
+ 977 0006 FFF7FEFF 		bl	HAL_UART_AbortReceive
+ 978              	.LVL106:
+ 284:Core/Src/user_interface.c **** 	HAL_Delay(10);
+ 979              		.loc 1 284 2 view .LVU248
+ 980 000a 0A20     		movs	r0, #10
+ 981 000c FFF7FEFF 		bl	HAL_Delay
+ 982              	.LVL107:
+ 285:Core/Src/user_interface.c **** 	HAL_UARTEx_ReceiveToIdle_DMA(&hlpuart1, rx_buffer, sizeof (rx_buffer));	//assign the dma+uart with
+ 983              		.loc 1 285 2 view .LVU249
+ 984 0010 4FF48072 		mov	r2, #256
+ 985 0014 0349     		ldr	r1, .L79+4
+ 986 0016 2046     		mov	r0, r4
+ 987 0018 FFF7FEFF 		bl	HAL_UARTEx_ReceiveToIdle_DMA
+ 988              	.LVL108:
+ 286:Core/Src/user_interface.c **** }
+ 989              		.loc 1 286 1 is_stmt 0 view .LVU250
+ 990 001c 10BD     		pop	{r4, pc}
+ 991              	.L80:
+ 992 001e 00BF     		.align	2
+ 993              	.L79:
+ 994 0020 00000000 		.word	hlpuart1
+ARM GAS  /tmp/cc2grnrp.s 			page 26
+
+
+ 995 0024 00000000 		.word	.LANCHOR4
+ 996              		.cfi_endproc
+ 997              	.LFE141:
+ 999              		.section	.text.ui_uart_init,"ax",%progbits
+ 1000              		.align	1
+ 1001              		.global	ui_uart_init
+ 1002              		.syntax unified
+ 1003              		.thumb
+ 1004              		.thumb_func
+ 1005              		.fpu fpv4-sp-d16
+ 1007              	ui_uart_init:
+ 1008              	.LFB132:
+  77:Core/Src/user_interface.c **** 	__HAL_DMA_DISABLE_IT(&hdma_lpuart1_tx,DMA_IT_HT);						//disable DMA half transfer interruption
+ 1009              		.loc 1 77 20 is_stmt 1 view -0
+ 1010              		.cfi_startproc
+ 1011              		@ args = 0, pretend = 0, frame = 0
+ 1012              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1013 0000 08B5     		push	{r3, lr}
+ 1014              	.LCFI10:
+ 1015              		.cfi_def_cfa_offset 8
+ 1016              		.cfi_offset 3, -8
+ 1017              		.cfi_offset 14, -4
+  78:Core/Src/user_interface.c **** 	__HAL_DMA_DISABLE_IT(&hdma_lpuart1_rx,DMA_IT_HT);						//disable DMA half transfer interruption
+ 1018              		.loc 1 78 2 view .LVU252
+ 1019 0002 084B     		ldr	r3, .L83
+ 1020 0004 1A68     		ldr	r2, [r3]
+ 1021 0006 1368     		ldr	r3, [r2]
+ 1022 0008 23F00403 		bic	r3, r3, #4
+ 1023 000c 1360     		str	r3, [r2]
+  79:Core/Src/user_interface.c **** 	reset_or_start_uart_DMA_communications();
+ 1024              		.loc 1 79 2 view .LVU253
+ 1025 000e 064B     		ldr	r3, .L83+4
+ 1026 0010 1A68     		ldr	r2, [r3]
+ 1027 0012 1368     		ldr	r3, [r2]
+ 1028 0014 23F00403 		bic	r3, r3, #4
+ 1029 0018 1360     		str	r3, [r2]
+  80:Core/Src/user_interface.c **** 	ui_uart_transmit_initial_message();
+ 1030              		.loc 1 80 2 view .LVU254
+ 1031 001a FFF7FEFF 		bl	reset_or_start_uart_DMA_communications
+ 1032              	.LVL109:
+  81:Core/Src/user_interface.c **** }
+ 1033              		.loc 1 81 2 view .LVU255
+ 1034 001e FFF7FEFF 		bl	ui_uart_transmit_initial_message
+ 1035              	.LVL110:
+  82:Core/Src/user_interface.c **** 
+ 1036              		.loc 1 82 1 is_stmt 0 view .LVU256
+ 1037 0022 08BD     		pop	{r3, pc}
+ 1038              	.L84:
+ 1039              		.align	2
+ 1040              	.L83:
+ 1041 0024 00000000 		.word	hdma_lpuart1_tx
+ 1042 0028 00000000 		.word	hdma_lpuart1_rx
+ 1043              		.cfi_endproc
+ 1044              	.LFE132:
+ 1046              		.section	.text.ui_uart_listen,"ax",%progbits
+ 1047              		.align	1
+ 1048              		.global	ui_uart_listen
+ARM GAS  /tmp/cc2grnrp.s 			page 27
+
+
+ 1049              		.syntax unified
+ 1050              		.thumb
+ 1051              		.thumb_func
+ 1052              		.fpu fpv4-sp-d16
+ 1054              	ui_uart_listen:
+ 1055              	.LFB134:
+  88:Core/Src/user_interface.c **** 	if(ui_uart_echo_and_breaklinedetect_rx()==1){
+ 1056              		.loc 1 88 22 is_stmt 1 view -0
+ 1057              		.cfi_startproc
+ 1058              		@ args = 0, pretend = 0, frame = 0
+ 1059              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1060 0000 08B5     		push	{r3, lr}
+ 1061              	.LCFI11:
+ 1062              		.cfi_def_cfa_offset 8
+ 1063              		.cfi_offset 3, -8
+ 1064              		.cfi_offset 14, -4
+  89:Core/Src/user_interface.c **** 
+ 1065              		.loc 1 89 2 view .LVU258
+  89:Core/Src/user_interface.c **** 
+ 1066              		.loc 1 89 5 is_stmt 0 view .LVU259
+ 1067 0002 FFF7FEFF 		bl	ui_uart_echo_and_breaklinedetect_rx
+ 1068              	.LVL111:
+  89:Core/Src/user_interface.c **** 
+ 1069              		.loc 1 89 4 view .LVU260
+ 1070 0006 0128     		cmp	r0, #1
+ 1071 0008 00D0     		beq	.L89
+ 1072              	.L85:
+  98:Core/Src/user_interface.c **** 
+ 1073              		.loc 1 98 1 view .LVU261
+ 1074 000a 08BD     		pop	{r3, pc}
+ 1075              	.L89:
+  91:Core/Src/user_interface.c **** 			decode_ABCcommands(rx_buffer, echoed_size);
+ 1076              		.loc 1 91 3 is_stmt 1 view .LVU262
+  91:Core/Src/user_interface.c **** 			decode_ABCcommands(rx_buffer, echoed_size);
+ 1077              		.loc 1 91 6 is_stmt 0 view .LVU263
+ 1078 000c 0A4B     		ldr	r3, .L91
+ 1079 000e 1978     		ldrb	r1, [r3]	@ zero_extendqisi2
+ 1080 0010 0A48     		ldr	r0, .L91+4
+ 1081 0012 FFF7FEFF 		bl	decode_othercommands
+ 1082              	.LVL112:
+  91:Core/Src/user_interface.c **** 			decode_ABCcommands(rx_buffer, echoed_size);
+ 1083              		.loc 1 91 5 view .LVU264
+ 1084 0016 0128     		cmp	r0, #1
+ 1085 0018 07D1     		bne	.L90
+ 1086              	.L87:
+  94:Core/Src/user_interface.c **** 		echoed_size=0;
+ 1087              		.loc 1 94 3 is_stmt 1 view .LVU265
+  94:Core/Src/user_interface.c **** 		echoed_size=0;
+ 1088              		.loc 1 94 10 is_stmt 0 view .LVU266
+ 1089 001a 0023     		movs	r3, #0
+ 1090 001c 084A     		ldr	r2, .L91+8
+ 1091 001e 1370     		strb	r3, [r2]
+  95:Core/Src/user_interface.c **** 		reset_or_start_uart_DMA_communications();
+ 1092              		.loc 1 95 3 is_stmt 1 view .LVU267
+  95:Core/Src/user_interface.c **** 		reset_or_start_uart_DMA_communications();
+ 1093              		.loc 1 95 14 is_stmt 0 view .LVU268
+ 1094 0020 054A     		ldr	r2, .L91
+ARM GAS  /tmp/cc2grnrp.s 			page 28
+
+
+ 1095 0022 1370     		strb	r3, [r2]
+  96:Core/Src/user_interface.c **** 	}
+ 1096              		.loc 1 96 3 is_stmt 1 view .LVU269
+ 1097 0024 FFF7FEFF 		bl	reset_or_start_uart_DMA_communications
+ 1098              	.LVL113:
+  98:Core/Src/user_interface.c **** 
+ 1099              		.loc 1 98 1 is_stmt 0 view .LVU270
+ 1100 0028 EFE7     		b	.L85
+ 1101              	.L90:
+  92:Core/Src/user_interface.c **** 		}
+ 1102              		.loc 1 92 4 is_stmt 1 view .LVU271
+ 1103 002a 034B     		ldr	r3, .L91
+ 1104 002c 1978     		ldrb	r1, [r3]	@ zero_extendqisi2
+ 1105 002e 0348     		ldr	r0, .L91+4
+ 1106 0030 FFF7FEFF 		bl	decode_ABCcommands
+ 1107              	.LVL114:
+ 1108 0034 F1E7     		b	.L87
+ 1109              	.L92:
+ 1110 0036 00BF     		.align	2
+ 1111              	.L91:
+ 1112 0038 00000000 		.word	.LANCHOR3
+ 1113 003c 00000000 		.word	.LANCHOR4
+ 1114 0040 00000000 		.word	.LANCHOR2
+ 1115              		.cfi_endproc
+ 1116              	.LFE134:
+ 1118              		.section	.text.HAL_UART_TxCpltCallback,"ax",%progbits
+ 1119              		.align	1
+ 1120              		.global	HAL_UART_TxCpltCallback
+ 1121              		.syntax unified
+ 1122              		.thumb
+ 1123              		.thumb_func
+ 1124              		.fpu fpv4-sp-d16
+ 1126              	HAL_UART_TxCpltCallback:
+ 1127              	.LVL115:
+ 1128              	.LFB142:
+ 287:Core/Src/user_interface.c **** 
+ 288:Core/Src/user_interface.c **** void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart){
+ 1129              		.loc 1 288 56 view -0
+ 1130              		.cfi_startproc
+ 1131              		@ args = 0, pretend = 0, frame = 0
+ 1132              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1133              		@ link register save eliminated.
+ 289:Core/Src/user_interface.c **** 
+ 290:Core/Src/user_interface.c **** }
+ 1134              		.loc 1 290 1 view .LVU273
+ 1135 0000 7047     		bx	lr
+ 1136              		.cfi_endproc
+ 1137              	.LFE142:
+ 1139              		.section	.text.HAL_UARTEx_RxEventCallback,"ax",%progbits
+ 1140              		.align	1
+ 1141              		.global	HAL_UARTEx_RxEventCallback
+ 1142              		.syntax unified
+ 1143              		.thumb
+ 1144              		.thumb_func
+ 1145              		.fpu fpv4-sp-d16
+ 1147              	HAL_UARTEx_RxEventCallback:
+ 1148              	.LVL116:
+ARM GAS  /tmp/cc2grnrp.s 			page 29
+
+
+ 1149              	.LFB143:
+ 291:Core/Src/user_interface.c **** 
+ 292:Core/Src/user_interface.c **** void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size){
+ 1150              		.loc 1 292 74 view -0
+ 1151              		.cfi_startproc
+ 1152              		@ args = 0, pretend = 0, frame = 0
+ 1153              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1154              		@ link register save eliminated.
+ 293:Core/Src/user_interface.c **** 	rx_flag=1;
+ 1155              		.loc 1 293 2 view .LVU275
+ 1156              		.loc 1 293 9 is_stmt 0 view .LVU276
+ 1157 0000 024B     		ldr	r3, .L95
+ 1158 0002 0122     		movs	r2, #1
+ 1159 0004 1A70     		strb	r2, [r3]
+ 294:Core/Src/user_interface.c **** 	rx_size=Size;
+ 1160              		.loc 1 294 2 is_stmt 1 view .LVU277
+ 1161              		.loc 1 294 9 is_stmt 0 view .LVU278
+ 1162 0006 024B     		ldr	r3, .L95+4
+ 1163 0008 1970     		strb	r1, [r3]
+ 295:Core/Src/user_interface.c **** 
+ 296:Core/Src/user_interface.c **** }
+ 1164              		.loc 1 296 1 view .LVU279
+ 1165 000a 7047     		bx	lr
+ 1166              	.L96:
+ 1167              		.align	2
+ 1168              	.L95:
+ 1169 000c 00000000 		.word	.LANCHOR1
+ 1170 0010 00000000 		.word	.LANCHOR2
+ 1171              		.cfi_endproc
+ 1172              	.LFE143:
+ 1174              		.global	hall_status_string
+ 1175              		.global	echoed_size
+ 1176              		.global	rx_size
+ 1177              		.global	rx_flag
+ 1178              		.global	rx_buffer
+ 1179              		.global	notokmessage
+ 1180              		.global	okmessage
+ 1181              		.global	resetmessage
+ 1182              		.global	resetcommand
+ 1183              		.global	off_emulationmessage
+ 1184              		.global	on_emulationmessage
+ 1185              		.global	emulationcommand
+ 1186              		.global	helpmessage
+ 1187              		.global	helpcommand
+ 1188              		.global	initialmessage
+ 1189              		.section	.rodata
+ 1190              		.align	2
+ 1191              		.set	.LANCHOR12,. + 0
+ 1192              	.LC0:
+ 1193 0000 FFFF     		.short	-1
+ 1194 0002 FFFF     		.short	-1
+ 1195 0004 FFFF     		.short	-1
+ 1196              		.section	.bss.echoed_size,"aw",%nobits
+ 1197              		.set	.LANCHOR3,. + 0
+ 1200              	echoed_size:
+ 1201 0000 00       		.space	1
+ 1202              		.section	.bss.rx_buffer,"aw",%nobits
+ARM GAS  /tmp/cc2grnrp.s 			page 30
+
+
+ 1203              		.align	2
+ 1204              		.set	.LANCHOR4,. + 0
+ 1207              	rx_buffer:
+ 1208 0000 00000000 		.space	256
+ 1208      00000000 
+ 1208      00000000 
+ 1208      00000000 
+ 1208      00000000 
+ 1209              		.section	.bss.rx_flag,"aw",%nobits
+ 1210              		.set	.LANCHOR1,. + 0
+ 1213              	rx_flag:
+ 1214 0000 00       		.space	1
+ 1215              		.section	.bss.rx_size,"aw",%nobits
+ 1216              		.set	.LANCHOR2,. + 0
+ 1219              	rx_size:
+ 1220 0000 00       		.space	1
+ 1221              		.section	.data.hall_status_string,"aw"
+ 1222              		.align	2
+ 1225              	hall_status_string:
+ 1226 0000 20412042 		.ascii	" A B C\000"
+ 1226      204300
+ 1227              		.section	.rodata.emulationcommand,"a"
+ 1228              		.align	2
+ 1229              		.set	.LANCHOR9,. + 0
+ 1232              	emulationcommand:
+ 1233 0000 656D756C 		.ascii	"emulation\000"
+ 1233      6174696F 
+ 1233      6E00
+ 1234              		.section	.rodata.helpcommand,"a"
+ 1235              		.align	2
+ 1236              		.set	.LANCHOR5,. + 0
+ 1239              	helpcommand:
+ 1240 0000 68656C70 		.ascii	"help\000"
+ 1240      00
+ 1241              		.section	.rodata.helpmessage,"a"
+ 1242              		.align	2
+ 1243              		.set	.LANCHOR6,. + 0
+ 1246              	helpmessage:
+ 1247 0000 0A0D2525 		.ascii	"\012\015%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%HELP%%%"
+ 1247      25252525 
+ 1247      25252525 
+ 1247      25252525 
+ 1247      25252525 
+ 1248 002d 25252525 		.ascii	"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\012\015"
+ 1248      25252525 
+ 1248      25252525 
+ 1248      25252525 
+ 1248      25252525 
+ 1249 005c 486F7720 		.ascii	"How to use this hall_error_emulator:\012\015type \""
+ 1249      746F2075 
+ 1249      73652074 
+ 1249      68697320 
+ 1249      68616C6C 
+ 1250 0088 41424322 		.ascii	"ABC\" + enter for the emulator to foward the hall s"
+ 1250      202B2065 
+ 1250      6E746572 
+ 1250      20666F72 
+ARM GAS  /tmp/cc2grnrp.s 			page 31
+
+
+ 1250      20746865 
+ 1251 00ba 69676E61 		.ascii	"ignals as they come, no errors\012\015-order error:"
+ 1251      6C732061 
+ 1251      73207468 
+ 1251      65792063 
+ 1251      6F6D652C 
+ 1252 00e7 20224241 		.ascii	" \"BAC\" + enter for the emulator to swap A and B i"
+ 1252      4322202B 
+ 1252      20656E74 
+ 1252      65722066 
+ 1252      6F722074 
+ 1253 0118 6E707574 		.ascii	"nputs\012\015-polarity error: \"!ABC\" + enter for "
+ 1253      730A0D2D 
+ 1253      706F6C61 
+ 1253      72697479 
+ 1253      20657272 
+ 1254 0143 74686520 		.ascii	"the emulator to logically negate input A and leave "
+ 1254      656D756C 
+ 1254      61746F72 
+ 1254      20746F20 
+ 1254      6C6F6769 
+ 1255 0176 696E7075 		.ascii	"inputs B and C as they come\012\015example: typing "
+ 1255      74732042 
+ 1255      20616E64 
+ 1255      20432061 
+ 1255      73207468 
+ 1256 01a3 22214143 		.ascii	"\"!AC!B\"+ enter will swap the order of signals B a"
+ 1256      2142222B 
+ 1256      20656E74 
+ 1256      65722077 
+ 1256      696C6C20 
+ 1257 01d4 6E642043 		.ascii	"nd C and negate signals A and B \012\015\012\015%%%"
+ 1257      20616E64 
+ 1257      206E6567 
+ 1257      61746520 
+ 1257      7369676E 
+ 1258 01fb 25252525 		.ascii	"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+ 1258      25252525 
+ 1258      25252525 
+ 1258      25252525 
+ 1258      25252525 
+ 1259 022e 25252525 		.ascii	"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\012\015\000"
+ 1259      25252525 
+ 1259      25252525 
+ 1259      25252525 
+ 1259      25252525 
+ 1260              		.section	.rodata.initialmessage,"a"
+ 1261              		.align	2
+ 1262              		.set	.LANCHOR0,. + 0
+ 1265              	initialmessage:
+ 1266 0000 0A0D2525 		.ascii	"\012\015%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%HOLA%%%"
+ 1266      25252525 
+ 1266      25252525 
+ 1266      25252525 
+ 1266      25252525 
+ 1267 002d 25252525 		.ascii	"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\012\015"
+ 1267      25252525 
+ARM GAS  /tmp/cc2grnrp.s 			page 32
+
+
+ 1267      25252525 
+ 1267      25252525 
+ 1267      25252525 
+ 1268 005c 54686973 		.ascii	"This code \"hall_error_emulator\" was made by javie"
+ 1268      20636F64 
+ 1268      65202268 
+ 1268      616C6C5F 
+ 1268      6572726F 
+ 1269 008d 722E6D75 		.ascii	"r.munoz.saez@upc.edu\012\015compiled on: 22-nov-202"
+ 1269      6E6F7A2E 
+ 1269      7361657A 
+ 1269      40757063 
+ 1269      2E656475 
+ 1270 00ba 330A0D73 		.ascii	"3\012\015stored in the internal CITCEA's gitlab rep"
+ 1270      746F7265 
+ 1270      6420696E 
+ 1270      20746865 
+ 1270      20696E74 
+ 1271 00e7 6F3A200A 		.ascii	"o: \012\015 http://serv-citcea-100.upc.edu:30000/ja"
+ 1271      0D206874 
+ 1271      74703A2F 
+ 1271      2F736572 
+ 1271      762D6369 
+ 1272 0114 76692F61 		.ascii	"vi/algoritmo_para_determinar_errores_en_sensores_ha"
+ 1272      6C676F72 
+ 1272      69746D6F 
+ 1272      5F706172 
+ 1272      615F6465 
+ 1273 0147 6C6C0A0D 		.ascii	"ll\012\015\012\015This code is meant to be run in a"
+ 1273      0A0D5468 
+ 1273      69732063 
+ 1273      6F646520 
+ 1273      6973206D 
+ 1274 016e 204E5543 		.ascii	" NUCLEO-FG431RB board and has two main functions:\012"
+ 1274      4C454F2D 
+ 1274      46473433 
+ 1274      31524220 
+ 1274      626F6172 
+ 1275 01a0 0D312D73 		.ascii	"\0151-swap real incoming hall signals changing its "
+ 1275      77617020 
+ 1275      7265616C 
+ 1275      20696E63 
+ 1275      6F6D696E 
+ 1276 01d0 6F726465 		.ascii	"order and/or polarity2-emulate a constant speed mot"
+ 1276      7220616E 
+ 1276      642F6F72 
+ 1276      20706F6C 
+ 1276      61726974 
+ 1277 0203 6F722077 		.ascii	"or with all three halls and two real current signal"
+ 1277      69746820 
+ 1277      616C6C20 
+ 1277      74687265 
+ 1277      65206861 
+ 1278 0236 732D494E 		.ascii	"s-INPUTS: uart-USB(stlink) bridge from the user wit"
+ 1278      50555453 
+ 1278      3A207561 
+ 1278      72742D55 
+ARM GAS  /tmp/cc2grnrp.s 			page 33
+
+
+ 1278      53422873 
+ 1279 0269 68207465 		.ascii	"h text commands\012\015-INPUTS: three (alegedly hea"
+ 1279      78742063 
+ 1279      6F6D6D61 
+ 1279      6E64730A 
+ 1279      0D2D494E 
+ 1280 0296 6C746879 		.ascii	"lthy) square signals from three real hall sensors\012"
+ 1280      29207371 
+ 1280      75617265 
+ 1280      20736967 
+ 1280      6E616C73 
+ 1281 02c8 0D2D4F55 		.ascii	"\015-OUTPUTS: same three square signals with the de"
+ 1281      54505554 
+ 1281      533A2073 
+ 1281      616D6520 
+ 1281      74687265 
+ 1282 02f8 7369676E 		.ascii	"signated order,polarity, and phase errors\012\015\012"
+ 1282      61746564 
+ 1282      206F7264 
+ 1282      65722C70 
+ 1282      6F6C6172 
+ 1283 0324 0D252525 		.ascii	"\015%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+ 1283      25252525 
+ 1283      25252525 
+ 1283      25252525 
+ 1283      25252525 
+ 1284 0354 25252525 		.ascii	"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\012\015\000"
+ 1284      25252525 
+ 1284      25252525 
+ 1284      25252525 
+ 1284      25252525 
+ 1285              		.section	.rodata.notokmessage,"a"
+ 1286              		.align	2
+ 1287              		.set	.LANCHOR14,. + 0
+ 1290              	notokmessage:
+ 1291 0000 3E3E2020 		.ascii	">>    what was that?, try again\012\015\000"
+ 1291      20207768 
+ 1291      61742077 
+ 1291      61732074 
+ 1291      6861743F 
+ 1292              		.section	.rodata.off_emulationmessage,"a"
+ 1293              		.align	2
+ 1294              		.set	.LANCHOR11,. + 0
+ 1297              	off_emulationmessage:
+ 1298 0000 3E3E2020 		.ascii	">>    emulation off\012\015\000"
+ 1298      2020656D 
+ 1298      756C6174 
+ 1298      696F6E20 
+ 1298      6F66660A 
+ 1299              		.section	.rodata.okmessage,"a"
+ 1300              		.align	2
+ 1301              		.set	.LANCHOR13,. + 0
+ 1304              	okmessage:
+ 1305 0000 3E3E2020 		.ascii	">>    ok\012\015\000"
+ 1305      20206F6B 
+ 1305      0A0D00
+ 1306              		.section	.rodata.on_emulationmessage,"a"
+ARM GAS  /tmp/cc2grnrp.s 			page 34
+
+
+ 1307              		.align	2
+ 1308              		.set	.LANCHOR10,. + 0
+ 1311              	on_emulationmessage:
+ 1312 0000 3E3E2020 		.ascii	">>    emulation on\012\015\000"
+ 1312      2020656D 
+ 1312      756C6174 
+ 1312      696F6E20 
+ 1312      6F6E0A0D 
+ 1313              		.section	.rodata.resetcommand,"a"
+ 1314              		.align	2
+ 1315              		.set	.LANCHOR7,. + 0
+ 1318              	resetcommand:
+ 1319 0000 72657365 		.ascii	"reset target\000"
+ 1319      74207461 
+ 1319      72676574 
+ 1319      00
+ 1320              		.section	.rodata.resetmessage,"a"
+ 1321              		.align	2
+ 1322              		.set	.LANCHOR8,. + 0
+ 1325              	resetmessage:
+ 1326 0000 3E3E0974 		.ascii	">>\011target just reseted\012\015\000"
+ 1326      61726765 
+ 1326      74206A75 
+ 1326      73742072 
+ 1326      65736574 
+ 1327              		.text
+ 1328              	.Letext0:
+ 1329              		.file 2 "/usr/lib/gcc/arm-none-eabi/8.3.1/include/stdint.h"
+ 1330              		.file 3 "Drivers/CMSIS/Include/core_cm4.h"
+ 1331              		.file 4 "Drivers/CMSIS/Device/ST/STM32G4xx/Include/system_stm32g4xx.h"
+ 1332              		.file 5 "Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g431xx.h"
+ 1333              		.file 6 "Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h"
+ 1334              		.file 7 "Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_gpio.h"
+ 1335              		.file 8 "Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h"
+ 1336              		.file 9 "Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash.h"
+ 1337              		.file 10 "Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h"
+ 1338              		.file 11 "Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h"
+ 1339              		.file 12 "Core/Inc/usart.h"
+ 1340              		.file 13 "/usr/lib/gcc/arm-none-eabi/8.3.1/include/stddef.h"
+ 1341              		.file 14 "/usr/include/newlib/sys/_types.h"
+ 1342              		.file 15 "/usr/include/newlib/sys/reent.h"
+ 1343              		.file 16 "/usr/include/newlib/sys/lock.h"
+ 1344              		.file 17 "Core/Inc/hall_swapper.h"
+ 1345              		.file 18 "Core/Inc/real_waveforms.h"
+ 1346              		.file 19 "Core/Inc/wave_emulator.h"
+ 1347              		.file 20 "Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h"
+ 1348              		.file 21 "/usr/include/newlib/string.h"
+ARM GAS  /tmp/cc2grnrp.s 			page 35
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 user_interface.c
+     /tmp/cc2grnrp.s:18     .text.ui_uart_transmit_initial_message:0000000000000000 $t
+     /tmp/cc2grnrp.s:26     .text.ui_uart_transmit_initial_message:0000000000000000 ui_uart_transmit_initial_message
+     /tmp/cc2grnrp.s:49     .text.ui_uart_transmit_initial_message:0000000000000010 $d
+     /tmp/cc2grnrp.s:55     .text.ui_uart_echo_and_breaklinedetect_rx:0000000000000000 $t
+     /tmp/cc2grnrp.s:62     .text.ui_uart_echo_and_breaklinedetect_rx:0000000000000000 ui_uart_echo_and_breaklinedetect_rx
+     /tmp/cc2grnrp.s:206    .text.ui_uart_echo_and_breaklinedetect_rx:0000000000000080 $d
+     /tmp/cc2grnrp.s:215    .text.decode_othercommands:0000000000000000 $t
+     /tmp/cc2grnrp.s:222    .text.decode_othercommands:0000000000000000 decode_othercommands
+     /tmp/cc2grnrp.s:387    .text.decode_othercommands:00000000000000a8 $d
+     /tmp/cc2grnrp.s:401    .text.apply_delete_character_to_buffer:0000000000000000 $t
+     /tmp/cc2grnrp.s:408    .text.apply_delete_character_to_buffer:0000000000000000 apply_delete_character_to_buffer
+     /tmp/cc2grnrp.s:547    .text.decode_char_to_hall_signals_order:0000000000000000 $t
+     /tmp/cc2grnrp.s:554    .text.decode_char_to_hall_signals_order:0000000000000000 decode_char_to_hall_signals_order
+     /tmp/cc2grnrp.s:572    .text.decode_char_to_hall_signals_order:000000000000000c $d
+     /tmp/cc2grnrp.s:644    .text.decode_char_to_hall_signals_polarity:0000000000000000 $t
+     /tmp/cc2grnrp.s:651    .text.decode_char_to_hall_signals_polarity:0000000000000000 decode_char_to_hall_signals_polarity
+     /tmp/cc2grnrp.s:683    .text.decode_ABCcommands:0000000000000000 $t
+     /tmp/cc2grnrp.s:690    .text.decode_ABCcommands:0000000000000000 decode_ABCcommands
+     /tmp/cc2grnrp.s:946    .text.decode_ABCcommands:0000000000000100 $d
+     /tmp/cc2grnrp.s:956    .text.reset_or_start_uart_DMA_communications:0000000000000000 $t
+     /tmp/cc2grnrp.s:963    .text.reset_or_start_uart_DMA_communications:0000000000000000 reset_or_start_uart_DMA_communications
+     /tmp/cc2grnrp.s:994    .text.reset_or_start_uart_DMA_communications:0000000000000020 $d
+     /tmp/cc2grnrp.s:1000   .text.ui_uart_init:0000000000000000 $t
+     /tmp/cc2grnrp.s:1007   .text.ui_uart_init:0000000000000000 ui_uart_init
+     /tmp/cc2grnrp.s:1041   .text.ui_uart_init:0000000000000024 $d
+     /tmp/cc2grnrp.s:1047   .text.ui_uart_listen:0000000000000000 $t
+     /tmp/cc2grnrp.s:1054   .text.ui_uart_listen:0000000000000000 ui_uart_listen
+     /tmp/cc2grnrp.s:1112   .text.ui_uart_listen:0000000000000038 $d
+     /tmp/cc2grnrp.s:1119   .text.HAL_UART_TxCpltCallback:0000000000000000 $t
+     /tmp/cc2grnrp.s:1126   .text.HAL_UART_TxCpltCallback:0000000000000000 HAL_UART_TxCpltCallback
+     /tmp/cc2grnrp.s:1140   .text.HAL_UARTEx_RxEventCallback:0000000000000000 $t
+     /tmp/cc2grnrp.s:1147   .text.HAL_UARTEx_RxEventCallback:0000000000000000 HAL_UARTEx_RxEventCallback
+     /tmp/cc2grnrp.s:1169   .text.HAL_UARTEx_RxEventCallback:000000000000000c $d
+     /tmp/cc2grnrp.s:1225   .data.hall_status_string:0000000000000000 hall_status_string
+     /tmp/cc2grnrp.s:1200   .bss.echoed_size:0000000000000000 echoed_size
+     /tmp/cc2grnrp.s:1219   .bss.rx_size:0000000000000000 rx_size
+     /tmp/cc2grnrp.s:1213   .bss.rx_flag:0000000000000000 rx_flag
+     /tmp/cc2grnrp.s:1207   .bss.rx_buffer:0000000000000000 rx_buffer
+     /tmp/cc2grnrp.s:1290   .rodata.notokmessage:0000000000000000 notokmessage
+     /tmp/cc2grnrp.s:1304   .rodata.okmessage:0000000000000000 okmessage
+     /tmp/cc2grnrp.s:1325   .rodata.resetmessage:0000000000000000 resetmessage
+     /tmp/cc2grnrp.s:1318   .rodata.resetcommand:0000000000000000 resetcommand
+     /tmp/cc2grnrp.s:1297   .rodata.off_emulationmessage:0000000000000000 off_emulationmessage
+     /tmp/cc2grnrp.s:1311   .rodata.on_emulationmessage:0000000000000000 on_emulationmessage
+     /tmp/cc2grnrp.s:1232   .rodata.emulationcommand:0000000000000000 emulationcommand
+     /tmp/cc2grnrp.s:1246   .rodata.helpmessage:0000000000000000 helpmessage
+     /tmp/cc2grnrp.s:1239   .rodata.helpcommand:0000000000000000 helpcommand
+     /tmp/cc2grnrp.s:1265   .rodata.initialmessage:0000000000000000 initialmessage
+     /tmp/cc2grnrp.s:1190   .rodata:0000000000000000 $d
+     /tmp/cc2grnrp.s:1201   .bss.echoed_size:0000000000000000 $d
+     /tmp/cc2grnrp.s:1203   .bss.rx_buffer:0000000000000000 $d
+     /tmp/cc2grnrp.s:1214   .bss.rx_flag:0000000000000000 $d
+     /tmp/cc2grnrp.s:1220   .bss.rx_size:0000000000000000 $d
+     /tmp/cc2grnrp.s:1222   .data.hall_status_string:0000000000000000 $d
+     /tmp/cc2grnrp.s:1228   .rodata.emulationcommand:0000000000000000 $d
+ARM GAS  /tmp/cc2grnrp.s 			page 36
+
+
+     /tmp/cc2grnrp.s:1235   .rodata.helpcommand:0000000000000000 $d
+     /tmp/cc2grnrp.s:1242   .rodata.helpmessage:0000000000000000 $d
+     /tmp/cc2grnrp.s:1261   .rodata.initialmessage:0000000000000000 $d
+     /tmp/cc2grnrp.s:1286   .rodata.notokmessage:0000000000000000 $d
+     /tmp/cc2grnrp.s:1293   .rodata.off_emulationmessage:0000000000000000 $d
+     /tmp/cc2grnrp.s:1300   .rodata.okmessage:0000000000000000 $d
+     /tmp/cc2grnrp.s:1307   .rodata.on_emulationmessage:0000000000000000 $d
+     /tmp/cc2grnrp.s:1314   .rodata.resetcommand:0000000000000000 $d
+     /tmp/cc2grnrp.s:1321   .rodata.resetmessage:0000000000000000 $d
+     /tmp/cc2grnrp.s:607    .text.decode_char_to_hall_signals_order:000000000000002f $d
+     /tmp/cc2grnrp.s:607    .text.decode_char_to_hall_signals_order:0000000000000030 $t
+
+UNDEFINED SYMBOLS
+HAL_UART_Transmit_DMA
+hlpuart1
+HAL_Delay
+strstr
+HAL_GPIO_WritePin
+emulator_enabled
+signal_order
+signal_polarity
+HAL_UART_AbortReceive
+HAL_UARTEx_ReceiveToIdle_DMA
+hdma_lpuart1_tx
+hdma_lpuart1_rx
