@@ -445,16 +445,13 @@ void present_results(){
 		}else if(results.hall_order[i]==hall_C){
 			message[(i*2)+1]='C';
 		}
-	}
 
-	for (uint32_t i = 0; i < number_of_phases; ++i) {
 		if(results.hall_polarity[i]==hall_inverse){//the "inverse polarity" from the hall with the currents is actually the normal logic.
 				message[i*2]=' ';
 		}else if(results.hall_polarity[i]==hall_direct){
 				message[i*2]='!';
 		}
 	}
-
 
 	message[messageLength-2]='\n';//two last characters
 	message[messageLength-1]='\r';
