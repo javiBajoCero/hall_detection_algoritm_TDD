@@ -39,7 +39,7 @@ int32_t differences_phaseA[number_of_phases]={0};	/*!< auxiliar variable storing
 int32_t differences_phaseB[number_of_phases]={0};	/*!< auxiliar variable storing average distances between zerocrossings between each hall and phaseB*/
 int32_t differences_phaseC[number_of_phases]={0};	/*!< auxiliar variable storing average distances between zerocrossings between each hall and phaseC*/
 
-uint32_t toggled_polarity[number_of_phases]={0};
+uint32_t toggled_polarity[number_of_phases]={0};	/*!< when phase and hall signals are measured out of phase due to unlucky timming when detecting, it is noted down in this variable for the polarity calculation */
 
 current_or_hall_measurements_struct *currents[number_of_phases]={&currA,&currB,&currC};
 current_or_hall_measurements_struct *halls[number_of_phases]={&hallA,&hallB,&hallC};
