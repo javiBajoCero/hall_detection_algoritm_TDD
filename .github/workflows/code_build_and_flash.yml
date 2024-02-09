@@ -43,8 +43,8 @@ jobs:
       # 
       - name: TEST1 static code analysis
         run: |
-         sudo apt-get update
-         sudo apt-get install cppcheck
+         sudo apt-get update -y
+         sudo apt-get install cppcheck -y
          cppcheck --enable=all bootloader --xml 2> TESTS/TEST1_cppcheck_static_analysis/test_results/cppcheck-result.xml
          cd ..
          wget https://github.com/danmar/cppcheck/tree/main/htmlreport
