@@ -441,18 +441,20 @@ void present_results(){
 	}
 
 	for (uint32_t i = 0; i < number_of_phases; ++i) {
+		if(toggle[i]==1){
+			if(results.hall_polarity[i]==hall_inverse){
+				results.hall_polarity[i]=hall_direct;
+			}else{
+				results.hall_polarity[i]=hall_inverse;
+			}
+		}
+	}
+
+	for (uint32_t i = 0; i < number_of_phases; ++i) {
 		if(results.hall_polarity[i]==hall_inverse){//the "inverse polarity" from the hall with the currents is actually the normal logic.
-			if(toggle[i]==0){
 				message[i*2]=' ';
-			}else{
-				message[i*2]='!';
-			}
 		}else if(results.hall_polarity[i]==hall_direct){
-			if(toggle[i]==0){
 				message[i*2]='!';
-			}else{
-				message[i*2]=' ';
-			}
 		}
 	}
 
