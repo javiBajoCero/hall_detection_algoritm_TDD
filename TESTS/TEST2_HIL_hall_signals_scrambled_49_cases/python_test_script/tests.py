@@ -110,7 +110,7 @@ def receive_messages_tester(ser,messages):
         if ser.in_waiting:
             received_data = ser.readline().decode()
             if received_data.find('\r')!=0:
-                if send_index>1
+                if send_index>1:
                     print(f"received from tester: {received_data}")
 
 def receive_messages_target(ser,messages):
@@ -120,7 +120,7 @@ def receive_messages_target(ser,messages):
         if ser.in_waiting:
             received_data = ser.readline().decode().replace(' ','')
             if received_data.find('\r')!=0:
-                if send_index>1
+                if send_index>1:
                     print(f"Received from target: {received_data}")
                     receivedMessages.append(received_data);
 
