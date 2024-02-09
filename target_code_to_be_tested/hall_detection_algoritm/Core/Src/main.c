@@ -26,7 +26,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "hall_detection.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -118,9 +118,15 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+ Hall_start_detection();
   while (1)
   {
-	  HAL_Delay(100);
+	  if(Hall_is_detection_finished()){
+		  HAL_Delay(1000); //blink slow when detection is finished
+	  }else{
+		  HAL_Delay(100);//blink fast during detection
+	  }
+
 	  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
     /* USER CODE END WHILE */
 

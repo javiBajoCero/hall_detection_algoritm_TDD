@@ -60,7 +60,11 @@ extern DMA_HandleTypeDef hdma_adc1;
 extern TIM_HandleTypeDef htim8;
 extern DMA_HandleTypeDef hdma_usart2_tx;
 /* USER CODE BEGIN EV */
-detection_state_enum detection_state=detection_ENABLED;
+extern hall_pin_info H1;
+extern hall_pin_info H2;
+extern hall_pin_info H3;
+extern uint32_t ADCreadings[2];
+
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -221,7 +225,7 @@ void DMA1_Stream6_IRQHandler(void)
 void TIM8_UP_TIM13_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM8_UP_TIM13_IRQn 0 */
-	Hall_Identification_Test_measurement(&detection_state,&H1,&H2,&H3);
+	Hall_Identification_Test_measurement(&H1,&H2,&H3,(uint16_t*)&ADCreadings[0],(uint16_t*)&ADCreadings[1]);
   /* USER CODE END TIM8_UP_TIM13_IRQn 0 */
   HAL_TIM_IRQHandler(&htim8);
   /* USER CODE BEGIN TIM8_UP_TIM13_IRQn 1 */

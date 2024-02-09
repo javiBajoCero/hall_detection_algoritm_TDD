@@ -77,17 +77,7 @@ void Error_Handler(void);
 #define TCK_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
-extern uint32_t ADCreadings[2];
 
-typedef struct{
-	GPIO_TypeDef * gpio_port;
-	uint16_t gpio_pin;
-	uint8_t polarity;
-}hall_pin_info;
-
-extern hall_pin_info H1;
-extern hall_pin_info H2;
-extern hall_pin_info H3;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

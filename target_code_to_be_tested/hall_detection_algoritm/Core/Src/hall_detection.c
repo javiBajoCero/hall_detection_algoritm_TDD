@@ -14,6 +14,8 @@
 #define messageLength (number_of_phases*2)+2
 
 //local variables
+run_detection_onetime_enum enabled_or_disabled=detection_DISABLED;
+
 uint32_t ticks=0; 								/*!< ticks are the time measurement unit of this algorithm, each run of the algorithm (0.05s) the tick is incremented +1 */
 uint32_t currentADCoffset=(4096-1)/2;			/*!< the current waves zerocross is assumed to be at 3,3v/2= 1,65V, because thats how its defined in the emulator */
 current_or_hall_measurements_struct currA;		/*!< contains all variables relevant for currA measurements*/
@@ -37,19 +39,34 @@ current_or_hall_measurements_struct *currents[number_of_phases]={&currA,&currB,&
 current_or_hall_measurements_struct *halls[number_of_phases]={&hallA,&hallB,&hallC};
 
 //all functions declared inside this .c are listed here:
+void Hall_start_detection();
+uint32_t Hall_is_detection_finished();
 void Hall_Identification_Test_measurement(
-		detection_state_enum* enabled_or_disabled,
 		hall_pin_info* H1,
 		hall_pin_info* H2,
-		hall_pin_info* H3
+		hall_pin_info* H3,
+		uint16_t *ADCcurrA,
+		uint16_t *ADCcurrB
 		);
-
-void signals_adquisition(hall_pin_info* H1,hall_pin_info* H2,hall_pin_info* H3);
-void detect_all_zerocrossings();
+void signals_adquisition(
+		hall_pin_info* H1,
+		hall_pin_info* H2,
+		hall_pin_info* H3,
+		uint16_t *ADCcurrA,
+		uint16_t *ADCcurrB
+		);
+void detect_all_zerocrossings(
+		current_or_hall_measurements_struct *_hallA,
+		current_or_hall_measurements_struct *_hallB,
+		current_or_hall_measurements_struct *_hallC,
+		current_or_hall_measurements_struct *_currA,
+		current_or_hall_measurements_struct *_currB,
+		current_or_hall_measurements_struct *_currC
+		);
 void detect_current_zerocrossings(current_or_hall_measurements_struct* currx);
 void detect_hall_zerocrossings(current_or_hall_measurements_struct* hallx);
-void end_detection(detection_state_enum* enabled_or_disabled);
-void evaluate_and_present_results(	detection_state_enum* enabled_or_disabled,
+void end_detection(run_detection_onetime_enum* enabled_or_disabled);
+void evaluate_and_present_results(	run_detection_onetime_enum* enabled_or_disabled,
 									hall_pin_info* H1,
 									hall_pin_info* H2,
 									hall_pin_info* H3
@@ -61,21 +78,46 @@ int32_t absolute(int32_t x);
 void assign_polarity(detection_results_struct* res);
 void present_results();
 
+
+
+/**
+* \brief
+* \param
+*/
+void Hall_start_detection(){
+	enabled_or_disabled=detection_ENABLED;
+}
+
+/**
+* \brief
+* \param
+*/
+uint32_t Hall_is_detection_finished(){
+	//1== yes its finished
+	//0== nop, still busy detecting
+	if(enabled_or_disabled==detection_DISABLED){
+		return (uint32_t)1;
+	}else{
+		return (uint32_t)0;
+	}
+}
+
 /**
 * \brief
 * \param
 */
 void Hall_Identification_Test_measurement(
-		detection_state_enum* enabled_or_disabled,
 		hall_pin_info* H1,
 		hall_pin_info* H2,
-		hall_pin_info* H3
+		hall_pin_info* H3,
+		uint16_t *ADCcurrA,
+		uint16_t *ADCcurrB
 		){
-	if(*enabled_or_disabled==detection_ENABLED){
-		signals_adquisition(H1,H2,H3);
-		detect_all_zerocrossings();
-		end_detection(enabled_or_disabled);
-		evaluate_and_present_results(enabled_or_disabled,H1,H2,H3);
+	if(enabled_or_disabled==detection_ENABLED){
+		signals_adquisition(H1,H2,H3,ADCcurrA,ADCcurrB);
+		detect_all_zerocrossings(&hallA,&hallB,&hallC,&currA,&currB,&currC);
+		end_detection(&enabled_or_disabled);
+		evaluate_and_present_results(&enabled_or_disabled,H1,H2,H3);
 		ticks++;
 	}
 
@@ -85,15 +127,21 @@ void Hall_Identification_Test_measurement(
 * \brief
 * \param
 */
-void signals_adquisition(hall_pin_info* H1,hall_pin_info* H2,hall_pin_info* H3){
+void signals_adquisition(
+		hall_pin_info* H1,
+		hall_pin_info* H2,
+		hall_pin_info* H3,
+		uint16_t *ADCcurrA,
+		uint16_t *ADCcurrB
+		){
 	currA.two_samples_buffer[1]=currA.two_samples_buffer[0];
-	currA.two_samples_buffer[0]= ADCreadings[0]; //i suspect ADC measurements are one sample late, because of the ADC being triggered at the end of the TIM interruption
+	currA.two_samples_buffer[0]= *ADCcurrA; //i suspect ADC measurements are one sample late, because of the ADC being triggered at the end of the TIM interruption
 
 	currB.two_samples_buffer[1]=currB.two_samples_buffer[0];
-	currB.two_samples_buffer[0]= ADCreadings[1];
+	currB.two_samples_buffer[0]= *ADCcurrB;
 	//c=-a-b, NO REAL MEASUREMENT OF CURRENT C, assuming ABC currents ortogonality:
 	currC.two_samples_buffer[1]=currC.two_samples_buffer[0];
-	currC.two_samples_buffer[0]= currentAplusBplusC-ADCreadings[0]-ADCreadings[1];
+	currC.two_samples_buffer[0]= currentAplusBplusC-*ADCcurrA-*ADCcurrB;
 
 	hallA.two_samples_buffer[1]=hallA.two_samples_buffer[0];
 	hallA.two_samples_buffer[0]=HAL_GPIO_ReadPin(H1->gpio_port, H1->gpio_pin);
@@ -109,14 +157,21 @@ void signals_adquisition(hall_pin_info* H1,hall_pin_info* H2,hall_pin_info* H3){
 * \brief
 * \param
 */
-void detect_all_zerocrossings(){
+void detect_all_zerocrossings(
+		current_or_hall_measurements_struct *_hallA,
+		current_or_hall_measurements_struct *_hallB,
+		current_or_hall_measurements_struct *_hallC,
+		current_or_hall_measurements_struct *_currA,
+		current_or_hall_measurements_struct *_currB,
+		current_or_hall_measurements_struct *_currC
+		){
 	if(ticks>2){ //skip the first two samples to fill the buffers
-		detect_current_zerocrossings(&currA);
-		detect_current_zerocrossings(&currB);
-		detect_current_zerocrossings(&currC);
-		detect_hall_zerocrossings(&hallA);
-		detect_hall_zerocrossings(&hallB);
-		detect_hall_zerocrossings(&hallC);
+		detect_current_zerocrossings(_currA);
+		detect_current_zerocrossings(_currB);
+		detect_current_zerocrossings(_currC);
+		detect_hall_zerocrossings(_hallA);
+		detect_hall_zerocrossings(_hallB);
+		detect_hall_zerocrossings(_hallC);
 	}
 }
 
@@ -174,7 +229,7 @@ void detect_hall_zerocrossings(current_or_hall_measurements_struct* hallx){
 * \brief
 * \param
 */
-void end_detection(detection_state_enum* enabled_or_disabled){
+void end_detection(run_detection_onetime_enum* enabled_or_disabled){
 	if(
 			(currA.numberof_zerocrossings>=MAXZEROCROSSINGS) &&
 			(currB.numberof_zerocrossings>=MAXZEROCROSSINGS) &&
@@ -193,7 +248,7 @@ void end_detection(detection_state_enum* enabled_or_disabled){
 * \brief
 * \param
 */
-void evaluate_and_present_results(detection_state_enum* enabled_or_disabled,hall_pin_info* H1,hall_pin_info* H2,hall_pin_info* H3){
+void evaluate_and_present_results(run_detection_onetime_enum* enabled_or_disabled,hall_pin_info* H1,hall_pin_info* H2,hall_pin_info* H3){
 	if(*enabled_or_disabled==detection_DISABLED){
 		calculateElectricPeriod_inTicks(&results.electricPeriod_ticks);
 		assign_closest_phase_to_hall(&results);

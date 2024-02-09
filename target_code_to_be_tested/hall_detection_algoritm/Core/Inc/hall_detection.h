@@ -13,10 +13,16 @@
 
 #define MAXZEROCROSSINGS 6
 
+typedef struct{
+	GPIO_TypeDef * gpio_port;
+	uint16_t gpio_pin;
+	uint8_t polarity;
+}hall_pin_info;
+
 typedef enum {
   detection_DISABLED =(uint32_t)0,
   detection_ENABLED  =(uint32_t)1
-} detection_state_enum ;
+} run_detection_onetime_enum ;
 
 typedef enum {		//this enum is used as an index for arrays, so it should start in 0
   hall_A = (uint32_t) 0,
@@ -58,24 +64,19 @@ typedef struct{
 	hall_curr_relation_enum hall_polarity[3];
 }detection_results_struct;
 
+void Hall_start_detection();
+
+uint32_t Hall_is_detection_finished();
 
 void Hall_Identification_Test_measurement(
-		detection_state_enum* enabled_or_disabled,
 		hall_pin_info* H1,
 		hall_pin_info* H2,
-		hall_pin_info* H3
+		hall_pin_info* H3,
+		uint16_t *ADCcurrA,
+		uint16_t *ADCcurrB
 		);
-//devolver punteros a H1 H2 H3 gpio->IDR , las polaridades son otro asunto
 
-//void Hall_Identification_Test_measurement(
-//		detection_state_enum* enable,
-//		uint8_t *H1,
-//		uint8_t *H2,
-//		uint8_t *H3,
-//		uint8_t *polarityH1,
-//		uint8_t *polarityH2,
-//		uint8_t *polarityH3,
-//		);
+
 
 
 #endif /* INC_HALL_DETECTION_H_ */
