@@ -66,6 +66,7 @@ messages = [
 def find_out_tester_and_open_ports():
     global serial_tester;
     global serial_target;
+    global f
         # Define the serial connection parameters
     baud_rate = 115200
     byte_size = 8
@@ -110,6 +111,7 @@ def send_messages_tester(ser, messages):
 def receive_messages_tester(ser,messages):
     global stopthreads
     global send_index
+    global f
     while stopthreads==True:
         if ser.in_waiting:
             received_data = ser.readline().decode()
@@ -132,6 +134,7 @@ def receive_messages_target(ser,messages):
 
 def main():
     global messages;
+    global f
     # List and open available serial ports
     find_out_tester_and_open_ports()
 
