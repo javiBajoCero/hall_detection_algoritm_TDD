@@ -8,6 +8,7 @@ waittime=0.25;
 stopthreads=True;
 serial_tester=0;
 serial_target=0;
+send_index=1;
 
 receivedMessages=[]
 messages = [
@@ -91,12 +92,12 @@ def send_messages_tester(ser, messages):
     emulationmessage="emulation\n\r";
     serial_tester.write(emulationmessage.encode());
     time.sleep(waittime)  # Add a delay to allow the device to process the message
-    i=1;
+    global send_index;
     for message in messages:
         serial_tester.write(message.encode())
         if message.find('reset')!=0:
             print(f'test case {i} ,messsage : {message}')
-            i=i+1;
+            send_index=send_index+1;
         time.sleep(waittime/2)  # Add a delay to allow the device to process the message
         serial_tester.write(resetmessage.encode());
         time.sleep(waittime)  # Add a delay to allow the device to process the message
@@ -104,20 +105,24 @@ def send_messages_tester(ser, messages):
 
 def receive_messages_tester(ser,messages):
     global stopthreads
+    global send_index
     while stopthreads==True:
         if ser.in_waiting:
             received_data = ser.readline().decode()
             if received_data.find('\r')!=0:
-                print(f"received from tester: {received_data}")
+                if send_index>1
+                    print(f"received from tester: {received_data}")
 
 def receive_messages_target(ser,messages):
     global stopthreads
+    global send_index
     while stopthreads==True:
         if ser.in_waiting:
             received_data = ser.readline().decode().replace(' ','')
             if received_data.find('\r')!=0:
-                print(f"Received from target: {received_data}")
-                receivedMessages.append(received_data);
+                if send_index>1
+                    print(f"Received from target: {received_data}")
+                    receivedMessages.append(received_data);
 
 def main():
     global messages;
