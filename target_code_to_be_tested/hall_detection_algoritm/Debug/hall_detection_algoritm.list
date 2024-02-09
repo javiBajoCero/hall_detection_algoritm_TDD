@@ -2538,8 +2538,8 @@ int main(void)
  8001346:	4603      	mov	r3, r0
  8001348:	2b00      	cmp	r3, #0
  800134a:	d0fa      	beq.n	8001342 <main+0x6a>
-		  HAL_Delay(100);
- 800134c:	2064      	movs	r0, #100	; 0x64
+		  HAL_Delay(50);
+ 800134c:	2032      	movs	r0, #50	; 0x32
  800134e:	f000 fadd 	bl	800190c <HAL_Delay>
 		  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
  8001352:	2120      	movs	r1, #32
