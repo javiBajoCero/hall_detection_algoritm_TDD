@@ -80,10 +80,12 @@ def find_out_tester_and_open_ports():
     for port in ports:
         if(port.pid==14155):
             print(f"- found target board in : {port.device}  with pid: {port.pid}")
+            f.write(f"- found target board in : {port.device}  with pid: {port.pid}")
             serial_target = serial.Serial(port=port.device,baudrate=baud_rate,bytesize=byte_size,parity=parity,stopbits=stop_bits,timeout=timeout,xonxoff=xonxoff,rtscts=rtscts)
             serial_target.flush();
         elif (port.pid==14164):
             print(f"- found tester board in : {port.device}  with pid: {port.pid}")
+            f.write(f"- found tester board in : {port.device}  with pid: {port.pid}")
             serial_tester = serial.Serial(port=port.device,baudrate=baud_rate,bytesize=byte_size,parity=parity,stopbits=stop_bits,timeout=timeout,xonxoff=xonxoff,rtscts=rtscts)
             serial_tester.flush();
             
@@ -159,21 +161,25 @@ def main():
     # Close the serial connection
     serial_tester.close()
     print("Serial connection closed.")
+    f.write("Serial connection closed.")
 
     for i in range(len(messages)):
         messages[i]=messages[i].replace('\r','');
     
     if receivedMessages == messages:
         print("all test cases passed");
+        f.write("all test cases passed");
         sys.exit(0);
     else:
         print("not all test cases passed");
+        f.write("not all test cases passed");
         for i in range(len(receivedMessages)):
             if messages[i].replace('\r','')!=receivedMessages[i]:
                 print(f"error in test case number {i}, it was supposed to be:{messages[i]} instead of: {receivedMessages[i]}")
+                f.write(f"error in test case number {i}, it was supposed to be:{messages[i]} instead of: {receivedMessages[i]}")
         sys.exit(-1);
      
 
-f = open("tests_python_console_dump.txt", "a");
+f = open("tests_python_console_dump.txt", "a").close();
 main()
 f.close();
