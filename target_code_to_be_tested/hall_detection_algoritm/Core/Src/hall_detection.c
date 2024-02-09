@@ -431,7 +431,7 @@ void assign_polarity(detection_results_struct* res){
 		}else{
 				res->hall_polarity[res->hall_order[i]]=hall_inverse;
 		}
-		res->hall_polarity[res->hall_order[i]]^=toggled_polarity[i];//resolve toggled polarity due to aliasis?
+		//res->hall_polarity[res->hall_order[i]]^=toggled_polarity[i];//resolve toggled polarity due to aliasis?
 	}
 }
 
