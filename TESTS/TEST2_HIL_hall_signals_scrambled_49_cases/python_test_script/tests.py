@@ -178,6 +178,13 @@ def main():
     else:
         print("not all test cases passed");
         f.write("not all test cases passed");
+
+        print(f"received messages length: {len(receivedMessages)}");
+        f.write(f"received messages length: {len(receivedMessages)}");
+
+        print(f"sent messages length: {len(messages)}");
+        f.write(f"sent messages length: {len(messages)}");
+
         for i in range(len(receivedMessages)):
             if messages[i].replace('\r','')!=receivedMessages[i]:
                 print(f"error in test case number {i}, it was supposed to be:{messages[i]} instead of: {receivedMessages[i]}")
