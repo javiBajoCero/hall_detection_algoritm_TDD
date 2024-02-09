@@ -2,7 +2,8 @@ import serial
 import serial.tools.list_ports
 import time
 import threading
-    
+import sys
+
 waittime=0.25;
 stopthreads=True;
 serial_tester=0;
@@ -150,11 +151,12 @@ def main():
     
     if receivedMessages == messages:
         print("all test cases passed");
+        sys.exit(0);
     else:
         print("not all test cases passed");
         for i in range(len(receivedMessages)):
             if messages[i].replace('\r','')!=receivedMessages[i]:
                 print(f"error in test case number {i}, it was supposed to be:{messages[i]} instead of: {receivedMessages[i]}")
-            
-
+        sys.exit(-1);
+        
 main()
