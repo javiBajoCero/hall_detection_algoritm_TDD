@@ -47,19 +47,29 @@ void Hall_Identification_Test_measurement(
 		detection_state_enum* enabled_or_disabled,
 		hall_pin_info* H1,
 		hall_pin_info* H2,
-		hall_pin_info* H3
+		hall_pin_info* H3,
+		uint16_t* ADCcurrA,
+		uint16_t* ADCcurrB
 		);
 
-void signals_adquisition(hall_pin_info* H1,hall_pin_info* H2,hall_pin_info* H3);
+void signals_adquisition(
+		hall_pin_info* H1,
+		hall_pin_info* H2,
+		hall_pin_info* H3,
+		uint16_t* ADCcurrA,
+		uint16_t* ADCcurrB
+		);
 void detect_all_zerocrossings();
 void detect_current_zerocrossings(current_or_hall_measurements_struct* currx);
 void detect_hall_zerocrossings(current_or_hall_measurements_struct* hallx);
 void end_detection(detection_state_enum* enabled_or_disabled);
+
 void evaluate_and_present_results(	detection_state_enum* enabled_or_disabled,
 									hall_pin_info* H1,
 									hall_pin_info* H2,
 									hall_pin_info* H3
 									);
+
 void swap_hall_gpios_with_detected_results(hall_pin_info* H1,hall_pin_info* H2,hall_pin_info* H3);
 void calculateElectricPeriod_inTicks(uint32_t* resulting_period);
 void assign_closest_phase_to_hall(detection_results_struct* res);
@@ -75,10 +85,12 @@ void Hall_Identification_Test_measurement(
 		detection_state_enum* enabled_or_disabled,
 		hall_pin_info* H1,
 		hall_pin_info* H2,
-		hall_pin_info* H3
+		hall_pin_info* H3,
+		uint16_t* ADCcurrA,
+		uint16_t* ADCcurrB
 		){
 	if(*enabled_or_disabled==detection_ENABLED){
-		signals_adquisition(H1,H2,H3);
+		signals_adquisition(H1,H2,H3,ADCcurrA,ADCcurrB);
 		detect_all_zerocrossings();
 		end_detection(enabled_or_disabled);
 		evaluate_and_present_results(enabled_or_disabled,H1,H2,H3);
@@ -91,15 +103,21 @@ void Hall_Identification_Test_measurement(
 * \brief
 * \param
 */
-void signals_adquisition(hall_pin_info* H1,hall_pin_info* H2,hall_pin_info* H3){
+void signals_adquisition(
+		hall_pin_info* H1,
+		hall_pin_info* H2,
+		hall_pin_info* H3,
+		uint16_t* ADCcurrA,
+		uint16_t* ADCcurrB
+		){
 	currA.two_samples_buffer[1]=currA.two_samples_buffer[0];
-	currA.two_samples_buffer[0]= ADCreadings[0]; //i suspect ADC measurements are one sample late, because of the ADC being triggered at the end of the TIM interruption
+	currA.two_samples_buffer[0]= *ADCcurrA; //i suspect ADC measurements are one sample late, because of the ADC being triggered at the end of the TIM interruption
 
 	currB.two_samples_buffer[1]=currB.two_samples_buffer[0];
-	currB.two_samples_buffer[0]= ADCreadings[1];
+	currB.two_samples_buffer[0]= *ADCcurrB;
 	//c=-a-b, NO REAL MEASUREMENT OF CURRENT C, assuming ABC currents ortogonality:
 	currC.two_samples_buffer[1]=currC.two_samples_buffer[0];
-	currC.two_samples_buffer[0]= currentAplusBplusC-ADCreadings[0]-ADCreadings[1];
+	currC.two_samples_buffer[0]= currentAplusBplusC-*ADCcurrA-*ADCcurrB;
 
 	hallA.two_samples_buffer[1]=hallA.two_samples_buffer[0];
 	hallA.two_samples_buffer[0]=HAL_GPIO_ReadPin(H1->gpio_port, H1->gpio_pin);

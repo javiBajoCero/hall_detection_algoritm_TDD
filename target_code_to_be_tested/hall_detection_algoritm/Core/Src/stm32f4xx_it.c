@@ -221,7 +221,7 @@ void DMA1_Stream6_IRQHandler(void)
 void TIM8_UP_TIM13_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM8_UP_TIM13_IRQn 0 */
-	Hall_Identification_Test_measurement(&detection_state,&H1,&H2,&H3);
+	Hall_Identification_Test_measurement(&detection_state,&H1,&H2,&H3,(uint16_t*)&ADCreadings[0],(uint16_t*)&ADCreadings[1]);
   /* USER CODE END TIM8_UP_TIM13_IRQn 0 */
   HAL_TIM_IRQHandler(&htim8);
   /* USER CODE BEGIN TIM8_UP_TIM13_IRQn 1 */

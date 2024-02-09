@@ -63,7 +63,9 @@ void Hall_Identification_Test_measurement(
 		detection_state_enum* enabled_or_disabled,
 		hall_pin_info* H1,
 		hall_pin_info* H2,
-		hall_pin_info* H3
+		hall_pin_info* H3,
+		uint16_t* ADCcurrA,
+		uint16_t* ADCcurrB
 		);
 //devolver punteros a H1 H2 H3 gpio->IDR , las polaridades son otro asunto
 
