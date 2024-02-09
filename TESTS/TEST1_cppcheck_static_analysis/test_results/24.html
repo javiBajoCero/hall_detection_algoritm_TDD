@@ -1087,7 +1087,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding: 0 5px
 <a name="line-460"></a>	<span class="n">message</span><span class="p">[</span><span class="n">messageLength</span><span class="mi">-1</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;\r&#39;</span><span class="p">;</span>
 <a name="line-461"></a>
 <a name="line-462"></a><span class="cp">#ifdef TESTuart</span>
-<a name="line-463"></a>	<span class="n">HAL_UART_Transmit_DMA</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart2</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">message</span><span class="p">,</span> <span class="n">messageLength</span><span class="p">);</span>
+<a name="line-463"></a>	<span class="n">HAL_UART_Transmit_DMA</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart2</span><span class="p">,</span> <span class="p">(</span><span class="k">const</span> <span class="kt">uint8_t</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">message</span><span class="p">,</span> <span class="n">messageLength</span><span class="p">);</span>
 <a name="line-464"></a><span class="cp">#endif</span>
 <a name="line-465"></a>
 <a name="line-466"></a><span class="p">}</span>
