@@ -75,7 +75,7 @@ jobs:
           
       #creates a log, basically to prevent git to throw an error when it doesnt have anything new to commit.
       - name: log test date
-        run: echo test ran last on  $(date) \n >lastbuilddate.txt
+        run: echo tests ran last on  $(date) >lastbuilddate.txt
           
       #        previosuly git client installed with  sudo apt-get install git -y
       # and Set your username: git config --global user.name "FIRST_NAME LAST_NAME"
