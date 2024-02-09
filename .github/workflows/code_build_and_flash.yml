@@ -72,10 +72,10 @@ jobs:
           cd TESTS/TEST2_HIL_hall_signals_scrambled_49_cases/python_test_script
           ls
           python tests.py
-          
+
+      #        previosuly git client installed with  sudo apt-get install git -y
       - name: commmit and push test results back to the same repo
         run: |
-         sudo apt-get install git -y
          git config --global user.email ${{ secrets.mailsecreto }}
          git config --global user.name ${{ secrets.usersecreto }}
          git config --global credential.helper cache
