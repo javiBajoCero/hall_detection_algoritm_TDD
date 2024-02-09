@@ -96,7 +96,7 @@ def send_messages_tester(ser, messages):
     for message in messages:
         serial_tester.write(message.encode())
         if message.find('reset')!=0:
-            print(f'test case {i} ,messsage : {message}')
+            print(f'test case {send_index} ,messsage : {message}')
             send_index=send_index+1;
         time.sleep(waittime/2)  # Add a delay to allow the device to process the message
         serial_tester.write(resetmessage.encode());
