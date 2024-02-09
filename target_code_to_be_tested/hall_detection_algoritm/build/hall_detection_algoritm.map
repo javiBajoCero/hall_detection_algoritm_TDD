@@ -1931,34 +1931,34 @@ LOAD /usr/lib/gcc/arm-none-eabi/8.3.1/thumb/v7e-m+fp/hard/libgcc.a
  .comment       0x000000000000009f       0x52 /usr/lib/gcc/arm-none-eabi/8.3.1/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
  .comment       0x000000000000009f       0x52 /usr/lib/gcc/arm-none-eabi/8.3.1/thumb/v7e-m+fp/hard/crtend.o
 
-.debug_info     0x0000000000000000    0x1a61f
+.debug_info     0x0000000000000000    0x1a620
  .debug_info    0x0000000000000000      0xd89 build/adc.o
  .debug_info    0x0000000000000d89      0x817 build/dma.o
  .debug_info    0x00000000000015a0      0x6b9 build/gpio.o
  .debug_info    0x0000000000001c59     0x12f3 build/hall_detection.o
- .debug_info    0x0000000000002f4c     0x1593 build/main.o
- .debug_info    0x00000000000044df      0x572 build/stm32f4xx_hal_msp.o
- .debug_info    0x0000000000004a51      0xabc build/stm32f4xx_it.o
- .debug_info    0x000000000000550d      0x65c build/system_stm32f4xx.o
- .debug_info    0x0000000000005b69     0x1023 build/tim.o
- .debug_info    0x0000000000006b8c      0xc8f build/usart.o
- .debug_info    0x000000000000781b      0xc5b build/stm32f4xx_hal_rcc.o
- .debug_info    0x0000000000008476      0xe2c build/stm32f4xx_hal_rcc_ex.o
- .debug_info    0x00000000000092a2      0x95e build/stm32f4xx_hal_gpio.o
- .debug_info    0x0000000000009c00      0xc62 build/stm32f4xx_hal_dma.o
- .debug_info    0x000000000000a862      0x93e build/stm32f4xx_hal_pwr_ex.o
- .debug_info    0x000000000000b1a0     0x124a build/stm32f4xx_hal_cortex.o
- .debug_info    0x000000000000c3ea      0xb9c build/stm32f4xx_hal.o
- .debug_info    0x000000000000cf86     0x10a4 build/stm32f4xx_hal_adc.o
- .debug_info    0x000000000000e02a     0x40e1 build/stm32f4xx_hal_tim.o
- .debug_info    0x000000000001210b     0x1cd5 build/stm32f4xx_hal_tim_ex.o
- .debug_info    0x0000000000013de0     0x4943 build/stm32f4xx_hal_uart.o
- .debug_info    0x0000000000018723       0x22 build/startup_stm32f446retx.o
- .debug_info    0x0000000000018745      0x11a /usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-init.o)
- .debug_info    0x000000000001885f      0xf21 /usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-memset.o)
- .debug_info    0x0000000000019780       0x26 /usr/lib/gcc/arm-none-eabi/8.3.1/thumb/v7e-m+fp/hard/libgcc.a(_aeabi_uldivmod.o)
- .debug_info    0x00000000000197a6      0xe53 /usr/lib/gcc/arm-none-eabi/8.3.1/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
- .debug_info    0x000000000001a5f9       0x26 /usr/lib/gcc/arm-none-eabi/8.3.1/thumb/v7e-m+fp/hard/libgcc.a(_dvmd_tls.o)
+ .debug_info    0x0000000000002f4c     0x1594 build/main.o
+ .debug_info    0x00000000000044e0      0x572 build/stm32f4xx_hal_msp.o
+ .debug_info    0x0000000000004a52      0xabc build/stm32f4xx_it.o
+ .debug_info    0x000000000000550e      0x65c build/system_stm32f4xx.o
+ .debug_info    0x0000000000005b6a     0x1023 build/tim.o
+ .debug_info    0x0000000000006b8d      0xc8f build/usart.o
+ .debug_info    0x000000000000781c      0xc5b build/stm32f4xx_hal_rcc.o
+ .debug_info    0x0000000000008477      0xe2c build/stm32f4xx_hal_rcc_ex.o
+ .debug_info    0x00000000000092a3      0x95e build/stm32f4xx_hal_gpio.o
+ .debug_info    0x0000000000009c01      0xc62 build/stm32f4xx_hal_dma.o
+ .debug_info    0x000000000000a863      0x93e build/stm32f4xx_hal_pwr_ex.o
+ .debug_info    0x000000000000b1a1     0x124a build/stm32f4xx_hal_cortex.o
+ .debug_info    0x000000000000c3eb      0xb9c build/stm32f4xx_hal.o
+ .debug_info    0x000000000000cf87     0x10a4 build/stm32f4xx_hal_adc.o
+ .debug_info    0x000000000000e02b     0x40e1 build/stm32f4xx_hal_tim.o
+ .debug_info    0x000000000001210c     0x1cd5 build/stm32f4xx_hal_tim_ex.o
+ .debug_info    0x0000000000013de1     0x4943 build/stm32f4xx_hal_uart.o
+ .debug_info    0x0000000000018724       0x22 build/startup_stm32f446retx.o
+ .debug_info    0x0000000000018746      0x11a /usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-init.o)
+ .debug_info    0x0000000000018860      0xf21 /usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-memset.o)
+ .debug_info    0x0000000000019781       0x26 /usr/lib/gcc/arm-none-eabi/8.3.1/thumb/v7e-m+fp/hard/libgcc.a(_aeabi_uldivmod.o)
+ .debug_info    0x00000000000197a7      0xe53 /usr/lib/gcc/arm-none-eabi/8.3.1/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
+ .debug_info    0x000000000001a5fa       0x26 /usr/lib/gcc/arm-none-eabi/8.3.1/thumb/v7e-m+fp/hard/libgcc.a(_dvmd_tls.o)
 
 .debug_abbrev   0x0000000000000000     0x36a1
  .debug_abbrev  0x0000000000000000      0x20c build/adc.o
