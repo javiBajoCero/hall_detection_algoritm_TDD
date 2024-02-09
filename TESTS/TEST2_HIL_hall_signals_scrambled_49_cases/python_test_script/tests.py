@@ -91,11 +91,12 @@ def send_messages_tester(ser, messages):
     emulationmessage="emulation\n\r";
     serial_tester.write(emulationmessage.encode());
     time.sleep(waittime)  # Add a delay to allow the device to process the message
-
+    i=1;
     for message in messages:
         serial_tester.write(message.encode())
         if message.find('reset')!=0:
-            print(f'Sent message tester: {message}')
+            print(f'test case {i} test: {message}')
+            i=i+1;
         time.sleep(waittime/2)  # Add a delay to allow the device to process the message
         serial_tester.write(resetmessage.encode());
         time.sleep(waittime)  # Add a delay to allow the device to process the message
