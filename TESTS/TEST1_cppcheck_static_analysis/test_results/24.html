@@ -625,10 +625,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding: 0 5px
 463
 464
 465
-466
-467
-468
-469</pre></div></td><td class="code"><div class="highlight"><pre><span></span><a name="line-1"></a><span class="cm">/*</span>
+466</pre></div></td><td class="code"><div class="highlight"><pre><span></span><a name="line-1"></a><span class="cm">/*</span>
 <a name="line-2"></a><span class="cm"> * hall_detection.c</span>
 <a name="line-3"></a><span class="cm"> *</span>
 <a name="line-4"></a><span class="cm"> *  Created on: Jan 30, 2024</span>
@@ -1046,57 +1043,54 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding: 0 5px
 <a name="line-416"></a>
 <a name="line-417"></a>	<span class="k">for</span> <span class="p">(</span><span class="kt">uint32_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">number_of_phases</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
 <a name="line-418"></a>		<span class="k">if</span><span class="p">(</span><span class="n">currents</span><span class="p">[</span><span class="n">res</span><span class="o">-&gt;</span><span class="n">hall_order</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">-&gt;</span><span class="n">zerocrossings_polarity</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="n">halls</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">zerocrossings_polarity</span><span class="p">[</span><span class="mi">0</span><span class="p">]){</span>
-<a name="line-419"></a>			<span class="n">res</span><span class="o">-&gt;</span><span class="n">hall_polarity</span><span class="p">[</span><span class="n">res</span><span class="o">-&gt;</span><span class="n">hall_order</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">=</span><span class="n">hall_direct</span><span class="p">;</span>
-<a name="line-420"></a>		<span class="p">}</span><span class="k">else</span><span class="p">{</span>
-<a name="line-421"></a>			<span class="n">res</span><span class="o">-&gt;</span><span class="n">hall_polarity</span><span class="p">[</span><span class="n">res</span><span class="o">-&gt;</span><span class="n">hall_order</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">=</span><span class="n">hall_inverse</span><span class="p">;</span>
-<a name="line-422"></a>		<span class="p">}</span>
-<a name="line-423"></a>	<span class="p">}</span>
-<a name="line-424"></a>
-<a name="line-425"></a><span class="p">}</span>
-<a name="line-426"></a>
-<a name="line-427"></a><span class="kt">void</span> <span class="nf">present_results</span><span class="p">(){</span>
-<a name="line-428"></a>
-<a name="line-429"></a>	<span class="k">for</span> <span class="p">(</span><span class="kt">uint32_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">messageLength</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-<a name="line-430"></a>		<span class="n">message</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39; &#39;</span><span class="p">;</span>
+<a name="line-419"></a>			<span class="k">if</span><span class="p">(</span><span class="n">toggle</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span>
+<a name="line-420"></a>				<span class="n">res</span><span class="o">-&gt;</span><span class="n">hall_polarity</span><span class="p">[</span><span class="n">res</span><span class="o">-&gt;</span><span class="n">hall_order</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">=</span><span class="n">hall_direct</span><span class="p">;</span>
+<a name="line-421"></a>			<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+<a name="line-422"></a>				<span class="n">res</span><span class="o">-&gt;</span><span class="n">hall_polarity</span><span class="p">[</span><span class="n">res</span><span class="o">-&gt;</span><span class="n">hall_order</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">=</span><span class="n">hall_inverse</span><span class="p">;</span>
+<a name="line-423"></a>			<span class="p">}</span>
+<a name="line-424"></a>		<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+<a name="line-425"></a>			<span class="k">if</span><span class="p">(</span><span class="n">toggle</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span>
+<a name="line-426"></a>				<span class="n">res</span><span class="o">-&gt;</span><span class="n">hall_polarity</span><span class="p">[</span><span class="n">res</span><span class="o">-&gt;</span><span class="n">hall_order</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">=</span><span class="n">hall_inverse</span><span class="p">;</span>
+<a name="line-427"></a>			<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+<a name="line-428"></a>				<span class="n">res</span><span class="o">-&gt;</span><span class="n">hall_polarity</span><span class="p">[</span><span class="n">res</span><span class="o">-&gt;</span><span class="n">hall_order</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">=</span><span class="n">hall_direct</span><span class="p">;</span>
+<a name="line-429"></a>			<span class="p">}</span>
+<a name="line-430"></a>		<span class="p">}</span>
 <a name="line-431"></a>	<span class="p">}</span>
-<a name="line-432"></a>
-<a name="line-433"></a>	<span class="k">for</span> <span class="p">(</span><span class="kt">uint32_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">number_of_phases</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-<a name="line-434"></a>		<span class="k">if</span><span class="p">(</span><span class="n">results</span><span class="p">.</span><span class="n">hall_order</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">hall_A</span><span class="p">){</span>
-<a name="line-435"></a>			<span class="n">message</span><span class="p">[(</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;A&#39;</span><span class="p">;</span>
-<a name="line-436"></a>		<span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">results</span><span class="p">.</span><span class="n">hall_order</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">hall_B</span><span class="p">){</span>
-<a name="line-437"></a>			<span class="n">message</span><span class="p">[(</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;B&#39;</span><span class="p">;</span>
-<a name="line-438"></a>		<span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">results</span><span class="p">.</span><span class="n">hall_order</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">hall_C</span><span class="p">){</span>
-<a name="line-439"></a>			<span class="n">message</span><span class="p">[(</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;C&#39;</span><span class="p">;</span>
-<a name="line-440"></a>		<span class="p">}</span>
-<a name="line-441"></a>	<span class="p">}</span>
-<a name="line-442"></a>
-<a name="line-443"></a>	<span class="k">for</span> <span class="p">(</span><span class="kt">uint32_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">number_of_phases</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-<a name="line-444"></a>		<span class="k">if</span><span class="p">(</span><span class="n">toggle</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">){</span>
-<a name="line-445"></a>			<span class="k">if</span><span class="p">(</span><span class="n">results</span><span class="p">.</span><span class="n">hall_polarity</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">hall_inverse</span><span class="p">){</span>
-<a name="line-446"></a>				<span class="n">results</span><span class="p">.</span><span class="n">hall_polarity</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">hall_direct</span><span class="p">;</span>
-<a name="line-447"></a>			<span class="p">}</span><span class="k">else</span><span class="p">{</span>
-<a name="line-448"></a>				<span class="n">results</span><span class="p">.</span><span class="n">hall_polarity</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">hall_inverse</span><span class="p">;</span>
-<a name="line-449"></a>			<span class="p">}</span>
-<a name="line-450"></a>		<span class="p">}</span>
-<a name="line-451"></a>	<span class="p">}</span>
-<a name="line-452"></a>
-<a name="line-453"></a>	<span class="k">for</span> <span class="p">(</span><span class="kt">uint32_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">number_of_phases</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-<a name="line-454"></a>		<span class="k">if</span><span class="p">(</span><span class="n">results</span><span class="p">.</span><span class="n">hall_polarity</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">hall_inverse</span><span class="p">){</span><span class="c1">//the &quot;inverse polarity&quot; from the hall with the currents is actually the normal logic.</span>
-<a name="line-455"></a>				<span class="n">message</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39; &#39;</span><span class="p">;</span>
-<a name="line-456"></a>		<span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">results</span><span class="p">.</span><span class="n">hall_polarity</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">hall_direct</span><span class="p">){</span>
-<a name="line-457"></a>				<span class="n">message</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;!&#39;</span><span class="p">;</span>
-<a name="line-458"></a>		<span class="p">}</span>
-<a name="line-459"></a>	<span class="p">}</span>
-<a name="line-460"></a>
+<a name="line-432"></a><span class="p">}</span>
+<a name="line-433"></a>
+<a name="line-434"></a><span class="kt">void</span> <span class="nf">present_results</span><span class="p">(){</span>
+<a name="line-435"></a>
+<a name="line-436"></a>	<span class="k">for</span> <span class="p">(</span><span class="kt">uint32_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">messageLength</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+<a name="line-437"></a>		<span class="n">message</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39; &#39;</span><span class="p">;</span>
+<a name="line-438"></a>	<span class="p">}</span>
+<a name="line-439"></a>
+<a name="line-440"></a>	<span class="k">for</span> <span class="p">(</span><span class="kt">uint32_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">number_of_phases</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+<a name="line-441"></a>		<span class="k">if</span><span class="p">(</span><span class="n">results</span><span class="p">.</span><span class="n">hall_order</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">hall_A</span><span class="p">){</span>
+<a name="line-442"></a>			<span class="n">message</span><span class="p">[(</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;A&#39;</span><span class="p">;</span>
+<a name="line-443"></a>		<span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">results</span><span class="p">.</span><span class="n">hall_order</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">hall_B</span><span class="p">){</span>
+<a name="line-444"></a>			<span class="n">message</span><span class="p">[(</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;B&#39;</span><span class="p">;</span>
+<a name="line-445"></a>		<span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">results</span><span class="p">.</span><span class="n">hall_order</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">hall_C</span><span class="p">){</span>
+<a name="line-446"></a>			<span class="n">message</span><span class="p">[(</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;C&#39;</span><span class="p">;</span>
+<a name="line-447"></a>		<span class="p">}</span>
+<a name="line-448"></a>	<span class="p">}</span>
+<a name="line-449"></a>
+<a name="line-450"></a>	<span class="k">for</span> <span class="p">(</span><span class="kt">uint32_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">number_of_phases</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+<a name="line-451"></a>		<span class="k">if</span><span class="p">(</span><span class="n">results</span><span class="p">.</span><span class="n">hall_polarity</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">hall_inverse</span><span class="p">){</span><span class="c1">//the &quot;inverse polarity&quot; from the hall with the currents is actually the normal logic.</span>
+<a name="line-452"></a>				<span class="n">message</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39; &#39;</span><span class="p">;</span>
+<a name="line-453"></a>		<span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">results</span><span class="p">.</span><span class="n">hall_polarity</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">hall_direct</span><span class="p">){</span>
+<a name="line-454"></a>				<span class="n">message</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;!&#39;</span><span class="p">;</span>
+<a name="line-455"></a>		<span class="p">}</span>
+<a name="line-456"></a>	<span class="p">}</span>
+<a name="line-457"></a>
+<a name="line-458"></a>
+<a name="line-459"></a>	<span class="n">message</span><span class="p">[</span><span class="n">messageLength</span><span class="mi">-2</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;\n&#39;</span><span class="p">;</span><span class="c1">//two last characters</span>
+<a name="line-460"></a>	<span class="n">message</span><span class="p">[</span><span class="n">messageLength</span><span class="mi">-1</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;\r&#39;</span><span class="p">;</span>
 <a name="line-461"></a>
-<a name="line-462"></a>	<span class="n">message</span><span class="p">[</span><span class="n">messageLength</span><span class="mi">-2</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;\n&#39;</span><span class="p">;</span><span class="c1">//two last characters</span>
-<a name="line-463"></a>	<span class="n">message</span><span class="p">[</span><span class="n">messageLength</span><span class="mi">-1</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;\r&#39;</span><span class="p">;</span>
-<a name="line-464"></a>
-<a name="line-465"></a><span class="cp">#ifdef TESTuart</span>
-<a name="line-466"></a>	<span class="n">HAL_UART_Transmit_DMA</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart2</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">message</span><span class="p">,</span> <span class="n">messageLength</span><span class="p">);</span>
-<a name="line-467"></a><span class="cp">#endif</span>
-<a name="line-468"></a>
-<a name="line-469"></a><span class="p">}</span>
+<a name="line-462"></a><span class="cp">#ifdef TESTuart</span>
+<a name="line-463"></a>	<span class="n">HAL_UART_Transmit_DMA</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart2</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">message</span><span class="p">,</span> <span class="n">messageLength</span><span class="p">);</span>
+<a name="line-464"></a><span class="cp">#endif</span>
+<a name="line-465"></a>
+<a name="line-466"></a><span class="p">}</span>
 </pre></div>
 </td></tr></table>
       </div> <!-- /.wrapper -->
