@@ -35,9 +35,9 @@ detection_results_struct results;				/*!< once the algorithm finishes, the detec
 uint8_t message[messageLength];					/*!< ASCII results char array to use with UART*/
 
 
-int32_t hall_orderA[number_of_phases]={0};
-int32_t hall_orderB[number_of_phases]={0};
-int32_t hall_orderC[number_of_phases]={0};
+int32_t differences_phaseA[number_of_phases]={0};	/*!< auxiliar variable storing average distances between zerocrossings between each hall and phaseA*/
+int32_t differences_phaseB[number_of_phases]={0};	/*!< auxiliar variable storing average distances between zerocrossings between each hall and phaseB*/
+int32_t differences_phaseC[number_of_phases]={0};	/*!< auxiliar variable storing average distances between zerocrossings between each hall and phaseC*/
 
 uint32_t toggled_polarity[number_of_phases]={0};
 
@@ -339,73 +339,73 @@ void assign_closest_phase_to_hall(detection_results_struct* res){
 
 
 	for (uint32_t i = 0; i < MAXZEROCROSSINGS; ++i) {// all zerocrossings loop
-		hall_orderA[phase_A]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallA.zerocrossings_tick[i]);
-		hall_orderA[phase_B]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_tick[i]);
-		hall_orderA[phase_C]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_tick[i]);
+		differences_phaseA[phase_A]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallA.zerocrossings_tick[i]);
+		differences_phaseA[phase_B]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_tick[i]);
+		differences_phaseA[phase_C]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_tick[i]);
 
-		hall_orderB[phase_A]+=absolute((int32_t)currB.zerocrossings_tick[i]-(int32_t)hallA.zerocrossings_tick[i]);
-		hall_orderB[phase_B]+=absolute((int32_t)currB.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_tick[i]);
-		hall_orderB[phase_C]+=absolute((int32_t)currB.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_tick[i]);
+		differences_phaseB[phase_A]+=absolute((int32_t)currB.zerocrossings_tick[i]-(int32_t)hallA.zerocrossings_tick[i]);
+		differences_phaseB[phase_B]+=absolute((int32_t)currB.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_tick[i]);
+		differences_phaseB[phase_C]+=absolute((int32_t)currB.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_tick[i]);
 
-		hall_orderC[phase_A]+=absolute((int32_t)currC.zerocrossings_tick[i]-(int32_t)hallA.zerocrossings_tick[i]);
-		hall_orderC[phase_B]+=absolute((int32_t)currC.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_tick[i]);
-		hall_orderC[phase_C]+=absolute((int32_t)currC.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_tick[i]);
+		differences_phaseC[phase_A]+=absolute((int32_t)currC.zerocrossings_tick[i]-(int32_t)hallA.zerocrossings_tick[i]);
+		differences_phaseC[phase_B]+=absolute((int32_t)currC.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_tick[i]);
+		differences_phaseC[phase_C]+=absolute((int32_t)currC.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_tick[i]);
 	}
 
 	for (uint32_t i = 0; i < number_of_phases; ++i) {
-		hall_orderA[i]/=MAXZEROCROSSINGS;
-		hall_orderB[i]/=MAXZEROCROSSINGS;
-		hall_orderC[i]/=MAXZEROCROSSINGS;
+		differences_phaseA[i]/=MAXZEROCROSSINGS;
+		differences_phaseB[i]/=MAXZEROCROSSINGS;
+		differences_phaseC[i]/=MAXZEROCROSSINGS;
 
-		if(hall_orderA[i]>((res->electricPeriod_ticks/2)-lowpassfilter_ticks) && hall_orderA[i]<(res->electricPeriod_ticks)){
-			hall_orderA[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+		if(differences_phaseA[i]>((res->electricPeriod_ticks/2)-lowpassfilter_ticks) && differences_phaseA[i]<(res->electricPeriod_ticks)){
+			differences_phaseA[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
 			toggled_polarity[hall_A]=1;
 
 		}
 
-		if(hall_orderB[i]>((res->electricPeriod_ticks/2)-lowpassfilter_ticks) && hall_orderB[i]<(res->electricPeriod_ticks)){
-			hall_orderB[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+		if(differences_phaseB[i]>((res->electricPeriod_ticks/2)-lowpassfilter_ticks) && differences_phaseB[i]<(res->electricPeriod_ticks)){
+			differences_phaseB[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
 			toggled_polarity[hall_B]=1;
 		}
 
-		if(hall_orderC[i]>((res->electricPeriod_ticks/2)-lowpassfilter_ticks) && hall_orderC[i]<(res->electricPeriod_ticks)){
-			hall_orderC[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+		if(differences_phaseC[i]>((res->electricPeriod_ticks/2)-lowpassfilter_ticks) && differences_phaseC[i]<(res->electricPeriod_ticks)){
+			differences_phaseC[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
 			toggled_polarity[hall_C]=1;
 		}
 	}
 
 	int32_t minimum=0xFF;
 	for (uint32_t i = 0; i < number_of_phases; ++i) {
-		if(hall_orderA[i]<minimum){
-			minimum=hall_orderA[i];
+		if(differences_phaseA[i]<minimum){
+			minimum=differences_phaseA[i];
 		}
 	}
 	for (uint32_t i = 0; i < number_of_phases; ++i) {
-		if(hall_orderA[i]==minimum){
+		if(differences_phaseA[i]==minimum){
 			res->hall_order[i]=phase_A;
 		}
 	}
 
 	minimum=0xFF;
 	for (uint32_t i = 0; i < number_of_phases; ++i) {
-		if(hall_orderB[i]<minimum){
-			minimum=hall_orderB[i];
+		if(differences_phaseB[i]<minimum){
+			minimum=differences_phaseB[i];
 		}
 	}
 	for (uint32_t i = 0; i < number_of_phases; ++i) {
-		if(hall_orderB[i]==minimum){
+		if(differences_phaseB[i]==minimum){
 			res->hall_order[i]=phase_B;
 		}
 	}
 
 	minimum=0xFF;
 	for (uint32_t i = 0; i < number_of_phases; ++i) {
-		if(hall_orderC[i]<minimum){
-			minimum=hall_orderC[i];
+		if(differences_phaseC[i]<minimum){
+			minimum=differences_phaseC[i];
 		}
 	}
 	for (uint32_t i = 0; i < number_of_phases; ++i) {
-		if(hall_orderC[i]==minimum){
+		if(differences_phaseC[i]==minimum){
 			res->hall_order[i]=phase_C;
 		}
 	}
