@@ -93,10 +93,12 @@ def send_messages_tester(ser, messages):
     serial_tester.write(emulationmessage.encode());
     time.sleep(waittime)  # Add a delay to allow the device to process the message
     global send_index;
+    global f
     for message in messages:
         serial_tester.write(message.encode())
         if message.find('reset')!=0:
             print(f'test case {send_index} ,messsage : {message}')
+            f.write(f'test case {send_index} ,messsage : {message}')
             send_index=send_index+1;
         time.sleep(waittime/2)  # Add a delay to allow the device to process the message
         serial_tester.write(resetmessage.encode());
@@ -116,12 +118,14 @@ def receive_messages_tester(ser,messages):
 def receive_messages_target(ser,messages):
     global stopthreads
     global send_index
+    global f
     while stopthreads==True:
         if ser.in_waiting:
             received_data = ser.readline().decode().replace(' ','')
             if received_data.find('\r')!=0:
                 if send_index>1:
                     print(f"Received from target: {received_data}")
+                    f.write(f"Received from target: {received_data}");
                     receivedMessages.append(received_data);
 
 def main():
@@ -170,6 +174,6 @@ def main():
         sys.exit(-1);
      
 
-sys.stdout = open('tests_python_console_dump.txt', 'w');   
+f = open("tests_python_console_dump.txt", "a");
 main()
-sys.stdout.close();
+f.close();
