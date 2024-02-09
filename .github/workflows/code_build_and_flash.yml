@@ -45,6 +45,7 @@ jobs:
         run: |
          sudo apt-get update -y
          sudo apt-get install cppcheck -y
+         ls
          cppcheck --enable=all hall_detection_algoritm_TDD --xml 2> /TESTS/TEST1_cppcheck_static_analysis/test_results/cppcheck-result.xml
          cd ..
          wget https://github.com/danmar/cppcheck/tree/main/htmlreport
