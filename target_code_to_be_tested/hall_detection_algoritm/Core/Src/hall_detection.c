@@ -6,7 +6,13 @@
  */
 
 #include "hall_detection.h" 		/*!< contains all enums, structs and includes neccesary for this .c, it also exposes the run_hall_detection_inside_20Khz_interruption() function to the outside world */
+
+#define TESTuart
+
+#ifdef TESTuart
 #include "usart.h"
+#endif
+
 //local defines
 #define MAXTICKs 1000 								/*!< timeout for the algorithm, measured in 0.05s ticks , so 1000*0.05=50ms (it takes only 380 ticks to get 6/2=3 electric periods from torrot emulated) */
 #define lowpassfilter_ticks 10 						/*!< minimum number of ticks that should have passed in between zerocrossings (lowpassfilter) */
@@ -420,5 +426,8 @@ void present_results(){
 	message[messageLength-2]='\n';//two last characters
 	message[messageLength-1]='\r';
 
+#ifdef TESTuart
 	HAL_UART_Transmit_DMA(&huart2, &message, messageLength);
+#endif
+
 }

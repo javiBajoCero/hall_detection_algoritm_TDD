@@ -37,15 +37,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  16 .debug_rnglists 00000b88  00000000  00000000  00034c80  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_macro  00023523  00000000  00000000  00035808  2**0
+ 17 .debug_macro  00023529  00000000  00000000  00035808  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_line   00014711  00000000  00000000  00058d2b  2**0
+ 18 .debug_line   00014711  00000000  00000000  00058d31  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    000d9e80  00000000  00000000  0006d43c  2**0
+ 19 .debug_str    000d9e8a  00000000  00000000  0006d442  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_frame  00003cbc  00000000  00000000  001472bc  2**2
+ 20 .debug_frame  00003cbc  00000000  00000000  001472cc  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 000000a2  00000000  00000000  0014af78  2**0
+ 21 .debug_line_str 000000a2  00000000  00000000  0014af88  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -2369,11 +2369,14 @@ void present_results(){
  800126a:	220d      	movs	r2, #13
  800126c:	71da      	strb	r2, [r3, #7]
 
+#ifdef TESTuart
 	HAL_UART_Transmit_DMA(&huart2, &message, messageLength);
  800126e:	2208      	movs	r2, #8
  8001270:	4903      	ldr	r1, [pc, #12]	; (8001280 <present_results+0x118>)
  8001272:	4806      	ldr	r0, [pc, #24]	; (800128c <present_results+0x124>)
  8001274:	f003 f8d4 	bl	8004420 <HAL_UART_Transmit_DMA>
+#endif
+
 }
  8001278:	bf00      	nop
  800127a:	3710      	adds	r7, #16
