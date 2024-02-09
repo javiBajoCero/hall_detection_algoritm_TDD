@@ -416,12 +416,19 @@ void assign_polarity(detection_results_struct* res){
 
 	for (uint32_t i = 0; i < number_of_phases; ++i) {
 		if(currents[res->hall_order[i]]->zerocrossings_polarity[0]==halls[i]->zerocrossings_polarity[0]){
-			res->hall_polarity[res->hall_order[i]]=hall_direct;
+			if(toggle[i]==0){
+				res->hall_polarity[res->hall_order[i]]=hall_direct;
+			}else{
+				res->hall_polarity[res->hall_order[i]]=hall_inverse;
+			}
 		}else{
-			res->hall_polarity[res->hall_order[i]]=hall_inverse;
+			if(toggle[i]==0){
+				res->hall_polarity[res->hall_order[i]]=hall_inverse;
+			}else{
+				res->hall_polarity[res->hall_order[i]]=hall_direct;
+			}
 		}
 	}
-
 }
 
 void present_results(){
@@ -437,16 +444,6 @@ void present_results(){
 			message[(i*2)+1]='B';
 		}else if(results.hall_order[i]==hall_C){
 			message[(i*2)+1]='C';
-		}
-	}
-
-	for (uint32_t i = 0; i < number_of_phases; ++i) {
-		if(toggle[i]==1){
-			if(results.hall_polarity[i]==hall_inverse){
-				results.hall_polarity[i]=hall_direct;
-			}else{
-				results.hall_polarity[i]=hall_inverse;
-			}
 		}
 	}
 
