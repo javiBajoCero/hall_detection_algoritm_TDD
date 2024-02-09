@@ -23,12 +23,15 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-
+      # build the target code project, makefile 
+      # makefile previously installed "sudo apt install make" (it comes with raspbian already i think)
+      # crosscompiling toolachain also installed with "sudo apt-get install gcc-arm-none-eabi"
       - name: build target code with makefile 
         run: |
           cd target_code_to_be_tested/hall_detection_algoritm
           make
           ls
+          
       #flashes firmware to the disrovery board attached to the self-hosted runner
       #previously instaled openocd "sudo apt-get install openocd"
       - name: flash target binaries into target nucleo board
@@ -37,7 +40,16 @@ jobs:
           sudo openocd
 
 
-
+      # 
+      - name: TEST1 static code analysis
+        run: |
+         sudo apt-get update
+         sudo apt-get install cppcheck
+         cppcheck --enable=all bootloader --xml 2> TESTS/TEST1_cppcheck_static_analysis/test_results/cppcheck-result.xml
+         cd ..
+         wget https://github.com/danmar/cppcheck/tree/main/htmlreport
+         cppcheck-htmlreport --source-dir=hall_detection_algoritm_TDD/. --title=htmlREPORTcppcheck --file=hall_detection_algoritm_TDD/TESTS/TEST1_cppcheck_static_analysis/test_results/cppcheck-result.xml --report-dir=hall_detection_algoritm_TDD/TESTS/TEST1_cppcheck_static_analysis/test_results/
+        
       # build the tester code project, makefile 
       # makefile previously installed "sudo apt install make" (it comes with raspbian already i think)
       # crosscompiling toolachain also installed with "sudo apt-get install gcc-arm-none-eabi"
