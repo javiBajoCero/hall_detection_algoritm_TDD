@@ -1,4 +1,4 @@
-ARM GAS  /tmp/cc8kV50R.s 			page 1
+ARM GAS  /tmp/ccpXojyM.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
   28:Core/Src/hall_detection.c **** current_or_hall_measurements_struct currB;		/*!< contains all variables relevant for currB measurem
   29:Core/Src/hall_detection.c **** current_or_hall_measurements_struct currC;		/*!< contains all variables relevant for currC measurem
   30:Core/Src/hall_detection.c **** current_or_hall_measurements_struct hallA;		/*!< contains all variables relevant for hallA measurem
-ARM GAS  /tmp/cc8kV50R.s 			page 2
+ARM GAS  /tmp/ccpXojyM.s 			page 2
 
 
   31:Core/Src/hall_detection.c **** current_or_hall_measurements_struct hallB;		/*!< contains all variables relevant for hallB measurem
@@ -118,7 +118,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
   85:Core/Src/hall_detection.c **** 
   86:Core/Src/hall_detection.c **** void Hall_start_detection(){
   29              		.loc 1 86 28 view -0
-ARM GAS  /tmp/cc8kV50R.s 			page 3
+ARM GAS  /tmp/ccpXojyM.s 			page 3
 
 
   30              		.cfi_startproc
@@ -178,7 +178,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
   75              		.loc 1 92 10 view .LVU10
   76 000c 0020     		movs	r0, #0
   77 000e 7047     		bx	lr
-ARM GAS  /tmp/cc8kV50R.s 			page 4
+ARM GAS  /tmp/ccpXojyM.s 			page 4
 
 
   78              	.L9:
@@ -238,7 +238,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  102              	.LCFI0:
  103              		.cfi_def_cfa_offset 16
  104              		.cfi_offset 4, -16
-ARM GAS  /tmp/cc8kV50R.s 			page 5
+ARM GAS  /tmp/ccpXojyM.s 			page 5
 
 
  105              		.cfi_offset 5, -12
@@ -298,7 +298,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  151              		.loc 1 136 29 view .LVU33
  152 002c 1360     		str	r3, [r2]
  137:Core/Src/hall_detection.c **** 
-ARM GAS  /tmp/cc8kV50R.s 			page 6
+ARM GAS  /tmp/ccpXojyM.s 			page 6
 
 
  138:Core/Src/hall_detection.c **** 	hallA.two_samples_buffer[1]=hallA.two_samples_buffer[0];
@@ -358,7 +358,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  198 005e 70BD     		pop	{r4, r5, r6, pc}
  199              	.LVL8:
  200              	.L13:
-ARM GAS  /tmp/cc8kV50R.s 			page 7
+ARM GAS  /tmp/ccpXojyM.s 			page 7
 
 
  201              		.loc 1 146 1 view .LVU54
@@ -418,7 +418,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  235              		.loc 1 168 2 is_stmt 1 view .LVU57
  236              		.loc 1 168 46 is_stmt 0 view .LVU58
  237 0002 0168     		ldr	r1, [r0]
-ARM GAS  /tmp/cc8kV50R.s 			page 8
+ARM GAS  /tmp/ccpXojyM.s 			page 8
 
 
  238              		.loc 1 168 49 view .LVU59
@@ -478,7 +478,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  264 001a 836A     		ldr	r3, [r0, #40]
  170:Core/Src/hall_detection.c **** 			 && currx->numberof_zerocrossings<MAXZEROCROSSINGS
  265              		.loc 1 170 5 view .LVU66
-ARM GAS  /tmp/cc8kV50R.s 			page 9
+ARM GAS  /tmp/ccpXojyM.s 			page 9
 
 
  266 001c 052B     		cmp	r3, #5
@@ -538,7 +538,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  305 004c 5C1C     		adds	r4, r3, #1
  306 004e 50F82440 		ldr	r4, [r0, r4, lsl #2]
  182:Core/Src/hall_detection.c **** 					currx->zerocrossings_tick[currx->numberof_zerocrossings]=ticks;
-ARM GAS  /tmp/cc8kV50R.s 			page 10
+ARM GAS  /tmp/ccpXojyM.s 			page 10
 
 
  307              		.loc 1 182 22 view .LVU82
@@ -598,7 +598,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  351              		.thumb
  352              		.thumb_func
  353              		.fpu fpv4-sp-d16
-ARM GAS  /tmp/cc8kV50R.s 			page 11
+ARM GAS  /tmp/ccpXojyM.s 			page 11
 
 
  355              	detect_hall_zerocrossings:
@@ -658,7 +658,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  395 0020 0121     		movs	r1, #1
  396 0022 82F82010 		strb	r1, [r2, #32]
  397              	.L28:
-ARM GAS  /tmp/cc8kV50R.s 			page 12
+ARM GAS  /tmp/ccpXojyM.s 			page 12
 
 
  207:Core/Src/hall_detection.c **** 			}
@@ -718,7 +718,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  445 0000 08B5     		push	{r3, lr}
  446              	.LCFI8:
  447              		.cfi_def_cfa_offset 8
-ARM GAS  /tmp/cc8kV50R.s 			page 13
+ARM GAS  /tmp/ccpXojyM.s 			page 13
 
 
  448              		.cfi_offset 3, -8
@@ -778,7 +778,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  491 0038 00000000 		.word	currA
  492 003c 00000000 		.word	currB
  493 0040 00000000 		.word	currC
-ARM GAS  /tmp/cc8kV50R.s 			page 14
+ARM GAS  /tmp/ccpXojyM.s 			page 14
 
 
  494 0044 00000000 		.word	hallA
@@ -838,7 +838,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  536 0018 0E4B     		ldr	r3, .L45+12
  537 001a 9B6A     		ldr	r3, [r3, #40]
  221:Core/Src/hall_detection.c **** 			(currC.numberof_zerocrossings>=MAXZEROCROSSINGS) &&
-ARM GAS  /tmp/cc8kV50R.s 			page 15
+ARM GAS  /tmp/ccpXojyM.s 			page 15
 
 
  538              		.loc 1 221 53 view .LVU137
@@ -898,7 +898,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  582 0060 00000000 		.word	.LANCHOR2
  583              		.cfi_endproc
  584              	.LFE242:
-ARM GAS  /tmp/cc8kV50R.s 			page 16
+ARM GAS  /tmp/ccpXojyM.s 			page 16
 
 
  586              		.section	.text.swap_hall_gpios_with_detected_results,"ax",%progbits
@@ -958,7 +958,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  623 0014 93E80300 		ldm	r3, {r0, r1}
  624 0018 85E80300 		stm	r5, {r0, r1}
  249:Core/Src/hall_detection.c **** 	hall_pin_info _H3=*H3;
-ARM GAS  /tmp/cc8kV50R.s 			page 17
+ARM GAS  /tmp/ccpXojyM.s 			page 17
 
 
  625              		.loc 1 249 2 is_stmt 1 view .LVU157
@@ -1018,7 +1018,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  275:Core/Src/hall_detection.c **** 			H2->polarity=results.hall_polarity[hall_B];
  276:Core/Src/hall_detection.c **** 			break;
  277:Core/Src/hall_detection.c **** 		case hall_C:
-ARM GAS  /tmp/cc8kV50R.s 			page 18
+ARM GAS  /tmp/ccpXojyM.s 			page 18
 
 
  278:Core/Src/hall_detection.c **** 			*H2=_H3;
@@ -1078,7 +1078,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  683              	.LVL22:
  684              	.L49:
  685              	.LCFI13:
-ARM GAS  /tmp/cc8kV50R.s 			page 19
+ARM GAS  /tmp/ccpXojyM.s 			page 19
 
 
  686              		.cfi_restore_state
@@ -1138,7 +1138,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  723              		.loc 1 262 16 view .LVU187
  724 008c A171     		strb	r1, [r4, #6]
  263:Core/Src/hall_detection.c **** 		default:
-ARM GAS  /tmp/cc8kV50R.s 			page 20
+ARM GAS  /tmp/ccpXojyM.s 			page 20
 
 
  725              		.loc 1 263 4 is_stmt 1 view .LVU188
@@ -1198,7 +1198,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  763 00ba 0F49     		ldr	r1, .L61
  764 00bc 497A     		ldrb	r1, [r1, #9]	@ zero_extendqisi2
  279:Core/Src/hall_detection.c **** 			break;
-ARM GAS  /tmp/cc8kV50R.s 			page 21
+ARM GAS  /tmp/ccpXojyM.s 			page 21
 
 
  765              		.loc 1 279 16 view .LVU205
@@ -1258,7 +1258,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  296:Core/Src/hall_detection.c **** 			break;
  804              		.loc 1 296 4 is_stmt 1 view .LVU221
  296:Core/Src/hall_detection.c **** 			break;
-ARM GAS  /tmp/cc8kV50R.s 			page 22
+ARM GAS  /tmp/ccpXojyM.s 			page 22
 
 
  805              		.loc 1 296 38 is_stmt 0 view .LVU222
@@ -1318,7 +1318,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  851              		.loc 1 308 11 view .LVU232
  852 0004 2B46     		mov	r3, r5
  853              	.LVL26:
-ARM GAS  /tmp/cc8kV50R.s 			page 23
+ARM GAS  /tmp/ccpXojyM.s 			page 23
 
 
  854              	.L64:
@@ -1378,7 +1378,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  904              	.LVL30:
  314:Core/Src/hall_detection.c **** 		averagedsemiPeriod+=(hallC.zerocrossings_tick[i+1]-hallC.zerocrossings_tick[i]);
  905              		.loc 1 314 3 is_stmt 1 discriminator 3 view .LVU254
-ARM GAS  /tmp/cc8kV50R.s 			page 24
+ARM GAS  /tmp/ccpXojyM.s 			page 24
 
 
  906              		.loc 1 314 48 is_stmt 0 discriminator 3 view .LVU255
@@ -1438,7 +1438,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  950              	.L69:
  951              		.align	2
  952              	.L68:
-ARM GAS  /tmp/cc8kV50R.s 			page 25
+ARM GAS  /tmp/ccpXojyM.s 			page 25
 
 
  953 0068 00000000 		.word	currA
@@ -1498,7 +1498,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  358:Core/Src/hall_detection.c **** 		}
  359:Core/Src/hall_detection.c **** 
  360:Core/Src/hall_detection.c **** 		if(hall_orderC[i]>((res->electricPeriod_ticks/2)-lowpassfilter_ticks) && hall_orderC[i]<(res->ele
-ARM GAS  /tmp/cc8kV50R.s 			page 26
+ARM GAS  /tmp/ccpXojyM.s 			page 26
 
 
  361:Core/Src/hall_detection.c **** 			hall_orderC[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
@@ -1558,7 +1558,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  409:Core/Src/hall_detection.c **** }
  979              		.loc 1 409 1 is_stmt 0 view .LVU273
  980 0000 0028     		cmp	r0, #0
-ARM GAS  /tmp/cc8kV50R.s 			page 27
+ARM GAS  /tmp/ccpXojyM.s 			page 27
 
 
  981 0002 B8BF     		it	lt
@@ -1618,7 +1618,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  1030              		.loc 1 331 3 is_stmt 1 discriminator 3 view .LVU281
  331:Core/Src/hall_detection.c **** 		hall_orderA[phase_B]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_
  1031              		.loc 1 331 67 is_stmt 0 discriminator 3 view .LVU282
-ARM GAS  /tmp/cc8kV50R.s 			page 28
+ARM GAS  /tmp/ccpXojyM.s 			page 28
 
 
  1032 000c B41C     		adds	r4, r6, #2
@@ -1678,7 +1678,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  1073 0052 7A4B     		ldr	r3, .L109+20
  1074 0054 53F824B0 		ldr	fp, [r3, r4, lsl #2]
  335:Core/Src/hall_detection.c **** 		hall_orderB[phase_B]+=absolute((int32_t)currB.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_
-ARM GAS  /tmp/cc8kV50R.s 			page 29
+ARM GAS  /tmp/ccpXojyM.s 			page 29
 
 
  1075              		.loc 1 335 25 discriminator 3 view .LVU296
@@ -1738,7 +1738,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  1116              		.loc 1 340 25 is_stmt 0 discriminator 3 view .LVU309
  1117 009a A5EB0900 		sub	r0, r5, r9
  1118 009e FFF7FEFF 		bl	absolute
-ARM GAS  /tmp/cc8kV50R.s 			page 30
+ARM GAS  /tmp/ccpXojyM.s 			page 30
 
 
  1119              	.LVL50:
@@ -1798,7 +1798,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  1161 00d4 41F82300 		str	r0, [r1, r3, lsl #2]
  346:Core/Src/hall_detection.c **** 		hall_orderC[i]/=MAXZEROCROSSINGS;
  1162              		.loc 1 346 3 is_stmt 1 view .LVU322
-ARM GAS  /tmp/cc8kV50R.s 			page 31
+ARM GAS  /tmp/ccpXojyM.s 			page 31
 
 
  346:Core/Src/hall_detection.c **** 		hall_orderC[i]/=MAXZEROCROSSINGS;
@@ -1858,7 +1858,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  1203 0124 0124     		movs	r4, #1
  1204 0126 0460     		str	r4, [r0]
  1205              	.L75:
-ARM GAS  /tmp/cc8kV50R.s 			page 32
+ARM GAS  /tmp/ccpXojyM.s 			page 32
 
 
  355:Core/Src/hall_detection.c **** 			hall_orderB[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
@@ -1918,7 +1918,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  1244 015c A242     		cmp	r2, r4
  1245 015e AED9     		bls	.L77
  360:Core/Src/hall_detection.c **** 			hall_orderC[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
-ARM GAS  /tmp/cc8kV50R.s 			page 33
+ARM GAS  /tmp/ccpXojyM.s 			page 33
 
 
  1246              		.loc 1 360 73 discriminator 1 view .LVU353
@@ -1978,7 +1978,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  1288              		.loc 1 368 3 is_stmt 1 view .LVU365
  368:Core/Src/hall_detection.c **** 			minimum=hall_orderA[i];
  1289              		.loc 1 368 17 is_stmt 0 view .LVU366
-ARM GAS  /tmp/cc8kV50R.s 			page 34
+ARM GAS  /tmp/ccpXojyM.s 			page 34
 
 
  1290 018e 2849     		ldr	r1, .L109+8
@@ -2038,7 +2038,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  1331 01b6 F3E7     		b	.L83
  1332              	.L104:
  374:Core/Src/hall_detection.c **** 		}
-ARM GAS  /tmp/cc8kV50R.s 			page 35
+ARM GAS  /tmp/ccpXojyM.s 			page 35
 
 
  1333              		.loc 1 374 22 view .LVU380
@@ -2098,7 +2098,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  1374 01d2 0023     		movs	r3, #0
  1375              	.LVL69:
  384:Core/Src/hall_detection.c **** 		if(hall_orderB[i]==minimum){
-ARM GAS  /tmp/cc8kV50R.s 			page 36
+ARM GAS  /tmp/ccpXojyM.s 			page 36
 
 
  1376              		.loc 1 384 16 view .LVU394
@@ -2158,7 +2158,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  1417              		.loc 1 391 45 discriminator 2 view .LVU407
  1418 01f4 0133     		adds	r3, r3, #1
  1419              	.LVL75:
-ARM GAS  /tmp/cc8kV50R.s 			page 37
+ARM GAS  /tmp/ccpXojyM.s 			page 37
 
 
  1420              	.L91:
@@ -2218,7 +2218,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  1460 0218 9142     		cmp	r1, r2
  1461 021a F7D1     		bne	.L95
  398:Core/Src/hall_detection.c **** 		}
-ARM GAS  /tmp/cc8kV50R.s 			page 38
+ARM GAS  /tmp/ccpXojyM.s 			page 38
 
 
  1462              		.loc 1 398 4 is_stmt 1 view .LVU422
@@ -2278,7 +2278,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  1508              		@ link register save eliminated.
  416:Core/Src/hall_detection.c **** 
  417:Core/Src/hall_detection.c **** 	for (uint32_t i = 0; i < number_of_phases; ++i) {
-ARM GAS  /tmp/cc8kV50R.s 			page 39
+ARM GAS  /tmp/ccpXojyM.s 			page 39
 
 
  1509              		.loc 1 417 2 view .LVU428
@@ -2338,7 +2338,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  1551 0026 51F82310 		ldr	r1, [r1, r3, lsl #2]
  418:Core/Src/hall_detection.c **** 		if(currents[res->hall_order[i]]->zerocrossings_polarity[0]==halls[i]->zerocrossings_polarity[0]){
  1552              		.loc 1 418 95 view .LVU442
-ARM GAS  /tmp/cc8kV50R.s 			page 40
+ARM GAS  /tmp/ccpXojyM.s 			page 40
 
 
  1553 002a 91F82010 		ldrb	r1, [r1, #32]	@ zero_extendqisi2
@@ -2398,7 +2398,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  1599              		.cfi_def_cfa_offset 8
  1600              		.cfi_offset 3, -8
  1601              		.cfi_offset 14, -4
-ARM GAS  /tmp/cc8kV50R.s 			page 41
+ARM GAS  /tmp/ccpXojyM.s 			page 41
 
 
  428:Core/Src/hall_detection.c **** 
@@ -2416,7 +2416,7 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  430:Core/Src/hall_detection.c **** 		message[i]=' ';
  1612              		.loc 1 430 3 is_stmt 1 discriminator 3 view .LVU454
  1613              		.loc 1 430 13 is_stmt 0 discriminator 3 view .LVU455
- 1614 0006 2B4A     		ldr	r2, .L143
+ 1614 0006 2E4A     		ldr	r2, .L146
  1615 0008 2021     		movs	r1, #32
  1616 000a D154     		strb	r1, [r2, r3]
  429:Core/Src/hall_detection.c **** 		message[i]=' ';
@@ -2446,31 +2446,31 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  1633              		.loc 1 436 9 is_stmt 1 view .LVU460
  1634              		.loc 1 436 11 is_stmt 0 view .LVU461
  1635 0016 012A     		cmp	r2, #1
- 1636 0018 0FD0     		beq	.L138
+ 1636 0018 0FD0     		beq	.L140
  437:Core/Src/hall_detection.c **** 			message[(i*2)+1]='B';
  438:Core/Src/hall_detection.c **** 		}else if(results.hall_order[i]==hall_C){
  1637              		.loc 1 438 9 is_stmt 1 view .LVU462
  1638              		.loc 1 438 11 is_stmt 0 view .LVU463
  1639 001a 022A     		cmp	r2, #2
- 1640 001c 13D0     		beq	.L139
+ 1640 001c 13D0     		beq	.L141
  1641              	.L128:
  433:Core/Src/hall_detection.c **** 		if(results.hall_order[i]==hall_A){
  1642              		.loc 1 433 45 discriminator 2 view .LVU464
  1643 001e 0133     		adds	r3, r3, #1
  1644              	.LVL90:
-ARM GAS  /tmp/cc8kV50R.s 			page 42
+ARM GAS  /tmp/ccpXojyM.s 			page 42
 
 
  1645              	.L126:
  433:Core/Src/hall_detection.c **** 		if(results.hall_order[i]==hall_A){
  1646              		.loc 1 433 2 discriminator 1 view .LVU465
  1647 0020 022B     		cmp	r3, #2
- 1648 0022 16D8     		bhi	.L140
+ 1648 0022 16D8     		bhi	.L142
  434:Core/Src/hall_detection.c **** 		if(results.hall_order[i]==hall_A){
  1649              		.loc 1 434 3 is_stmt 1 view .LVU466
  434:Core/Src/hall_detection.c **** 		if(results.hall_order[i]==hall_A){
  1650              		.loc 1 434 24 is_stmt 0 view .LVU467
- 1651 0024 244A     		ldr	r2, .L143+4
+ 1651 0024 274A     		ldr	r2, .L146+4
  1652 0026 1A44     		add	r2, r2, r3
  1653 0028 1279     		ldrb	r2, [r2, #4]	@ zero_extendqisi2
  434:Core/Src/hall_detection.c **** 		if(results.hall_order[i]==hall_A){
@@ -2487,11 +2487,11 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  1661 0030 0132     		adds	r2, r2, #1
  435:Core/Src/hall_detection.c **** 		}else if(results.hall_order[i]==hall_B){
  1662              		.loc 1 435 20 view .LVU472
- 1663 0032 2049     		ldr	r1, .L143
+ 1663 0032 2349     		ldr	r1, .L146
  1664 0034 4120     		movs	r0, #65
  1665 0036 8854     		strb	r0, [r1, r2]
  1666 0038 F1E7     		b	.L128
- 1667              	.L138:
+ 1667              	.L140:
  437:Core/Src/hall_detection.c **** 			message[(i*2)+1]='B';
  1668              		.loc 1 437 4 is_stmt 1 view .LVU473
  437:Core/Src/hall_detection.c **** 			message[(i*2)+1]='B';
@@ -2502,11 +2502,11 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  1672 003c 0132     		adds	r2, r2, #1
  437:Core/Src/hall_detection.c **** 			message[(i*2)+1]='B';
  1673              		.loc 1 437 20 view .LVU476
- 1674 003e 1D49     		ldr	r1, .L143
+ 1674 003e 2049     		ldr	r1, .L146
  1675 0040 4220     		movs	r0, #66
  1676 0042 8854     		strb	r0, [r1, r2]
  1677 0044 EBE7     		b	.L128
- 1678              	.L139:
+ 1678              	.L141:
  439:Core/Src/hall_detection.c **** 			message[(i*2)+1]='C';
  1679              		.loc 1 439 4 is_stmt 1 view .LVU477
  1680              		.loc 1 439 14 is_stmt 0 view .LVU478
@@ -2514,14 +2514,14 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  1682              		.loc 1 439 17 view .LVU479
  1683 0048 0132     		adds	r2, r2, #1
  1684              		.loc 1 439 20 view .LVU480
- 1685 004a 1A49     		ldr	r1, .L143
+ 1685 004a 1D49     		ldr	r1, .L146
  1686 004c 4320     		movs	r0, #67
  1687 004e 8854     		strb	r0, [r1, r2]
  1688 0050 E5E7     		b	.L128
-ARM GAS  /tmp/cc8kV50R.s 			page 43
+ARM GAS  /tmp/ccpXojyM.s 			page 43
 
 
- 1689              	.L140:
+ 1689              	.L142:
  1690              		.loc 1 439 20 view .LVU481
  1691              	.LBE18:
  1692              	.LBB19:
@@ -2533,478 +2533,510 @@ ARM GAS  /tmp/cc8kV50R.s 			page 1
  1694 0052 0023     		movs	r3, #0
  1695              	.LVL91:
  1696              		.loc 1 443 16 view .LVU483
- 1697 0054 08E0     		b	.L131
+ 1697 0054 04E0     		b	.L131
  1698              	.LVL92:
- 1699              	.L142:
- 444:Core/Src/hall_detection.c **** 		if(results.hall_polarity[i]==hall_inverse){//the "inverse polarity" from the hall with the curren
- 445:Core/Src/hall_detection.c **** 			if(toggle[i]==0){
- 1700              		.loc 1 445 4 is_stmt 1 view .LVU484
- 1701              		.loc 1 445 13 is_stmt 0 view .LVU485
- 1702 0056 194A     		ldr	r2, .L143+8
- 1703 0058 52F82320 		ldr	r2, [r2, r3, lsl #2]
- 1704              		.loc 1 445 6 view .LVU486
- 1705 005c B2B9     		cbnz	r2, .L133
- 446:Core/Src/hall_detection.c **** 				message[i*2]=' ';
- 1706              		.loc 1 446 5 is_stmt 1 view .LVU487
- 1707              		.loc 1 446 17 is_stmt 0 view .LVU488
- 1708 005e 154A     		ldr	r2, .L143
- 1709 0060 2021     		movs	r1, #32
- 1710 0062 02F81310 		strb	r1, [r2, r3, lsl #1]
- 1711              	.L134:
- 443:Core/Src/hall_detection.c **** 		if(results.hall_polarity[i]==hall_inverse){//the "inverse polarity" from the hall with the curren
- 1712              		.loc 1 443 45 discriminator 2 view .LVU489
- 1713 0066 0133     		adds	r3, r3, #1
- 1714              	.LVL93:
- 1715              	.L131:
- 443:Core/Src/hall_detection.c **** 		if(results.hall_polarity[i]==hall_inverse){//the "inverse polarity" from the hall with the curren
- 1716              		.loc 1 443 2 discriminator 1 view .LVU490
- 1717 0068 022B     		cmp	r3, #2
- 1718 006a 19D8     		bhi	.L141
- 444:Core/Src/hall_detection.c **** 		if(results.hall_polarity[i]==hall_inverse){//the "inverse polarity" from the hall with the curren
- 1719              		.loc 1 444 3 is_stmt 1 view .LVU491
- 444:Core/Src/hall_detection.c **** 		if(results.hall_polarity[i]==hall_inverse){//the "inverse polarity" from the hall with the curren
- 1720              		.loc 1 444 27 is_stmt 0 view .LVU492
- 1721 006c 124A     		ldr	r2, .L143+4
- 1722 006e 1A44     		add	r2, r2, r3
- 1723 0070 D279     		ldrb	r2, [r2, #7]	@ zero_extendqisi2
- 444:Core/Src/hall_detection.c **** 		if(results.hall_polarity[i]==hall_inverse){//the "inverse polarity" from the hall with the curren
- 1724              		.loc 1 444 5 view .LVU493
- 1725 0072 012A     		cmp	r2, #1
- 1726 0074 EFD0     		beq	.L142
+ 1699              	.L133:
+ 444:Core/Src/hall_detection.c **** 		if(toggle[i]==1){
+ 445:Core/Src/hall_detection.c **** 			if(results.hall_polarity[i]==hall_inverse){
+ 446:Core/Src/hall_detection.c **** 				results.hall_polarity[i]=hall_direct;
  447:Core/Src/hall_detection.c **** 			}else{
- 448:Core/Src/hall_detection.c **** 				message[i*2]='!';
+ 448:Core/Src/hall_detection.c **** 				results.hall_polarity[i]=hall_inverse;
+ 1700              		.loc 1 448 5 is_stmt 1 view .LVU484
+ 1701              		.loc 1 448 29 is_stmt 0 view .LVU485
+ 1702 0056 1B4A     		ldr	r2, .L146+4
+ 1703 0058 1A44     		add	r2, r2, r3
+ 1704 005a 0121     		movs	r1, #1
+ 1705 005c D171     		strb	r1, [r2, #7]
+ 1706              	.L132:
+ 443:Core/Src/hall_detection.c **** 		if(toggle[i]==1){
+ 1707              		.loc 1 443 45 discriminator 2 view .LVU486
+ 1708 005e 0133     		adds	r3, r3, #1
+ 1709              	.LVL93:
+ 1710              	.L131:
+ 443:Core/Src/hall_detection.c **** 		if(toggle[i]==1){
+ 1711              		.loc 1 443 2 discriminator 1 view .LVU487
+ 1712 0060 022B     		cmp	r3, #2
+ 1713 0062 0ED8     		bhi	.L143
+ 444:Core/Src/hall_detection.c **** 		if(toggle[i]==1){
+ 1714              		.loc 1 444 3 is_stmt 1 view .LVU488
+ 444:Core/Src/hall_detection.c **** 		if(toggle[i]==1){
+ 1715              		.loc 1 444 12 is_stmt 0 view .LVU489
+ 1716 0064 184A     		ldr	r2, .L146+8
+ 1717 0066 52F82320 		ldr	r2, [r2, r3, lsl #2]
+ 444:Core/Src/hall_detection.c **** 		if(toggle[i]==1){
+ 1718              		.loc 1 444 5 view .LVU490
+ 1719 006a 012A     		cmp	r2, #1
+ 1720 006c F7D1     		bne	.L132
+ 445:Core/Src/hall_detection.c **** 				results.hall_polarity[i]=hall_direct;
+ 1721              		.loc 1 445 4 is_stmt 1 view .LVU491
+ 445:Core/Src/hall_detection.c **** 				results.hall_polarity[i]=hall_direct;
+ 1722              		.loc 1 445 28 is_stmt 0 view .LVU492
+ 1723 006e 154A     		ldr	r2, .L146+4
+ 1724 0070 1A44     		add	r2, r2, r3
+ 1725 0072 D279     		ldrb	r2, [r2, #7]	@ zero_extendqisi2
+ 445:Core/Src/hall_detection.c **** 				results.hall_polarity[i]=hall_direct;
+ 1726              		.loc 1 445 6 view .LVU493
+ 1727 0074 012A     		cmp	r2, #1
+ 1728 0076 EED1     		bne	.L133
+ARM GAS  /tmp/ccpXojyM.s 			page 44
+
+
+ 446:Core/Src/hall_detection.c **** 			}else{
+ 1729              		.loc 1 446 5 is_stmt 1 view .LVU494
+ 446:Core/Src/hall_detection.c **** 			}else{
+ 1730              		.loc 1 446 29 is_stmt 0 view .LVU495
+ 1731 0078 124A     		ldr	r2, .L146+4
+ 1732 007a 1A44     		add	r2, r2, r3
+ 1733 007c 0021     		movs	r1, #0
+ 1734 007e D171     		strb	r1, [r2, #7]
+ 1735 0080 EDE7     		b	.L132
+ 1736              	.L143:
+ 1737              	.LBE19:
+ 1738              	.LBB20:
  449:Core/Src/hall_detection.c **** 			}
- 450:Core/Src/hall_detection.c **** 		}else if(results.hall_polarity[i]==hall_direct){
- 1727              		.loc 1 450 9 is_stmt 1 view .LVU494
- 1728              		.loc 1 450 11 is_stmt 0 view .LVU495
- 1729 0076 002A     		cmp	r2, #0
-ARM GAS  /tmp/cc8kV50R.s 			page 44
+ 450:Core/Src/hall_detection.c **** 		}
+ 451:Core/Src/hall_detection.c **** 	}
+ 452:Core/Src/hall_detection.c **** 
+ 453:Core/Src/hall_detection.c **** 	for (uint32_t i = 0; i < number_of_phases; ++i) {
+ 1739              		.loc 1 453 16 view .LVU496
+ 1740 0082 0023     		movs	r3, #0
+ 1741              	.LVL94:
+ 1742              		.loc 1 453 16 view .LVU497
+ 1743 0084 04E0     		b	.L135
+ 1744              	.LVL95:
+ 1745              	.L145:
+ 454:Core/Src/hall_detection.c **** 		if(results.hall_polarity[i]==hall_inverse){//the "inverse polarity" from the hall with the curren
+ 455:Core/Src/hall_detection.c **** 				message[i*2]=' ';
+ 1746              		.loc 1 455 5 is_stmt 1 view .LVU498
+ 1747              		.loc 1 455 17 is_stmt 0 view .LVU499
+ 1748 0086 0E4A     		ldr	r2, .L146
+ 1749 0088 2021     		movs	r1, #32
+ 1750 008a 02F81310 		strb	r1, [r2, r3, lsl #1]
+ 1751              	.L137:
+ 453:Core/Src/hall_detection.c **** 		if(results.hall_polarity[i]==hall_inverse){//the "inverse polarity" from the hall with the curren
+ 1752              		.loc 1 453 45 discriminator 2 view .LVU500
+ 1753 008e 0133     		adds	r3, r3, #1
+ 1754              	.LVL96:
+ 1755              	.L135:
+ 453:Core/Src/hall_detection.c **** 		if(results.hall_polarity[i]==hall_inverse){//the "inverse polarity" from the hall with the curren
+ 1756              		.loc 1 453 2 discriminator 1 view .LVU501
+ 1757 0090 022B     		cmp	r3, #2
+ 1758 0092 0BD8     		bhi	.L144
+ 454:Core/Src/hall_detection.c **** 		if(results.hall_polarity[i]==hall_inverse){//the "inverse polarity" from the hall with the curren
+ 1759              		.loc 1 454 3 is_stmt 1 view .LVU502
+ 454:Core/Src/hall_detection.c **** 		if(results.hall_polarity[i]==hall_inverse){//the "inverse polarity" from the hall with the curren
+ 1760              		.loc 1 454 27 is_stmt 0 view .LVU503
+ 1761 0094 0B4A     		ldr	r2, .L146+4
+ 1762 0096 1A44     		add	r2, r2, r3
+ 1763 0098 D279     		ldrb	r2, [r2, #7]	@ zero_extendqisi2
+ 454:Core/Src/hall_detection.c **** 		if(results.hall_polarity[i]==hall_inverse){//the "inverse polarity" from the hall with the curren
+ 1764              		.loc 1 454 5 view .LVU504
+ 1765 009a 012A     		cmp	r2, #1
+ 1766 009c F3D0     		beq	.L145
+ 456:Core/Src/hall_detection.c **** 		}else if(results.hall_polarity[i]==hall_direct){
+ 1767              		.loc 1 456 9 is_stmt 1 view .LVU505
+ 1768              		.loc 1 456 11 is_stmt 0 view .LVU506
+ 1769 009e 002A     		cmp	r2, #0
+ 1770 00a0 F5D1     		bne	.L137
+ARM GAS  /tmp/ccpXojyM.s 			page 45
 
 
- 1730 0078 F5D1     		bne	.L134
- 451:Core/Src/hall_detection.c **** 			if(toggle[i]==0){
- 1731              		.loc 1 451 4 is_stmt 1 view .LVU496
- 1732              		.loc 1 451 13 is_stmt 0 view .LVU497
- 1733 007a 104A     		ldr	r2, .L143+8
- 1734 007c 52F82320 		ldr	r2, [r2, r3, lsl #2]
- 1735              		.loc 1 451 6 view .LVU498
- 1736 0080 4AB9     		cbnz	r2, .L135
- 452:Core/Src/hall_detection.c **** 				message[i*2]='!';
- 1737              		.loc 1 452 5 is_stmt 1 view .LVU499
- 1738              		.loc 1 452 17 is_stmt 0 view .LVU500
- 1739 0082 0C4A     		ldr	r2, .L143
- 1740 0084 2121     		movs	r1, #33
- 1741 0086 02F81310 		strb	r1, [r2, r3, lsl #1]
- 1742 008a ECE7     		b	.L134
- 1743              	.L133:
- 448:Core/Src/hall_detection.c **** 			}
- 1744              		.loc 1 448 5 is_stmt 1 view .LVU501
- 448:Core/Src/hall_detection.c **** 			}
- 1745              		.loc 1 448 17 is_stmt 0 view .LVU502
- 1746 008c 094A     		ldr	r2, .L143
- 1747 008e 2121     		movs	r1, #33
- 1748 0090 02F81310 		strb	r1, [r2, r3, lsl #1]
- 1749 0094 E7E7     		b	.L134
- 1750              	.L135:
- 453:Core/Src/hall_detection.c **** 			}else{
- 454:Core/Src/hall_detection.c **** 				message[i*2]=' ';
- 1751              		.loc 1 454 5 is_stmt 1 view .LVU503
- 1752              		.loc 1 454 17 is_stmt 0 view .LVU504
- 1753 0096 074A     		ldr	r2, .L143
- 1754 0098 2021     		movs	r1, #32
- 1755 009a 02F81310 		strb	r1, [r2, r3, lsl #1]
- 1756 009e E2E7     		b	.L134
- 1757              	.L141:
- 1758              		.loc 1 454 17 view .LVU505
- 1759              	.LBE19:
- 455:Core/Src/hall_detection.c **** 			}
- 456:Core/Src/hall_detection.c **** 		}
- 457:Core/Src/hall_detection.c **** 	}
- 458:Core/Src/hall_detection.c **** 
- 459:Core/Src/hall_detection.c **** 
- 460:Core/Src/hall_detection.c **** 	message[messageLength-2]='\n';//two last characters
- 1760              		.loc 1 460 2 is_stmt 1 view .LVU506
- 1761              		.loc 1 460 26 is_stmt 0 view .LVU507
- 1762 00a0 0449     		ldr	r1, .L143
- 1763 00a2 0A23     		movs	r3, #10
- 1764              	.LVL94:
- 1765              		.loc 1 460 26 view .LVU508
- 1766 00a4 8B71     		strb	r3, [r1, #6]
- 461:Core/Src/hall_detection.c **** 	message[messageLength-1]='\r';
- 1767              		.loc 1 461 2 is_stmt 1 view .LVU509
- 1768              		.loc 1 461 26 is_stmt 0 view .LVU510
- 1769 00a6 0D23     		movs	r3, #13
- 1770 00a8 CB71     		strb	r3, [r1, #7]
- 462:Core/Src/hall_detection.c **** 
- 463:Core/Src/hall_detection.c **** #ifdef TESTuart
- 464:Core/Src/hall_detection.c **** 	HAL_UART_Transmit_DMA(&huart2, &message, messageLength);
-ARM GAS  /tmp/cc8kV50R.s 			page 45
+ 457:Core/Src/hall_detection.c **** 				message[i*2]='!';
+ 1771              		.loc 1 457 5 is_stmt 1 view .LVU507
+ 1772              		.loc 1 457 17 is_stmt 0 view .LVU508
+ 1773 00a2 074A     		ldr	r2, .L146
+ 1774 00a4 2121     		movs	r1, #33
+ 1775 00a6 02F81310 		strb	r1, [r2, r3, lsl #1]
+ 1776 00aa F0E7     		b	.L137
+ 1777              	.L144:
+ 1778              	.LBE20:
+ 458:Core/Src/hall_detection.c **** 		}
+ 459:Core/Src/hall_detection.c **** 	}
+ 460:Core/Src/hall_detection.c **** 
+ 461:Core/Src/hall_detection.c **** 
+ 462:Core/Src/hall_detection.c **** 	message[messageLength-2]='\n';//two last characters
+ 1779              		.loc 1 462 2 is_stmt 1 view .LVU509
+ 1780              		.loc 1 462 26 is_stmt 0 view .LVU510
+ 1781 00ac 0449     		ldr	r1, .L146
+ 1782 00ae 0A23     		movs	r3, #10
+ 1783              	.LVL97:
+ 1784              		.loc 1 462 26 view .LVU511
+ 1785 00b0 8B71     		strb	r3, [r1, #6]
+ 463:Core/Src/hall_detection.c **** 	message[messageLength-1]='\r';
+ 1786              		.loc 1 463 2 is_stmt 1 view .LVU512
+ 1787              		.loc 1 463 26 is_stmt 0 view .LVU513
+ 1788 00b2 0D23     		movs	r3, #13
+ 1789 00b4 CB71     		strb	r3, [r1, #7]
+ 464:Core/Src/hall_detection.c **** 
+ 465:Core/Src/hall_detection.c **** #ifdef TESTuart
+ 466:Core/Src/hall_detection.c **** 	HAL_UART_Transmit_DMA(&huart2, &message, messageLength);
+ 1790              		.loc 1 466 2 is_stmt 1 view .LVU514
+ 1791 00b6 0822     		movs	r2, #8
+ 1792 00b8 0448     		ldr	r0, .L146+12
+ 1793 00ba FFF7FEFF 		bl	HAL_UART_Transmit_DMA
+ 1794              	.LVL98:
+ 467:Core/Src/hall_detection.c **** #endif
+ 468:Core/Src/hall_detection.c **** 
+ 469:Core/Src/hall_detection.c **** }
+ 1795              		.loc 1 469 1 is_stmt 0 view .LVU515
+ 1796 00be 08BD     		pop	{r3, pc}
+ 1797              	.L147:
+ 1798              		.align	2
+ 1799              	.L146:
+ 1800 00c0 00000000 		.word	message
+ 1801 00c4 00000000 		.word	results
+ 1802 00c8 00000000 		.word	.LANCHOR6
+ 1803 00cc 00000000 		.word	huart2
+ 1804              		.cfi_endproc
+ 1805              	.LFE249:
+ 1807              		.section	.text.evaluate_and_present_results,"ax",%progbits
+ 1808              		.align	1
+ 1809              		.global	evaluate_and_present_results
+ 1810              		.syntax unified
+ 1811              		.thumb
+ 1812              		.thumb_func
+ 1813              		.fpu fpv4-sp-d16
+ 1815              	evaluate_and_present_results:
+ 1816              	.LVL99:
+ARM GAS  /tmp/ccpXojyM.s 			page 46
 
 
- 1771              		.loc 1 464 2 is_stmt 1 view .LVU511
- 1772 00aa 0822     		movs	r2, #8
- 1773 00ac 0448     		ldr	r0, .L143+12
- 1774 00ae FFF7FEFF 		bl	HAL_UART_Transmit_DMA
- 1775              	.LVL95:
- 465:Core/Src/hall_detection.c **** #endif
- 466:Core/Src/hall_detection.c **** 
- 467:Core/Src/hall_detection.c **** }
- 1776              		.loc 1 467 1 is_stmt 0 view .LVU512
- 1777 00b2 08BD     		pop	{r3, pc}
- 1778              	.L144:
- 1779              		.align	2
- 1780              	.L143:
- 1781 00b4 00000000 		.word	message
- 1782 00b8 00000000 		.word	results
- 1783 00bc 00000000 		.word	.LANCHOR6
- 1784 00c0 00000000 		.word	huart2
- 1785              		.cfi_endproc
- 1786              	.LFE249:
- 1788              		.section	.text.evaluate_and_present_results,"ax",%progbits
- 1789              		.align	1
- 1790              		.global	evaluate_and_present_results
- 1791              		.syntax unified
- 1792              		.thumb
- 1793              		.thumb_func
- 1794              		.fpu fpv4-sp-d16
- 1796              	evaluate_and_present_results:
- 1797              	.LVL96:
- 1798              	.LFB243:
+ 1817              	.LFB243:
  236:Core/Src/hall_detection.c **** 	if(*enabled_or_disabled==detection_DISABLED){
- 1799              		.loc 1 236 131 is_stmt 1 view -0
- 1800              		.cfi_startproc
- 1801              		@ args = 0, pretend = 0, frame = 0
- 1802              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1818              		.loc 1 236 131 is_stmt 1 view -0
+ 1819              		.cfi_startproc
+ 1820              		@ args = 0, pretend = 0, frame = 0
+ 1821              		@ frame_needed = 0, uses_anonymous_args = 0
  237:Core/Src/hall_detection.c **** 		calculateElectricPeriod_inTicks(&results.electricPeriod_ticks);
- 1803              		.loc 1 237 2 view .LVU514
+ 1822              		.loc 1 237 2 view .LVU517
  237:Core/Src/hall_detection.c **** 		calculateElectricPeriod_inTicks(&results.electricPeriod_ticks);
- 1804              		.loc 1 237 5 is_stmt 0 view .LVU515
- 1805 0000 0378     		ldrb	r3, [r0]	@ zero_extendqisi2
- 1806              	.LVL97:
+ 1823              		.loc 1 237 5 is_stmt 0 view .LVU518
+ 1824 0000 0378     		ldrb	r3, [r0]	@ zero_extendqisi2
+ 1825              	.LVL100:
  237:Core/Src/hall_detection.c **** 		calculateElectricPeriod_inTicks(&results.electricPeriod_ticks);
- 1807              		.loc 1 237 4 view .LVU516
- 1808 0002 03B1     		cbz	r3, .L151
- 1809 0004 7047     		bx	lr
- 1810              	.L151:
+ 1826              		.loc 1 237 4 view .LVU519
+ 1827 0002 03B1     		cbz	r3, .L154
+ 1828 0004 7047     		bx	lr
+ 1829              	.L154:
  236:Core/Src/hall_detection.c **** 	if(*enabled_or_disabled==detection_DISABLED){
- 1811              		.loc 1 236 131 view .LVU517
- 1812 0006 10B5     		push	{r4, lr}
- 1813              	.LCFI20:
- 1814              		.cfi_def_cfa_offset 8
- 1815              		.cfi_offset 4, -8
- 1816              		.cfi_offset 14, -4
+ 1830              		.loc 1 236 131 view .LVU520
+ 1831 0006 10B5     		push	{r4, lr}
+ 1832              	.LCFI20:
+ 1833              		.cfi_def_cfa_offset 8
+ 1834              		.cfi_offset 4, -8
+ 1835              		.cfi_offset 14, -4
  238:Core/Src/hall_detection.c **** 		assign_closest_phase_to_hall(&results);
- 1817              		.loc 1 238 3 is_stmt 1 view .LVU518
- 1818 0008 064C     		ldr	r4, .L152
- 1819 000a 2046     		mov	r0, r4
- 1820              	.LVL98:
-ARM GAS  /tmp/cc8kV50R.s 			page 46
-
-
+ 1836              		.loc 1 238 3 is_stmt 1 view .LVU521
+ 1837 0008 064C     		ldr	r4, .L155
+ 1838 000a 2046     		mov	r0, r4
+ 1839              	.LVL101:
  238:Core/Src/hall_detection.c **** 		assign_closest_phase_to_hall(&results);
- 1821              		.loc 1 238 3 is_stmt 0 view .LVU519
- 1822 000c FFF7FEFF 		bl	calculateElectricPeriod_inTicks
- 1823              	.LVL99:
+ 1840              		.loc 1 238 3 is_stmt 0 view .LVU522
+ 1841 000c FFF7FEFF 		bl	calculateElectricPeriod_inTicks
+ 1842              	.LVL102:
  239:Core/Src/hall_detection.c **** 		assign_polarity(&results);
- 1824              		.loc 1 239 3 is_stmt 1 view .LVU520
- 1825 0010 2046     		mov	r0, r4
- 1826 0012 FFF7FEFF 		bl	assign_closest_phase_to_hall
- 1827              	.LVL100:
+ 1843              		.loc 1 239 3 is_stmt 1 view .LVU523
+ 1844 0010 2046     		mov	r0, r4
+ 1845 0012 FFF7FEFF 		bl	assign_closest_phase_to_hall
+ 1846              	.LVL103:
  240:Core/Src/hall_detection.c **** 		//swap_hall_gpios_with_detected_results(H1,H2,H3);
- 1828              		.loc 1 240 3 view .LVU521
- 1829 0016 2046     		mov	r0, r4
- 1830 0018 FFF7FEFF 		bl	assign_polarity
- 1831              	.LVL101:
+ 1847              		.loc 1 240 3 view .LVU524
+ 1848 0016 2046     		mov	r0, r4
+ 1849 0018 FFF7FEFF 		bl	assign_polarity
+ 1850              	.LVL104:
  242:Core/Src/hall_detection.c **** 	}
- 1832              		.loc 1 242 3 view .LVU522
- 1833 001c FFF7FEFF 		bl	present_results
- 1834              	.LVL102:
+ 1851              		.loc 1 242 3 view .LVU525
+ 1852 001c FFF7FEFF 		bl	present_results
+ 1853              	.LVL105:
  244:Core/Src/hall_detection.c **** 
- 1835              		.loc 1 244 1 is_stmt 0 view .LVU523
- 1836 0020 10BD     		pop	{r4, pc}
- 1837              	.L153:
- 1838 0022 00BF     		.align	2
- 1839              	.L152:
- 1840 0024 00000000 		.word	results
- 1841              		.cfi_endproc
- 1842              	.LFE243:
- 1844              		.section	.text.Hall_Identification_Test_measurement,"ax",%progbits
- 1845              		.align	1
- 1846              		.global	Hall_Identification_Test_measurement
- 1847              		.syntax unified
- 1848              		.thumb
- 1849              		.thumb_func
- 1850              		.fpu fpv4-sp-d16
- 1852              	Hall_Identification_Test_measurement:
- 1853              	.LVL103:
- 1854              	.LFB237:
- 107:Core/Src/hall_detection.c **** 	if(detection_state==detection_ENABLED){
- 1855              		.loc 1 107 4 is_stmt 1 view -0
- 1856              		.cfi_startproc
- 1857              		@ args = 4, pretend = 0, frame = 0
- 1858              		@ frame_needed = 0, uses_anonymous_args = 0
- 107:Core/Src/hall_detection.c **** 	if(detection_state==detection_ENABLED){
- 1859              		.loc 1 107 4 is_stmt 0 view .LVU525
- 1860 0000 F0B5     		push	{r4, r5, r6, r7, lr}
- 1861              	.LCFI21:
- 1862              		.cfi_def_cfa_offset 20
- 1863              		.cfi_offset 4, -20
- 1864              		.cfi_offset 5, -16
- 1865              		.cfi_offset 6, -12
- 1866              		.cfi_offset 7, -8
- 1867              		.cfi_offset 14, -4
- 1868 0002 83B0     		sub	sp, sp, #12
- 1869              	.LCFI22:
- 1870              		.cfi_def_cfa_offset 32
- 108:Core/Src/hall_detection.c **** 		signals_adquisition(H1,H2,H3,ADCcurrA,ADCcurrB);
- 1871              		.loc 1 108 2 is_stmt 1 view .LVU526
-ARM GAS  /tmp/cc8kV50R.s 			page 47
+ 1854              		.loc 1 244 1 is_stmt 0 view .LVU526
+ 1855 0020 10BD     		pop	{r4, pc}
+ 1856              	.L156:
+ 1857 0022 00BF     		.align	2
+ 1858              	.L155:
+ 1859 0024 00000000 		.word	results
+ 1860              		.cfi_endproc
+ 1861              	.LFE243:
+ 1863              		.section	.text.Hall_Identification_Test_measurement,"ax",%progbits
+ARM GAS  /tmp/ccpXojyM.s 			page 47
 
 
+ 1864              		.align	1
+ 1865              		.global	Hall_Identification_Test_measurement
+ 1866              		.syntax unified
+ 1867              		.thumb
+ 1868              		.thumb_func
+ 1869              		.fpu fpv4-sp-d16
+ 1871              	Hall_Identification_Test_measurement:
+ 1872              	.LVL106:
+ 1873              	.LFB237:
+ 107:Core/Src/hall_detection.c **** 	if(detection_state==detection_ENABLED){
+ 1874              		.loc 1 107 4 is_stmt 1 view -0
+ 1875              		.cfi_startproc
+ 1876              		@ args = 4, pretend = 0, frame = 0
+ 1877              		@ frame_needed = 0, uses_anonymous_args = 0
+ 107:Core/Src/hall_detection.c **** 	if(detection_state==detection_ENABLED){
+ 1878              		.loc 1 107 4 is_stmt 0 view .LVU528
+ 1879 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 1880              	.LCFI21:
+ 1881              		.cfi_def_cfa_offset 20
+ 1882              		.cfi_offset 4, -20
+ 1883              		.cfi_offset 5, -16
+ 1884              		.cfi_offset 6, -12
+ 1885              		.cfi_offset 7, -8
+ 1886              		.cfi_offset 14, -4
+ 1887 0002 83B0     		sub	sp, sp, #12
+ 1888              	.LCFI22:
+ 1889              		.cfi_def_cfa_offset 32
  108:Core/Src/hall_detection.c **** 		signals_adquisition(H1,H2,H3,ADCcurrA,ADCcurrB);
- 1872              		.loc 1 108 20 is_stmt 0 view .LVU527
- 1873 0004 0F4C     		ldr	r4, .L158
- 1874 0006 2478     		ldrb	r4, [r4]	@ zero_extendqisi2
+ 1890              		.loc 1 108 2 is_stmt 1 view .LVU529
  108:Core/Src/hall_detection.c **** 		signals_adquisition(H1,H2,H3,ADCcurrA,ADCcurrB);
- 1875              		.loc 1 108 4 view .LVU528
- 1876 0008 012C     		cmp	r4, #1
- 1877 000a 01D0     		beq	.L157
- 1878              	.LVL104:
- 1879              	.L154:
+ 1891              		.loc 1 108 20 is_stmt 0 view .LVU530
+ 1892 0004 0F4C     		ldr	r4, .L161
+ 1893 0006 2478     		ldrb	r4, [r4]	@ zero_extendqisi2
+ 108:Core/Src/hall_detection.c **** 		signals_adquisition(H1,H2,H3,ADCcurrA,ADCcurrB);
+ 1894              		.loc 1 108 4 view .LVU531
+ 1895 0008 012C     		cmp	r4, #1
+ 1896 000a 01D0     		beq	.L160
+ 1897              	.LVL107:
+ 1898              	.L157:
  116:Core/Src/hall_detection.c **** 
- 1880              		.loc 1 116 1 view .LVU529
- 1881 000c 03B0     		add	sp, sp, #12
- 1882              	.LCFI23:
- 1883              		.cfi_remember_state
- 1884              		.cfi_def_cfa_offset 20
- 1885              		@ sp needed
- 1886 000e F0BD     		pop	{r4, r5, r6, r7, pc}
- 1887              	.LVL105:
- 1888              	.L157:
- 1889              	.LCFI24:
- 1890              		.cfi_restore_state
+ 1899              		.loc 1 116 1 view .LVU532
+ 1900 000c 03B0     		add	sp, sp, #12
+ 1901              	.LCFI23:
+ 1902              		.cfi_remember_state
+ 1903              		.cfi_def_cfa_offset 20
+ 1904              		@ sp needed
+ 1905 000e F0BD     		pop	{r4, r5, r6, r7, pc}
+ 1906              	.LVL108:
+ 1907              	.L160:
+ 1908              	.LCFI24:
+ 1909              		.cfi_restore_state
  116:Core/Src/hall_detection.c **** 
- 1891              		.loc 1 116 1 view .LVU530
- 1892 0010 1646     		mov	r6, r2
- 1893 0012 0D46     		mov	r5, r1
- 1894 0014 0446     		mov	r4, r0
+ 1910              		.loc 1 116 1 view .LVU533
+ 1911 0010 1646     		mov	r6, r2
+ 1912 0012 0D46     		mov	r5, r1
+ 1913 0014 0446     		mov	r4, r0
  109:Core/Src/hall_detection.c **** 		detect_all_zerocrossings();
- 1895              		.loc 1 109 3 is_stmt 1 view .LVU531
- 1896 0016 089A     		ldr	r2, [sp, #32]
- 1897              	.LVL106:
+ARM GAS  /tmp/ccpXojyM.s 			page 48
+
+
+ 1914              		.loc 1 109 3 is_stmt 1 view .LVU534
+ 1915 0016 089A     		ldr	r2, [sp, #32]
+ 1916              	.LVL109:
  109:Core/Src/hall_detection.c **** 		detect_all_zerocrossings();
- 1898              		.loc 1 109 3 is_stmt 0 view .LVU532
- 1899 0018 0092     		str	r2, [sp]
- 1900 001a 3246     		mov	r2, r6
- 1901 001c FFF7FEFF 		bl	signals_adquisition
- 1902              	.LVL107:
+ 1917              		.loc 1 109 3 is_stmt 0 view .LVU535
+ 1918 0018 0092     		str	r2, [sp]
+ 1919 001a 3246     		mov	r2, r6
+ 1920 001c FFF7FEFF 		bl	signals_adquisition
+ 1921              	.LVL110:
  110:Core/Src/hall_detection.c **** 		end_detection(&detection_state);
- 1903              		.loc 1 110 3 is_stmt 1 view .LVU533
- 1904 0020 FFF7FEFF 		bl	detect_all_zerocrossings
- 1905              	.LVL108:
+ 1922              		.loc 1 110 3 is_stmt 1 view .LVU536
+ 1923 0020 FFF7FEFF 		bl	detect_all_zerocrossings
+ 1924              	.LVL111:
  111:Core/Src/hall_detection.c **** 		evaluate_and_present_results(&detection_state,H1,H2,H3);
- 1906              		.loc 1 111 3 view .LVU534
- 1907 0024 074F     		ldr	r7, .L158
- 1908 0026 3846     		mov	r0, r7
- 1909 0028 FFF7FEFF 		bl	end_detection
- 1910              	.LVL109:
+ 1925              		.loc 1 111 3 view .LVU537
+ 1926 0024 074F     		ldr	r7, .L161
+ 1927 0026 3846     		mov	r0, r7
+ 1928 0028 FFF7FEFF 		bl	end_detection
+ 1929              	.LVL112:
  112:Core/Src/hall_detection.c **** 		ticks++;
- 1911              		.loc 1 112 3 view .LVU535
- 1912 002c 3346     		mov	r3, r6
- 1913 002e 2A46     		mov	r2, r5
- 1914 0030 2146     		mov	r1, r4
- 1915 0032 3846     		mov	r0, r7
- 1916 0034 FFF7FEFF 		bl	evaluate_and_present_results
- 1917              	.LVL110:
+ 1930              		.loc 1 112 3 view .LVU538
+ 1931 002c 3346     		mov	r3, r6
+ 1932 002e 2A46     		mov	r2, r5
+ 1933 0030 2146     		mov	r1, r4
+ 1934 0032 3846     		mov	r0, r7
+ 1935 0034 FFF7FEFF 		bl	evaluate_and_present_results
+ 1936              	.LVL113:
  113:Core/Src/hall_detection.c **** 	}
- 1918              		.loc 1 113 3 view .LVU536
-ARM GAS  /tmp/cc8kV50R.s 			page 48
-
-
+ 1937              		.loc 1 113 3 view .LVU539
  113:Core/Src/hall_detection.c **** 	}
- 1919              		.loc 1 113 8 is_stmt 0 view .LVU537
- 1920 0038 034A     		ldr	r2, .L158+4
- 1921 003a 1368     		ldr	r3, [r2]
- 1922 003c 0133     		adds	r3, r3, #1
- 1923 003e 1360     		str	r3, [r2]
+ 1938              		.loc 1 113 8 is_stmt 0 view .LVU540
+ 1939 0038 034A     		ldr	r2, .L161+4
+ 1940 003a 1368     		ldr	r3, [r2]
+ 1941 003c 0133     		adds	r3, r3, #1
+ 1942 003e 1360     		str	r3, [r2]
  116:Core/Src/hall_detection.c **** 
- 1924              		.loc 1 116 1 view .LVU538
- 1925 0040 E4E7     		b	.L154
- 1926              	.L159:
- 1927 0042 00BF     		.align	2
- 1928              	.L158:
- 1929 0044 00000000 		.word	.LANCHOR0
- 1930 0048 00000000 		.word	.LANCHOR2
- 1931              		.cfi_endproc
- 1932              	.LFE237:
- 1934              		.global	halls
- 1935              		.global	currents
- 1936              		.global	toggle
- 1937              		.global	hall_orderC
- 1938              		.global	hall_orderB
- 1939              		.global	hall_orderA
- 1940              		.comm	message,8,4
- 1941              		.comm	results,12,4
- 1942              		.comm	hallC,44,4
- 1943              		.comm	hallB,44,4
- 1944              		.comm	hallA,44,4
- 1945              		.comm	currC,44,4
- 1946              		.comm	currB,44,4
- 1947              		.comm	currA,44,4
- 1948              		.global	currentADCoffset
- 1949              		.global	ticks
- 1950              		.global	detection_state
- 1951              		.section	.bss.detection_state,"aw",%nobits
- 1952              		.set	.LANCHOR0,. + 0
- 1955              	detection_state:
- 1956 0000 00       		.space	1
- 1957              		.section	.bss.hall_orderA,"aw",%nobits
- 1958              		.align	2
- 1959              		.set	.LANCHOR3,. + 0
- 1962              	hall_orderA:
- 1963 0000 00000000 		.space	12
- 1963      00000000 
- 1963      00000000 
- 1964              		.section	.bss.hall_orderB,"aw",%nobits
- 1965              		.align	2
- 1966              		.set	.LANCHOR4,. + 0
- 1969              	hall_orderB:
- 1970 0000 00000000 		.space	12
- 1970      00000000 
- 1970      00000000 
- 1971              		.section	.bss.hall_orderC,"aw",%nobits
- 1972              		.align	2
- 1973              		.set	.LANCHOR5,. + 0
- 1976              	hall_orderC:
- 1977 0000 00000000 		.space	12
- 1977      00000000 
-ARM GAS  /tmp/cc8kV50R.s 			page 49
+ 1943              		.loc 1 116 1 view .LVU541
+ 1944 0040 E4E7     		b	.L157
+ 1945              	.L162:
+ 1946 0042 00BF     		.align	2
+ 1947              	.L161:
+ 1948 0044 00000000 		.word	.LANCHOR0
+ 1949 0048 00000000 		.word	.LANCHOR2
+ 1950              		.cfi_endproc
+ 1951              	.LFE237:
+ 1953              		.global	halls
+ 1954              		.global	currents
+ 1955              		.global	toggle
+ 1956              		.global	hall_orderC
+ 1957              		.global	hall_orderB
+ 1958              		.global	hall_orderA
+ 1959              		.comm	message,8,4
+ 1960              		.comm	results,12,4
+ 1961              		.comm	hallC,44,4
+ 1962              		.comm	hallB,44,4
+ 1963              		.comm	hallA,44,4
+ 1964              		.comm	currC,44,4
+ARM GAS  /tmp/ccpXojyM.s 			page 49
 
 
- 1977      00000000 
- 1978              		.section	.bss.ticks,"aw",%nobits
- 1979              		.align	2
- 1980              		.set	.LANCHOR2,. + 0
- 1983              	ticks:
- 1984 0000 00000000 		.space	4
- 1985              		.section	.bss.toggle,"aw",%nobits
- 1986              		.align	2
- 1987              		.set	.LANCHOR6,. + 0
- 1990              	toggle:
- 1991 0000 00000000 		.space	12
- 1991      00000000 
- 1991      00000000 
- 1992              		.section	.data.currentADCoffset,"aw"
- 1993              		.align	2
- 1994              		.set	.LANCHOR1,. + 0
- 1997              	currentADCoffset:
- 1998 0000 FF070000 		.word	2047
- 1999              		.section	.data.currents,"aw"
- 2000              		.align	2
- 2001              		.set	.LANCHOR7,. + 0
- 2004              	currents:
- 2005 0000 00000000 		.word	currA
- 2006 0004 00000000 		.word	currB
- 2007 0008 00000000 		.word	currC
- 2008              		.section	.data.halls,"aw"
- 2009              		.align	2
- 2010              		.set	.LANCHOR8,. + 0
- 2013              	halls:
- 2014 0000 00000000 		.word	hallA
- 2015 0004 00000000 		.word	hallB
- 2016 0008 00000000 		.word	hallC
- 2017              		.text
- 2018              	.Letext0:
- 2019              		.file 2 "/usr/lib/gcc/arm-none-eabi/8.3.1/include/stdint.h"
- 2020              		.file 3 "Drivers/CMSIS/Include/core_cm4.h"
- 2021              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
- 2022              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f446xx.h"
- 2023              		.file 6 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
- 2024              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
- 2025              		.file 8 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
- 2026              		.file 9 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h"
- 2027              		.file 10 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
- 2028              		.file 11 "Core/Inc/main.h"
- 2029              		.file 12 "Core/Inc/hall_detection.h"
- 2030              		.file 13 "Core/Inc/usart.h"
-ARM GAS  /tmp/cc8kV50R.s 			page 50
+ 1965              		.comm	currB,44,4
+ 1966              		.comm	currA,44,4
+ 1967              		.global	currentADCoffset
+ 1968              		.global	ticks
+ 1969              		.global	detection_state
+ 1970              		.section	.bss.detection_state,"aw",%nobits
+ 1971              		.set	.LANCHOR0,. + 0
+ 1974              	detection_state:
+ 1975 0000 00       		.space	1
+ 1976              		.section	.bss.hall_orderA,"aw",%nobits
+ 1977              		.align	2
+ 1978              		.set	.LANCHOR3,. + 0
+ 1981              	hall_orderA:
+ 1982 0000 00000000 		.space	12
+ 1982      00000000 
+ 1982      00000000 
+ 1983              		.section	.bss.hall_orderB,"aw",%nobits
+ 1984              		.align	2
+ 1985              		.set	.LANCHOR4,. + 0
+ 1988              	hall_orderB:
+ 1989 0000 00000000 		.space	12
+ 1989      00000000 
+ 1989      00000000 
+ 1990              		.section	.bss.hall_orderC,"aw",%nobits
+ 1991              		.align	2
+ 1992              		.set	.LANCHOR5,. + 0
+ 1995              	hall_orderC:
+ 1996 0000 00000000 		.space	12
+ 1996      00000000 
+ 1996      00000000 
+ 1997              		.section	.bss.ticks,"aw",%nobits
+ 1998              		.align	2
+ 1999              		.set	.LANCHOR2,. + 0
+ 2002              	ticks:
+ 2003 0000 00000000 		.space	4
+ 2004              		.section	.bss.toggle,"aw",%nobits
+ 2005              		.align	2
+ 2006              		.set	.LANCHOR6,. + 0
+ 2009              	toggle:
+ 2010 0000 00000000 		.space	12
+ 2010      00000000 
+ 2010      00000000 
+ 2011              		.section	.data.currentADCoffset,"aw"
+ 2012              		.align	2
+ 2013              		.set	.LANCHOR1,. + 0
+ 2016              	currentADCoffset:
+ 2017 0000 FF070000 		.word	2047
+ 2018              		.section	.data.currents,"aw"
+ 2019              		.align	2
+ 2020              		.set	.LANCHOR7,. + 0
+ 2023              	currents:
+ 2024 0000 00000000 		.word	currA
+ 2025 0004 00000000 		.word	currB
+ 2026 0008 00000000 		.word	currC
+ 2027              		.section	.data.halls,"aw"
+ 2028              		.align	2
+ 2029              		.set	.LANCHOR8,. + 0
+ARM GAS  /tmp/ccpXojyM.s 			page 50
+
+
+ 2032              	halls:
+ 2033 0000 00000000 		.word	hallA
+ 2034 0004 00000000 		.word	hallB
+ 2035 0008 00000000 		.word	hallC
+ 2036              		.text
+ 2037              	.Letext0:
+ 2038              		.file 2 "/usr/lib/gcc/arm-none-eabi/8.3.1/include/stdint.h"
+ 2039              		.file 3 "Drivers/CMSIS/Include/core_cm4.h"
+ 2040              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
+ 2041              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f446xx.h"
+ 2042              		.file 6 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 2043              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+ 2044              		.file 8 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 2045              		.file 9 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h"
+ 2046              		.file 10 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ 2047              		.file 11 "Core/Inc/main.h"
+ 2048              		.file 12 "Core/Inc/hall_detection.h"
+ 2049              		.file 13 "Core/Inc/usart.h"
+ARM GAS  /tmp/ccpXojyM.s 			page 51
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 hall_detection.c
-     /tmp/cc8kV50R.s:18     .text.Hall_start_detection:0000000000000000 $t
-     /tmp/cc8kV50R.s:26     .text.Hall_start_detection:0000000000000000 Hall_start_detection
-     /tmp/cc8kV50R.s:44     .text.Hall_start_detection:0000000000000008 $d
-     /tmp/cc8kV50R.s:49     .text.Hall_is_detection_finished:0000000000000000 $t
-     /tmp/cc8kV50R.s:56     .text.Hall_is_detection_finished:0000000000000000 Hall_is_detection_finished
-     /tmp/cc8kV50R.s:81     .text.Hall_is_detection_finished:0000000000000010 $d
-     /tmp/cc8kV50R.s:86     .text.signals_adquisition:0000000000000000 $t
-     /tmp/cc8kV50R.s:93     .text.signals_adquisition:0000000000000000 signals_adquisition
-     /tmp/cc8kV50R.s:204    .text.signals_adquisition:0000000000000060 $d
+     /tmp/ccpXojyM.s:18     .text.Hall_start_detection:0000000000000000 $t
+     /tmp/ccpXojyM.s:26     .text.Hall_start_detection:0000000000000000 Hall_start_detection
+     /tmp/ccpXojyM.s:44     .text.Hall_start_detection:0000000000000008 $d
+     /tmp/ccpXojyM.s:49     .text.Hall_is_detection_finished:0000000000000000 $t
+     /tmp/ccpXojyM.s:56     .text.Hall_is_detection_finished:0000000000000000 Hall_is_detection_finished
+     /tmp/ccpXojyM.s:81     .text.Hall_is_detection_finished:0000000000000010 $d
+     /tmp/ccpXojyM.s:86     .text.signals_adquisition:0000000000000000 $t
+     /tmp/ccpXojyM.s:93     .text.signals_adquisition:0000000000000000 signals_adquisition
+     /tmp/ccpXojyM.s:204    .text.signals_adquisition:0000000000000060 $d
                             *COM*:000000000000002c currA
                             *COM*:000000000000002c currB
                             *COM*:000000000000002c currC
                             *COM*:000000000000002c hallA
                             *COM*:000000000000002c hallB
                             *COM*:000000000000002c hallC
-     /tmp/cc8kV50R.s:214    .text.detect_current_zerocrossings:0000000000000000 $t
-     /tmp/cc8kV50R.s:221    .text.detect_current_zerocrossings:0000000000000000 detect_current_zerocrossings
-     /tmp/cc8kV50R.s:342    .text.detect_current_zerocrossings:000000000000007c $d
-     /tmp/cc8kV50R.s:348    .text.detect_hall_zerocrossings:0000000000000000 $t
-     /tmp/cc8kV50R.s:355    .text.detect_hall_zerocrossings:0000000000000000 detect_hall_zerocrossings
-     /tmp/cc8kV50R.s:427    .text.detect_hall_zerocrossings:000000000000003c $d
-     /tmp/cc8kV50R.s:432    .text.detect_all_zerocrossings:0000000000000000 $t
-     /tmp/cc8kV50R.s:439    .text.detect_all_zerocrossings:0000000000000000 detect_all_zerocrossings
-     /tmp/cc8kV50R.s:490    .text.detect_all_zerocrossings:0000000000000034 $d
-     /tmp/cc8kV50R.s:501    .text.end_detection:0000000000000000 $t
-     /tmp/cc8kV50R.s:508    .text.end_detection:0000000000000000 end_detection
-     /tmp/cc8kV50R.s:576    .text.end_detection:0000000000000048 $d
-     /tmp/cc8kV50R.s:587    .text.swap_hall_gpios_with_detected_results:0000000000000000 $t
-     /tmp/cc8kV50R.s:594    .text.swap_hall_gpios_with_detected_results:0000000000000000 swap_hall_gpios_with_detected_results
-     /tmp/cc8kV50R.s:816    .text.swap_hall_gpios_with_detected_results:00000000000000f8 $d
+     /tmp/ccpXojyM.s:214    .text.detect_current_zerocrossings:0000000000000000 $t
+     /tmp/ccpXojyM.s:221    .text.detect_current_zerocrossings:0000000000000000 detect_current_zerocrossings
+     /tmp/ccpXojyM.s:342    .text.detect_current_zerocrossings:000000000000007c $d
+     /tmp/ccpXojyM.s:348    .text.detect_hall_zerocrossings:0000000000000000 $t
+     /tmp/ccpXojyM.s:355    .text.detect_hall_zerocrossings:0000000000000000 detect_hall_zerocrossings
+     /tmp/ccpXojyM.s:427    .text.detect_hall_zerocrossings:000000000000003c $d
+     /tmp/ccpXojyM.s:432    .text.detect_all_zerocrossings:0000000000000000 $t
+     /tmp/ccpXojyM.s:439    .text.detect_all_zerocrossings:0000000000000000 detect_all_zerocrossings
+     /tmp/ccpXojyM.s:490    .text.detect_all_zerocrossings:0000000000000034 $d
+     /tmp/ccpXojyM.s:501    .text.end_detection:0000000000000000 $t
+     /tmp/ccpXojyM.s:508    .text.end_detection:0000000000000000 end_detection
+     /tmp/ccpXojyM.s:576    .text.end_detection:0000000000000048 $d
+     /tmp/ccpXojyM.s:587    .text.swap_hall_gpios_with_detected_results:0000000000000000 $t
+     /tmp/ccpXojyM.s:594    .text.swap_hall_gpios_with_detected_results:0000000000000000 swap_hall_gpios_with_detected_results
+     /tmp/ccpXojyM.s:816    .text.swap_hall_gpios_with_detected_results:00000000000000f8 $d
                             *COM*:000000000000000c results
-     /tmp/cc8kV50R.s:821    .text.calculateElectricPeriod_inTicks:0000000000000000 $t
-     /tmp/cc8kV50R.s:828    .text.calculateElectricPeriod_inTicks:0000000000000000 calculateElectricPeriod_inTicks
-     /tmp/cc8kV50R.s:953    .text.calculateElectricPeriod_inTicks:0000000000000068 $d
-     /tmp/cc8kV50R.s:963    .text.absolute:0000000000000000 $t
-     /tmp/cc8kV50R.s:970    .text.absolute:0000000000000000 absolute
-     /tmp/cc8kV50R.s:990    .text.assign_closest_phase_to_hall:0000000000000000 $t
-     /tmp/cc8kV50R.s:997    .text.assign_closest_phase_to_hall:0000000000000000 assign_closest_phase_to_hall
-     /tmp/cc8kV50R.s:1478   .text.assign_closest_phase_to_hall:0000000000000228 $d
-     /tmp/cc8kV50R.s:1494   .text.assign_polarity:0000000000000000 $t
-     /tmp/cc8kV50R.s:1501   .text.assign_polarity:0000000000000000 assign_polarity
-     /tmp/cc8kV50R.s:1578   .text.assign_polarity:0000000000000044 $d
-     /tmp/cc8kV50R.s:1584   .text.present_results:0000000000000000 $t
-     /tmp/cc8kV50R.s:1591   .text.present_results:0000000000000000 present_results
-     /tmp/cc8kV50R.s:1781   .text.present_results:00000000000000b4 $d
+     /tmp/ccpXojyM.s:821    .text.calculateElectricPeriod_inTicks:0000000000000000 $t
+     /tmp/ccpXojyM.s:828    .text.calculateElectricPeriod_inTicks:0000000000000000 calculateElectricPeriod_inTicks
+     /tmp/ccpXojyM.s:953    .text.calculateElectricPeriod_inTicks:0000000000000068 $d
+     /tmp/ccpXojyM.s:963    .text.absolute:0000000000000000 $t
+     /tmp/ccpXojyM.s:970    .text.absolute:0000000000000000 absolute
+     /tmp/ccpXojyM.s:990    .text.assign_closest_phase_to_hall:0000000000000000 $t
+     /tmp/ccpXojyM.s:997    .text.assign_closest_phase_to_hall:0000000000000000 assign_closest_phase_to_hall
+     /tmp/ccpXojyM.s:1478   .text.assign_closest_phase_to_hall:0000000000000228 $d
+     /tmp/ccpXojyM.s:1494   .text.assign_polarity:0000000000000000 $t
+     /tmp/ccpXojyM.s:1501   .text.assign_polarity:0000000000000000 assign_polarity
+     /tmp/ccpXojyM.s:1578   .text.assign_polarity:0000000000000044 $d
+     /tmp/ccpXojyM.s:1584   .text.present_results:0000000000000000 $t
+     /tmp/ccpXojyM.s:1591   .text.present_results:0000000000000000 present_results
+     /tmp/ccpXojyM.s:1800   .text.present_results:00000000000000c0 $d
                             *COM*:0000000000000008 message
-     /tmp/cc8kV50R.s:1789   .text.evaluate_and_present_results:0000000000000000 $t
-     /tmp/cc8kV50R.s:1796   .text.evaluate_and_present_results:0000000000000000 evaluate_and_present_results
-     /tmp/cc8kV50R.s:1840   .text.evaluate_and_present_results:0000000000000024 $d
-     /tmp/cc8kV50R.s:1845   .text.Hall_Identification_Test_measurement:0000000000000000 $t
-     /tmp/cc8kV50R.s:1852   .text.Hall_Identification_Test_measurement:0000000000000000 Hall_Identification_Test_measurement
-     /tmp/cc8kV50R.s:1929   .text.Hall_Identification_Test_measurement:0000000000000044 $d
-     /tmp/cc8kV50R.s:2013   .data.halls:0000000000000000 halls
-     /tmp/cc8kV50R.s:2004   .data.currents:0000000000000000 currents
-     /tmp/cc8kV50R.s:1990   .bss.toggle:0000000000000000 toggle
-ARM GAS  /tmp/cc8kV50R.s 			page 51
+     /tmp/ccpXojyM.s:1808   .text.evaluate_and_present_results:0000000000000000 $t
+     /tmp/ccpXojyM.s:1815   .text.evaluate_and_present_results:0000000000000000 evaluate_and_present_results
+     /tmp/ccpXojyM.s:1859   .text.evaluate_and_present_results:0000000000000024 $d
+     /tmp/ccpXojyM.s:1864   .text.Hall_Identification_Test_measurement:0000000000000000 $t
+     /tmp/ccpXojyM.s:1871   .text.Hall_Identification_Test_measurement:0000000000000000 Hall_Identification_Test_measurement
+     /tmp/ccpXojyM.s:1948   .text.Hall_Identification_Test_measurement:0000000000000044 $d
+     /tmp/ccpXojyM.s:2032   .data.halls:0000000000000000 halls
+     /tmp/ccpXojyM.s:2023   .data.currents:0000000000000000 currents
+     /tmp/ccpXojyM.s:2009   .bss.toggle:0000000000000000 toggle
+ARM GAS  /tmp/ccpXojyM.s 			page 52
 
 
-     /tmp/cc8kV50R.s:1976   .bss.hall_orderC:0000000000000000 hall_orderC
-     /tmp/cc8kV50R.s:1969   .bss.hall_orderB:0000000000000000 hall_orderB
-     /tmp/cc8kV50R.s:1962   .bss.hall_orderA:0000000000000000 hall_orderA
-     /tmp/cc8kV50R.s:1997   .data.currentADCoffset:0000000000000000 currentADCoffset
-     /tmp/cc8kV50R.s:1983   .bss.ticks:0000000000000000 ticks
-     /tmp/cc8kV50R.s:1955   .bss.detection_state:0000000000000000 detection_state
-     /tmp/cc8kV50R.s:1956   .bss.detection_state:0000000000000000 $d
-     /tmp/cc8kV50R.s:1958   .bss.hall_orderA:0000000000000000 $d
-     /tmp/cc8kV50R.s:1965   .bss.hall_orderB:0000000000000000 $d
-     /tmp/cc8kV50R.s:1972   .bss.hall_orderC:0000000000000000 $d
-     /tmp/cc8kV50R.s:1979   .bss.ticks:0000000000000000 $d
-     /tmp/cc8kV50R.s:1986   .bss.toggle:0000000000000000 $d
-     /tmp/cc8kV50R.s:1993   .data.currentADCoffset:0000000000000000 $d
-     /tmp/cc8kV50R.s:2000   .data.currents:0000000000000000 $d
-     /tmp/cc8kV50R.s:2009   .data.halls:0000000000000000 $d
+     /tmp/ccpXojyM.s:1995   .bss.hall_orderC:0000000000000000 hall_orderC
+     /tmp/ccpXojyM.s:1988   .bss.hall_orderB:0000000000000000 hall_orderB
+     /tmp/ccpXojyM.s:1981   .bss.hall_orderA:0000000000000000 hall_orderA
+     /tmp/ccpXojyM.s:2016   .data.currentADCoffset:0000000000000000 currentADCoffset
+     /tmp/ccpXojyM.s:2002   .bss.ticks:0000000000000000 ticks
+     /tmp/ccpXojyM.s:1974   .bss.detection_state:0000000000000000 detection_state
+     /tmp/ccpXojyM.s:1975   .bss.detection_state:0000000000000000 $d
+     /tmp/ccpXojyM.s:1977   .bss.hall_orderA:0000000000000000 $d
+     /tmp/ccpXojyM.s:1984   .bss.hall_orderB:0000000000000000 $d
+     /tmp/ccpXojyM.s:1991   .bss.hall_orderC:0000000000000000 $d
+     /tmp/ccpXojyM.s:1998   .bss.ticks:0000000000000000 $d
+     /tmp/ccpXojyM.s:2005   .bss.toggle:0000000000000000 $d
+     /tmp/ccpXojyM.s:2012   .data.currentADCoffset:0000000000000000 $d
+     /tmp/ccpXojyM.s:2019   .data.currents:0000000000000000 $d
+     /tmp/ccpXojyM.s:2028   .data.halls:0000000000000000 $d
 
 UNDEFINED SYMBOLS
 HAL_GPIO_ReadPin
