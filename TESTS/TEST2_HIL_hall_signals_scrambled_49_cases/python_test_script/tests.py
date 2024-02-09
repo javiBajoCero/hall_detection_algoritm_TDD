@@ -168,5 +168,8 @@ def main():
             if messages[i].replace('\r','')!=receivedMessages[i]:
                 print(f"error in test case number {i}, it was supposed to be:{messages[i]} instead of: {receivedMessages[i]}")
         sys.exit(-1);
-        
+     
+
+sys.stdout = open('tests_python_console_dump.txt', 'w');   
 main()
+sys.stdout.close();
