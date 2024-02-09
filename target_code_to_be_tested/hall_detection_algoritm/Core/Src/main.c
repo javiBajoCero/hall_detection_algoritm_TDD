@@ -118,10 +118,14 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  Hall_start_detection();
   while (1)
   {
-	  HAL_Delay(100);
-	  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+	  if(Hall_is_detection_finished()){
+		  HAL_Delay(100);
+		  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+	  }
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

@@ -59,25 +59,16 @@ typedef struct{
 }detection_results_struct;
 
 
+void Hall_start_detection();
+uint32_t Hall_is_detection_finished();
+
 void Hall_Identification_Test_measurement(
-		detection_state_enum* enabled_or_disabled,
 		hall_pin_info* H1,
 		hall_pin_info* H2,
 		hall_pin_info* H3,
 		uint16_t* ADCcurrA,
 		uint16_t* ADCcurrB
 		);
-//devolver punteros a H1 H2 H3 gpio->IDR , las polaridades son otro asunto
-
-//void Hall_Identification_Test_measurement(
-//		detection_state_enum* enable,
-//		uint8_t *H1,
-//		uint8_t *H2,
-//		uint8_t *H3,
-//		uint8_t *polarityH1,
-//		uint8_t *polarityH2,
-//		uint8_t *polarityH3,
-//		);
 
 
 #endif /* INC_HALL_DETECTION_H_ */

@@ -20,6 +20,8 @@
 #define messageLength (number_of_phases*2)+2
 
 //local variables
+detection_state_enum detection_state=detection_DISABLED;
+
 uint32_t ticks=0; 								/*!< ticks are the time measurement unit of this algorithm, each run of the algorithm (0.05s) the tick is incremented +1 */
 uint32_t currentADCoffset=(4096-1)/2;			/*!< the current waves zerocross is assumed to be at 3,3v/2= 1,65V, because thats how its defined in the emulator */
 current_or_hall_measurements_struct currA;		/*!< contains all variables relevant for currA measurements*/
@@ -43,8 +45,10 @@ current_or_hall_measurements_struct *currents[number_of_phases]={&currA,&currB,&
 current_or_hall_measurements_struct *halls[number_of_phases]={&hallA,&hallB,&hallC};
 
 //all functions declared inside this .c are listed here:
+void Hall_start_detection();
+uint32_t Hall_is_detection_finished();
+
 void Hall_Identification_Test_measurement(
-		detection_state_enum* enabled_or_disabled,
 		hall_pin_info* H1,
 		hall_pin_info* H2,
 		hall_pin_info* H3,
@@ -59,6 +63,7 @@ void signals_adquisition(
 		uint16_t* ADCcurrA,
 		uint16_t* ADCcurrB
 		);
+
 void detect_all_zerocrossings();
 void detect_current_zerocrossings(current_or_hall_measurements_struct* currx);
 void detect_hall_zerocrossings(current_or_hall_measurements_struct* hallx);
@@ -77,23 +82,34 @@ int32_t absolute(int32_t x);
 void assign_polarity(detection_results_struct* res);
 void present_results();
 
+
+void Hall_start_detection(){
+	detection_state=detection_ENABLED;
+}
+
+uint32_t Hall_is_detection_finished(){
+	if(detection_state==detection_ENABLED){
+		return 0;
+	}else{
+		return 1;
+	}
+}
 /**
 * \brief
 * \param
 */
 void Hall_Identification_Test_measurement(
-		detection_state_enum* enabled_or_disabled,
 		hall_pin_info* H1,
 		hall_pin_info* H2,
 		hall_pin_info* H3,
 		uint16_t* ADCcurrA,
 		uint16_t* ADCcurrB
 		){
-	if(*enabled_or_disabled==detection_ENABLED){
+	if(detection_state==detection_ENABLED){
 		signals_adquisition(H1,H2,H3,ADCcurrA,ADCcurrB);
 		detect_all_zerocrossings();
-		end_detection(enabled_or_disabled);
-		evaluate_and_present_results(enabled_or_disabled,H1,H2,H3);
+		end_detection(&detection_state);
+		evaluate_and_present_results(&detection_state,H1,H2,H3);
 		ticks++;
 	}
 
