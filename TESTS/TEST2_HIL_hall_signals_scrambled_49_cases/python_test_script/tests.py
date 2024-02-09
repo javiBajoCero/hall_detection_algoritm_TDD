@@ -186,7 +186,7 @@ def main():
      
 
 
-f = open("tests_python_console_dump.txt", "a").close();#erases the file
-f = open("tests_python_console_dump.txt", "a")
+f = open("tests_python_console_dump.txt", "a");
+f.truncate(0);
 main()
 f.close();
