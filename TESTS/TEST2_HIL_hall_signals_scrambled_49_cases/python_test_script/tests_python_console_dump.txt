@@ -1,0 +1,96 @@
+test case 1 ,messsage : ABC
+Received from target: ABC
+test case 2 ,messsage : !ABC
+Received from target: !ABC
+test case 3 ,messsage : !A!BC
+Received from target: !A!BC
+test case 4 ,messsage : !A!B!C
+Received from target: !A!B!C
+test case 5 ,messsage : !AB!C
+Received from target: !AB!C
+test case 6 ,messsage : AB!C
+Received from target: AB!C
+test case 7 ,messsage : A!B!C
+Received from target: A!B!C
+test case 8 ,messsage : A!BC
+Received from target: A!BC
+test case 9 ,messsage : BCA
+Received from target: BCA
+test case 10 ,messsage : !BCA
+Received from target: !BCA
+test case 11 ,messsage : !B!CA
+Received from target: !B!CA
+test case 12 ,messsage : !B!C!A
+Received from target: !B!C!A
+test case 13 ,messsage : !BC!A
+Received from target: !BC!A
+test case 14 ,messsage : BC!A
+Received from target: BC!A
+test case 15 ,messsage : B!C!A
+Received from target: B!C!A
+test case 16 ,messsage : B!CA
+Received from target: B!CA
+test case 17 ,messsage : CAB
+Received from target: CAB
+test case 18 ,messsage : !CAB
+Received from target: !CAB
+test case 19 ,messsage : !C!AB
+Received from target: !C!AB
+test case 20 ,messsage : !C!A!B
+Received from target: !C!A!B
+test case 21 ,messsage : !CA!B
+Received from target: !CA!B
+test case 22 ,messsage : CA!B
+Received from target: CA!B
+test case 23 ,messsage : C!A!B
+Received from target: C!A!B
+test case 24 ,messsage : C!AB
+Received from target: C!AB
+test case 25 ,messsage : ACB
+Received from target: ACB
+test case 26 ,messsage : !ACB
+Received from target: !ACB
+test case 27 ,messsage : !A!CB
+Received from target: !A!CB
+test case 28 ,messsage : !A!C!B
+Received from target: !A!C!B
+test case 29 ,messsage : !AC!B
+Received from target: !AC!B
+test case 30 ,messsage : AC!B
+Received from target: AC!B
+test case 31 ,messsage : A!C!B
+Received from target: A!C!B
+test case 32 ,messsage : A!CB
+Received from target: A!CB
+test case 33 ,messsage : BAC
+Received from target: BAC
+test case 34 ,messsage : !BAC
+Received from target: !BAC
+test case 35 ,messsage : !B!AC
+Received from target: !B!AC
+test case 36 ,messsage : !B!A!C
+Received from target: !B!A!C
+test case 37 ,messsage : !BA!C
+Received from target: !BA!C
+test case 38 ,messsage : BA!C
+Received from target: BA!C
+test case 39 ,messsage : B!A!C
+Received from target: B!A!C
+test case 40 ,messsage : B!AC
+Received from target: B!AC
+test case 41 ,messsage : CBA
+Received from target: CBA
+test case 42 ,messsage : !CBA
+Received from target: !CBA
+test case 43 ,messsage : !C!BA
+Received from target: !C!BA
+test case 44 ,messsage : !C!B!A
+Received from target: !C!B!A
+test case 45 ,messsage : !CB!A
+Received from target: !CB!A
+test case 46 ,messsage : CB!A
+Received from target: CB!A
+test case 47 ,messsage : C!B!A
+Received from target: C!B!A
+test case 48 ,messsage : C!BA
+Received from target: C!BA
