@@ -123,6 +123,10 @@ def main():
     # List and open available serial ports
     find_out_tester_and_open_ports()
 
+    time.sleep(1000); #enough time for the nucleo boards to be ready
+    serial_target.flush();#flush again for good measure, sometimes we get garbage stuff send by the target board 
+    serial_tester.flush();
+
 
     # Start a thread or a separate process to receive incoming messages
     receive_thread = threading.Thread(target=receive_messages_tester, args=(serial_tester,messages),daemon=True)
