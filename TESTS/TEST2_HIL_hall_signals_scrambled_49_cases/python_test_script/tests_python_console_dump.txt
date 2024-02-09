@@ -94,4 +94,4 @@ test case 47 ,messsage : C!B!A
 Received from target: C!B!A
 test case 48 ,messsage : C!BA
 Received from target: C!BA
-Serial connection closed.all test cases passed
+Serial connection closed.received messages length: 48sent messages length: 48all test cases passed
