@@ -79,6 +79,7 @@ def find_out_tester_and_open_ports():
     
     ports = serial.tools.list_ports.comports()
     print("Available serial ports:")
+    f.write("Available serial ports:")
     for port in ports:
         if(port.pid==14155):
             print(f"- found target board in : {port.device}  with pid: {port.pid}")
@@ -184,6 +185,8 @@ def main():
         sys.exit(-1);
      
 
-f = open("tests_python_console_dump.txt", "a").close();
+
+f = open("tests_python_console_dump.txt", "a").close();#erases the file
+f = open("tests_python_console_dump.txt", "a")
 main()
 f.close();
