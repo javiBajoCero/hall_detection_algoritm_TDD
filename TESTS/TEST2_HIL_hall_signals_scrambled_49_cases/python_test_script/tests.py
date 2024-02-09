@@ -9,6 +9,7 @@ stopthreads=True;
 serial_tester=0;
 serial_target=0;
 send_index=1;
+f=0;
 
 receivedMessages=[]
 messages = [
