@@ -622,10 +622,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding: 0 5px
 460
 461
 462
-463
-464
-465
-466</pre></div></td><td class="code"><div class="highlight"><pre><span></span><a name="line-1"></a><span class="cm">/*</span>
+463</pre></div></td><td class="code"><div class="highlight"><pre><span></span><a name="line-1"></a><span class="cm">/*</span>
 <a name="line-2"></a><span class="cm"> * hall_detection.c</span>
 <a name="line-3"></a><span class="cm"> *</span>
 <a name="line-4"></a><span class="cm"> *  Created on: Jan 30, 2024</span>
@@ -1072,25 +1069,22 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding: 0 5px
 <a name="line-445"></a>		<span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">results</span><span class="p">.</span><span class="n">hall_order</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">hall_C</span><span class="p">){</span>
 <a name="line-446"></a>			<span class="n">message</span><span class="p">[(</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;C&#39;</span><span class="p">;</span>
 <a name="line-447"></a>		<span class="p">}</span>
-<a name="line-448"></a>	<span class="p">}</span>
-<a name="line-449"></a>
-<a name="line-450"></a>	<span class="k">for</span> <span class="p">(</span><span class="kt">uint32_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">number_of_phases</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-<a name="line-451"></a>		<span class="k">if</span><span class="p">(</span><span class="n">results</span><span class="p">.</span><span class="n">hall_polarity</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">hall_inverse</span><span class="p">){</span><span class="c1">//the &quot;inverse polarity&quot; from the hall with the currents is actually the normal logic.</span>
-<a name="line-452"></a>				<span class="n">message</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39; &#39;</span><span class="p">;</span>
-<a name="line-453"></a>		<span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">results</span><span class="p">.</span><span class="n">hall_polarity</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">hall_direct</span><span class="p">){</span>
-<a name="line-454"></a>				<span class="n">message</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;!&#39;</span><span class="p">;</span>
-<a name="line-455"></a>		<span class="p">}</span>
-<a name="line-456"></a>	<span class="p">}</span>
-<a name="line-457"></a>
+<a name="line-448"></a>
+<a name="line-449"></a>		<span class="k">if</span><span class="p">(</span><span class="n">results</span><span class="p">.</span><span class="n">hall_polarity</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">hall_inverse</span><span class="p">){</span><span class="c1">//the &quot;inverse polarity&quot; from the hall with the currents is actually the normal logic.</span>
+<a name="line-450"></a>				<span class="n">message</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39; &#39;</span><span class="p">;</span>
+<a name="line-451"></a>		<span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">results</span><span class="p">.</span><span class="n">hall_polarity</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">hall_direct</span><span class="p">){</span>
+<a name="line-452"></a>				<span class="n">message</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;!&#39;</span><span class="p">;</span>
+<a name="line-453"></a>		<span class="p">}</span>
+<a name="line-454"></a>	<span class="p">}</span>
+<a name="line-455"></a>
+<a name="line-456"></a>	<span class="n">message</span><span class="p">[</span><span class="n">messageLength</span><span class="mi">-2</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;\n&#39;</span><span class="p">;</span><span class="c1">//two last characters</span>
+<a name="line-457"></a>	<span class="n">message</span><span class="p">[</span><span class="n">messageLength</span><span class="mi">-1</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;\r&#39;</span><span class="p">;</span>
 <a name="line-458"></a>
-<a name="line-459"></a>	<span class="n">message</span><span class="p">[</span><span class="n">messageLength</span><span class="mi">-2</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;\n&#39;</span><span class="p">;</span><span class="c1">//two last characters</span>
-<a name="line-460"></a>	<span class="n">message</span><span class="p">[</span><span class="n">messageLength</span><span class="mi">-1</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;\r&#39;</span><span class="p">;</span>
-<a name="line-461"></a>
-<a name="line-462"></a><span class="cp">#ifdef TESTuart</span>
-<a name="line-463"></a>	<span class="n">HAL_UART_Transmit_DMA</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart2</span><span class="p">,</span> <span class="p">(</span><span class="k">const</span> <span class="kt">uint8_t</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">message</span><span class="p">,</span> <span class="n">messageLength</span><span class="p">);</span>
-<a name="line-464"></a><span class="cp">#endif</span>
-<a name="line-465"></a>
-<a name="line-466"></a><span class="p">}</span>
+<a name="line-459"></a><span class="cp">#ifdef TESTuart</span>
+<a name="line-460"></a>	<span class="n">HAL_UART_Transmit_DMA</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart2</span><span class="p">,</span> <span class="p">(</span><span class="k">const</span> <span class="kt">uint8_t</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">message</span><span class="p">,</span> <span class="n">messageLength</span><span class="p">);</span>
+<a name="line-461"></a><span class="cp">#endif</span>
+<a name="line-462"></a>
+<a name="line-463"></a><span class="p">}</span>
 </pre></div>
 </td></tr></table>
       </div> <!-- /.wrapper -->
