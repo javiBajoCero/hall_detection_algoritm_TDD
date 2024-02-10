@@ -12,6 +12,11 @@ send_index=1;
 f=0;
 
 receivedMessages=[]
+
+
+
+
+
 messages = [
             "ABC\n\r",
             "!ABC\n\r",
@@ -60,7 +65,7 @@ messages = [
             "!CB!A\n\r",
             "CB!A\n\r",
             "C!B!A\n\r",
-            "C!BA\n\r",
+            "C!BA\n\r"
         ]
 
 
@@ -187,11 +192,10 @@ def main():
     else:
         print("not all test cases passed");
         f.write("not all test cases passed");
-        j=1;
         for j in range(len(receivedMessages)):
             if messages[j]!=receivedMessages[j]:
-                print(f"error in test case number {j}, it was supposed to be:{messages[j]} instead of:{receivedMessages[j]}")
-                f.write(f"error in test case number {j}, it was supposed to be:{messages[j]} instead of:{receivedMessages[j]}")
+                print(  f"error in test case number {j+1}, it was supposed to be:{messages[j]} instead of:{receivedMessages[j]}")
+                f.write(f"error in test case number {j+1}, it was supposed to be:{messages[j]} instead of:{receivedMessages[j]}")
 
         print(messages);
         print(receivedMessages);
