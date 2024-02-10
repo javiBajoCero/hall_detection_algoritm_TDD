@@ -427,11 +427,18 @@ void assign_polarity(detection_results_struct* res){
 
 	for (uint32_t i = 0; i < number_of_phases; ++i) {
 		if(currents[res->hall_order[i]]->zerocrossings_polarity[0]==halls[i]->zerocrossings_polarity[0]){
+			if(toggled_polarity[res->hall_order[i]]==0){
 				res->hall_polarity[res->hall_order[i]]=hall_direct;
-		}else{
+			}else{
 				res->hall_polarity[res->hall_order[i]]=hall_inverse;
+			}
+		}else{
+			if(toggled_polarity[res->hall_order[i]]==0){
+				res->hall_polarity[res->hall_order[i]]=hall_inverse;
+			}else{
+				res->hall_polarity[res->hall_order[i]]=hall_direct;
+			}
 		}
-		res->hall_polarity[i]^=toggled_polarity[i];//resolve toggled polarity due to aliasis?
 	}
 }
 
