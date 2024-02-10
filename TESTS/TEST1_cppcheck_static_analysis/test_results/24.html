@@ -1063,7 +1063,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding: 0 5px
 <a name="line-431"></a>		<span class="p">}</span><span class="k">else</span><span class="p">{</span>
 <a name="line-432"></a>				<span class="n">res</span><span class="o">-&gt;</span><span class="n">hall_polarity</span><span class="p">[</span><span class="n">res</span><span class="o">-&gt;</span><span class="n">hall_order</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">=</span><span class="n">hall_inverse</span><span class="p">;</span>
 <a name="line-433"></a>		<span class="p">}</span>
-<a name="line-434"></a>		<span class="c1">//res-&gt;hall_polarity[res-&gt;hall_order[i]]^=toggled_polarity[i];//resolve toggled polarity due to aliasis?</span>
+<a name="line-434"></a>		<span class="n">res</span><span class="o">-&gt;</span><span class="n">hall_polarity</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">^=</span><span class="n">toggled_polarity</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="c1">//resolve toggled polarity due to aliasis?</span>
 <a name="line-435"></a>	<span class="p">}</span>
 <a name="line-436"></a><span class="p">}</span>
 <a name="line-437"></a>
