@@ -3,13 +3,9 @@ import serial.tools.list_ports
 import time
 import threading
 import sys
-import os
-Okay_duration = 0.3  # seconds
-Okay_freq = 1000  # Hz
-not_okay_duration = 1
-not_okay_freq = 200;
 
-waittime=1;
+
+waittime=0.5;
 stopthreads=True;
 serial_tester=0;
 serial_target=0;
@@ -192,15 +188,13 @@ def main():
     f.write(f"sent messages length: {len(messages)}");
 
     if len(receivedMessages) != len(messages):
-        print("number of sent messages {len(messages)}  match the number of received results {len(messages)}, TESTING FAILED");
-        f.write("number of sent messages {len(messages)}  match the number of received results {len(messages)}, TESTING FAILED");
-        os.system('play -nq -t alsa synth {} sine {}'.format(not_okay_duration, not_okay_freq))
+        print(f"number of sent messages {len(messages)}  match the number of received results {len(messages)}, TESTING FAILED");
+        f.write(f"number of sent messages {len(messages)}  match the number of received results {len(messages)}, TESTING FAILED");
         sys.exit(-1);
         
     if receivedMessages == messages:
         print("all test cases passed");
         f.write("all test cases passed");
-        os.system('play -nq -t alsa synth {} sine {}'.format(Okay_duration, Okay_freq))
         sys.exit(0);
     else:
         print("not all test cases passed");
@@ -213,7 +207,6 @@ def main():
 
         print(messages);
         print(receivedMessages);
-        os.system('play -nq -t alsa synth {} sine {}'.format(not_okay_duration, not_okay_freq))
         sys.exit(-1);
      
 
