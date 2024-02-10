@@ -194,6 +194,7 @@ def main():
         f.write("not all test cases passed");
         for j in range(len(receivedMessages)):
             if messages[j]!=receivedMessages[j]:
+                #lists are indexed starting in 0, thats why i do j+1, our cases are from 1 to 48, the list is from 0 to 47
                 print(  f"error in test case number {j+1}, it was supposed to be:{messages[j]} instead of:{receivedMessages[j]}")
                 f.write(f"error in test case number {j+1}, it was supposed to be:{messages[j]} instead of:{receivedMessages[j]}")
 
