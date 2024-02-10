@@ -188,8 +188,8 @@ def main():
     f.write(f"sent messages length: {len(messages)}");
 
     if len(receivedMessages) != len(messages):
-        print(f"number of sent messages {len(messages)}  match the number of received results {len(messages)}, TESTING FAILED");
-        f.write(f"number of sent messages {len(messages)}  match the number of received results {len(messages)}, TESTING FAILED");
+        print(f"number of sent messages {len(messages)}  match the number of received results {len(receivedMessages)}, TESTING FAILED");
+        f.write(f"number of sent messages {len(messages)}  match the number of received results {len(receivedMessages)}, TESTING FAILED");
         sys.exit(-1);
         
     if receivedMessages == messages:
