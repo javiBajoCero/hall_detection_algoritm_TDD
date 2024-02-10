@@ -3,8 +3,13 @@ import serial.tools.list_ports
 import time
 import threading
 import sys
+import os
+Okay_duration = 0.3  # seconds
+Okay_freq = 1000  # Hz
+not_okay_duration = 1
+not_okay_freq = 200;
 
-waittime=0.3;
+waittime=1;
 stopthreads=True;
 serial_tester=0;
 serial_target=0;
@@ -107,12 +112,12 @@ def send_messages_tester(ser, messages):
     for message in messages:
         serial_tester.write(message.encode())
         if message.find('reset')!=0:
-            print(f'test case {send_index} ,messsage : {message}')
-            f.write(f'test case {send_index} ,messsage : {message}')
-            send_index=send_index+1;
-        time.sleep(waittime/2)  # Add a delay to allow the device to process the message
+            send_index=send_index+1;#we increment index first, im afraid it was not used correctly by receive_messages
+            print(f'test case {send_index-1} ,messsage : {message}')
+            f.write(f'test case {send_index-1} ,messsage : {message}')
+        time.sleep(waittime*0.2)  # Add a delay to allow the device to process the message
         serial_tester.write(resetmessage.encode());
-        time.sleep(waittime)  # Add a delay to allow the device to process the message
+        time.sleep(waittime*0.8)  # Add a delay to allow the device to process the message
 
 
 def receive_messages_tester(ser,messages):
@@ -186,9 +191,16 @@ def main():
     print(f"sent messages length: {len(messages)}");
     f.write(f"sent messages length: {len(messages)}");
 
+    if len(receivedMessages) != len(messages):
+        print("number of sent messages {len(messages)}  match the number of received results {len(messages)}, TESTING FAILED");
+        f.write("number of sent messages {len(messages)}  match the number of received results {len(messages)}, TESTING FAILED");
+        os.system('play -nq -t alsa synth {} sine {}'.format(not_okay_duration, not_okay_freq))
+        sys.exit(-1);
+        
     if receivedMessages == messages:
         print("all test cases passed");
         f.write("all test cases passed");
+        os.system('play -nq -t alsa synth {} sine {}'.format(Okay_duration, Okay_freq))
         sys.exit(0);
     else:
         print("not all test cases passed");
@@ -201,6 +213,7 @@ def main():
 
         print(messages);
         print(receivedMessages);
+        os.system('play -nq -t alsa synth {} sine {}'.format(not_okay_duration, not_okay_freq))
         sys.exit(-1);
      
 
