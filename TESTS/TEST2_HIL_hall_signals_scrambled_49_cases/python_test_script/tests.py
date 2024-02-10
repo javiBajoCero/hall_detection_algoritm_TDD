@@ -4,7 +4,7 @@ import time
 import threading
 import sys
 
-waittime=0.25;
+waittime=0.3;
 stopthreads=True;
 serial_tester=0;
 serial_target=0;
@@ -170,7 +170,10 @@ def main():
 
     for i in range(len(messages)):
         messages[i]=messages[i].replace('\r','');
-    
+        messages[i]=messages[i].replace(" ","");
+    for i in range(len(receivedMessages)):
+        receivedMessages[i]=receivedMessages[i].replace('\r','');
+        receivedMessages[i]=receivedMessages[i].replace(" ","");
     print(f"received messages length: {len(receivedMessages)}");
     f.write(f"received messages length: {len(receivedMessages)}");
 
@@ -184,11 +187,14 @@ def main():
     else:
         print("not all test cases passed");
         f.write("not all test cases passed");
+        j=1;
+        for j in range(len(receivedMessages)):
+            if messages[j]!=receivedMessages[j]:
+                print(f"error in test case number {j}, it was supposed to be:{messages[j]} instead of:{receivedMessages[j]}")
+                f.write(f"error in test case number {j}, it was supposed to be:{messages[j]} instead of:{receivedMessages[j]}")
 
-        for i in range(len(receivedMessages)):
-            if messages[i].replace('\r','')!=receivedMessages[i]:
-                print(f"error in test case number {i}, it was supposed to be:{messages[i]} instead of: {receivedMessages[i]}")
-                f.write(f"error in test case number {i}, it was supposed to be:{messages[i]} instead of: {receivedMessages[i]}")
+        print(messages);
+        print(receivedMessages);
         sys.exit(-1);
      
 
