@@ -74,6 +74,7 @@ void evaluate_and_present_results(	detection_state_enum* enabled_or_disabled,
 									hall_pin_info* H2,
 									hall_pin_info* H3
 									);
+void present_results_uart();
 
 void swap_hall_gpios_with_detected_results(hall_pin_info* H1,hall_pin_info* H2,hall_pin_info* H3);
 void calculateElectricPeriod_inTicks(uint32_t* resulting_period);
@@ -471,8 +472,12 @@ void present_results(){
 	message[messageLength-2]='\n';//two last characters
 	message[messageLength-1]='\r';
 
+
+
+}
+
+void present_results_uart(){
 #ifdef TESTuart
 	HAL_UART_Transmit_DMA(&huart2, (const uint8_t *)&message, messageLength);
 #endif
-
 }

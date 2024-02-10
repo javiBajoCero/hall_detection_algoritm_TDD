@@ -69,6 +69,6 @@ void Hall_Identification_Test_measurement(
 		uint16_t* ADCcurrA,
 		uint16_t* ADCcurrB
 		);
-
+void present_results_uart();
 
 #endif /* INC_HALL_DETECTION_H_ */

@@ -118,10 +118,15 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+ uint32_t onetime=1;
   Hall_start_detection();
   while (1)
   {
 	  if(Hall_is_detection_finished()){
+		  if(onetime){
+			  onetime=0;
+			  present_results_uart();
+		  }
 		  HAL_Delay(70);
 		  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
 	  }
