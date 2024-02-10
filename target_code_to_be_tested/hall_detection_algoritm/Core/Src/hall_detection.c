@@ -357,19 +357,19 @@ void assign_closest_phase_to_hall(detection_results_struct* res){
 		differences_phaseB[i]/=MAXZEROCROSSINGS;
 		differences_phaseC[i]/=MAXZEROCROSSINGS;
 
-		if(differences_phaseA[i]>((res->electricPeriod_ticks/2)-lowpassfilter_ticks) && differences_phaseA[i]<(res->electricPeriod_ticks)){
-			differences_phaseA[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+		if(differences_phaseA[i]>((int32_t)(res->electricPeriod_ticks/2)-lowpassfilter_ticks) && differences_phaseA[i]<(int32_t)(res->electricPeriod_ticks)){
+			differences_phaseA[i]=(int32_t)(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
 			toggled_polarity[hall_A]=1;
 
 		}
 
-		if(differences_phaseB[i]>((res->electricPeriod_ticks/2)-lowpassfilter_ticks) && differences_phaseB[i]<(res->electricPeriod_ticks)){
-			differences_phaseB[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+		if(differences_phaseB[i]>((int32_t)(res->electricPeriod_ticks/2)-lowpassfilter_ticks) && differences_phaseB[i]<(int32_t)(res->electricPeriod_ticks)){
+			differences_phaseB[i]=(int32_t)(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
 			toggled_polarity[hall_B]=1;
 		}
 
-		if(differences_phaseC[i]>((res->electricPeriod_ticks/2)-lowpassfilter_ticks) && differences_phaseC[i]<(res->electricPeriod_ticks)){
-			differences_phaseC[i]=(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
+		if(differences_phaseC[i]>((int32_t)(res->electricPeriod_ticks/2)-lowpassfilter_ticks) && differences_phaseC[i]<(int32_t)(res->electricPeriod_ticks)){
+			differences_phaseC[i]=(int32_t)(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
 			toggled_polarity[hall_C]=1;
 		}
 	}

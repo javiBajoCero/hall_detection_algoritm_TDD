@@ -179,6 +179,7 @@ def main():
     for i in range(len(receivedMessages)):
         receivedMessages[i]=receivedMessages[i].replace('\r','');
         receivedMessages[i]=receivedMessages[i].replace(" ","");
+        
     print(f"received messages length: {len(receivedMessages)}");
     f.write(f"received messages length: {len(receivedMessages)}");
 
