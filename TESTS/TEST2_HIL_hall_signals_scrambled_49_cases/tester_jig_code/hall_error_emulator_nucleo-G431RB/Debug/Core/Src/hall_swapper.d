@@ -19,9 +19,6 @@ Core/Src/hall_swapper.o: ../Core/Src/hall_swapper.c \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h \
- ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_adc.h \
- ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_adc.h \
- ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_adc_ex.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dac.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dac_ex.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h \
@@ -35,7 +32,7 @@ Core/Src/hall_swapper.o: ../Core/Src/hall_swapper.c \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h \
  ../Core/Inc/wave_emulator.h ../Core/Inc/real_waveforms.h \
- ../Core/Inc/gpio.h ../Core/Inc/adc.h
+ ../Core/Inc/gpio.h
 ../Core/Inc/hall_swapper.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h:
@@ -57,9 +54,6 @@ Core/Src/hall_swapper.o: ../Core/Src/hall_swapper.c \
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dma_ex.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_cortex.h:
-../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_adc.h:
-../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_ll_adc.h:
-../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_adc_ex.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dac.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dac_ex.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_exti.h:
@@ -75,4 +69,3 @@ Core/Src/hall_swapper.o: ../Core/Src/hall_swapper.c \
 ../Core/Inc/wave_emulator.h:
 ../Core/Inc/real_waveforms.h:
 ../Core/Inc/gpio.h:
-../Core/Inc/adc.h:

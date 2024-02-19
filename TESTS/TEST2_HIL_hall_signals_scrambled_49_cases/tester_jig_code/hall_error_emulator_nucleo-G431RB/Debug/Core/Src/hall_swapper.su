@@ -1,7 +1,6 @@
-../Core/Src/hall_swapper.c:39:6:startADCs	8	static
-../Core/Src/hall_swapper.c:49:6:hall_swapper_twentyKHzinterruptionIRQ	8	static
-../Core/Src/hall_swapper.c:71:6:read_input_signals	4	static
-../Core/Src/hall_swapper.c:101:6:emulated_read_input_signals	4	static
-../Core/Src/hall_swapper.c:118:6:polarice_signals	16	static
-../Core/Src/hall_swapper.c:137:6:swap_signals	16	static
-../Core/Src/hall_swapper.c:150:6:write_output_signals	8	static
+../Core/Src/hall_swapper.c:35:6:hall_swapper_twentyKHzinterruptionIRQ	8	static
+../Core/Src/hall_swapper.c:57:6:read_input_signals	8	static
+../Core/Src/hall_swapper.c:66:6:emulated_read_input_signals	4	static
+../Core/Src/hall_swapper.c:83:6:polarice_signals	16	static
+../Core/Src/hall_swapper.c:102:6:swap_signals	16	static
+../Core/Src/hall_swapper.c:115:6:write_output_signals	8	static

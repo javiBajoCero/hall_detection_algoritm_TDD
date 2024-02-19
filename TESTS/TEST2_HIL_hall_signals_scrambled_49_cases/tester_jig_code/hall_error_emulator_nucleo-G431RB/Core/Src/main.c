@@ -18,7 +18,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "adc.h"
 #include "dac.h"
 #include "dma.h"
 #include "usart.h"
@@ -97,10 +96,8 @@ int main(void)
   MX_LPUART1_UART_Init();
   MX_TIM8_Init();
   MX_USART1_UART_Init();
-  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
   ui_uart_init();
-  startADCs();
   HAL_TIM_Base_Start_IT(&htim8); //start 20Khz timer with enabled interruption
 
   /* USER CODE END 2 */
