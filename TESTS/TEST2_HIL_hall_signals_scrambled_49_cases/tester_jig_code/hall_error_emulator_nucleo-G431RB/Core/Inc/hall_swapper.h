@@ -29,6 +29,7 @@ extern hall_signals_order 		signal_order[3];
 extern hall_signals_polarity 	signal_polarity[3];
 
 //public functions
+void startADCs(void);
 void hall_swapper_twentyKHzinterruptionIRQ( void );
 
 #endif /* INC_HALL_SWAPPER_H_ */

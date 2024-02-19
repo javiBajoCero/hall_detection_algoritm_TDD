@@ -9,6 +9,9 @@
 #include "wave_emulator.h"
 
 #include "gpio.h" /*!< to access all those HAL_GPIO... functions */
+#include "adc.h"	/*!< to access the ADC1 */
+//#define hallinputsareGPIO
+#define hallinputsareADC
 
 hall_signals_order 		signal_order[3]		={hall_A,hall_B,hall_C};	            /*!< HALL signals order */
 hall_signals_polarity 	signal_polarity[3]	={hall_direct,hall_direct,hall_direct};	/*!< HALL signals polarity */
@@ -16,9 +19,13 @@ hall_signals_polarity 	signal_polarity[3]	={hall_direct,hall_direct,hall_direct}
 GPIO_PinState signal_inputs[3]	={GPIO_PIN_RESET,GPIO_PIN_RESET,GPIO_PIN_RESET};	/*!< once we read gpio inputs the detected value is stored here. */
 GPIO_PinState signal_outputs[3]	={GPIO_PIN_RESET,GPIO_PIN_RESET,GPIO_PIN_RESET};	/*!< contains our translated signal_input_values, swapped and polariced. */
 
-
+#ifdef hallinputsareADC
+uint32_t adc_low_level_threshold=1241;//(4096/3,3)*1=1241 (1V)
+uint32_t signal_inputs_ADC[3] ={0,0,0};
+#endif
 
 //all funtions inside this .c are listed here:
+void startADCs();
 void hall_swapper_twentyKHzinterruptionIRQ( void );
 void read_input_signals(void);
 void emulated_read_input_signals(void);
@@ -26,7 +33,14 @@ void polarice_signals(hall_signals_order hall_x);
 void swap_signals(hall_signals_order hall_x);
 void write_output_signals();
 
-
+/**
+* \brief if instead of GPIOs we read hall inputs with ADCs, due to logic levels being too damm low
+*/
+void startADCs(){
+#ifdef hallinputsareADC
+	  HAL_ADC_Start_DMA(&hadc1, signal_inputs_ADC, 3);
+#endif
+}
 
 /**
 * \brief does the hall swapping and polarizing thing
@@ -52,12 +66,33 @@ void hall_swapper_twentyKHzinterruptionIRQ( void ){
 }
 
 /**
-* \brief simple GPIO read of all halll signals, stores readings into signal_inputs
+* \brief simple GPIO read or ADC read of all hall signals, stores readings into signal_inputs
 */
 void read_input_signals(void){
+#ifdef hallinputsareGPIO
 	signal_inputs[hall_A]=HAL_GPIO_ReadPin(input_HALLA_GPIO_Port, input_HALLA_Pin);
 	signal_inputs[hall_B]=HAL_GPIO_ReadPin(input_HALLB_GPIO_Port, input_HALLB_Pin);
 	signal_inputs[hall_C]=HAL_GPIO_ReadPin(input_HALLC_GPIO_Port, input_HALLC_Pin);
+#endif
+#ifdef hallinputsareADC
+	if(signal_inputs_ADC[hall_A]>adc_low_level_threshold){
+		signal_inputs[hall_A]=GPIO_PIN_SET;
+	}else{
+		signal_inputs[hall_A]=GPIO_PIN_RESET;
+	}
+
+	if(signal_inputs_ADC[hall_B]>adc_low_level_threshold){
+		signal_inputs[hall_B]=GPIO_PIN_SET;
+	}else{
+		signal_inputs[hall_B]=GPIO_PIN_RESET;
+	}
+
+	if(signal_inputs_ADC[hall_C]>adc_low_level_threshold){
+		signal_inputs[hall_C]=GPIO_PIN_SET;
+	}else{
+		signal_inputs[hall_C]=GPIO_PIN_RESET;
+	}
+#endif
 }
 
 /**
