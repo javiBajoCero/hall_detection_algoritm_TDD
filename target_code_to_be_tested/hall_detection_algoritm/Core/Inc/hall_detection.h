@@ -66,8 +66,8 @@ void Hall_Identification_Test_measurement(
 		hall_pin_info* H1,
 		hall_pin_info* H2,
 		hall_pin_info* H3,
-		uint16_t* ADCcurrA,
-		uint16_t* ADCcurrB
+		uint16_t* ADCcurr1,
+		uint16_t* ADCcurr2
 		);
 void present_results_uart();
 

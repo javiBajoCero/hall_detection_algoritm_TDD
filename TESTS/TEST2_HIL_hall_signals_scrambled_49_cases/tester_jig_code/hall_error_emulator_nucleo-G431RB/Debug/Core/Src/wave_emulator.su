@@ -1,3 +1,3 @@
-../Core/Src/wave_emulator.c:28:6:emulation	8	static
-../Core/Src/wave_emulator.c:42:6:enable_emulator	16	static
-../Core/Src/wave_emulator.c:54:6:disable_emulator	8	static
+../Core/Src/wave_emulator.c:32:6:emulation	8	static
+../Core/Src/wave_emulator.c:46:6:enable_emulator	16	static
+../Core/Src/wave_emulator.c:70:6:disable_emulator	8	static

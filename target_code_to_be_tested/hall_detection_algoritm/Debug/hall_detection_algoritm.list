@@ -29,23 +29,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
  12 .comment      00000043  00000000  00000000  00020058  2**0
                   CONTENTS, READONLY
- 13 .debug_info   000111fe  00000000  00000000  0002009b  2**0
+ 13 .debug_info   000111fc  00000000  00000000  0002009b  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_abbrev 00002c14  00000000  00000000  00031299  2**0
+ 14 .debug_abbrev 00002c18  00000000  00000000  00031297  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  15 .debug_aranges 00000ef0  00000000  00000000  00033eb0  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  16 .debug_rnglists 00000b9a  00000000  00000000  00034da0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_macro  00023529  00000000  00000000  0003593a  2**0
+ 17 .debug_macro  0002352f  00000000  00000000  0003593a  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_line   0001476e  00000000  00000000  00058e63  2**0
+ 18 .debug_line   00014772  00000000  00000000  00058e69  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    000d9efc  00000000  00000000  0006d5d1  2**0
+ 19 .debug_str    000d9f26  00000000  00000000  0006d5db  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_frame  00003d28  00000000  00000000  001474d0  2**2
+ 20 .debug_frame  00003d28  00000000  00000000  00147504  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 000000a2  00000000  00000000  0014b1f8  2**0
+ 21 .debug_line_str 000000a2  00000000  00000000  0014b22c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -924,8 +924,8 @@ uint32_t Hall_is_detection_finished(){
 		hall_pin_info* H1,
 		hall_pin_info* H2,
 		hall_pin_info* H3,
-		uint16_t* ADCcurrA,
-		uint16_t* ADCcurrB
+		uint16_t* ADCcurr1,
+		uint16_t* ADCcurr2
 		){
  8000860:	b580      	push	{r7, lr}
  8000862:	b086      	sub	sp, #24
@@ -939,7 +939,7 @@ uint32_t Hall_is_detection_finished(){
  8000870:	781b      	ldrb	r3, [r3, #0]
  8000872:	2b01      	cmp	r3, #1
  8000874:	d117      	bne.n	80008a6 <Hall_Identification_Test_measurement+0x46>
-		signals_adquisition(H1,H2,H3,ADCcurrA,ADCcurrB);
+		signals_adquisition(H1,H2,H3,ADCcurr1,ADCcurr2);
  8000876:	69bb      	ldr	r3, [r7, #24]
  8000878:	9300      	str	r3, [sp, #0]
  800087a:	683b      	ldr	r3, [r7, #0]
@@ -979,8 +979,8 @@ uint32_t Hall_is_detection_finished(){
 		hall_pin_info* H1,
 		hall_pin_info* H2,
 		hall_pin_info* H3,
-		uint16_t* ADCcurrA,
-		uint16_t* ADCcurrB
+		uint16_t* ADCcurr1,
+		uint16_t* ADCcurr2
 		){
  80008b8:	b580      	push	{r7, lr}
  80008ba:	b084      	sub	sp, #16
@@ -989,45 +989,54 @@ uint32_t Hall_is_detection_finished(){
  80008c0:	60b9      	str	r1, [r7, #8]
  80008c2:	607a      	str	r2, [r7, #4]
  80008c4:	603b      	str	r3, [r7, #0]
+	currC.two_samples_buffer[1]=currC.two_samples_buffer[0];
+	currC.two_samples_buffer[0]= currentAplusBplusC-*ADCcurr1-*ADCcurr2;
+#endif
+
+#ifdef REAL_PHASES_A_C_calculated_B
 	currA.two_samples_buffer[1]=currA.two_samples_buffer[0];
  80008c6:	4b2a      	ldr	r3, [pc, #168]	; (8000970 <signals_adquisition+0xb8>)
  80008c8:	681b      	ldr	r3, [r3, #0]
  80008ca:	4a29      	ldr	r2, [pc, #164]	; (8000970 <signals_adquisition+0xb8>)
  80008cc:	6053      	str	r3, [r2, #4]
-	currA.two_samples_buffer[0]= *ADCcurrA; //i suspect ADC measurements are one sample late, because of the ADC being triggered at the end of the TIM interruption
+	currA.two_samples_buffer[0]= *ADCcurr1;
  80008ce:	683b      	ldr	r3, [r7, #0]
  80008d0:	881b      	ldrh	r3, [r3, #0]
  80008d2:	461a      	mov	r2, r3
  80008d4:	4b26      	ldr	r3, [pc, #152]	; (8000970 <signals_adquisition+0xb8>)
  80008d6:	601a      	str	r2, [r3, #0]
-
+	//b=-a-c, NO REAL MEASUREMENT OF CURRENT B, assuming ABC currents ortogonality:
 	currB.two_samples_buffer[1]=currB.two_samples_buffer[0];
  80008d8:	4b26      	ldr	r3, [pc, #152]	; (8000974 <signals_adquisition+0xbc>)
  80008da:	681b      	ldr	r3, [r3, #0]
  80008dc:	4a25      	ldr	r2, [pc, #148]	; (8000974 <signals_adquisition+0xbc>)
  80008de:	6053      	str	r3, [r2, #4]
-	currB.two_samples_buffer[0]= *ADCcurrB;
- 80008e0:	69bb      	ldr	r3, [r7, #24]
+	currB.two_samples_buffer[0]= currentAplusBplusC-*ADCcurr1-*ADCcurr2;
+ 80008e0:	683b      	ldr	r3, [r7, #0]
  80008e2:	881b      	ldrh	r3, [r3, #0]
  80008e4:	461a      	mov	r2, r3
- 80008e6:	4b23      	ldr	r3, [pc, #140]	; (8000974 <signals_adquisition+0xbc>)
- 80008e8:	601a      	str	r2, [r3, #0]
-	//c=-a-b, NO REAL MEASUREMENT OF CURRENT C, assuming ABC currents ortogonality:
+ 80008e6:	69bb      	ldr	r3, [r7, #24]
+ 80008e8:	881b      	ldrh	r3, [r3, #0]
+ 80008ea:	4413      	add	r3, r2
+ 80008ec:	f5c3 53c0 	rsb	r3, r3, #6144	; 0x1800
+ 80008f0:	4a20      	ldr	r2, [pc, #128]	; (8000974 <signals_adquisition+0xbc>)
+ 80008f2:	6013      	str	r3, [r2, #0]
+
 	currC.two_samples_buffer[1]=currC.two_samples_buffer[0];
- 80008ea:	4b23      	ldr	r3, [pc, #140]	; (8000978 <signals_adquisition+0xc0>)
- 80008ec:	681b      	ldr	r3, [r3, #0]
- 80008ee:	4a22      	ldr	r2, [pc, #136]	; (8000978 <signals_adquisition+0xc0>)
- 80008f0:	6053      	str	r3, [r2, #4]
-	currC.two_samples_buffer[0]= currentAplusBplusC-*ADCcurrA-*ADCcurrB;
- 80008f2:	683b      	ldr	r3, [r7, #0]
- 80008f4:	881b      	ldrh	r3, [r3, #0]
- 80008f6:	461a      	mov	r2, r3
- 80008f8:	69bb      	ldr	r3, [r7, #24]
- 80008fa:	881b      	ldrh	r3, [r3, #0]
- 80008fc:	4413      	add	r3, r2
- 80008fe:	f5c3 53c0 	rsb	r3, r3, #6144	; 0x1800
- 8000902:	4a1d      	ldr	r2, [pc, #116]	; (8000978 <signals_adquisition+0xc0>)
- 8000904:	6013      	str	r3, [r2, #0]
+ 80008f4:	4b20      	ldr	r3, [pc, #128]	; (8000978 <signals_adquisition+0xc0>)
+ 80008f6:	681b      	ldr	r3, [r3, #0]
+ 80008f8:	4a1f      	ldr	r2, [pc, #124]	; (8000978 <signals_adquisition+0xc0>)
+ 80008fa:	6053      	str	r3, [r2, #4]
+	currC.two_samples_buffer[0]= *ADCcurr2;
+ 80008fc:	69bb      	ldr	r3, [r7, #24]
+ 80008fe:	881b      	ldrh	r3, [r3, #0]
+ 8000900:	461a      	mov	r2, r3
+ 8000902:	4b1d      	ldr	r3, [pc, #116]	; (8000978 <signals_adquisition+0xc0>)
+ 8000904:	601a      	str	r2, [r3, #0]
+	currC.two_samples_buffer[0]= *ADCcurr2;
+#endif
+
+
 
 	hallA.two_samples_buffer[1]=hallA.two_samples_buffer[0];
  8000906:	4b1d      	ldr	r3, [pc, #116]	; (800097c <signals_adquisition+0xc4>)

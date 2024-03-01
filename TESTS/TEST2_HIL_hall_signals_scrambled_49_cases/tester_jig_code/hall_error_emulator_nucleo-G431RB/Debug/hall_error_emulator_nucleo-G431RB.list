@@ -37,15 +37,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  16 .debug_rnglists 00000ed8  00000000  00000000  0003be58  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_macro  0001f3a9  00000000  00000000  0003cd30  2**0
+ 17 .debug_macro  0001f3af  00000000  00000000  0003cd30  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_line   00019404  00000000  00000000  0005c0d9  2**0
+ 18 .debug_line   00019405  00000000  00000000  0005c0df  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    000c879d  00000000  00000000  000754dd  2**0
+ 19 .debug_str    000c87bb  00000000  00000000  000754e4  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_frame  00004f30  00000000  00000000  0013dc7c  2**2
+ 20 .debug_frame  00004f30  00000000  00000000  0013dca0  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 000000d3  00000000  00000000  00142bac  2**0
+ 21 .debug_line_str 000000d3  00000000  00000000  00142bd0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -3458,6 +3458,11 @@ void enable_emulator(){
  80016e0:	480d      	ldr	r0, [pc, #52]	; (8001718 <enable_emulator+0x44>)
  80016e2:	f002 fb19 	bl	8003d18 <HAL_TIM_Base_Stop_IT>
 		HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t *)&current_A, sizeof(current_A)/sizeof(current_A[0]), DAC_ALIGN_12B_R);
+		HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_2, (uint32_t *)&current_B, sizeof(current_B)/sizeof(current_B[0]), DAC_ALIGN_12B_R);
+#endif
+
+#ifdef REAL_PHASES_A_C_calculated_B
+		HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t *)&current_A, sizeof(current_A)/sizeof(current_A[0]), DAC_ALIGN_12B_R);
  80016e6:	2300      	movs	r3, #0
  80016e8:	9300      	str	r3, [sp, #0]
  80016ea:	2384      	movs	r3, #132	; 0x84
@@ -3465,7 +3470,7 @@ void enable_emulator(){
  80016ee:	2100      	movs	r1, #0
  80016f0:	480b      	ldr	r0, [pc, #44]	; (8001720 <enable_emulator+0x4c>)
  80016f2:	f000 fa1d 	bl	8001b30 <HAL_DAC_Start_DMA>
-		HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_2, (uint32_t *)&current_B, sizeof(current_B)/sizeof(current_B[0]), DAC_ALIGN_12B_R);
+		HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_2, (uint32_t *)&current_C, sizeof(current_C)/sizeof(current_C[0]), DAC_ALIGN_12B_R);
  80016f6:	2300      	movs	r3, #0
  80016f8:	9300      	str	r3, [sp, #0]
  80016fa:	2384      	movs	r3, #132	; 0x84
@@ -3473,6 +3478,11 @@ void enable_emulator(){
  80016fe:	2110      	movs	r1, #16
  8001700:	4807      	ldr	r0, [pc, #28]	; (8001720 <enable_emulator+0x4c>)
  8001702:	f000 fa15 	bl	8001b30 <HAL_DAC_Start_DMA>
+
+#ifdef REAL_PHASES_B_C_calculated_A
+		HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t *)&current_B, sizeof(current_B)/sizeof(current_B[0]), DAC_ALIGN_12B_R);
+		HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_2, (uint32_t *)&current_C, sizeof(current_C)/sizeof(current_C[0]), DAC_ALIGN_12B_R);
+#endif
 		HAL_TIM_Base_Start_IT(&htim8); //start 20Khz timer with enabled interruption (DAC+DMA trigger)
  8001706:	4804      	ldr	r0, [pc, #16]	; (8001718 <enable_emulator+0x44>)
  8001708:	f002 fa9c 	bl	8003c44 <HAL_TIM_Base_Start_IT>

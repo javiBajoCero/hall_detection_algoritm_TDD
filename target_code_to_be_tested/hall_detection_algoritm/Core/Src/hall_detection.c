@@ -8,6 +8,10 @@
 #include "hall_detection.h" 		/*!< contains all enums, structs and includes neccesary for this .c, it also exposes the run_hall_detection_inside_20Khz_interruption() function to the outside world */
 
 #define TESTuart
+//uncomment only one
+//#define REAL_PHASES_A_B_calculated_C		/*!< our ADC is reading real current signals A and B, C=-A-B */
+#define REAL_PHASES_A_C_calculated_B		/*!< our ADC is reading real current signals A and C, B=-A-C */
+//#define REAL_PHASES_B_C_calculated_A		/*!< our ADC is reading real current signals B and C, A=-B-C */
 
 #ifdef TESTuart
 #include "usart.h"
@@ -52,16 +56,16 @@ void Hall_Identification_Test_measurement(
 		hall_pin_info* H1,
 		hall_pin_info* H2,
 		hall_pin_info* H3,
-		uint16_t* ADCcurrA,
-		uint16_t* ADCcurrB
+		uint16_t* ADCcurr1,
+		uint16_t* ADCcurr2
 		);
 
 void signals_adquisition(
 		hall_pin_info* H1,
 		hall_pin_info* H2,
 		hall_pin_info* H3,
-		uint16_t* ADCcurrA,
-		uint16_t* ADCcurrB
+		uint16_t* ADCcurr1,
+		uint16_t* ADCcurr2
 		);
 
 void detect_all_zerocrossings();
@@ -110,11 +114,11 @@ void Hall_Identification_Test_measurement(
 		hall_pin_info* H1,
 		hall_pin_info* H2,
 		hall_pin_info* H3,
-		uint16_t* ADCcurrA,
-		uint16_t* ADCcurrB
+		uint16_t* ADCcurr1,
+		uint16_t* ADCcurr2
 		){
 	if(detection_state==detection_ENABLED){
-		signals_adquisition(H1,H2,H3,ADCcurrA,ADCcurrB);
+		signals_adquisition(H1,H2,H3,ADCcurr1,ADCcurr2);
 		detect_all_zerocrossings();
 		end_detection(&detection_state);
 		evaluate_and_present_results(&detection_state,H1,H2,H3);
@@ -131,17 +135,45 @@ void signals_adquisition(
 		hall_pin_info* H1,
 		hall_pin_info* H2,
 		hall_pin_info* H3,
-		uint16_t* ADCcurrA,
-		uint16_t* ADCcurrB
+		uint16_t* ADCcurr1,
+		uint16_t* ADCcurr2
 		){
+
+#ifdef REAL_PHASES_A_B_calculated_C
 	currA.two_samples_buffer[1]=currA.two_samples_buffer[0];
-	currA.two_samples_buffer[0]= *ADCcurrA; //i suspect ADC measurements are one sample late, because of the ADC being triggered at the end of the TIM interruption
+	currA.two_samples_buffer[0]= *ADCcurr1; //i suspect ADC measurements are one sample late, because of the ADC being triggered at the end of the TIM interruption
 
 	currB.two_samples_buffer[1]=currB.two_samples_buffer[0];
-	currB.two_samples_buffer[0]= *ADCcurrB;
+	currB.two_samples_buffer[0]= *ADCcurr2;
 	//c=-a-b, NO REAL MEASUREMENT OF CURRENT C, assuming ABC currents ortogonality:
 	currC.two_samples_buffer[1]=currC.two_samples_buffer[0];
-	currC.two_samples_buffer[0]= currentAplusBplusC-*ADCcurrA-*ADCcurrB;
+	currC.two_samples_buffer[0]= currentAplusBplusC-*ADCcurr1-*ADCcurr2;
+#endif
+
+#ifdef REAL_PHASES_A_C_calculated_B
+	currA.two_samples_buffer[1]=currA.two_samples_buffer[0];
+	currA.two_samples_buffer[0]= *ADCcurr1;
+	//b=-a-c, NO REAL MEASUREMENT OF CURRENT B, assuming ABC currents ortogonality:
+	currB.two_samples_buffer[1]=currB.two_samples_buffer[0];
+	currB.two_samples_buffer[0]= currentAplusBplusC-*ADCcurr1-*ADCcurr2;
+
+	currC.two_samples_buffer[1]=currC.two_samples_buffer[0];
+	currC.two_samples_buffer[0]= *ADCcurr2;
+#endif
+
+#ifdef REAL_PHASES_B_C_calculated_A
+	//a=-b-bc, NO REAL MEASUREMENT OF CURRENT A, assuming ABC currents ortogonality:
+	currA.two_samples_buffer[1]=currA.two_samples_buffer[0];
+	currA.two_samples_buffer[0]= currentAplusBplusC-*ADCcurr1-*ADCcurr2;
+
+	currB.two_samples_buffer[1]=currB.two_samples_buffer[0];
+	currB.two_samples_buffer[0]= *ADCcurr1;
+
+	currC.two_samples_buffer[1]=currC.two_samples_buffer[0];
+	currC.two_samples_buffer[0]= *ADCcurr2;
+#endif
+
+
 
 	hallA.two_samples_buffer[1]=hallA.two_samples_buffer[0];
 	hallA.two_samples_buffer[0]=HAL_GPIO_ReadPin(H1->gpio_port, H1->gpio_pin);
