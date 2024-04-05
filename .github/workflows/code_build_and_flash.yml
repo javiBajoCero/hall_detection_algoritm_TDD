@@ -29,6 +29,7 @@ jobs:
       - name: build target code with makefile 
         run: |
           cd target_code_to_be_tested/hall_detection_algoritm
+          make clean
           make
           ls
           
@@ -56,6 +57,7 @@ jobs:
       - name: TEST2 building tester code with makefile
         run: |
           cd TESTS/TEST2_HIL_hall_signals_scrambled_49_cases/tester_jig_code/hall_error_emulator_nucleo-G431RB
+          make clean 
           make
           ls
 
