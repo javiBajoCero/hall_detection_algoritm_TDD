@@ -5,10 +5,10 @@ import threading
 import sys
 
 
-waittime=2;
+waittime=1;
 stopthreads=True;
-serial_tester=0;
-serial_target=0;
+serial_tester=None;
+serial_target=None;
 send_index=1;
 f=0;
 
@@ -152,8 +152,7 @@ def main():
 
 
     # Start a thread or a separate process to receive incoming messages
-    receive_thread = threading.Thread(target=receive_messages_tester, args=(serial_tester,messages),daemon=True)
-
+    #receive_thread = threading.Thread(target=receive_messages_tester, args=(serial_tester,messages),daemon=True)
     #receive_thread.start();
     
     receive_thread_test = threading.Thread(target=receive_messages_target, args=(serial_target,messages),daemon=True)
