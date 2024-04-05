@@ -133,7 +133,7 @@ def receive_messages_target(ser,messages):
     global f
     while stopthreads==True:
         if ser.in_waiting:
-            received_data = ser.readline().decode().replace(' ','')
+            received_data = ser.readline().decode('latin-1').replace(' ','')
             if received_data.find('\r')!=0:
                 if send_index>1:
                     print(f"Received from target: {received_data}")
