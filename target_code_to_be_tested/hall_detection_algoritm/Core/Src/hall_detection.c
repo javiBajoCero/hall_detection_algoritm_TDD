@@ -26,7 +26,7 @@
 //local defines
 
 #define MAXTICKs 1*20000 +INITIAL_WAIT_TICKS			/*!< timeout for the algorithm, measured in 0.05s ticks , so 1000*0.05=50ms (it takes only 380 ticks to get 6/2=3 electric periods from torrot emulated) */
-#define lowpassfilter_ticks 30 						/*!< minimum number of ticks that should have passed in between zerocrossings (lowpassfilter) */
+#define lowpassfilter_ticks 15 						/*!< minimum number of ticks that should have passed in between zerocrossings (lowpassfilter) */
 #define currentAplusBplusC (uint32_t)(3*(4096)/2)	/*!< the sum of the average of each currents should be this number aprox, used to calculate currentC ortogonally*/
 #define messageLength (number_of_phases*2)+2		/*!< ASCII results char array length to use with UART*/
 
@@ -475,15 +475,15 @@ void assign_polarity(detection_results_struct* res){
 	for (uint32_t i = 0; i < number_of_phases; ++i) {
 		if(currents[res->hall_order[i]]->zerocrossings_polarity[0]==halls[i]->zerocrossings_polarity[0]){
 			if(toggled_polarity[res->hall_order[i]]==0){
-				res->hall_polarity[res->hall_order[i]]=hall_inverse;
-			}else{
 				res->hall_polarity[res->hall_order[i]]=hall_direct;
+			}else{
+				res->hall_polarity[res->hall_order[i]]=hall_inverse;
 			}
 		}else{
 			if(toggled_polarity[res->hall_order[i]]==0){
-				res->hall_polarity[res->hall_order[i]]=hall_direct;
-			}else{
 				res->hall_polarity[res->hall_order[i]]=hall_inverse;
+			}else{
+				res->hall_polarity[res->hall_order[i]]=hall_direct;
 			}
 		}
 	}
@@ -524,7 +524,6 @@ void present_results(){
 
 void present_results_uart(){
 #ifdef TESTuart
-	HAL_UART_Transmit_DMA(&huart2, (const uint8_t *)&message, messageLength);
-	HAL_Delay(10);
+	HAL_UART_Transmit(&huart2, (const uint8_t *)&message, messageLength,100);
 #endif
 }
