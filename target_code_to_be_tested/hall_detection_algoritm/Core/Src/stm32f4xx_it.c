@@ -221,7 +221,19 @@ void DMA1_Stream6_IRQHandler(void)
 void TIM8_UP_TIM13_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM8_UP_TIM13_IRQn 0 */
-	Hall_Identification_Test_measurement(&H1,&H2,&H3,(uint16_t*)&ADCreadings[0],(uint16_t*)&ADCreadings[1]);
+
+	//read all hall gpios before handling the algorythm
+	H1.state=HAL_GPIO_ReadPin(H1.gpio_port, H1.gpio_pin);
+	H2.state=HAL_GPIO_ReadPin(H2.gpio_port, H2.gpio_pin);
+	H3.state=HAL_GPIO_ReadPin(H3.gpio_port, H3.gpio_pin);
+
+	//translate all currents to more coherent 1.0 float values isntead of raw ADC values
+	translated_to_float_current0=(float)((int32_t)ADCreadings[0]-(float)0xFFF/2.0)/20.0;// making up the gain to "look" coherent to real measurements but is not exact
+	translated_to_float_current1=(float)((int32_t)ADCreadings[1]-(float)0xFFF/2.0)/20.0;
+
+	//alright, now run the algorythm
+	Hall_Identification_Test_measurement(&H1,&H2,&H3,&translated_to_float_current0,&translated_to_float_current1);
+
   /* USER CODE END TIM8_UP_TIM13_IRQn 0 */
   HAL_TIM_IRQHandler(&htim8);
   /* USER CODE BEGIN TIM8_UP_TIM13_IRQn 1 */

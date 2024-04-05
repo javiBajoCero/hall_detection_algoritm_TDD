@@ -7,19 +7,26 @@
 
 #include "hall_detection.h" 		/*!< contains all enums, structs and includes neccesary for this .c, it also exposes the run_hall_detection_inside_20Khz_interruption() function to the outside world */
 
-#define TESTuart
+//#define TESTuart
 //uncomment only one
 //#define REAL_PHASES_A_B_calculated_C		/*!< our ADC is reading real current signals A and B, C=-A-B */
 #define REAL_PHASES_A_C_calculated_B		/*!< our ADC is reading real current signals A and C, B=-A-C */
 //#define REAL_PHASES_B_C_calculated_A		/*!< our ADC is reading real current signals B and C, A=-B-C */
-
+#define TESTuart
 #ifdef TESTuart
 #include "usart.h"
 #endif
 
+#define TESTnodelay
+#ifdef TESTuart
+#define INITIAL_WAIT_TICKS 0
+#elif
+#define INITIAL_WAIT_TICKS 3*20000
+#endif
 //local defines
-#define MAXTICKs 1000 								/*!< timeout for the algorithm, measured in 0.05s ticks , so 1000*0.05=50ms (it takes only 380 ticks to get 6/2=3 electric periods from torrot emulated) */
-#define lowpassfilter_ticks 10 						/*!< minimum number of ticks that should have passed in between zerocrossings (lowpassfilter) */
+
+#define MAXTICKs 1*20000 +INITIAL_WAIT_TICKS			/*!< timeout for the algorithm, measured in 0.05s ticks , so 1000*0.05=50ms (it takes only 380 ticks to get 6/2=3 electric periods from torrot emulated) */
+#define lowpassfilter_ticks 30 						/*!< minimum number of ticks that should have passed in between zerocrossings (lowpassfilter) */
 #define currentAplusBplusC (uint32_t)(3*(4096)/2)	/*!< the sum of the average of each currents should be this number aprox, used to calculate currentC ortogonally*/
 #define messageLength (number_of_phases*2)+2		/*!< ASCII results char array length to use with UART*/
 
@@ -27,14 +34,17 @@
 detection_state_enum detection_state=detection_DISABLED;	/*!< main enable disable variable, when it flips to enabled it starts the detection, when the detection is finished it flips back to disabled*/
 
 uint32_t ticks=0; 								/*!< ticks are the time measurement unit of this algorithm, each run of the algorithm (0.05s) the tick is incremented +1 */
-uint32_t currentADCoffset=(4096-1)/2;			/*!< the current waves zerocross is assumed to be at 3,3v/2= 1,65V, because thats how its defined in the emulator */
+float currentADCoffset=0.0;						/*!< as we are using already processed filtered currents, no offset is take into account */
 current_or_hall_measurements_struct currA;		/*!< contains all variables relevant for currA measurements*/
 current_or_hall_measurements_struct currB;		/*!< contains all variables relevant for currB measurements*/
 current_or_hall_measurements_struct currC;		/*!< contains all variables relevant for currC measurements*/
-current_or_hall_measurements_struct hallA;		/*!< contains all variables relevant for hallA measurements*/
-current_or_hall_measurements_struct hallB;		/*!< contains all variables relevant for hallB measurements*/
-current_or_hall_measurements_struct hallC;		/*!< contains all variables relevant for hallC measurements*/
+hall_measurements_struct hallA;		/*!< contains all variables relevant for hallA measurements*/
+hall_measurements_struct hallB;		/*!< contains all variables relevant for hallB measurements*/
+hall_measurements_struct hallC;		/*!< contains all variables relevant for hallC measurements*/
 detection_results_struct results;				/*!< once the algorithm finishes, the detection results will be stored in this struct*/
+const detection_results_struct emptyresults={0};
+const hall_measurements_struct empty_hall_measurements={0};
+const current_or_hall_measurements_struct empty_current_measurements={0};
 
 uint8_t message[messageLength];					/*!< ASCII results char array to use with UART*/
 
@@ -46,41 +56,41 @@ int32_t differences_phaseC[number_of_phases]={0};	/*!< auxiliar variable storing
 uint32_t toggled_polarity[number_of_phases]={0};	/*!< when phase and hall signals are measured out of phase due to unlucky timming when detecting, it is noted down in this variable for the polarity calculation */
 
 current_or_hall_measurements_struct *currents[number_of_phases]={&currA,&currB,&currC};
-current_or_hall_measurements_struct *halls[number_of_phases]={&hallA,&hallB,&hallC};
+hall_measurements_struct *halls[number_of_phases]={&hallA,&hallB,&hallC};
 
 //all functions declared inside this .c are listed here:
 void Hall_start_detection();
 uint32_t Hall_is_detection_finished();
 
 void Hall_Identification_Test_measurement(
-		hall_pin_info* H1,
-		hall_pin_info* H2,
-		hall_pin_info* H3,
-		uint16_t* ADCcurr1,
-		uint16_t* ADCcurr2
+		hall_pin_info* H1_gpio,
+		hall_pin_info* H2_gpio,
+		hall_pin_info* H3_gpio,
+		volatile float* ADCcurr1,
+		volatile float* ADCcurr2
 		);
 
 void signals_adquisition(
-		hall_pin_info* H1,
-		hall_pin_info* H2,
-		hall_pin_info* H3,
-		uint16_t* ADCcurr1,
-		uint16_t* ADCcurr2
+		hall_pin_info* H1_gpio,
+		hall_pin_info* H2_gpio,
+		hall_pin_info* H3_gpio,
+		volatile float* ADCcurr1,
+		volatile float* ADCcurr2
 		);
 
 void detect_all_zerocrossings();
 void detect_current_zerocrossings(current_or_hall_measurements_struct* currx);
-void detect_hall_zerocrossings(current_or_hall_measurements_struct* hallx);
+void detect_hall_zerocrossings(hall_measurements_struct* hallx);
 void end_detection(detection_state_enum* enabled_or_disabled);
 
 void evaluate_and_present_results(	detection_state_enum* enabled_or_disabled,
-									hall_pin_info* H1,
-									hall_pin_info* H2,
-									hall_pin_info* H3
+									hall_pin_info* H1_gpio,
+									hall_pin_info* H2_gpio,
+									hall_pin_info* H3_gpio
 									);
 void present_results_uart();
 
-void swap_hall_gpios_with_detected_results(hall_pin_info* H1,hall_pin_info* H2,hall_pin_info* H3);
+void swap_hall_gpios_with_detected_results(hall_pin_info* pin_infoH1,hall_pin_info* pin_infoH2,hall_pin_info* pin_infoH3);
 void calculateElectricPeriod_inTicks(uint32_t* resulting_period);
 void assign_closest_phase_to_hall(detection_results_struct* res);
 int32_t absolute(int32_t x);
@@ -93,6 +103,14 @@ void present_results();
 */
 void Hall_start_detection(){
 	detection_state=detection_ENABLED;
+	ticks=0;
+	results=emptyresults;
+	currA=empty_current_measurements;
+	currB=empty_current_measurements;
+	currC=empty_current_measurements;
+	hallA=empty_hall_measurements;
+	hallB=empty_hall_measurements;
+	hallC=empty_hall_measurements;
 }
 
 /**
@@ -111,17 +129,19 @@ uint32_t Hall_is_detection_finished(){
 * \param
 */
 void Hall_Identification_Test_measurement(
-		hall_pin_info* H1,
-		hall_pin_info* H2,
-		hall_pin_info* H3,
-		uint16_t* ADCcurr1,
-		uint16_t* ADCcurr2
+		hall_pin_info* H1_gpio,
+		hall_pin_info* H2_gpio,
+		hall_pin_info* H3_gpio,
+		volatile float* ADCcurr1,
+		volatile float* ADCcurr2
 		){
 	if(detection_state==detection_ENABLED){
-		signals_adquisition(H1,H2,H3,ADCcurr1,ADCcurr2);
-		detect_all_zerocrossings();
-		end_detection(&detection_state);
-		evaluate_and_present_results(&detection_state,H1,H2,H3);
+		if(ticks>INITIAL_WAIT_TICKS){
+			signals_adquisition(H1_gpio,H2_gpio,H3_gpio,ADCcurr1,ADCcurr2);
+			detect_all_zerocrossings();
+			end_detection(&detection_state);
+			evaluate_and_present_results(&detection_state,H1_gpio,H2_gpio,H3_gpio);
+		}
 		ticks++;
 	}
 
@@ -132,11 +152,11 @@ void Hall_Identification_Test_measurement(
 * \param
 */
 void signals_adquisition(
-		hall_pin_info* H1,
-		hall_pin_info* H2,
-		hall_pin_info* H3,
-		uint16_t* ADCcurr1,
-		uint16_t* ADCcurr2
+		hall_pin_info* H1_gpio,
+		hall_pin_info* H2_gpio,
+		hall_pin_info* H3_gpio,
+		volatile float* ADCcurr1,
+		volatile float* ADCcurr2
 		){
 
 #ifdef REAL_PHASES_A_B_calculated_C
@@ -155,7 +175,7 @@ void signals_adquisition(
 	currA.two_samples_buffer[0]= *ADCcurr1;
 	//b=-a-c, NO REAL MEASUREMENT OF CURRENT B, assuming ABC currents ortogonality:
 	currB.two_samples_buffer[1]=currB.two_samples_buffer[0];
-	currB.two_samples_buffer[0]= currentAplusBplusC-*ADCcurr1-*ADCcurr2;
+	currB.two_samples_buffer[0]= -*ADCcurr1-*ADCcurr2;
 
 	currC.two_samples_buffer[1]=currC.two_samples_buffer[0];
 	currC.two_samples_buffer[0]= *ADCcurr2;
@@ -174,15 +194,14 @@ void signals_adquisition(
 #endif
 
 
-
 	hallA.two_samples_buffer[1]=hallA.two_samples_buffer[0];
-	hallA.two_samples_buffer[0]=HAL_GPIO_ReadPin(H1->gpio_port, H1->gpio_pin);
+	hallA.two_samples_buffer[0]= H1_gpio->state;
 
 	hallB.two_samples_buffer[1]=hallB.two_samples_buffer[0];
-	hallB.two_samples_buffer[0]=HAL_GPIO_ReadPin(H2->gpio_port, H2->gpio_pin);
+	hallB.two_samples_buffer[0]= H2_gpio->state;
 
 	hallC.two_samples_buffer[1]=hallC.two_samples_buffer[0];
-	hallC.two_samples_buffer[0]=HAL_GPIO_ReadPin(H3->gpio_port, H3->gpio_pin);
+	hallC.two_samples_buffer[0]= H3_gpio->state;
 }
 
 /**
@@ -205,8 +224,8 @@ void detect_all_zerocrossings(){
 * \param
 */
 void detect_current_zerocrossings(current_or_hall_measurements_struct* currx){
-	if(	   (((int32_t)(currx->two_samples_buffer[0]-currentADCoffset)*
-			 (int32_t)(currx->two_samples_buffer[1]-currentADCoffset))<=0)
+	if(	   (((currx->two_samples_buffer[0]-currentADCoffset)*
+			 (currx->two_samples_buffer[1]-currentADCoffset))<=0)
 			 && currx->numberof_zerocrossings<MAXZEROCROSSINGS
 			){
 
@@ -236,11 +255,11 @@ void detect_current_zerocrossings(current_or_hall_measurements_struct* currx){
 * \brief
 * \param
 */
-void detect_hall_zerocrossings(current_or_hall_measurements_struct* hallx){
+void detect_hall_zerocrossings(hall_measurements_struct* hallx){
 	if(hallx->two_samples_buffer[0]!=hallx->two_samples_buffer[1]){
 		if(hallx->numberof_zerocrossings<MAXZEROCROSSINGS){
 			hallx->zerocrossings_tick[hallx->numberof_zerocrossings]=ticks;
-			if(hallx->two_samples_buffer[0]==GPIO_PIN_SET){
+			if(hallx->two_samples_buffer[0]!=0){
 				hallx->zerocrossings_polarity[hallx->numberof_zerocrossings]=rising_polarity;
 			}else{
 				hallx->zerocrossings_polarity[hallx->numberof_zerocrossings]=falling_polarity;
@@ -273,13 +292,17 @@ void end_detection(detection_state_enum* enabled_or_disabled){
 * \brief
 * \param
 */
-void evaluate_and_present_results(detection_state_enum* enabled_or_disabled,hall_pin_info* H1,hall_pin_info* H2,hall_pin_info* H3){
+void evaluate_and_present_results(
+		detection_state_enum* enabled_or_disabled,
+		hall_pin_info* H1_gpio,
+		hall_pin_info* H2_gpio,
+		hall_pin_info* H3_gpio){
 	if(*enabled_or_disabled==detection_DISABLED){
 		calculateElectricPeriod_inTicks(&results.electricPeriod_ticks);
 		assign_closest_phase_to_hall(&results);
 		assign_polarity(&results);
-		//swap_hall_gpios_with_detected_results(H1,H2,H3);
 		present_results();
+		swap_hall_gpios_with_detected_results(H1_gpio,H2_gpio,H3_gpio);
 	}
 }
 
@@ -287,23 +310,20 @@ void evaluate_and_present_results(detection_state_enum* enabled_or_disabled,hall
 * \brief
 * \param
 */
-void swap_hall_gpios_with_detected_results(hall_pin_info* H1,hall_pin_info* H2,hall_pin_info* H3){
-	hall_pin_info _H1=*H1;
-	hall_pin_info _H2=*H2;
-	hall_pin_info _H3=*H3;
+void swap_hall_gpios_with_detected_results(hall_pin_info* pin_infoH1,hall_pin_info* pin_infoH2,hall_pin_info* pin_infoH3){
+	hall_pin_info old_pin_infoH1=*pin_infoH1;
+	hall_pin_info old_pin_infoH2=*pin_infoH2;
+	hall_pin_info old_pin_infoH3=*pin_infoH3;
 
 	switch (results.hall_order[phase_A]) {
 		case hall_A:
-			*H1=_H1;
-			H1->polarity=results.hall_polarity[hall_A];
+			*pin_infoH1=old_pin_infoH1;
 			break;
 		case hall_B:
-			*H1=_H2;
-			H1->polarity=results.hall_polarity[hall_B];
+			*pin_infoH2=old_pin_infoH1;
 			break;
 		case hall_C:
-			*H1=_H3;
-			H1->polarity=results.hall_polarity[hall_C];
+			*pin_infoH3=old_pin_infoH1;
 			break;
 		default:
 			break;
@@ -311,16 +331,13 @@ void swap_hall_gpios_with_detected_results(hall_pin_info* H1,hall_pin_info* H2,h
 
 	switch (results.hall_order[phase_B]) {
 		case hall_A:
-			*H2=_H1;
-			H2->polarity=results.hall_polarity[hall_A];
+			*pin_infoH1=old_pin_infoH2;
 			break;
 		case hall_B:
-			*H2=_H2;
-			H2->polarity=results.hall_polarity[hall_B];
+			*pin_infoH2=old_pin_infoH2;
 			break;
 		case hall_C:
-			*H2=_H3;
-			H2->polarity=results.hall_polarity[hall_C];
+			*pin_infoH3=old_pin_infoH2;
 			break;
 		default:
 			break;
@@ -328,16 +345,13 @@ void swap_hall_gpios_with_detected_results(hall_pin_info* H1,hall_pin_info* H2,h
 
 	switch (results.hall_order[phase_C]) {
 		case hall_A:
-			*H3=_H1;
-			H3->polarity=results.hall_polarity[hall_A];
+			*pin_infoH1=old_pin_infoH3;
 			break;
 		case hall_B:
-			*H3=_H2;
-			H3->polarity=results.hall_polarity[hall_B];
+			*pin_infoH2=old_pin_infoH3;
 			break;
 		case hall_C:
-			*H3=_H3;
-			H3->polarity=results.hall_polarity[hall_C];
+			*pin_infoH3=old_pin_infoH3;
 			break;
 		default:
 			break;
@@ -511,5 +525,6 @@ void present_results(){
 void present_results_uart(){
 #ifdef TESTuart
 	HAL_UART_Transmit_DMA(&huart2, (const uint8_t *)&message, messageLength);
+	HAL_Delay(10);
 #endif
 }

@@ -45,12 +45,18 @@ typedef enum {
 } hall_curr_relation_enum;
 
 typedef struct{
-	uint32_t two_samples_buffer[2];
-
+	volatile float two_samples_buffer[2];
 	uint32_t zerocrossings_tick[MAXZEROCROSSINGS];
 	signals_polarity_enum zerocrossings_polarity[MAXZEROCROSSINGS];
 	uint32_t numberof_zerocrossings;
 }current_or_hall_measurements_struct;
+
+typedef struct{
+	volatile uint8_t two_samples_buffer[2];
+	uint32_t zerocrossings_tick[MAXZEROCROSSINGS];
+	signals_polarity_enum zerocrossings_polarity[MAXZEROCROSSINGS];
+	uint32_t numberof_zerocrossings;
+}hall_measurements_struct;
 
 typedef struct{
 	uint32_t electricPeriod_ticks;
@@ -63,11 +69,11 @@ void Hall_start_detection();
 uint32_t Hall_is_detection_finished();
 
 void Hall_Identification_Test_measurement(
-		hall_pin_info* H1,
-		hall_pin_info* H2,
-		hall_pin_info* H3,
-		uint16_t* ADCcurr1,
-		uint16_t* ADCcurr2
+		hall_pin_info* H1_gpio,
+		hall_pin_info* H2_gpio,
+		hall_pin_info* H3_gpio,
+		volatile float* ADCcurr1,
+		volatile float* ADCcurr2
 		);
 void present_results_uart();
 

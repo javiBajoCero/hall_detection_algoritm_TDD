@@ -83,11 +83,17 @@ typedef struct{
 	GPIO_TypeDef * gpio_port;
 	uint16_t gpio_pin;
 	uint8_t polarity;
+	GPIO_PinState state;
 }hall_pin_info;
 
 extern hall_pin_info H1;
 extern hall_pin_info H2;
 extern hall_pin_info H3;
+
+
+extern float translated_to_float_current0;
+extern float translated_to_float_current1;
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

@@ -26,7 +26,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "hall_detection.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -50,11 +50,12 @@
 #define numberofADCchannels 2
 uint32_t ADCreadings[numberofADCchannels];
 
+hall_pin_info H1={input_hall_A_GPIO_Port,input_hall_A_Pin,hall_direct,GPIO_PIN_RESET};
+hall_pin_info H2={input_hall_B_GPIO_Port,input_hall_B_Pin,hall_direct,GPIO_PIN_RESET};
+hall_pin_info H3={input_hall_C_GPIO_Port,input_hall_C_Pin,hall_direct,GPIO_PIN_RESET};
 
-hall_pin_info H1;
-hall_pin_info H2;
-hall_pin_info H3;
-
+float translated_to_float_current0=0;
+float translated_to_float_current1=0;
 
 /* USER CODE END PV */
 
@@ -76,17 +77,7 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	 H1.gpio_port=input_hall_A_GPIO_Port;
-	 H1.gpio_pin=input_hall_A_Pin;
-	 H1.polarity=0;
 
-	 H2.gpio_port=input_hall_B_GPIO_Port;
-	 H2.gpio_pin=input_hall_B_Pin;
-	 H2.polarity=0;
-
-	 H3.gpio_port=input_hall_C_GPIO_Port;
-	 H3.gpio_pin=input_hall_C_Pin;
-	 H3.polarity=0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -119,7 +110,7 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
  uint32_t onetime=1;
-  Hall_start_detection();
+ Hall_start_detection();
   while (1)
   {
 	  if(Hall_is_detection_finished()){
