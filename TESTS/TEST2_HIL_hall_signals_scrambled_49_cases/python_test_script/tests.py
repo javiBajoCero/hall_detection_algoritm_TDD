@@ -100,9 +100,6 @@ def find_out_tester_and_open_ports():
             
 def send_messages_tester(ser, messages):
     resetmessage="reset target\n\r";
-    emulationmessage="emulation\n\r";
-    serial_tester.write(emulationmessage.encode());
-    time.sleep(waittime)  # Add a delay to allow the device to process the message
     global send_index;
     global f
     for message in messages:
@@ -156,9 +153,13 @@ def main():
     #receive_thread.start();
     
     receive_thread_test = threading.Thread(target=receive_messages_target, args=(serial_target,messages),daemon=True)
-
     receive_thread_test.start();
     
+    time.sleep(waittime)  # Add a delay to allow the device to process the message
+    emulationmessage="emulation\n\r";
+    serial_tester.write(emulationmessage.encode());
+    time.sleep(waittime)  # Add a delay to allow the device to process the message
+
     send_thread = threading.Thread(target=send_messages_tester, args=(serial_tester,messages),daemon=True) 
     send_thread.start();
 
