@@ -2783,7 +2783,7 @@ void assign_polarity(detection_results_struct* res){
  8001700:	2300      	movs	r3, #0
  8001702:	60fb      	str	r3, [r7, #12]
  8001704:	e055      	b.n	80017b2 <assign_polarity+0xba>
-		if(currents[res->hall_order[i]]->zerocrossings_polarity[0]==halls[i]->zerocrossings_polarity[0]){
+		if(currents[res->hall_order[i]]->zerocrossings_polarity[1]==halls[i]->zerocrossings_polarity[1]){
  8001706:	687a      	ldr	r2, [r7, #4]
  8001708:	68fb      	ldr	r3, [r7, #12]
  800170a:	4413      	add	r3, r2
@@ -2792,11 +2792,11 @@ void assign_polarity(detection_results_struct* res){
  8001710:	461a      	mov	r2, r3
  8001712:	4b2d      	ldr	r3, [pc, #180]	; (80017c8 <assign_polarity+0xd0>)
  8001714:	f853 3022 	ldr.w	r3, [r3, r2, lsl #2]
- 8001718:	f893 2020 	ldrb.w	r2, [r3, #32]
+ 8001718:	f893 2021 	ldrb.w	r2, [r3, #33]	; 0x21
  800171c:	492b      	ldr	r1, [pc, #172]	; (80017cc <assign_polarity+0xd4>)
  800171e:	68fb      	ldr	r3, [r7, #12]
  8001720:	f851 3023 	ldr.w	r3, [r1, r3, lsl #2]
- 8001724:	7f1b      	ldrb	r3, [r3, #28]
+ 8001724:	7f5b      	ldrb	r3, [r3, #29]
  8001726:	429a      	cmp	r2, r3
  8001728:	d120      	bne.n	800176c <assign_polarity+0x74>
 			if(toggled_polarity[res->hall_order[i]]==0){
@@ -2977,13 +2977,13 @@ void present_results(){
  800184c:	54d1      	strb	r1, [r2, r3]
 		}
 
-		if(results.hall_polarity[i]==hall_inverse){//the "inverse polarity" from the hall with the currents is actually the normal logic.
+		if(results.hall_polarity[i]==hall_direct){
  800184e:	4a16      	ldr	r2, [pc, #88]	; (80018a8 <present_results+0xd4>)
  8001850:	683b      	ldr	r3, [r7, #0]
  8001852:	4413      	add	r3, r2
  8001854:	3307      	adds	r3, #7
  8001856:	781b      	ldrb	r3, [r3, #0]
- 8001858:	2b01      	cmp	r3, #1
+ 8001858:	2b00      	cmp	r3, #0
  800185a:	d105      	bne.n	8001868 <present_results+0x94>
 				message[i*2]=' ';
  800185c:	683b      	ldr	r3, [r7, #0]
@@ -2992,13 +2992,13 @@ void present_results(){
  8001862:	2120      	movs	r1, #32
  8001864:	54d1      	strb	r1, [r2, r3]
  8001866:	e00b      	b.n	8001880 <present_results+0xac>
-		}else if(results.hall_polarity[i]==hall_direct){
+		}else if(results.hall_polarity[i]==hall_inverse){
  8001868:	4a0f      	ldr	r2, [pc, #60]	; (80018a8 <present_results+0xd4>)
  800186a:	683b      	ldr	r3, [r7, #0]
  800186c:	4413      	add	r3, r2
  800186e:	3307      	adds	r3, #7
  8001870:	781b      	ldrb	r3, [r3, #0]
- 8001872:	2b00      	cmp	r3, #0
+ 8001872:	2b01      	cmp	r3, #1
  8001874:	d104      	bne.n	8001880 <present_results+0xac>
 				message[i*2]='!';
  8001876:	683b      	ldr	r3, [r7, #0]

@@ -473,7 +473,7 @@ int32_t absolute(int32_t x){
 void assign_polarity(detection_results_struct* res){
 
 	for (uint32_t i = 0; i < number_of_phases; ++i) {
-		if(currents[res->hall_order[i]]->zerocrossings_polarity[0]==halls[i]->zerocrossings_polarity[0]){
+		if(currents[res->hall_order[i]]->zerocrossings_polarity[1]==halls[i]->zerocrossings_polarity[1]){
 			if(toggled_polarity[res->hall_order[i]]==0){
 				res->hall_polarity[res->hall_order[i]]=hall_direct;
 			}else{
@@ -508,9 +508,9 @@ void present_results(){
 			message[(i*2)+1]='C';
 		}
 
-		if(results.hall_polarity[i]==hall_inverse){//the "inverse polarity" from the hall with the currents is actually the normal logic.
+		if(results.hall_polarity[i]==hall_direct){
 				message[i*2]=' ';
-		}else if(results.hall_polarity[i]==hall_direct){
+		}else if(results.hall_polarity[i]==hall_inverse){
 				message[i*2]='!';
 		}
 	}
