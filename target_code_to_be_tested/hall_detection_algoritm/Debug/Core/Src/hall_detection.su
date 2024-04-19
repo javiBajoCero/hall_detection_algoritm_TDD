@@ -15,5 +15,5 @@
 ../Core/Src/hall_detection.c:592:18:is_deviation_from_period_acceptable	48	static
 ../Core/Src/hall_detection.c:618:18:are_all_periods_stable	16	static
 ../Core/Src/hall_detection.c:682:9:absolute	16	static
-../Core/Src/hall_detection.c:691:6:assign_closest_phase_to_hall	64	static
-../Core/Src/hall_detection.c:777:6:assign_polarity	48	static
+../Core/Src/hall_detection.c:691:6:assign_closest_phase_to_hall	56	static
+../Core/Src/hall_detection.c:765:6:assign_polarity	48	static

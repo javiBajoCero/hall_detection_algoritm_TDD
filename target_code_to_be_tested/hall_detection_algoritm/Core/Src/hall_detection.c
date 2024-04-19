@@ -729,42 +729,30 @@ void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
 		}
 	}
 
-	int32_t minimum=0xFF;
-	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
-		if(gen->differences_phaseA[i]<minimum){
-			minimum=gen->differences_phaseA[i];
+	int32_t minimum[NUMBEROFPHASES]={0xFF,0xFF,0xFF};
+	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {//learns what the minimum differences are
+		if(gen->differences_phaseA[i]<minimum[phase_A]){
+			minimum[phase_A]=gen->differences_phaseA[i];
+		}
+		if(gen->differences_phaseA[i]<minimum[phase_B]){
+			minimum[phase_B]=gen->differences_phaseB[i];
+		}
+		if(gen->differences_phaseA[i]<minimum[phase_C]){
+			minimum[phase_C]=gen->differences_phaseC[i];
 		}
 	}
-	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
-		if(gen->differences_phaseA[i]==minimum){
+
+	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {//if the difference is the minimum one thats the winnner
+		if(gen->differences_phaseA[i]==minimum[phase_A]){
 			gen->results[gen->numberOfresults].hall_order[i]=phase_A;
 		}
-	}
-
-	minimum=0xFF;
-	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
-		if(gen->differences_phaseB[i]<minimum){
-			minimum=gen->differences_phaseB[i];
-		}
-	}
-	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
-		if(gen->differences_phaseB[i]==minimum){
+		if(gen->differences_phaseB[i]==minimum[phase_B]){
 			gen->results[gen->numberOfresults].hall_order[i]=phase_B;
 		}
-	}
-
-	minimum=0xFF;
-	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
-		if(gen->differences_phaseC[i]<minimum){
-			minimum=gen->differences_phaseC[i];
-		}
-	}
-	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
-		if(gen->differences_phaseC[i]==minimum){
+		if(gen->differences_phaseC[i]==minimum[phase_C]){
 			gen->results[gen->numberOfresults].hall_order[i]=phase_C;
 		}
 	}
-
 }
 
 
