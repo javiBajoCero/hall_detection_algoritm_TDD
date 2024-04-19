@@ -151,9 +151,10 @@ def main():
     # Start a thread or a separate process to receive incoming messages
     #receive_thread = threading.Thread(target=receive_messages_tester, args=(serial_tester,messages),daemon=True)
     #receive_thread.start();
-    
-    receive_thread_test = threading.Thread(target=receive_messages_target, args=(serial_target,messages),daemon=True)
-    receive_thread_test.start();
+    # Start a thread or a separate process to receive incoming messages
+    receive2_thread = threading.Thread(target=receive_messages_target, args=(serial_target,messages),daemon=True)
+    receive2_thread.start();
+
     
     time.sleep(waittime)  # Add a delay to allow the device to process the message
     emulationmessage="emulation\n\r";
@@ -168,7 +169,7 @@ def main():
     global stopthreads
     stopthreads=False;
     #receive_thread.join();
-    receive_thread_test.join();
+    receive2_thread.join();
     # Close the serial connection
     serial_tester.close()
     print("Serial connection closed.")
