@@ -739,17 +739,17 @@ void assign_polarity(hall_detection_general_struct *gen){
 
 
 	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
-		if(currents[i]->zerocrossings_polarity[1]==halls[pointerOfcurrentResult->hall_order[i]]->zerocrossings_polarity[1]){
-			if(gen->shifted_polarity[i][pointerOfcurrentResult->hall_order[i]]==0){
-				pointerOfcurrentResult->hall_polarity[i]=hall_direct;
+		if(currents[pointerOfcurrentResult->hall_order[i]]->zerocrossings_polarity[1]==halls[i]->zerocrossings_polarity[1]){
+			if(gen->shifted_polarity[pointerOfcurrentResult->hall_order[i]][i]==0){
+				pointerOfcurrentResult->hall_polarity[pointerOfcurrentResult->hall_order[i]]=hall_direct;
 			}else{
-				pointerOfcurrentResult->hall_polarity[i]=hall_inverse;
+				pointerOfcurrentResult->hall_polarity[pointerOfcurrentResult->hall_order[i]]=hall_inverse;
 			}
 		}else{
-			if(gen->shifted_polarity[i][pointerOfcurrentResult->hall_order[i]]==0){
-				pointerOfcurrentResult->hall_polarity[i]=hall_inverse;
+			if(gen->shifted_polarity[pointerOfcurrentResult->hall_order[i]][i]==0){
+				pointerOfcurrentResult->hall_polarity[pointerOfcurrentResult->hall_order[i]]=hall_inverse;
 			}else{
-				pointerOfcurrentResult->hall_polarity[i]=hall_direct;
+				pointerOfcurrentResult->hall_polarity[pointerOfcurrentResult->hall_order[i]]=hall_direct;
 			}
 		}
 	}
