@@ -176,18 +176,24 @@ void Hall_Identification_Test_measurement(
 			break;
 		case detection_WAIT_CURRENT_STATIONARY:
 			wait_for_the_current_stationary(&detection_state,&general,H1_gpio,H2_gpio,H3_gpio,ADCcurr1,ADCcurr2);
+			ticks++;
 			break;
 		case detection_ADQUISITION:
 			adquisition(&detection_state,&general,H1_gpio,H2_gpio,H3_gpio,ADCcurr1,ADCcurr2);
+			ticks++;
 			break;
 		case detection_INTERPRETATION:
 			interpretation(&detection_state, &general);
+			ticks++;
 			break;
 		case detection_VALIDATION:
+			ticks++;
 			validation(&detection_state,&general);
+			ticks++;
 			break;
 		case detection_PRESENTATION_FINISH:
 			present_and_finish(&detection_state,&general);
+			ticks++;
 			break;
 		case detection_ERROR_OR_TIMEOUT:
 		case detection_DISABLED://do nothing
@@ -195,7 +201,6 @@ void Hall_Identification_Test_measurement(
 			detection_state=detection_DISABLED;
 			break;
 	}
-	ticks++;
 }
 
 /**
@@ -734,7 +739,7 @@ void assign_polarity(hall_detection_general_struct *gen){
 
 
 	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
-		if(currents[pointerOfcurrentResult->hall_order[i]]->zerocrossings_polarity[1]==halls[i]->zerocrossings_polarity[1]){
+		if(currents[i]->zerocrossings_polarity[1]==halls[pointerOfcurrentResult->hall_order[i]]->zerocrossings_polarity[1]){
 			if(gen->shifted_polarity[i][pointerOfcurrentResult->hall_order[i]]==0){
 				pointerOfcurrentResult->hall_polarity[i]=hall_direct;
 			}else{
