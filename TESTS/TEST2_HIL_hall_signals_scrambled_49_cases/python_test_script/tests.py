@@ -5,7 +5,7 @@ import threading
 import sys
 
 
-waittime=10*0.5;
+waittime=0.5;
 stopthreads=True;
 serial_tester=None;
 serial_target=None;
@@ -123,6 +123,7 @@ def receive_messages_tester(ser,messages):
             if received_data.find('\r')!=0:
                 if send_index>1:
                     print(f"received from tester: {received_data}")
+        time.sleep(waittime*0.1)
 
 def receive_messages_target(ser,messages):
     global stopthreads
