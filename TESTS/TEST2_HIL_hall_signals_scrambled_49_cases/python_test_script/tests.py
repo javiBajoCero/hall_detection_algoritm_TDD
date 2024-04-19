@@ -145,20 +145,38 @@ def main():
     stopthreads=False;
     #receive_thread.join();
     receive_thread_test.join();
+    
     # Close the serial connection
     serial_tester.close()
     print("Serial connection closed.")
+    f.write("Serial connection closed.")
 
     for i in range(len(messages)):
         messages[i]=messages[i].replace('\r','');
-    
+        messages[i]=messages[i].replace(" ","");
+    for i in range(len(receivedMessages)):
+        receivedMessages[i]=receivedMessages[i].replace('\r','');
+        receivedMessages[i]=receivedMessages[i].replace(" ","");
+        
+    print(f"received messages length: {len(receivedMessages)}");
+    print(f"sent messages length: {len(messages)}");
+
+    if len(receivedMessages) != len(messages):
+        print(f"number of sent messages {len(messages)}  match the number of received results {len(receivedMessages)}, TESTING FAILED");
+        sys.exit(-1);
+        
     if receivedMessages == messages:
         print("all test cases passed");
+        sys.exit(0);
     else:
         print("not all test cases passed");
-        for i in range(len(receivedMessages)):
-            if messages[i].replace('\r','')!=receivedMessages[i]:
-                print(f"error in test case number {i}, it was supposed to be:{messages[i]} instead of: {receivedMessages[i]}")
+        for j in range(len(receivedMessages)):
+            if messages[j]!=receivedMessages[j]:
+                #lists are indexed starting in 0, thats why i do j+1, our cases are from 1 to 48, the list is from 0 to 47
+                print(  f"error in test case number {j+1}, it was supposed to be:{messages[j]} instead of:{receivedMessages[j]}")
+
+        print(messages);
+        print(receivedMessages);
         sys.exit(-1);
 
 main()
