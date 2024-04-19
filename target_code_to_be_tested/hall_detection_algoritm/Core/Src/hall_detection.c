@@ -91,16 +91,14 @@ void assign_polarity(hall_detection_general_struct *gen);
 
 
 /**
-* \brief
-* \param
+* \brief public function , this should me called by anyone otside this .c .h to start the hall detection show
 */
 void Hall_start_detection(){
 	detection_state=detection_ENABLED;
 }
 
 /**
-* \brief
-* \param
+* \brief public function , this should me called by anyone otside this .c .h to figure out if the detection finished
 */
 uint32_t Hall_is_detection_finished(){
 	if(detection_state==detection_DISABLED){
@@ -157,8 +155,12 @@ uint32_t Hall_is_detection_finished(){
 
 */
 /**
-* \brief
-* \param
+* \brief public function, to be included inside a 20Khz interruption routine, it manages the state machine used by the detection
+* \param hall_pin_info * H1_gpio, pointer to gpio info about the hall A
+* \param hall_pin_info * H2_gpio, pointer to gpio info about the hall B
+* \param hall_pin_info * H3_gpio, pointer to gpio info about the hall C
+* \param volatile float* ADCcurr1, pointer to current value in amps for phase A
+* \param volatile float* ADCcurr2, pointer to current value in amps for phase C? or B?
 */
 void Hall_Identification_Test_measurement(
 		hall_pin_info* H1_gpio,
@@ -204,8 +206,8 @@ void Hall_Identification_Test_measurement(
 }
 
 /**
-* \brief
-* \param
+* \brief just resets to 0 the huge structure used by the detection
+* \param hall_detection_general_struct *gen, pointer to the huge structure.
 */
 void resetVariables(hall_detection_general_struct *gen){
 	*gen=empty_general;		//set everything to 0, im not memsetting
@@ -213,8 +215,14 @@ void resetVariables(hall_detection_general_struct *gen){
 
 
 /**
-* \brief
-* \param
+* \brief the motor running in open loop control needs a bit of time to lock in place so current signals stop being so ugly.
+* \param detection_state_enum* state,
+* \param hall_detection_general_struct *gen,
+* \param hall_pin_info * H1_gpio, pointer to gpio info about the hall A
+* \param hall_pin_info * H2_gpio, pointer to gpio info about the hall B
+* \param hall_pin_info * H3_gpio, pointer to gpio info about the hall C
+* \param volatile float* ADCcurr1, pointer to current value in amps for phase A
+* \param volatile float* ADCcurr2, pointer to current value in amps for phase C? or B?
 */
 void wait_for_the_current_stationary(detection_state_enum* state,hall_detection_general_struct *gen,
 		hall_pin_info* H1_gpio,
