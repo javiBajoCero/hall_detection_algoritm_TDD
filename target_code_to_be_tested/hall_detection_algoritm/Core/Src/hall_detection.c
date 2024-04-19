@@ -351,9 +351,8 @@ void validation(detection_state_enum* state,hall_detection_general_struct *gen){
 
 
 	if(gen->numberOfresults>=NUMBER_OF_VALID_MATCHING_RESULTS){			//only if enough adquisitions were made
-		uint32_t number_of_results_matching=0;
 		for (uint32_t i = 0; i < gen->numberOfresults; ++i) {			//loop trough results
-			number_of_results_matching=0;
+			uint32_t number_of_results_matching=0;
 			if(gen->results[i].is_valid==YES){							//skip the not valid results.
 				for (uint32_t j = i+1; j < gen->numberOfresults; ++j) {	//compare that one result with the rest
 					if(
@@ -482,8 +481,9 @@ void fill_buffers(
 }
 
 /**
-* \brief
-* \param
+* \brief reading the buffers we just filled detects if a zero crossing happened in between them, it has a low pass filter just in case spurious stuff happens, once all zerocrossings are filled it signals done detecting
+* \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
+* \return YES//done detecting or NO//still ongoing
 */
 detection_YES_NO detect_N_zerocrossings(hall_detection_general_struct *gen,uint32_t N){
 	if((ticks-general.start_adquisition_ticks)>2){ //skip the first two samples to fill the buffers
@@ -509,8 +509,8 @@ detection_YES_NO detect_N_zerocrossings(hall_detection_general_struct *gen,uint3
 }
 
 /**
-* \brief
-* \param
+* \brief reading the current buffers detects 0 crossings and takes notes of the tick number.
+* \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
 */
 void detect_N_current_zerocrossings(uint32_t ticks,current_or_hall_measurements_struct* currx,uint32_t N){
 	if(	   (((currx->two_samples_buffer[0]-currentADCoffset)*
@@ -541,8 +541,8 @@ void detect_N_current_zerocrossings(uint32_t ticks,current_or_hall_measurements_
 }
 
 /**
-* \brief
-* \param
+* \brief similar to detect_N_current_zerocrossings() reading the hall buffers detects logic changes and notes down the tick number
+* \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
 */
 void detect_N_hall_zerocrossings(uint32_t ticks,hall_measurements_struct* hallx,uint32_t N){
 	if(hallx->two_samples_buffer[0]!=hallx->two_samples_buffer[1]){
@@ -559,8 +559,9 @@ void detect_N_hall_zerocrossings(uint32_t ticks,hall_measurements_struct* hallx,
 }
 
 /**
-* \brief
-* \param
+* \brief reading differences between noted ticks zerocrossigns averages our motor electric period
+* \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
+* \param samples number of zerocrossings to be used in the diff calculation
 */
 void calculateElectricPeriod_inTicks(hall_detection_general_struct *gen, uint32_t samples){
 	uint32_t averagedsemiPeriod=0;
@@ -579,11 +580,12 @@ void calculateElectricPeriod_inTicks(hall_detection_general_struct *gen, uint32_
 }
 
 /**
-* \brief
-* \param
+* \brief just checks if all zerocrossings fall between acceptable deviation from average period.
+* \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
+* \param float tolerance_factor, 0.1 would mean +-10%tolerance of deviation from average
+* \param samples number of zerocrossings to be used in the diff calculation
+* \return YES if all deviations are accceptable, or NO if they are not
 */
-
-
 detection_YES_NO is_deviation_from_period_acceptable(hall_detection_general_struct *gen, float tolerance_factor,uint32_t samples){
 	float _semiperiod=gen->results[gen->numberOfresults].electricPeriod_ticks/2.0;
 	uint32_t _deviation_top=	_semiperiod +_semiperiod*tolerance_factor;
@@ -592,12 +594,12 @@ detection_YES_NO is_deviation_from_period_acceptable(hall_detection_general_stru
 	for (uint32_t i = 0; i < samples-1; ++i) {
 		uint32_t _sampled_period=(gen->currA.zerocrossings_tick[i+1]-gen->currA.zerocrossings_tick[i]);
 		if((_sampled_period<(_deviation_bottom))||(_sampled_period>(_deviation_top))){
-			return NO;
+			return NO;//early return, bad news
 		}
 
 		_sampled_period=(gen->currC.zerocrossings_tick[i+1]-gen->currC.zerocrossings_tick[i]);
 		if((_sampled_period<(_deviation_bottom))||(_sampled_period>(_deviation_top))){
-			return NO;
+			return NO;//early return, bad news
 		}
 	}
 	return YES;//acceptable
@@ -605,8 +607,10 @@ detection_YES_NO is_deviation_from_period_acceptable(hall_detection_general_stru
 
 
 /**
-* \brief
-* \param
+* \brief a wrapper to tidy up and make sure we calculate the electric period before calculating deviations.
+* \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
+* \param samples number of zerocrossings to be used in the diff calculation
+* \return YES if we are in the stable zone of steady periods. NO otherwise
 */
 detection_YES_NO are_all_periods_stable(hall_detection_general_struct *gen, uint32_t samples){
 			calculateElectricPeriod_inTicks(gen,samples);
