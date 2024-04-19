@@ -6,6 +6,7 @@ import sys
 
 waittime=0.50;
 stopthreads=True;
+listeningSerial=False;
 serial_tester=0;
 serial_target=0;
 
@@ -103,23 +104,28 @@ def send_messages_tester(ser, messages):
 
 def receive_messages_tester(ser,messages):
     global stopthreads
-    while stopthreads==True:
+    global listeningSerial
+    while stopthreads==True and listeningSerial==True:
         if ser.in_waiting:
             received_data = ser.readline().decode()
             if received_data.find('\r')!=0:
                 print(f"received from tester: {received_data}")
+                time.sleep(0.1);
 
 def receive_messages_target(ser,messages):
     global stopthreads
-    while stopthreads==True:
+    global listeningSerial
+    while stopthreads==True and listeningSerial==True:
         if ser.in_waiting:
             received_data = ser.readline().decode().replace(' ','')
             if received_data.find('\r')!=0:
                 print(f"Received from target: {received_data}")
                 receivedMessages.append(received_data);
+                time.sleep(0.1);
 
 def main():
     global messages;
+    global listeningSerial;
     # List and open available serial ports
     find_out_tester_and_open_ports()
 
@@ -129,13 +135,16 @@ def main():
 
     # Start a thread or a separate process to receive incoming messages
     receive_thread = threading.Thread(target=receive_messages_tester, args=(serial_tester,messages),daemon=True)
-
     #receive_thread.start();
     
     receive_thread_test = threading.Thread(target=receive_messages_target, args=(serial_target,messages),daemon=True)
-
     receive_thread_test.start();
     
+    time.sleep(1);
+    serial_tester.flush();
+    serial_target.flush();
+    
+    listeningSerial=True
     send_thread = threading.Thread(target=send_messages_tester, args=(serial_tester,messages),daemon=True) 
     send_thread.start();
 
