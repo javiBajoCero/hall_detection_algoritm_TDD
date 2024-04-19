@@ -89,13 +89,13 @@
        <table>
            <tr><th>Show</th><th>#</th><th>Defect ID</th></tr>
             <tr><td><input type="checkbox" onclick="toggleDisplay(this.id)" id="unusedFunction" name="unusedFunction" checked></td><td>306</td><td>unusedFunction</td></tr>
-            <tr><td><input type="checkbox" onclick="toggleDisplay(this.id)" id="variableScope" name="variableScope" checked></td><td>56</td><td>variableScope</td></tr>
+            <tr><td><input type="checkbox" onclick="toggleDisplay(this.id)" id="variableScope" name="variableScope" checked></td><td>55</td><td>variableScope</td></tr>
             <tr><td><input type="checkbox" onclick="toggleDisplay(this.id)" id="ConfigurationNotChecked" name="ConfigurationNotChecked" checked></td><td>29</td><td>ConfigurationNotChecked</td></tr>
-            <tr><td><input type="checkbox" onclick="toggleDisplay(this.id)" id="unreadVariable" name="unreadVariable" checked></td><td>21</td><td>unreadVariable</td></tr>
+            <tr><td><input type="checkbox" onclick="toggleDisplay(this.id)" id="unreadVariable" name="unreadVariable" checked></td><td>20</td><td>unreadVariable</td></tr>
             <tr><td><input type="checkbox" onclick="toggleDisplay(this.id)" id="redundantAssignment" name="redundantAssignment" checked></td><td>5</td><td>redundantAssignment</td></tr>
             <tr><td><input type="checkbox" onclick="toggleDisplay(this.id)" id="toomanyconfigs" name="toomanyconfigs" checked></td><td>2</td><td>toomanyconfigs</td></tr>
             <tr><td><input type="checkbox" onclick="toggleDisplay(this.id)" id="missingInclude" name="missingInclude" checked></td><td>1</td><td>missingInclude</td></tr>
-           <tr><td></td><td>420</td><td>total</td></tr>
+           <tr><td></td><td>418</td><td>total</td></tr>
        </table>
        <p><a href="stats.html">Statistics</a></p>
     </div>
@@ -106,10 +106,8 @@
        <tr><td colspan="5"><a href="25.html"></a></td></tr>
          <tr class="missingInclude"><td></td><td>missingInclude</td><td></td><td>information</td><td>Cppcheck cannot find all the include files (use --check-config for details)</td></tr>
        <tr><td colspan="5"><a href="0.html">target_code_to_be_tested/hall_detection_algoritm/Core/Src/hall_detection.c</a></td></tr>
-       <tr class="variableScope"><td><a href="0.html#line-339">339</a></td><td>variableScope</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style</td><td >The scope of the variable &apos;number_of_results_matching&apos; can be reduced.</td></tr>
-       <tr class="unreadVariable"><td><a href="0.html#line-339">339</a></td><td>unreadVariable</td><td><a href="https://cwe.mitre.org/data/definitions/563.html">563</a></td><td>style</td><td >Variable &apos;number_of_results_matching&apos; is assigned a value that is never used.</td></tr>
-       <tr class="variableScope"><td><a href="0.html#line-565">565</a></td><td>variableScope</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style</td><td >The scope of the variable &apos;_sampled_period&apos; can be reduced.</td></tr>
-       <tr class="unreadVariable"><td><a href="0.html#line-565">565</a></td><td>unreadVariable</td><td><a href="https://cwe.mitre.org/data/definitions/563.html">563</a></td><td>style</td><td >Variable &apos;_sampled_period&apos; is assigned a value that is never used.</td></tr>
+       <tr class="variableScope"><td><a href="0.html#line-354">354</a></td><td>variableScope</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style</td><td >The scope of the variable &apos;number_of_results_matching&apos; can be reduced.</td></tr>
+       <tr class="unreadVariable"><td><a href="0.html#line-354">354</a></td><td>unreadVariable</td><td><a href="https://cwe.mitre.org/data/definitions/563.html">563</a></td><td>style</td><td >Variable &apos;number_of_results_matching&apos; is assigned a value that is never used.</td></tr>
        <tr><td colspan="5"><a href="24.html">target_code_to_be_tested/hall_detection_algoritm/Core/Src/main.c</a></td></tr>
        <tr class="unusedFunction"><td><a href="24.html#line-208">208</a></td><td>unusedFunction</td><td><a href="https://cwe.mitre.org/data/definitions/561.html">561</a></td><td>style</td><td >The function &apos;assert_failed&apos; is never used.</td></tr>
        <tr><td colspan="5"><a href="14.html">target_code_to_be_tested/hall_detection_algoritm/Core/Src/stm32f4xx_it.c</a></td></tr>

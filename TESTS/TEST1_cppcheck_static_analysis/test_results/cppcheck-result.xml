@@ -2,21 +2,13 @@
 <results version="2">
     <cppcheck version="2.3"/>
     <errors>
-        <error id="variableScope" severity="style" msg="The scope of the variable &apos;number_of_results_matching&apos; can be reduced." verbose="The scope of the variable &apos;number_of_results_matching&apos; can be reduced. Warning: Be careful when fixing this message, especially when there are inner loops. Here is an example where cppcheck will write that the scope for &apos;i&apos; can be reduced:\012void f(int x)\012{\012    int i = 0;\012    if (x) {\012        // it&apos;s safe to move &apos;int i = 0;&apos; here\012        for (int n = 0; n &lt; 10; ++n) {\012            // it is possible but not safe to move &apos;int i = 0;&apos; here\012            do_something(&amp;i);\012        }\012    }\012}\012When you see this message it is always safe to reduce the variable scope 1 level." cwe="398" hash="1213238569155645379">
-            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/hall_detection.c" line="339" column="11"/>
+        <error id="variableScope" severity="style" msg="The scope of the variable &apos;number_of_results_matching&apos; can be reduced." verbose="The scope of the variable &apos;number_of_results_matching&apos; can be reduced. Warning: Be careful when fixing this message, especially when there are inner loops. Here is an example where cppcheck will write that the scope for &apos;i&apos; can be reduced:\012void f(int x)\012{\012    int i = 0;\012    if (x) {\012        // it&apos;s safe to move &apos;int i = 0;&apos; here\012        for (int n = 0; n &lt; 10; ++n) {\012            // it is possible but not safe to move &apos;int i = 0;&apos; here\012            do_something(&amp;i);\012        }\012    }\012}\012When you see this message it is always safe to reduce the variable scope 1 level." cwe="398" hash="4871807908884820769">
+            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/hall_detection.c" line="354" column="12"/>
             <symbol>number_of_results_matching</symbol>
         </error>
-        <error id="variableScope" severity="style" msg="The scope of the variable &apos;_sampled_period&apos; can be reduced." verbose="The scope of the variable &apos;_sampled_period&apos; can be reduced. Warning: Be careful when fixing this message, especially when there are inner loops. Here is an example where cppcheck will write that the scope for &apos;i&apos; can be reduced:\012void f(int x)\012{\012    int i = 0;\012    if (x) {\012        // it&apos;s safe to move &apos;int i = 0;&apos; here\012        for (int n = 0; n &lt; 10; ++n) {\012            // it is possible but not safe to move &apos;int i = 0;&apos; here\012            do_something(&amp;i);\012        }\012    }\012}\012When you see this message it is always safe to reduce the variable scope 1 level." cwe="398" hash="6049502606444474666">
-            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/hall_detection.c" line="565" column="11"/>
-            <symbol>_sampled_period</symbol>
-        </error>
-        <error id="unreadVariable" severity="style" msg="Variable &apos;number_of_results_matching&apos; is assigned a value that is never used." verbose="Variable &apos;number_of_results_matching&apos; is assigned a value that is never used." cwe="563" hash="1710135857573286573">
-            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/hall_detection.c" line="339" column="37"/>
+        <error id="unreadVariable" severity="style" msg="Variable &apos;number_of_results_matching&apos; is assigned a value that is never used." verbose="Variable &apos;number_of_results_matching&apos; is assigned a value that is never used." cwe="563" hash="223172486251673500">
+            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/hall_detection.c" line="354" column="38"/>
             <symbol>number_of_results_matching</symbol>
-        </error>
-        <error id="unreadVariable" severity="style" msg="Variable &apos;_sampled_period&apos; is assigned a value that is never used." verbose="Variable &apos;_sampled_period&apos; is assigned a value that is never used." cwe="563" hash="5910863492511002918">
-            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/hall_detection.c" line="565" column="26"/>
-            <symbol>_sampled_period</symbol>
         </error>
         <error id="toomanyconfigs" severity="information" msg="Too many #ifdef configurations - cppcheck only checks 12 of 20 configurations. Use --force to check all configurations." verbose="The checking of the file will be interrupted because there are too many #ifdef configurations. Checking of all #ifdef configurations can be forced by --force command line option or from GUI preferences. However that may increase the checking time." cwe="398">
             <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/system_stm32f4xx.c" line="0" column="0"/>
