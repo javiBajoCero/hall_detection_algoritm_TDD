@@ -355,8 +355,8 @@ void validation(detection_state_enum* state,hall_detection_general_struct *gen){
 
 	if(gen->numberOfresults>=NUMBER_OF_VALID_MATCHING_RESULTS){			//only if enough adquisitions were made
 		for (uint32_t i = 0; i < gen->numberOfresults; ++i) {			//loop trough results
-			uint32_t number_of_results_matching=0;
 			if(gen->results[i].is_valid==YES){							//skip the not valid results.
+				uint32_t number_of_results_matching=0;
 				for (uint32_t j = i+1; j < gen->numberOfresults; ++j) {	//compare that one result with the rest
 					if(
 							gen->results[i].hall_order[0]==gen->results[j].hall_order[0] &&
