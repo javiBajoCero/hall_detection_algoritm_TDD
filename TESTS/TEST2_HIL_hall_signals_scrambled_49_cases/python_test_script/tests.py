@@ -123,10 +123,10 @@ def main():
     # List and open available serial ports
     find_out_tester_and_open_ports()
 
-    time.sleedp(1);
+    time.sleed(1);
     serial_tester.flush();
     serial_target.flush();
-    
+
     # Start a thread or a separate process to receive incoming messages
     receive_thread = threading.Thread(target=receive_messages_tester, args=(serial_tester,messages),daemon=True)
 
