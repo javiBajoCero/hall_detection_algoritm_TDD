@@ -66,7 +66,8 @@ void interpretation					(detection_state_enum* state,hall_detection_general_stru
 void validation						(detection_state_enum* state,hall_detection_general_struct *gen);
 void present_and_finish				(detection_state_enum* state,hall_detection_general_struct *gen);
 
-void fill_buffers(detection_state_enum* state,hall_detection_general_struct *gen,
+void fill_buffers(
+		hall_detection_general_struct *gen,
 		hall_pin_info* H1_gpio,
 		hall_pin_info* H2_gpio,
 		hall_pin_info* H3_gpio,
@@ -210,14 +211,14 @@ void Hall_Identification_Test_measurement(
 * \param hall_detection_general_struct *gen, pointer to the huge structure.
 */
 void resetVariables(hall_detection_general_struct *gen){
-	*gen=empty_general;		//set everything to 0, im not memsetting
+	*gen=empty_general;		//i dont want to use memset, so we sacrifice flash memory space filled with 0's for this.
 }
 
 
 /**
 * \brief the motor running in open loop control needs a bit of time to lock in place so current signals stop being so ugly.
-* \param detection_state_enum* state,
-* \param hall_detection_general_struct *gen,
+* \param detection_state_enum* state,			pointer to the variable controling the state machine
+* \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
 * \param hall_pin_info * H1_gpio, pointer to gpio info about the hall A
 * \param hall_pin_info * H2_gpio, pointer to gpio info about the hall B
 * \param hall_pin_info * H3_gpio, pointer to gpio info about the hall C
@@ -232,7 +233,7 @@ void wait_for_the_current_stationary(detection_state_enum* state,hall_detection_
 		volatile float* ADCcurr2
 		){
 	//timeout or currentisstationary
-	fill_buffers(state, gen, H1_gpio, H2_gpio, H3_gpio, ADCcurr1, ADCcurr2);
+	fill_buffers(gen, H1_gpio, H2_gpio, H3_gpio, ADCcurr1, ADCcurr2);
 	//timeout
 	if( ticks>MAXTICKs){
 		*state=detection_ERROR_OR_TIMEOUT;
@@ -255,8 +256,14 @@ void wait_for_the_current_stationary(detection_state_enum* state,hall_detection_
 }
 
 /**
-* \brief
-* \param
+* \brief similar to wait_for_the_current_stationary(), but this time we mean it, we are adquiring the zerocrossings that will be used to detect everything. not just checking stable signal periods.
+* \param detection_state_enum* state,			pointer to the variable controling the state machine
+* \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
+* \param hall_pin_info * H1_gpio, pointer to gpio info about the hall A
+* \param hall_pin_info * H2_gpio, pointer to gpio info about the hall B
+* \param hall_pin_info * H3_gpio, pointer to gpio info about the hall C
+* \param volatile float* ADCcurr1, pointer to current value in amps for phase A
+* \param volatile float* ADCcurr2, pointer to current value in amps for phase C? or B?
 */
 void adquisition(
 		detection_state_enum* state,
@@ -268,7 +275,7 @@ void adquisition(
 		volatile float* ADCcurr2
 		){
 
-	fill_buffers(state, gen, H1_gpio, H2_gpio, H3_gpio, ADCcurr1, ADCcurr2);
+	fill_buffers(gen, H1_gpio, H2_gpio, H3_gpio, ADCcurr1, ADCcurr2);
 
 	//timeout
 	if( ticks>MAXTICKs){
@@ -285,8 +292,9 @@ void adquisition(
 }
 
 /**
-* \brief
-* \param
+* \brief once we adquired the data we are trying to make sense out of it.
+* \param detection_state_enum* state,			pointer to the variable controling the state machine
+* \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
 */
 void interpretation(detection_state_enum* state,hall_detection_general_struct *gen){
 
@@ -304,6 +312,11 @@ void interpretation(detection_state_enum* state,hall_detection_general_struct *g
 
 }
 
+/**
+* \brief once we interpreted enough data, we validate results
+* \param detection_state_enum* state,			pointer to the variable controling the state machine
+* \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
+*/
 void validation(detection_state_enum* state,hall_detection_general_struct *gen){
 
 	//timeout
@@ -366,6 +379,12 @@ void validation(detection_state_enum* state,hall_detection_general_struct *gen){
 		return;
 	}
 }
+
+/**
+* \brief if the resutls are validated, lets present the data, load the ASCII message for uart and/or manage the logic swap for hall gpios.
+* \param detection_state_enum* state,			pointer to the variable controling the state machine
+* \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
+*/
 void present_and_finish(detection_state_enum* state,hall_detection_general_struct *gen){
 
 	for (uint32_t i = 0; i < messageLength; ++i) {
@@ -399,10 +418,16 @@ void present_and_finish(detection_state_enum* state,hall_detection_general_struc
 }
 
 /**
-* \brief
-* \param
+* \brief these buffers need to be filled, not much to this function, manages the "circularity" of the buffers and calculates the missing current signal.
+* \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
+* \param hall_pin_info * H1_gpio, pointer to gpio info about the hall A
+* \param hall_pin_info * H2_gpio, pointer to gpio info about the hall B
+* \param hall_pin_info * H3_gpio, pointer to gpio info about the hall C
+* \param volatile float* ADCcurr1, pointer to current value in amps for phase A
+* \param volatile float* ADCcurr2, pointer to current value in amps for phase C? or B?
 */
-void fill_buffers(detection_state_enum* state,hall_detection_general_struct *gen,
+void fill_buffers(
+		hall_detection_general_struct *gen,
 		hall_pin_info* H1_gpio,
 		hall_pin_info* H2_gpio,
 		hall_pin_info* H3_gpio,
