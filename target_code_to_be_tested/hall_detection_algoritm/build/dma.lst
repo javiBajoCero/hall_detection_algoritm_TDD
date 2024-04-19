@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccAl9mMc.s 			page 1
+ARM GAS  /tmp/cc62Tnoc.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /tmp/ccAl9mMc.s 			page 1
   28:Core/Src/dma.c **** /*----------------------------------------------------------------------------*/
   29:Core/Src/dma.c **** /* Configure DMA                                                              */
   30:Core/Src/dma.c **** /*----------------------------------------------------------------------------*/
-ARM GAS  /tmp/ccAl9mMc.s 			page 2
+ARM GAS  /tmp/cc62Tnoc.s 			page 2
 
 
   31:Core/Src/dma.c **** 
@@ -75,112 +75,82 @@ ARM GAS  /tmp/ccAl9mMc.s 			page 1
   30              		.cfi_startproc
   31              		@ args = 0, pretend = 0, frame = 8
   32              		@ frame_needed = 0, uses_anonymous_args = 0
-  33 0000 10B5     		push	{r4, lr}
+  33 0000 00B5     		push	{lr}
   34              	.LCFI0:
-  35              		.cfi_def_cfa_offset 8
-  36              		.cfi_offset 4, -8
-  37              		.cfi_offset 14, -4
-  38 0002 82B0     		sub	sp, sp, #8
-  39              	.LCFI1:
-  40              		.cfi_def_cfa_offset 16
+  35              		.cfi_def_cfa_offset 4
+  36              		.cfi_offset 14, -4
+  37 0002 83B0     		sub	sp, sp, #12
+  38              	.LCFI1:
+  39              		.cfi_def_cfa_offset 16
   41:Core/Src/dma.c **** 
   42:Core/Src/dma.c ****   /* DMA controller clock enable */
   43:Core/Src/dma.c ****   __HAL_RCC_DMA2_CLK_ENABLE();
-  41              		.loc 1 43 3 view .LVU1
-  42              	.LBB2:
-  43              		.loc 1 43 3 view .LVU2
-  44 0004 0024     		movs	r4, #0
-  45 0006 0094     		str	r4, [sp]
-  46              		.loc 1 43 3 view .LVU3
-  47 0008 124B     		ldr	r3, .L3
-  48 000a 1A6B     		ldr	r2, [r3, #48]
-  49 000c 42F48002 		orr	r2, r2, #4194304
-  50 0010 1A63     		str	r2, [r3, #48]
-  51              		.loc 1 43 3 view .LVU4
-  52 0012 1A6B     		ldr	r2, [r3, #48]
-  53 0014 02F48002 		and	r2, r2, #4194304
-  54 0018 0092     		str	r2, [sp]
-  55              		.loc 1 43 3 view .LVU5
-  56 001a 009A     		ldr	r2, [sp]
-  57              	.LBE2:
-  44:Core/Src/dma.c ****   __HAL_RCC_DMA1_CLK_ENABLE();
-  58              		.loc 1 44 3 view .LVU6
-  59              	.LBB3:
-  60              		.loc 1 44 3 view .LVU7
-  61 001c 0194     		str	r4, [sp, #4]
-  62              		.loc 1 44 3 view .LVU8
-  63 001e 1A6B     		ldr	r2, [r3, #48]
-  64 0020 42F40012 		orr	r2, r2, #2097152
-  65 0024 1A63     		str	r2, [r3, #48]
-  66              		.loc 1 44 3 view .LVU9
-  67 0026 1B6B     		ldr	r3, [r3, #48]
-  68 0028 03F40013 		and	r3, r3, #2097152
-  69 002c 0193     		str	r3, [sp, #4]
-  70              		.loc 1 44 3 view .LVU10
-  71 002e 019B     		ldr	r3, [sp, #4]
-ARM GAS  /tmp/ccAl9mMc.s 			page 3
+  40              		.loc 1 43 3 view .LVU1
+  41              	.LBB2:
+  42              		.loc 1 43 3 view .LVU2
+  43 0004 0021     		movs	r1, #0
+  44 0006 0191     		str	r1, [sp, #4]
+  45              		.loc 1 43 3 view .LVU3
+  46 0008 094B     		ldr	r3, .L3
+  47 000a 1A6B     		ldr	r2, [r3, #48]
+  48 000c 42F48002 		orr	r2, r2, #4194304
+  49 0010 1A63     		str	r2, [r3, #48]
+  50              		.loc 1 43 3 view .LVU4
+  51 0012 1B6B     		ldr	r3, [r3, #48]
+  52 0014 03F48003 		and	r3, r3, #4194304
+  53 0018 0193     		str	r3, [sp, #4]
+  54              		.loc 1 43 3 view .LVU5
+  55 001a 019B     		ldr	r3, [sp, #4]
+  56              	.LBE2:
+  44:Core/Src/dma.c **** 
+  45:Core/Src/dma.c ****   /* DMA interrupt init */
+  46:Core/Src/dma.c ****   /* DMA2_Stream0_IRQn interrupt configuration */
+  47:Core/Src/dma.c ****   HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 0, 0);
+  57              		.loc 1 47 3 view .LVU6
+  58 001c 0A46     		mov	r2, r1
+  59 001e 3820     		movs	r0, #56
+  60 0020 FFF7FEFF 		bl	HAL_NVIC_SetPriority
+  61              	.LVL0:
+  48:Core/Src/dma.c ****   HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
+  62              		.loc 1 48 3 view .LVU7
+  63 0024 3820     		movs	r0, #56
+  64 0026 FFF7FEFF 		bl	HAL_NVIC_EnableIRQ
+  65              	.LVL1:
+  49:Core/Src/dma.c **** 
+  50:Core/Src/dma.c **** }
+ARM GAS  /tmp/cc62Tnoc.s 			page 3
 
 
-  72              	.LBE3:
-  45:Core/Src/dma.c **** 
-  46:Core/Src/dma.c ****   /* DMA interrupt init */
-  47:Core/Src/dma.c ****   /* DMA1_Stream6_IRQn interrupt configuration */
-  48:Core/Src/dma.c ****   HAL_NVIC_SetPriority(DMA1_Stream6_IRQn, 0, 0);
-  73              		.loc 1 48 3 view .LVU11
-  74 0030 2246     		mov	r2, r4
-  75 0032 2146     		mov	r1, r4
-  76 0034 1120     		movs	r0, #17
-  77 0036 FFF7FEFF 		bl	HAL_NVIC_SetPriority
-  78              	.LVL0:
-  49:Core/Src/dma.c ****   HAL_NVIC_EnableIRQ(DMA1_Stream6_IRQn);
-  79              		.loc 1 49 3 view .LVU12
-  80 003a 1120     		movs	r0, #17
-  81 003c FFF7FEFF 		bl	HAL_NVIC_EnableIRQ
-  82              	.LVL1:
-  50:Core/Src/dma.c ****   /* DMA2_Stream0_IRQn interrupt configuration */
-  51:Core/Src/dma.c ****   HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 0, 0);
-  83              		.loc 1 51 3 view .LVU13
-  84 0040 2246     		mov	r2, r4
-  85 0042 2146     		mov	r1, r4
-  86 0044 3820     		movs	r0, #56
-  87 0046 FFF7FEFF 		bl	HAL_NVIC_SetPriority
-  88              	.LVL2:
-  52:Core/Src/dma.c ****   HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
-  89              		.loc 1 52 3 view .LVU14
-  90 004a 3820     		movs	r0, #56
-  91 004c FFF7FEFF 		bl	HAL_NVIC_EnableIRQ
-  92              	.LVL3:
-  53:Core/Src/dma.c **** 
-  54:Core/Src/dma.c **** }
-  93              		.loc 1 54 1 is_stmt 0 view .LVU15
-  94 0050 02B0     		add	sp, sp, #8
-  95              	.LCFI2:
-  96              		.cfi_def_cfa_offset 8
-  97              		@ sp needed
-  98 0052 10BD     		pop	{r4, pc}
-  99              	.L4:
- 100              		.align	2
- 101              	.L3:
- 102 0054 00380240 		.word	1073887232
- 103              		.cfi_endproc
- 104              	.LFE235:
- 106              		.text
- 107              	.Letext0:
- 108              		.file 2 "/usr/lib/gcc/arm-none-eabi/8.3.1/include/stdint.h"
- 109              		.file 3 "Drivers/CMSIS/Include/core_cm4.h"
- 110              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
- 111              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f446xx.h"
- 112              		.file 6 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
- 113              		.file 7 "Core/Inc/main.h"
- 114              		.file 8 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h"
-ARM GAS  /tmp/ccAl9mMc.s 			page 4
+  66              		.loc 1 50 1 is_stmt 0 view .LVU8
+  67 002a 03B0     		add	sp, sp, #12
+  68              	.LCFI2:
+  69              		.cfi_def_cfa_offset 4
+  70              		@ sp needed
+  71 002c 5DF804FB 		ldr	pc, [sp], #4
+  72              	.L4:
+  73              		.align	2
+  74              	.L3:
+  75 0030 00380240 		.word	1073887232
+  76              		.cfi_endproc
+  77              	.LFE235:
+  79              		.text
+  80              	.Letext0:
+  81              		.file 2 "/usr/lib/gcc/arm-none-eabi/8.3.1/include/stdint.h"
+  82              		.file 3 "Drivers/CMSIS/Include/core_cm4.h"
+  83              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
+  84              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f446xx.h"
+  85              		.file 6 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+  86              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+  87              		.file 8 "Core/Inc/main.h"
+  88              		.file 9 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h"
+ARM GAS  /tmp/cc62Tnoc.s 			page 4
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 dma.c
-     /tmp/ccAl9mMc.s:18     .text.MX_DMA_Init:0000000000000000 $t
-     /tmp/ccAl9mMc.s:26     .text.MX_DMA_Init:0000000000000000 MX_DMA_Init
-     /tmp/ccAl9mMc.s:102    .text.MX_DMA_Init:0000000000000054 $d
+     /tmp/cc62Tnoc.s:18     .text.MX_DMA_Init:0000000000000000 $t
+     /tmp/cc62Tnoc.s:26     .text.MX_DMA_Init:0000000000000000 MX_DMA_Init
+     /tmp/cc62Tnoc.s:75     .text.MX_DMA_Init:0000000000000030 $d
 
 UNDEFINED SYMBOLS
 HAL_NVIC_SetPriority

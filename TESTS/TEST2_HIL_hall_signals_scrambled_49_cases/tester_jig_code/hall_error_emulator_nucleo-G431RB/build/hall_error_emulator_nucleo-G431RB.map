@@ -1104,7 +1104,7 @@ Discarded input sections
  .text          0x0000000000000000        0x0 build/real_waveforms.o
  .data          0x0000000000000000        0x0 build/real_waveforms.o
  .bss           0x0000000000000000        0x0 build/real_waveforms.o
- .rodata.current_C
+ .rodata.current_B
                 0x0000000000000000      0x210 build/real_waveforms.o
  .text          0x0000000000000000        0x0 build/user_interface.o
  .data          0x0000000000000000        0x0 build/user_interface.o
@@ -1900,9 +1900,9 @@ LOAD /usr/lib/gcc/arm-none-eabi/8.3.1/thumb/v7e-m+fp/hard/crtn.o
  .rodata.current_A
                 0x00000000080046d4      0x210 build/real_waveforms.o
                 0x00000000080046d4                current_A
- .rodata.current_B
+ .rodata.current_C
                 0x00000000080048e4      0x210 build/real_waveforms.o
-                0x00000000080048e4                current_B
+                0x00000000080048e4                current_C
  .rodata.emulationcommand
                 0x0000000008004af4        0xa build/user_interface.o
                 0x0000000008004af4                emulationcommand
@@ -2449,7 +2449,7 @@ LOAD /usr/lib/gcc/arm-none-eabi/8.3.1/thumb/v7e-m+fp/hard/libgcc.a
  .debug_ranges  0x00000000000012d0       0x10 /usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-strnlen.o)
  .debug_ranges  0x00000000000012e0       0xd8 /usr/lib/gcc/arm-none-eabi/8.3.1/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
 
-.debug_line     0x0000000000000000    0x17525
+.debug_line     0x0000000000000000    0x17526
  .debug_line    0x0000000000000000      0x39f build/main.o
  .debug_line    0x000000000000039f      0x217 build/gpio.o
  .debug_line    0x00000000000005b6      0x3a6 build/dac.o
@@ -2475,18 +2475,18 @@ LOAD /usr/lib/gcc/arm-none-eabi/8.3.1/thumb/v7e-m+fp/hard/libgcc.a
  .debug_line    0x0000000000014ea8      0x31f build/hall_swapper.o
  .debug_line    0x00000000000151c7      0x184 build/real_waveforms.o
  .debug_line    0x000000000001534b      0x732 build/user_interface.o
- .debug_line    0x0000000000015a7d      0x273 build/wave_emulator.o
- .debug_line    0x0000000000015cf0       0x86 build/startup_stm32g431rbtx.o
- .debug_line    0x0000000000015d76      0x10d /usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-init.o)
- .debug_line    0x0000000000015e83      0x26b /usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-memset.o)
- .debug_line    0x00000000000160ee      0x788 /usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-strstr.o)
- .debug_line    0x0000000000016876      0x1d4 /usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-memcmp.o)
- .debug_line    0x0000000000016a4a      0x21f /usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-strchr.o)
- .debug_line    0x0000000000016c69       0xaf /usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-strlen.o)
- .debug_line    0x0000000000016d18      0x18e /usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-strnlen.o)
- .debug_line    0x0000000000016ea6       0x60 /usr/lib/gcc/arm-none-eabi/8.3.1/thumb/v7e-m+fp/hard/libgcc.a(_aeabi_uldivmod.o)
- .debug_line    0x0000000000016f06      0x5bf /usr/lib/gcc/arm-none-eabi/8.3.1/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
- .debug_line    0x00000000000174c5       0x60 /usr/lib/gcc/arm-none-eabi/8.3.1/thumb/v7e-m+fp/hard/libgcc.a(_dvmd_tls.o)
+ .debug_line    0x0000000000015a7d      0x274 build/wave_emulator.o
+ .debug_line    0x0000000000015cf1       0x86 build/startup_stm32g431rbtx.o
+ .debug_line    0x0000000000015d77      0x10d /usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-init.o)
+ .debug_line    0x0000000000015e84      0x26b /usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-memset.o)
+ .debug_line    0x00000000000160ef      0x788 /usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-strstr.o)
+ .debug_line    0x0000000000016877      0x1d4 /usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-memcmp.o)
+ .debug_line    0x0000000000016a4b      0x21f /usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-strchr.o)
+ .debug_line    0x0000000000016c6a       0xaf /usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-strlen.o)
+ .debug_line    0x0000000000016d19      0x18e /usr/lib/gcc/arm-none-eabi/8.3.1/../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-strnlen.o)
+ .debug_line    0x0000000000016ea7       0x60 /usr/lib/gcc/arm-none-eabi/8.3.1/thumb/v7e-m+fp/hard/libgcc.a(_aeabi_uldivmod.o)
+ .debug_line    0x0000000000016f07      0x5bf /usr/lib/gcc/arm-none-eabi/8.3.1/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
+ .debug_line    0x00000000000174c6       0x60 /usr/lib/gcc/arm-none-eabi/8.3.1/thumb/v7e-m+fp/hard/libgcc.a(_dvmd_tls.o)
 
 .debug_str      0x0000000000000000     0x7f66
  .debug_str     0x0000000000000000     0x1003 build/main.o
@@ -3386,8 +3386,8 @@ atexit                                            /usr/lib/gcc/arm-none-eabi/8.3
 current_A                                         build/real_waveforms.o
                                                   build/wave_emulator.o
 current_B                                         build/real_waveforms.o
-                                                  build/wave_emulator.o
 current_C                                         build/real_waveforms.o
+                                                  build/wave_emulator.o
 decode_ABCcommands                                build/user_interface.o
 decode_char_to_hall_signals_order                 build/user_interface.o
 decode_char_to_hall_signals_polarity              build/user_interface.o

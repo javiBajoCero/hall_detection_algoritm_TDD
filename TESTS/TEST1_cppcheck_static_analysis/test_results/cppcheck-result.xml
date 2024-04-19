@@ -2,6 +2,22 @@
 <results version="2">
     <cppcheck version="2.3"/>
     <errors>
+        <error id="variableScope" severity="style" msg="The scope of the variable &apos;number_of_results_matching&apos; can be reduced." verbose="The scope of the variable &apos;number_of_results_matching&apos; can be reduced. Warning: Be careful when fixing this message, especially when there are inner loops. Here is an example where cppcheck will write that the scope for &apos;i&apos; can be reduced:\012void f(int x)\012{\012    int i = 0;\012    if (x) {\012        // it&apos;s safe to move &apos;int i = 0;&apos; here\012        for (int n = 0; n &lt; 10; ++n) {\012            // it is possible but not safe to move &apos;int i = 0;&apos; here\012            do_something(&amp;i);\012        }\012    }\012}\012When you see this message it is always safe to reduce the variable scope 1 level." cwe="398" hash="1213238569155645379">
+            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/hall_detection.c" line="331" column="11"/>
+            <symbol>number_of_results_matching</symbol>
+        </error>
+        <error id="variableScope" severity="style" msg="The scope of the variable &apos;_sampled_period&apos; can be reduced." verbose="The scope of the variable &apos;_sampled_period&apos; can be reduced. Warning: Be careful when fixing this message, especially when there are inner loops. Here is an example where cppcheck will write that the scope for &apos;i&apos; can be reduced:\012void f(int x)\012{\012    int i = 0;\012    if (x) {\012        // it&apos;s safe to move &apos;int i = 0;&apos; here\012        for (int n = 0; n &lt; 10; ++n) {\012            // it is possible but not safe to move &apos;int i = 0;&apos; here\012            do_something(&amp;i);\012        }\012    }\012}\012When you see this message it is always safe to reduce the variable scope 1 level." cwe="398" hash="6049502606444474666">
+            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/hall_detection.c" line="557" column="11"/>
+            <symbol>_sampled_period</symbol>
+        </error>
+        <error id="unreadVariable" severity="style" msg="Variable &apos;number_of_results_matching&apos; is assigned a value that is never used." verbose="Variable &apos;number_of_results_matching&apos; is assigned a value that is never used." cwe="563" hash="1710135857573286573">
+            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/hall_detection.c" line="331" column="37"/>
+            <symbol>number_of_results_matching</symbol>
+        </error>
+        <error id="unreadVariable" severity="style" msg="Variable &apos;_sampled_period&apos; is assigned a value that is never used." verbose="Variable &apos;_sampled_period&apos; is assigned a value that is never used." cwe="563" hash="5910863492511002918">
+            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/hall_detection.c" line="557" column="26"/>
+            <symbol>_sampled_period</symbol>
+        </error>
         <error id="toomanyconfigs" severity="information" msg="Too many #ifdef configurations - cppcheck only checks 12 of 20 configurations. Use --force to check all configurations." verbose="The checking of the file will be interrupted because there are too many #ifdef configurations. Checking of all #ifdef configurations can be forced by --force command line option or from GUI preferences. However that may increase the checking time." cwe="398">
             <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/system_stm32f4xx.c" line="0" column="0"/>
         </error>
@@ -413,19 +429,15 @@
             <location file="target_code_to_be_tested/hall_detection_algoritm/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c" line="3714" column="0"/>
         </error>
         <error id="unusedFunction" severity="style" msg="The function &apos;BusFault_Handler&apos; is never used." verbose="The function &apos;BusFault_Handler&apos; is never used." cwe="561">
-            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/stm32f4xx_it.c" line="117" column="0"/>
+            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/stm32f4xx_it.c" line="116" column="0"/>
             <symbol>BusFault_Handler</symbol>
         </error>
-        <error id="unusedFunction" severity="style" msg="The function &apos;DMA1_Stream6_IRQHandler&apos; is never used." verbose="The function &apos;DMA1_Stream6_IRQHandler&apos; is never used." cwe="561">
-            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/stm32f4xx_it.c" line="207" column="0"/>
-            <symbol>DMA1_Stream6_IRQHandler</symbol>
-        </error>
         <error id="unusedFunction" severity="style" msg="The function &apos;DMA2_Stream0_IRQHandler&apos; is never used." verbose="The function &apos;DMA2_Stream0_IRQHandler&apos; is never used." cwe="561">
-            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/stm32f4xx_it.c" line="235" column="0"/>
+            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/stm32f4xx_it.c" line="232" column="0"/>
             <symbol>DMA2_Stream0_IRQHandler</symbol>
         </error>
         <error id="unusedFunction" severity="style" msg="The function &apos;DebugMon_Handler&apos; is never used." verbose="The function &apos;DebugMon_Handler&apos; is never used." cwe="561">
-            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/stm32f4xx_it.c" line="160" column="0"/>
+            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/stm32f4xx_it.c" line="159" column="0"/>
             <symbol>DebugMon_Handler</symbol>
         </error>
         <error id="unusedFunction" severity="style" msg="The function &apos;HAL_ADCEx_InjectedConfigChannel&apos; is never used." verbose="The function &apos;HAL_ADCEx_InjectedConfigChannel&apos; is never used." cwe="561">
@@ -1476,16 +1488,16 @@
             <location file="target_code_to_be_tested/hall_detection_algoritm/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c" line="1360" column="0"/>
             <symbol>HAL_UART_Receive_IT</symbol>
         </error>
-        <error id="unusedFunction" severity="style" msg="The function &apos;HAL_UART_Transmit&apos; is never used." verbose="The function &apos;HAL_UART_Transmit&apos; is never used." cwe="561">
-            <location file="target_code_to_be_tested/hall_detection_algoritm/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c" line="1136" column="0"/>
-            <symbol>HAL_UART_Transmit</symbol>
+        <error id="unusedFunction" severity="style" msg="The function &apos;HAL_UART_Transmit_DMA&apos; is never used." verbose="The function &apos;HAL_UART_Transmit_DMA&apos; is never used." cwe="561">
+            <location file="target_code_to_be_tested/hall_detection_algoritm/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c" line="1395" column="0"/>
+            <symbol>HAL_UART_Transmit_DMA</symbol>
         </error>
         <error id="unusedFunction" severity="style" msg="The function &apos;HAL_UART_Transmit_IT&apos; is never used." verbose="The function &apos;HAL_UART_Transmit_IT&apos; is never used." cwe="561">
             <location file="target_code_to_be_tested/hall_detection_algoritm/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c" line="1315" column="0"/>
             <symbol>HAL_UART_Transmit_IT</symbol>
         </error>
         <error id="unusedFunction" severity="style" msg="The function &apos;HardFault_Handler&apos; is never used." verbose="The function &apos;HardFault_Handler&apos; is never used." cwe="561">
-            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/stm32f4xx_it.c" line="87" column="0"/>
+            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/stm32f4xx_it.c" line="86" column="0"/>
             <symbol>HardFault_Handler</symbol>
         </error>
         <error id="unusedFunction" severity="style" msg="The function &apos;LL_ADC_CommonDeInit&apos; is never used." verbose="The function &apos;LL_ADC_CommonDeInit&apos; is never used." cwe="561">
@@ -1529,23 +1541,23 @@
             <symbol>LL_ADC_StructInit</symbol>
         </error>
         <error id="unusedFunction" severity="style" msg="The function &apos;MemManage_Handler&apos; is never used." verbose="The function &apos;MemManage_Handler&apos; is never used." cwe="561">
-            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/stm32f4xx_it.c" line="102" column="0"/>
+            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/stm32f4xx_it.c" line="101" column="0"/>
             <symbol>MemManage_Handler</symbol>
         </error>
         <error id="unusedFunction" severity="style" msg="The function &apos;NMI_Handler&apos; is never used." verbose="The function &apos;NMI_Handler&apos; is never used." cwe="561">
-            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/stm32f4xx_it.c" line="72" column="0"/>
+            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/stm32f4xx_it.c" line="71" column="0"/>
             <symbol>NMI_Handler</symbol>
         </error>
         <error id="unusedFunction" severity="style" msg="The function &apos;PendSV_Handler&apos; is never used." verbose="The function &apos;PendSV_Handler&apos; is never used." cwe="561">
-            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/stm32f4xx_it.c" line="173" column="0"/>
+            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/stm32f4xx_it.c" line="172" column="0"/>
             <symbol>PendSV_Handler</symbol>
         </error>
         <error id="unusedFunction" severity="style" msg="The function &apos;SVC_Handler&apos; is never used." verbose="The function &apos;SVC_Handler&apos; is never used." cwe="561">
-            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/stm32f4xx_it.c" line="147" column="0"/>
+            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/stm32f4xx_it.c" line="146" column="0"/>
             <symbol>SVC_Handler</symbol>
         </error>
         <error id="unusedFunction" severity="style" msg="The function &apos;SysTick_Handler&apos; is never used." verbose="The function &apos;SysTick_Handler&apos; is never used." cwe="561">
-            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/stm32f4xx_it.c" line="186" column="0"/>
+            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/stm32f4xx_it.c" line="185" column="0"/>
             <symbol>SysTick_Handler</symbol>
         </error>
         <error id="unusedFunction" severity="style" msg="The function &apos;SystemCoreClockUpdate&apos; is never used." verbose="The function &apos;SystemCoreClockUpdate&apos; is never used." cwe="561">
@@ -1557,11 +1569,11 @@
             <symbol>SystemInit</symbol>
         </error>
         <error id="unusedFunction" severity="style" msg="The function &apos;TIM8_UP_TIM13_IRQHandler&apos; is never used." verbose="The function &apos;TIM8_UP_TIM13_IRQHandler&apos; is never used." cwe="561">
-            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/stm32f4xx_it.c" line="221" column="0"/>
+            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/stm32f4xx_it.c" line="206" column="0"/>
             <symbol>TIM8_UP_TIM13_IRQHandler</symbol>
         </error>
         <error id="unusedFunction" severity="style" msg="The function &apos;UsageFault_Handler&apos; is never used." verbose="The function &apos;UsageFault_Handler&apos; is never used." cwe="561">
-            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/stm32f4xx_it.c" line="132" column="0"/>
+            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/stm32f4xx_it.c" line="131" column="0"/>
             <symbol>UsageFault_Handler</symbol>
         </error>
         <error id="unusedFunction" severity="style" msg="The function &apos;_close&apos; is never used." verbose="The function &apos;_close&apos; is never used." cwe="561">
@@ -1633,16 +1645,12 @@
             <symbol>_write</symbol>
         </error>
         <error id="unusedFunction" severity="style" msg="The function &apos;assert_failed&apos; is never used." verbose="The function &apos;assert_failed&apos; is never used." cwe="561">
-            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/main.c" line="217" column="0"/>
+            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/main.c" line="208" column="0"/>
             <symbol>assert_failed</symbol>
         </error>
         <error id="unusedFunction" severity="style" msg="The function &apos;initialise_monitor_handles&apos; is never used." verbose="The function &apos;initialise_monitor_handles&apos; is never used." cwe="561">
             <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/syscalls.c" line="44" column="0"/>
             <symbol>initialise_monitor_handles</symbol>
-        </error>
-        <error id="unusedFunction" severity="style" msg="The function &apos;swap_hall_gpios_with_detected_results&apos; is never used." verbose="The function &apos;swap_hall_gpios_with_detected_results&apos; is never used." cwe="561">
-            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/hall_detection.c" line="257" column="0"/>
-            <symbol>swap_hall_gpios_with_detected_results</symbol>
         </error>
         <error id="missingInclude" severity="information" msg="Cppcheck cannot find all the include files (use --check-config for details)" verbose="Cppcheck cannot find all the include files. Cppcheck can check the code without the include files found. But the results will probably be more accurate if all the include files are found. Please check your project&apos;s include directories and add all of them as include directories for Cppcheck. To see what files Cppcheck cannot find use --check-config."/>
     </errors>

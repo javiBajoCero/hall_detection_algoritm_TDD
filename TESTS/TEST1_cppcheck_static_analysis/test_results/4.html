@@ -152,12 +152,12 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding: 0 5px
   </head>
   <body>
     <div id="header" class="header">
-      <h1>Cppcheck report - htmlREPORTcppcheck: target_code_to_be_tested/hall_detection_algoritm/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c</h1>
+      <h1>Cppcheck report - htmlREPORTcppcheck: target_code_to_be_tested/hall_detection_algoritm/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c</h1>
     </div>
     <div class="wrapper">
       <div id="menu">
-       <p id="filename"><a href="index.html">Defects:</a> stm32f4xx_hal_flash.c</p>
-<a href="4.html#line-154"> unusedFunction 154</a><a href="4.html#line-212"> unusedFunction 212</a><a href="4.html#line-259"> unusedFunction 259</a><a href="4.html#line-261"> unreadVariable 261</a><a href="4.html#line-431"> unusedFunction 431</a><a href="4.html#line-455"> unusedFunction 455</a><a href="4.html#line-467"> unusedFunction 467</a><a href="4.html#line-487"> unusedFunction 487</a><a href="4.html#line-499"> unusedFunction 499</a><a href="4.html#line-536"> unusedFunction 536</a>
+       <p id="filename"><a href="index.html">Defects:</a> stm32f4xx_hal_exti.c</p>
+<a href="4.html#line-142"> unusedFunction 142</a><a href="4.html#line-144"> variableScope 144</a><a href="4.html#line-237"> unusedFunction 237</a><a href="4.html#line-239"> variableScope 239</a><a href="4.html#line-316"> unusedFunction 316</a><a href="4.html#line-318"> variableScope 318</a><a href="4.html#line-369"> unusedFunction 369</a><a href="4.html#line-394"> unusedFunction 394</a><a href="4.html#line-434"> unusedFunction 434</a><a href="4.html#line-466"> unusedFunction 466</a><a href="4.html#line-495"> unusedFunction 495</a><a href="4.html#line-516"> unusedFunction 516</a>
     </div>
     <div id="content">
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
@@ -706,1009 +706,589 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding: 0 5px
 544
 545
 546
-547
-548
-549
-550
-551
-552
-553
-554
-555
-556
-557
-558
-559
-560
-561
-562
-563
-564
-565
-566
-567
-568
-569
-570
-571
-572
-573
-574
-575
-576
-577
-578
-579
-580
-581
-582
-583
-584
-585
-586
-587
-588
-589
-590
-591
-592
-593
-594
-595
-596
-597
-598
-599
-600
-601
-602
-603
-604
-605
-606
-607
-608
-609
-610
-611
-612
-613
-614
-615
-616
-617
-618
-619
-620
-621
-622
-623
-624
-625
-626
-627
-628
-629
-630
-631
-632
-633
-634
-635
-636
-637
-638
-639
-640
-641
-642
-643
-644
-645
-646
-647
-648
-649
-650
-651
-652
-653
-654
-655
-656
-657
-658
-659
-660
-661
-662
-663
-664
-665
-666
-667
-668
-669
-670
-671
-672
-673
-674
-675
-676
-677
-678
-679
-680
-681
-682
-683
-684
-685
-686
-687
-688
-689
-690
-691
-692
-693
-694
-695
-696
-697
-698
-699
-700
-701
-702
-703
-704
-705
-706
-707
-708
-709
-710
-711
-712
-713
-714
-715
-716
-717
-718
-719
-720
-721
-722
-723
-724
-725
-726
-727
-728
-729
-730
-731
-732
-733
-734
-735
-736
-737
-738
-739
-740
-741
-742
-743
-744
-745
-746
-747
-748
-749
-750
-751
-752
-753
-754
-755
-756
-757
-758
-759
-760
-761
-762
-763
-764
-765
-766
-767
-768
-769
-770
-771
-772
-773
-774
-775</pre></div></td><td class="code"><div class="highlight"><pre><span></span><a name="line-1"></a><span class="cm">/**</span>
+547</pre></div></td><td class="code"><div class="highlight"><pre><span></span><a name="line-1"></a><span class="cm">/**</span>
 <a name="line-2"></a><span class="cm">  ******************************************************************************</span>
-<a name="line-3"></a><span class="cm">  * @file    stm32f4xx_hal_flash.c</span>
+<a name="line-3"></a><span class="cm">  * @file    stm32f4xx_hal_exti.c</span>
 <a name="line-4"></a><span class="cm">  * @author  MCD Application Team</span>
-<a name="line-5"></a><span class="cm">  * @brief   FLASH HAL module driver.</span>
-<a name="line-6"></a><span class="cm">  *          This file provides firmware functions to manage the following </span>
-<a name="line-7"></a><span class="cm">  *          functionalities of the internal FLASH memory:</span>
-<a name="line-8"></a><span class="cm">  *           + Program operations functions</span>
-<a name="line-9"></a><span class="cm">  *           + Memory Control functions </span>
-<a name="line-10"></a><span class="cm">  *           + Peripheral Errors functions</span>
-<a name="line-11"></a><span class="cm">  *         </span>
-<a name="line-12"></a><span class="cm">  @verbatim</span>
-<a name="line-13"></a><span class="cm">  ==============================================================================</span>
-<a name="line-14"></a><span class="cm">                        ##### FLASH peripheral features #####</span>
-<a name="line-15"></a><span class="cm">  ==============================================================================</span>
-<a name="line-16"></a><span class="cm">           </span>
-<a name="line-17"></a><span class="cm">  [..] The Flash memory interface manages CPU AHB I-Code and D-Code accesses </span>
-<a name="line-18"></a><span class="cm">       to the Flash memory. It implements the erase and program Flash memory operations </span>
-<a name="line-19"></a><span class="cm">       and the read and write protection mechanisms.</span>
-<a name="line-20"></a><span class="cm">      </span>
-<a name="line-21"></a><span class="cm">  [..] The Flash memory interface accelerates code execution with a system of instruction</span>
-<a name="line-22"></a><span class="cm">       prefetch and cache lines. </span>
-<a name="line-23"></a>
-<a name="line-24"></a><span class="cm">  [..] The FLASH main features are:</span>
-<a name="line-25"></a><span class="cm">      (+) Flash memory read operations</span>
-<a name="line-26"></a><span class="cm">      (+) Flash memory program/erase operations</span>
-<a name="line-27"></a><span class="cm">      (+) Read / write protections</span>
-<a name="line-28"></a><span class="cm">      (+) Prefetch on I-Code</span>
-<a name="line-29"></a><span class="cm">      (+) 64 cache lines of 128 bits on I-Code</span>
-<a name="line-30"></a><span class="cm">      (+) 8 cache lines of 128 bits on D-Code</span>
-<a name="line-31"></a><span class="cm">      </span>
-<a name="line-32"></a><span class="cm">      </span>
-<a name="line-33"></a><span class="cm">                     ##### How to use this driver #####</span>
-<a name="line-34"></a><span class="cm">  ==============================================================================</span>
-<a name="line-35"></a><span class="cm">    [..]                             </span>
-<a name="line-36"></a><span class="cm">      This driver provides functions and macros to configure and program the FLASH </span>
-<a name="line-37"></a><span class="cm">      memory of all STM32F4xx devices.</span>
-<a name="line-38"></a><span class="cm">    </span>
-<a name="line-39"></a><span class="cm">      (#) FLASH Memory IO Programming functions: </span>
-<a name="line-40"></a><span class="cm">           (++) Lock and Unlock the FLASH interface using HAL_FLASH_Unlock() and </span>
-<a name="line-41"></a><span class="cm">                HAL_FLASH_Lock() functions</span>
-<a name="line-42"></a><span class="cm">           (++) Program functions: byte, half word, word and double word</span>
-<a name="line-43"></a><span class="cm">           (++) There Two modes of programming :</span>
-<a name="line-44"></a><span class="cm">            (+++) Polling mode using HAL_FLASH_Program() function</span>
-<a name="line-45"></a><span class="cm">            (+++) Interrupt mode using HAL_FLASH_Program_IT() function</span>
-<a name="line-46"></a><span class="cm">    </span>
-<a name="line-47"></a><span class="cm">      (#) Interrupts and flags management functions : </span>
-<a name="line-48"></a><span class="cm">           (++) Handle FLASH interrupts by calling HAL_FLASH_IRQHandler()</span>
-<a name="line-49"></a><span class="cm">           (++) Wait for last FLASH operation according to its status</span>
-<a name="line-50"></a><span class="cm">           (++) Get error flag status by calling HAL_SetErrorCode()          </span>
+<a name="line-5"></a><span class="cm">  * @brief   EXTI HAL module driver.</span>
+<a name="line-6"></a><span class="cm">  *          This file provides firmware functions to manage the following</span>
+<a name="line-7"></a><span class="cm">  *          functionalities of the Extended Interrupts and events controller (EXTI) peripheral:</span>
+<a name="line-8"></a><span class="cm">  *           + Initialization and de-initialization functions</span>
+<a name="line-9"></a><span class="cm">  *           + IO operation functions</span>
+<a name="line-10"></a><span class="cm">  *</span>
+<a name="line-11"></a><span class="cm">  ******************************************************************************</span>
+<a name="line-12"></a><span class="cm">  * @attention</span>
+<a name="line-13"></a><span class="cm">  *</span>
+<a name="line-14"></a><span class="cm">  * Copyright (c) 2018 STMicroelectronics.</span>
+<a name="line-15"></a><span class="cm">  * All rights reserved.</span>
+<a name="line-16"></a><span class="cm">  *</span>
+<a name="line-17"></a><span class="cm">  * This software is licensed under terms that can be found in the LICENSE file</span>
+<a name="line-18"></a><span class="cm">  * in the root directory of this software component.</span>
+<a name="line-19"></a><span class="cm">  * If no LICENSE file comes with this software, it is provided AS-IS.</span>
+<a name="line-20"></a><span class="cm">  *</span>
+<a name="line-21"></a><span class="cm">  ******************************************************************************</span>
+<a name="line-22"></a><span class="cm">  @verbatim</span>
+<a name="line-23"></a><span class="cm">  ==============================================================================</span>
+<a name="line-24"></a><span class="cm">                    ##### EXTI Peripheral features #####</span>
+<a name="line-25"></a><span class="cm">  ==============================================================================</span>
+<a name="line-26"></a><span class="cm">  [..]</span>
+<a name="line-27"></a><span class="cm">    (+) Each Exti line can be configured within this driver.</span>
+<a name="line-28"></a>
+<a name="line-29"></a><span class="cm">    (+) Exti line can be configured in 3 different modes</span>
+<a name="line-30"></a><span class="cm">        (++) Interrupt</span>
+<a name="line-31"></a><span class="cm">        (++) Event</span>
+<a name="line-32"></a><span class="cm">        (++) Both of them</span>
+<a name="line-33"></a>
+<a name="line-34"></a><span class="cm">    (+) Configurable Exti lines can be configured with 3 different triggers</span>
+<a name="line-35"></a><span class="cm">        (++) Rising</span>
+<a name="line-36"></a><span class="cm">        (++) Falling</span>
+<a name="line-37"></a><span class="cm">        (++) Both of them</span>
+<a name="line-38"></a>
+<a name="line-39"></a><span class="cm">    (+) When set in interrupt mode, configurable Exti lines have two different</span>
+<a name="line-40"></a><span class="cm">        interrupts pending registers which allow to distinguish which transition</span>
+<a name="line-41"></a><span class="cm">        occurs:</span>
+<a name="line-42"></a><span class="cm">        (++) Rising edge pending interrupt</span>
+<a name="line-43"></a><span class="cm">        (++) Falling</span>
+<a name="line-44"></a>
+<a name="line-45"></a><span class="cm">    (+) Exti lines 0 to 15 are linked to gpio pin number 0 to 15. Gpio port can</span>
+<a name="line-46"></a><span class="cm">        be selected through multiplexer.</span>
+<a name="line-47"></a>
+<a name="line-48"></a><span class="cm">                     ##### How to use this driver #####</span>
+<a name="line-49"></a><span class="cm">  ==============================================================================</span>
+<a name="line-50"></a><span class="cm">  [..]</span>
 <a name="line-51"></a>
-<a name="line-52"></a><span class="cm">    [..] </span>
-<a name="line-53"></a><span class="cm">      In addition to these functions, this driver includes a set of macros allowing</span>
-<a name="line-54"></a><span class="cm">      to handle the following operations:</span>
-<a name="line-55"></a><span class="cm">       (+) Set the latency</span>
-<a name="line-56"></a><span class="cm">       (+) Enable/Disable the prefetch buffer</span>
-<a name="line-57"></a><span class="cm">       (+) Enable/Disable the Instruction cache and the Data cache</span>
-<a name="line-58"></a><span class="cm">       (+) Reset the Instruction cache and the Data cache</span>
-<a name="line-59"></a><span class="cm">       (+) Enable/Disable the FLASH interrupts</span>
-<a name="line-60"></a><span class="cm">       (+) Monitor the FLASH flags status</span>
-<a name="line-61"></a><span class="cm">          </span>
-<a name="line-62"></a><span class="cm">  @endverbatim</span>
-<a name="line-63"></a><span class="cm">  ******************************************************************************</span>
-<a name="line-64"></a><span class="cm">  * @attention</span>
-<a name="line-65"></a><span class="cm">  *</span>
-<a name="line-66"></a><span class="cm">  * Copyright (c) 2017 STMicroelectronics.</span>
-<a name="line-67"></a><span class="cm">  * All rights reserved.</span>
-<a name="line-68"></a><span class="cm">  *</span>
-<a name="line-69"></a><span class="cm">  * This software is licensed under terms that can be found in the LICENSE file in</span>
-<a name="line-70"></a><span class="cm">  * the root directory of this software component.</span>
-<a name="line-71"></a><span class="cm">  * If no LICENSE file comes with this software, it is provided AS-IS.</span>
-<a name="line-72"></a><span class="cm">  ******************************************************************************</span>
-<a name="line-73"></a><span class="cm">  */</span> 
-<a name="line-74"></a>
-<a name="line-75"></a><span class="cm">/* Includes ------------------------------------------------------------------*/</span>
-<a name="line-76"></a><span class="cp">#include</span> <span class="cpf">&quot;stm32f4xx_hal.h&quot;</span><span class="cp"></span>
+<a name="line-52"></a><span class="cm">    (#) Configure the EXTI line using HAL_EXTI_SetConfigLine().</span>
+<a name="line-53"></a><span class="cm">        (++) Choose the interrupt line number by setting &quot;Line&quot; member from</span>
+<a name="line-54"></a><span class="cm">             EXTI_ConfigTypeDef structure.</span>
+<a name="line-55"></a><span class="cm">        (++) Configure the interrupt and/or event mode using &quot;Mode&quot; member from</span>
+<a name="line-56"></a><span class="cm">             EXTI_ConfigTypeDef structure.</span>
+<a name="line-57"></a><span class="cm">        (++) For configurable lines, configure rising and/or falling trigger</span>
+<a name="line-58"></a><span class="cm">             &quot;Trigger&quot; member from EXTI_ConfigTypeDef structure.</span>
+<a name="line-59"></a><span class="cm">        (++) For Exti lines linked to gpio, choose gpio port using &quot;GPIOSel&quot;</span>
+<a name="line-60"></a><span class="cm">             member from GPIO_InitTypeDef structure.</span>
+<a name="line-61"></a>
+<a name="line-62"></a><span class="cm">    (#) Get current Exti configuration of a dedicated line using</span>
+<a name="line-63"></a><span class="cm">        HAL_EXTI_GetConfigLine().</span>
+<a name="line-64"></a><span class="cm">        (++) Provide exiting handle as parameter.</span>
+<a name="line-65"></a><span class="cm">        (++) Provide pointer on EXTI_ConfigTypeDef structure as second parameter.</span>
+<a name="line-66"></a>
+<a name="line-67"></a><span class="cm">    (#) Clear Exti configuration of a dedicated line using HAL_EXTI_GetConfigLine().</span>
+<a name="line-68"></a><span class="cm">        (++) Provide exiting handle as parameter.</span>
+<a name="line-69"></a>
+<a name="line-70"></a><span class="cm">    (#) Register callback to treat Exti interrupts using HAL_EXTI_RegisterCallback().</span>
+<a name="line-71"></a><span class="cm">        (++) Provide exiting handle as first parameter.</span>
+<a name="line-72"></a><span class="cm">        (++) Provide which callback will be registered using one value from</span>
+<a name="line-73"></a><span class="cm">             EXTI_CallbackIDTypeDef.</span>
+<a name="line-74"></a><span class="cm">        (++) Provide callback function pointer.</span>
+<a name="line-75"></a>
+<a name="line-76"></a><span class="cm">    (#) Get interrupt pending bit using HAL_EXTI_GetPending().</span>
 <a name="line-77"></a>
-<a name="line-78"></a><span class="cm">/** @addtogroup STM32F4xx_HAL_Driver</span>
-<a name="line-79"></a><span class="cm">  * @{</span>
-<a name="line-80"></a><span class="cm">  */</span>
+<a name="line-78"></a><span class="cm">    (#) Clear interrupt pending bit using HAL_EXTI_GetPending().</span>
+<a name="line-79"></a>
+<a name="line-80"></a><span class="cm">    (#) Generate software interrupt using HAL_EXTI_GenerateSWI().</span>
 <a name="line-81"></a>
-<a name="line-82"></a><span class="cm">/** @defgroup FLASH FLASH</span>
-<a name="line-83"></a><span class="cm">  * @brief FLASH HAL module driver</span>
-<a name="line-84"></a><span class="cm">  * @{</span>
-<a name="line-85"></a><span class="cm">  */</span>
-<a name="line-86"></a>
-<a name="line-87"></a><span class="cp">#ifdef HAL_FLASH_MODULE_ENABLED</span>
-<a name="line-88"></a>
-<a name="line-89"></a><span class="cm">/* Private typedef -----------------------------------------------------------*/</span>
-<a name="line-90"></a><span class="cm">/* Private define ------------------------------------------------------------*/</span>
-<a name="line-91"></a><span class="cm">/** @addtogroup FLASH_Private_Constants</span>
-<a name="line-92"></a><span class="cm">  * @{</span>
-<a name="line-93"></a><span class="cm">  */</span>
-<a name="line-94"></a><span class="cp">#define FLASH_TIMEOUT_VALUE       50000U </span><span class="cm">/* 50 s */</span><span class="cp"></span>
-<a name="line-95"></a><span class="cm">/**</span>
-<a name="line-96"></a><span class="cm">  * @}</span>
-<a name="line-97"></a><span class="cm">  */</span>         
-<a name="line-98"></a><span class="cm">/* Private macro -------------------------------------------------------------*/</span>
-<a name="line-99"></a><span class="cm">/* Private variables ---------------------------------------------------------*/</span>
-<a name="line-100"></a><span class="cm">/** @addtogroup FLASH_Private_Variables</span>
-<a name="line-101"></a><span class="cm">  * @{</span>
-<a name="line-102"></a><span class="cm">  */</span>
-<a name="line-103"></a><span class="cm">/* Variable used for Erase sectors under interruption */</span>
-<a name="line-104"></a><span class="n">FLASH_ProcessTypeDef</span> <span class="n">pFlash</span><span class="p">;</span>
-<a name="line-105"></a><span class="cm">/**</span>
-<a name="line-106"></a><span class="cm">  * @}</span>
-<a name="line-107"></a><span class="cm">  */</span>
-<a name="line-108"></a>
-<a name="line-109"></a><span class="cm">/* Private function prototypes -----------------------------------------------*/</span>
-<a name="line-110"></a><span class="cm">/** @addtogroup FLASH_Private_Functions</span>
-<a name="line-111"></a><span class="cm">  * @{</span>
-<a name="line-112"></a><span class="cm">  */</span>
-<a name="line-113"></a><span class="cm">/* Program operations */</span>
-<a name="line-114"></a><span class="k">static</span> <span class="kt">void</span>   <span class="n">FLASH_Program_DoubleWord</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">Address</span><span class="p">,</span> <span class="kt">uint64_t</span> <span class="n">Data</span><span class="p">);</span>
-<a name="line-115"></a><span class="k">static</span> <span class="kt">void</span>   <span class="n">FLASH_Program_Word</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">Address</span><span class="p">,</span> <span class="kt">uint32_t</span> <span class="n">Data</span><span class="p">);</span>
-<a name="line-116"></a><span class="k">static</span> <span class="kt">void</span>   <span class="n">FLASH_Program_HalfWord</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">Address</span><span class="p">,</span> <span class="kt">uint16_t</span> <span class="n">Data</span><span class="p">);</span>
-<a name="line-117"></a><span class="k">static</span> <span class="kt">void</span>   <span class="n">FLASH_Program_Byte</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">Address</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">Data</span><span class="p">);</span>
-<a name="line-118"></a><span class="k">static</span> <span class="kt">void</span>   <span class="n">FLASH_SetErrorCode</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<a name="line-82"></a><span class="cm">  @endverbatim</span>
+<a name="line-83"></a><span class="cm">  */</span>
+<a name="line-84"></a>
+<a name="line-85"></a><span class="cm">/* Includes ------------------------------------------------------------------*/</span>
+<a name="line-86"></a><span class="cp">#include</span> <span class="cpf">&quot;stm32f4xx_hal.h&quot;</span><span class="cp"></span>
+<a name="line-87"></a>
+<a name="line-88"></a><span class="cm">/** @addtogroup STM32F4xx_HAL_Driver</span>
+<a name="line-89"></a><span class="cm">  * @{</span>
+<a name="line-90"></a><span class="cm">  */</span>
+<a name="line-91"></a>
+<a name="line-92"></a><span class="cm">/** @addtogroup EXTI</span>
+<a name="line-93"></a><span class="cm">  * @{</span>
+<a name="line-94"></a><span class="cm">  */</span>
+<a name="line-95"></a><span class="cm">/** MISRA C:2012 deviation rule has been granted for following rule:</span>
+<a name="line-96"></a><span class="cm">  * Rule-18.1_b - Medium: Array `EXTICR&#39; 1st subscript interval [0,7] may be out</span>
+<a name="line-97"></a><span class="cm">  * of bounds [0,3] in following API :</span>
+<a name="line-98"></a><span class="cm">  * HAL_EXTI_SetConfigLine</span>
+<a name="line-99"></a><span class="cm">  * HAL_EXTI_GetConfigLine</span>
+<a name="line-100"></a><span class="cm">  * HAL_EXTI_ClearConfigLine</span>
+<a name="line-101"></a><span class="cm">  */</span>
+<a name="line-102"></a>
+<a name="line-103"></a><span class="cp">#ifdef HAL_EXTI_MODULE_ENABLED</span>
+<a name="line-104"></a>
+<a name="line-105"></a><span class="cm">/* Private typedef -----------------------------------------------------------*/</span>
+<a name="line-106"></a><span class="cm">/* Private defines -----------------------------------------------------------*/</span>
+<a name="line-107"></a><span class="cm">/** @defgroup EXTI_Private_Constants EXTI Private Constants</span>
+<a name="line-108"></a><span class="cm">  * @{</span>
+<a name="line-109"></a><span class="cm">  */</span>
+<a name="line-110"></a>
+<a name="line-111"></a><span class="cm">/**</span>
+<a name="line-112"></a><span class="cm">  * @}</span>
+<a name="line-113"></a><span class="cm">  */</span>
+<a name="line-114"></a>
+<a name="line-115"></a><span class="cm">/* Private macros ------------------------------------------------------------*/</span>
+<a name="line-116"></a><span class="cm">/* Private variables ---------------------------------------------------------*/</span>
+<a name="line-117"></a><span class="cm">/* Private function prototypes -----------------------------------------------*/</span>
+<a name="line-118"></a><span class="cm">/* Exported functions --------------------------------------------------------*/</span>
 <a name="line-119"></a>
-<a name="line-120"></a><span class="n">HAL_StatusTypeDef</span> <span class="nf">FLASH_WaitForLastOperation</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">Timeout</span><span class="p">);</span>
-<a name="line-121"></a><span class="cm">/**</span>
-<a name="line-122"></a><span class="cm">  * @}</span>
-<a name="line-123"></a><span class="cm">  */</span>
-<a name="line-124"></a>
-<a name="line-125"></a><span class="cm">/* Exported functions --------------------------------------------------------*/</span>
-<a name="line-126"></a><span class="cm">/** @defgroup FLASH_Exported_Functions FLASH Exported Functions</span>
-<a name="line-127"></a><span class="cm">  * @{</span>
-<a name="line-128"></a><span class="cm">  */</span>
-<a name="line-129"></a>  
-<a name="line-130"></a><span class="cm">/** @defgroup FLASH_Exported_Functions_Group1 Programming operation functions </span>
-<a name="line-131"></a><span class="cm"> *  @brief   Programming operation functions </span>
-<a name="line-132"></a><span class="cm"> *</span>
-<a name="line-133"></a><span class="cm">@verbatim   </span>
-<a name="line-134"></a><span class="cm"> ===============================================================================</span>
-<a name="line-135"></a><span class="cm">                  ##### Programming operation functions #####</span>
-<a name="line-136"></a><span class="cm"> ===============================================================================  </span>
-<a name="line-137"></a><span class="cm">    [..]</span>
-<a name="line-138"></a><span class="cm">    This subsection provides a set of functions allowing to manage the FLASH </span>
-<a name="line-139"></a><span class="cm">    program operations.</span>
-<a name="line-140"></a>
-<a name="line-141"></a><span class="cm">@endverbatim</span>
-<a name="line-142"></a><span class="cm">  * @{</span>
-<a name="line-143"></a><span class="cm">  */</span>
-<a name="line-144"></a>
-<a name="line-145"></a><span class="cm">/**</span>
-<a name="line-146"></a><span class="cm">  * @brief  Program byte, halfword, word or double word at a specified address</span>
-<a name="line-147"></a><span class="cm">  * @param  TypeProgram  Indicate the way to program at a specified address.</span>
-<a name="line-148"></a><span class="cm">  *                           This parameter can be a value of @ref FLASH_Type_Program</span>
-<a name="line-149"></a><span class="cm">  * @param  Address  specifies the address to be programmed.</span>
-<a name="line-150"></a><span class="cm">  * @param  Data specifies the data to be programmed</span>
-<a name="line-151"></a><span class="cm">  * </span>
-<a name="line-152"></a><span class="cm">  * @retval HAL_StatusTypeDef HAL Status</span>
-<a name="line-153"></a><span class="cm">  */</span>
-<a name="line-154"></a><span class="hll"><span class="n">HAL_StatusTypeDef</span> <span class="nf">HAL_FLASH_Program</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">TypeProgram</span><span class="p">,</span> <span class="kt">uint32_t</span> <span class="n">Address</span><span class="p">,</span> <span class="kt">uint64_t</span> <span class="n">Data</span><span class="p">)</span><span class="error2">&lt;--- The function 'HAL_FLASH_Program' is never used.</span>
-</span><a name="line-155"></a><span class="p">{</span>
-<a name="line-156"></a>  <span class="n">HAL_StatusTypeDef</span> <span class="n">status</span> <span class="o">=</span> <span class="n">HAL_ERROR</span><span class="p">;</span>
-<a name="line-157"></a>  
-<a name="line-158"></a>  <span class="cm">/* Process Locked */</span>
-<a name="line-159"></a>  <span class="n">__HAL_LOCK</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pFlash</span><span class="p">);</span>
-<a name="line-160"></a>  
-<a name="line-161"></a>  <span class="cm">/* Check the parameters */</span>
-<a name="line-162"></a>  <span class="n">assert_param</span><span class="p">(</span><span class="n">IS_FLASH_TYPEPROGRAM</span><span class="p">(</span><span class="n">TypeProgram</span><span class="p">));</span>
-<a name="line-163"></a>  
-<a name="line-164"></a>  <span class="cm">/* Wait for last operation to be completed */</span>
-<a name="line-165"></a>  <span class="n">status</span> <span class="o">=</span> <span class="n">FLASH_WaitForLastOperation</span><span class="p">((</span><span class="kt">uint32_t</span><span class="p">)</span><span class="n">FLASH_TIMEOUT_VALUE</span><span class="p">);</span>
-<a name="line-166"></a>  
-<a name="line-167"></a>  <span class="k">if</span><span class="p">(</span><span class="n">status</span> <span class="o">==</span> <span class="n">HAL_OK</span><span class="p">)</span>
-<a name="line-168"></a>  <span class="p">{</span>
-<a name="line-169"></a>    <span class="k">if</span><span class="p">(</span><span class="n">TypeProgram</span> <span class="o">==</span> <span class="n">FLASH_TYPEPROGRAM_BYTE</span><span class="p">)</span>
-<a name="line-170"></a>    <span class="p">{</span>
-<a name="line-171"></a>      <span class="cm">/*Program byte (8-bit) at a specified address.*/</span>
-<a name="line-172"></a>      <span class="n">FLASH_Program_Byte</span><span class="p">(</span><span class="n">Address</span><span class="p">,</span> <span class="p">(</span><span class="kt">uint8_t</span><span class="p">)</span> <span class="n">Data</span><span class="p">);</span>
-<a name="line-173"></a>    <span class="p">}</span>
-<a name="line-174"></a>    <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">TypeProgram</span> <span class="o">==</span> <span class="n">FLASH_TYPEPROGRAM_HALFWORD</span><span class="p">)</span>
-<a name="line-175"></a>    <span class="p">{</span>
-<a name="line-176"></a>      <span class="cm">/*Program halfword (16-bit) at a specified address.*/</span>
-<a name="line-177"></a>      <span class="n">FLASH_Program_HalfWord</span><span class="p">(</span><span class="n">Address</span><span class="p">,</span> <span class="p">(</span><span class="kt">uint16_t</span><span class="p">)</span> <span class="n">Data</span><span class="p">);</span>
-<a name="line-178"></a>    <span class="p">}</span>
-<a name="line-179"></a>    <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">TypeProgram</span> <span class="o">==</span> <span class="n">FLASH_TYPEPROGRAM_WORD</span><span class="p">)</span>
-<a name="line-180"></a>    <span class="p">{</span>
-<a name="line-181"></a>      <span class="cm">/*Program word (32-bit) at a specified address.*/</span>
-<a name="line-182"></a>      <span class="n">FLASH_Program_Word</span><span class="p">(</span><span class="n">Address</span><span class="p">,</span> <span class="p">(</span><span class="kt">uint32_t</span><span class="p">)</span> <span class="n">Data</span><span class="p">);</span>
-<a name="line-183"></a>    <span class="p">}</span>
-<a name="line-184"></a>    <span class="k">else</span>
-<a name="line-185"></a>    <span class="p">{</span>
-<a name="line-186"></a>      <span class="cm">/*Program double word (64-bit) at a specified address.*/</span>
-<a name="line-187"></a>      <span class="n">FLASH_Program_DoubleWord</span><span class="p">(</span><span class="n">Address</span><span class="p">,</span> <span class="n">Data</span><span class="p">);</span>
-<a name="line-188"></a>    <span class="p">}</span>
-<a name="line-189"></a>    
-<a name="line-190"></a>    <span class="cm">/* Wait for last operation to be completed */</span>
-<a name="line-191"></a>    <span class="n">status</span> <span class="o">=</span> <span class="n">FLASH_WaitForLastOperation</span><span class="p">((</span><span class="kt">uint32_t</span><span class="p">)</span><span class="n">FLASH_TIMEOUT_VALUE</span><span class="p">);</span>
-<a name="line-192"></a>    
-<a name="line-193"></a>    <span class="cm">/* If the program operation is completed, disable the PG Bit */</span>
-<a name="line-194"></a>    <span class="n">FLASH</span><span class="o">-&gt;</span><span class="n">CR</span> <span class="o">&amp;=</span> <span class="p">(</span><span class="o">~</span><span class="n">FLASH_CR_PG</span><span class="p">);</span>  
-<a name="line-195"></a>  <span class="p">}</span>
-<a name="line-196"></a>  
-<a name="line-197"></a>  <span class="cm">/* Process Unlocked */</span>
-<a name="line-198"></a>  <span class="n">__HAL_UNLOCK</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pFlash</span><span class="p">);</span>
-<a name="line-199"></a>  
-<a name="line-200"></a>  <span class="k">return</span> <span class="n">status</span><span class="p">;</span>
-<a name="line-201"></a><span class="p">}</span>
-<a name="line-202"></a>
-<a name="line-203"></a><span class="cm">/**</span>
-<a name="line-204"></a><span class="cm">  * @brief   Program byte, halfword, word or double word at a specified address  with interrupt enabled.</span>
-<a name="line-205"></a><span class="cm">  * @param  TypeProgram  Indicate the way to program at a specified address.</span>
-<a name="line-206"></a><span class="cm">  *                           This parameter can be a value of @ref FLASH_Type_Program</span>
-<a name="line-207"></a><span class="cm">  * @param  Address  specifies the address to be programmed.</span>
-<a name="line-208"></a><span class="cm">  * @param  Data specifies the data to be programmed</span>
-<a name="line-209"></a><span class="cm">  * </span>
-<a name="line-210"></a><span class="cm">  * @retval HAL Status</span>
-<a name="line-211"></a><span class="cm">  */</span>
-<a name="line-212"></a><span class="hll"><span class="n">HAL_StatusTypeDef</span> <span class="nf">HAL_FLASH_Program_IT</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">TypeProgram</span><span class="p">,</span> <span class="kt">uint32_t</span> <span class="n">Address</span><span class="p">,</span> <span class="kt">uint64_t</span> <span class="n">Data</span><span class="p">)</span><span class="error2">&lt;--- The function 'HAL_FLASH_Program_IT' is never used.</span>
-</span><a name="line-213"></a><span class="p">{</span>
-<a name="line-214"></a>  <span class="n">HAL_StatusTypeDef</span> <span class="n">status</span> <span class="o">=</span> <span class="n">HAL_OK</span><span class="p">;</span>
-<a name="line-215"></a>  
-<a name="line-216"></a>  <span class="cm">/* Process Locked */</span>
-<a name="line-217"></a>  <span class="n">__HAL_LOCK</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pFlash</span><span class="p">);</span>
-<a name="line-218"></a>
-<a name="line-219"></a>  <span class="cm">/* Check the parameters */</span>
-<a name="line-220"></a>  <span class="n">assert_param</span><span class="p">(</span><span class="n">IS_FLASH_TYPEPROGRAM</span><span class="p">(</span><span class="n">TypeProgram</span><span class="p">));</span>
-<a name="line-221"></a>
-<a name="line-222"></a>  <span class="cm">/* Enable End of FLASH Operation interrupt */</span>
-<a name="line-223"></a>  <span class="n">__HAL_FLASH_ENABLE_IT</span><span class="p">(</span><span class="n">FLASH_IT_EOP</span><span class="p">);</span>
-<a name="line-224"></a>  
-<a name="line-225"></a>  <span class="cm">/* Enable Error source interrupt */</span>
-<a name="line-226"></a>  <span class="n">__HAL_FLASH_ENABLE_IT</span><span class="p">(</span><span class="n">FLASH_IT_ERR</span><span class="p">);</span>
+<a name="line-120"></a><span class="cm">/** @addtogroup EXTI_Exported_Functions</span>
+<a name="line-121"></a><span class="cm">  * @{</span>
+<a name="line-122"></a><span class="cm">  */</span>
+<a name="line-123"></a>
+<a name="line-124"></a><span class="cm">/** @addtogroup EXTI_Exported_Functions_Group1</span>
+<a name="line-125"></a><span class="cm">  *  @brief    Configuration functions</span>
+<a name="line-126"></a><span class="cm">  *</span>
+<a name="line-127"></a><span class="cm">@verbatim</span>
+<a name="line-128"></a><span class="cm"> ===============================================================================</span>
+<a name="line-129"></a><span class="cm">              ##### Configuration functions #####</span>
+<a name="line-130"></a><span class="cm"> ===============================================================================</span>
+<a name="line-131"></a>
+<a name="line-132"></a><span class="cm">@endverbatim</span>
+<a name="line-133"></a><span class="cm">  * @{</span>
+<a name="line-134"></a><span class="cm">  */</span>
+<a name="line-135"></a>
+<a name="line-136"></a><span class="cm">/**</span>
+<a name="line-137"></a><span class="cm">  * @brief  Set configuration of a dedicated Exti line.</span>
+<a name="line-138"></a><span class="cm">  * @param  hexti Exti handle.</span>
+<a name="line-139"></a><span class="cm">  * @param  pExtiConfig Pointer on EXTI configuration to be set.</span>
+<a name="line-140"></a><span class="cm">  * @retval HAL Status.</span>
+<a name="line-141"></a><span class="cm">  */</span>
+<a name="line-142"></a><span class="hll"><span class="n">HAL_StatusTypeDef</span> <span class="nf">HAL_EXTI_SetConfigLine</span><span class="p">(</span><span class="n">EXTI_HandleTypeDef</span> <span class="o">*</span><span class="n">hexti</span><span class="p">,</span> <span class="n">EXTI_ConfigTypeDef</span> <span class="o">*</span><span class="n">pExtiConfig</span><span class="p">)</span><span class="error2">&lt;--- The function 'HAL_EXTI_SetConfigLine' is never used.</span>
+</span><a name="line-143"></a><span class="p">{</span>
+<a name="line-144"></a><span class="hll">  <span class="kt">uint32_t</span> <span class="n">regval</span><span class="p">;</span><div class="verbose expandable"><span class="error2">&lt;--- The scope of the variable 'regval' can be reduced. <span class="marker">[+]</span></span><div class="content">The scope of the variable &apos;regval&apos; can be reduced. Warning: Be careful when fixing this message, especially when there are inner loops. Here is an example where cppcheck will write that the scope for &apos;i&apos; can be reduced:
+void f(int x)
+{
+    int i = 0;
+    if (x) {
+        // it&apos;s safe to move &apos;int i = 0;&apos; here
+        for (int n = 0; n &lt; 10; ++n) {
+            // it is possible but not safe to move &apos;int i = 0;&apos; here
+            do_something(&amp;i);
+        }
+    }
+}
+When you see this message it is always safe to reduce the variable scope 1 level.</div></div>
+</span><a name="line-145"></a>  <span class="kt">uint32_t</span> <span class="n">linepos</span><span class="p">;</span>
+<a name="line-146"></a>  <span class="kt">uint32_t</span> <span class="n">maskline</span><span class="p">;</span>
+<a name="line-147"></a>
+<a name="line-148"></a>  <span class="cm">/* Check null pointer */</span>
+<a name="line-149"></a>  <span class="k">if</span> <span class="p">((</span><span class="n">hexti</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">pExtiConfig</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">))</span>
+<a name="line-150"></a>  <span class="p">{</span>
+<a name="line-151"></a>    <span class="k">return</span> <span class="n">HAL_ERROR</span><span class="p">;</span>
+<a name="line-152"></a>  <span class="p">}</span>
+<a name="line-153"></a>
+<a name="line-154"></a>  <span class="cm">/* Check parameters */</span>
+<a name="line-155"></a>  <span class="n">assert_param</span><span class="p">(</span><span class="n">IS_EXTI_LINE</span><span class="p">(</span><span class="n">pExtiConfig</span><span class="o">-&gt;</span><span class="n">Line</span><span class="p">));</span>
+<a name="line-156"></a>  <span class="n">assert_param</span><span class="p">(</span><span class="n">IS_EXTI_MODE</span><span class="p">(</span><span class="n">pExtiConfig</span><span class="o">-&gt;</span><span class="n">Mode</span><span class="p">));</span>
+<a name="line-157"></a>
+<a name="line-158"></a>  <span class="cm">/* Assign line number to handle */</span>
+<a name="line-159"></a>  <span class="n">hexti</span><span class="o">-&gt;</span><span class="n">Line</span> <span class="o">=</span> <span class="n">pExtiConfig</span><span class="o">-&gt;</span><span class="n">Line</span><span class="p">;</span>
+<a name="line-160"></a>
+<a name="line-161"></a>  <span class="cm">/* Compute line mask */</span>
+<a name="line-162"></a>  <span class="n">linepos</span> <span class="o">=</span> <span class="p">(</span><span class="n">pExtiConfig</span><span class="o">-&gt;</span><span class="n">Line</span> <span class="o">&amp;</span> <span class="n">EXTI_PIN_MASK</span><span class="p">);</span>
+<a name="line-163"></a>  <span class="n">maskline</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1uL</span> <span class="o">&lt;&lt;</span> <span class="n">linepos</span><span class="p">);</span>
+<a name="line-164"></a>
+<a name="line-165"></a>  <span class="cm">/* Configure triggers for configurable lines */</span>
+<a name="line-166"></a>  <span class="k">if</span> <span class="p">((</span><span class="n">pExtiConfig</span><span class="o">-&gt;</span><span class="n">Line</span> <span class="o">&amp;</span> <span class="n">EXTI_CONFIG</span><span class="p">)</span> <span class="o">!=</span> <span class="mh">0x00u</span><span class="p">)</span>
+<a name="line-167"></a>  <span class="p">{</span>
+<a name="line-168"></a>    <span class="n">assert_param</span><span class="p">(</span><span class="n">IS_EXTI_TRIGGER</span><span class="p">(</span><span class="n">pExtiConfig</span><span class="o">-&gt;</span><span class="n">Trigger</span><span class="p">));</span>
+<a name="line-169"></a>
+<a name="line-170"></a>    <span class="cm">/* Configure rising trigger */</span>
+<a name="line-171"></a>    <span class="cm">/* Mask or set line */</span>
+<a name="line-172"></a>    <span class="k">if</span> <span class="p">((</span><span class="n">pExtiConfig</span><span class="o">-&gt;</span><span class="n">Trigger</span> <span class="o">&amp;</span> <span class="n">EXTI_TRIGGER_RISING</span><span class="p">)</span> <span class="o">!=</span> <span class="mh">0x00u</span><span class="p">)</span>
+<a name="line-173"></a>    <span class="p">{</span>
+<a name="line-174"></a>      <span class="n">EXTI</span><span class="o">-&gt;</span><span class="n">RTSR</span> <span class="o">|=</span> <span class="n">maskline</span><span class="p">;</span>
+<a name="line-175"></a>    <span class="p">}</span>
+<a name="line-176"></a>    <span class="k">else</span>
+<a name="line-177"></a>    <span class="p">{</span>
+<a name="line-178"></a>      <span class="n">EXTI</span><span class="o">-&gt;</span><span class="n">RTSR</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">maskline</span><span class="p">;</span>
+<a name="line-179"></a>    <span class="p">}</span>
+<a name="line-180"></a>
+<a name="line-181"></a>    <span class="cm">/* Configure falling trigger */</span>
+<a name="line-182"></a>    <span class="cm">/* Mask or set line */</span>
+<a name="line-183"></a>    <span class="k">if</span> <span class="p">((</span><span class="n">pExtiConfig</span><span class="o">-&gt;</span><span class="n">Trigger</span> <span class="o">&amp;</span> <span class="n">EXTI_TRIGGER_FALLING</span><span class="p">)</span> <span class="o">!=</span> <span class="mh">0x00u</span><span class="p">)</span>
+<a name="line-184"></a>    <span class="p">{</span>
+<a name="line-185"></a>      <span class="n">EXTI</span><span class="o">-&gt;</span><span class="n">FTSR</span> <span class="o">|=</span> <span class="n">maskline</span><span class="p">;</span>
+<a name="line-186"></a>    <span class="p">}</span>
+<a name="line-187"></a>    <span class="k">else</span>
+<a name="line-188"></a>    <span class="p">{</span>
+<a name="line-189"></a>      <span class="n">EXTI</span><span class="o">-&gt;</span><span class="n">FTSR</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">maskline</span><span class="p">;</span>
+<a name="line-190"></a>    <span class="p">}</span>
+<a name="line-191"></a>
+<a name="line-192"></a>
+<a name="line-193"></a>    <span class="cm">/* Configure gpio port selection in case of gpio exti line */</span>
+<a name="line-194"></a>    <span class="k">if</span> <span class="p">((</span><span class="n">pExtiConfig</span><span class="o">-&gt;</span><span class="n">Line</span> <span class="o">&amp;</span> <span class="n">EXTI_GPIO</span><span class="p">)</span> <span class="o">==</span> <span class="n">EXTI_GPIO</span><span class="p">)</span>
+<a name="line-195"></a>    <span class="p">{</span>
+<a name="line-196"></a>      <span class="n">assert_param</span><span class="p">(</span><span class="n">IS_EXTI_GPIO_PORT</span><span class="p">(</span><span class="n">pExtiConfig</span><span class="o">-&gt;</span><span class="n">GPIOSel</span><span class="p">));</span>
+<a name="line-197"></a>      <span class="n">assert_param</span><span class="p">(</span><span class="n">IS_EXTI_GPIO_PIN</span><span class="p">(</span><span class="n">linepos</span><span class="p">));</span>
+<a name="line-198"></a>
+<a name="line-199"></a>      <span class="n">regval</span> <span class="o">=</span> <span class="n">SYSCFG</span><span class="o">-&gt;</span><span class="n">EXTICR</span><span class="p">[</span><span class="n">linepos</span> <span class="o">&gt;&gt;</span> <span class="mi">2u</span><span class="p">];</span>
+<a name="line-200"></a>      <span class="n">regval</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="p">(</span><span class="n">SYSCFG_EXTICR1_EXTI0</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">SYSCFG_EXTICR1_EXTI1_Pos</span> <span class="o">*</span> <span class="p">(</span><span class="n">linepos</span> <span class="o">&amp;</span> <span class="mh">0x03u</span><span class="p">)));</span>
+<a name="line-201"></a>      <span class="n">regval</span> <span class="o">|=</span> <span class="p">(</span><span class="n">pExtiConfig</span><span class="o">-&gt;</span><span class="n">GPIOSel</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">SYSCFG_EXTICR1_EXTI1_Pos</span> <span class="o">*</span> <span class="p">(</span><span class="n">linepos</span> <span class="o">&amp;</span> <span class="mh">0x03u</span><span class="p">)));</span>
+<a name="line-202"></a>      <span class="n">SYSCFG</span><span class="o">-&gt;</span><span class="n">EXTICR</span><span class="p">[</span><span class="n">linepos</span> <span class="o">&gt;&gt;</span> <span class="mi">2u</span><span class="p">]</span> <span class="o">=</span> <span class="n">regval</span><span class="p">;</span>
+<a name="line-203"></a>    <span class="p">}</span>
+<a name="line-204"></a>  <span class="p">}</span>
+<a name="line-205"></a>
+<a name="line-206"></a>  <span class="cm">/* Configure interrupt mode : read current mode */</span>
+<a name="line-207"></a>  <span class="cm">/* Mask or set line */</span>
+<a name="line-208"></a>  <span class="k">if</span> <span class="p">((</span><span class="n">pExtiConfig</span><span class="o">-&gt;</span><span class="n">Mode</span> <span class="o">&amp;</span> <span class="n">EXTI_MODE_INTERRUPT</span><span class="p">)</span> <span class="o">!=</span> <span class="mh">0x00u</span><span class="p">)</span>
+<a name="line-209"></a>  <span class="p">{</span>
+<a name="line-210"></a>    <span class="n">EXTI</span><span class="o">-&gt;</span><span class="n">IMR</span> <span class="o">|=</span> <span class="n">maskline</span><span class="p">;</span>
+<a name="line-211"></a>  <span class="p">}</span>
+<a name="line-212"></a>  <span class="k">else</span>
+<a name="line-213"></a>  <span class="p">{</span>
+<a name="line-214"></a>    <span class="n">EXTI</span><span class="o">-&gt;</span><span class="n">IMR</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">maskline</span><span class="p">;</span>
+<a name="line-215"></a>  <span class="p">}</span>
+<a name="line-216"></a>
+<a name="line-217"></a>  <span class="cm">/* Configure event mode : read current mode */</span>
+<a name="line-218"></a>  <span class="cm">/* Mask or set line */</span>
+<a name="line-219"></a>  <span class="k">if</span> <span class="p">((</span><span class="n">pExtiConfig</span><span class="o">-&gt;</span><span class="n">Mode</span> <span class="o">&amp;</span> <span class="n">EXTI_MODE_EVENT</span><span class="p">)</span> <span class="o">!=</span> <span class="mh">0x00u</span><span class="p">)</span>
+<a name="line-220"></a>  <span class="p">{</span>
+<a name="line-221"></a>    <span class="n">EXTI</span><span class="o">-&gt;</span><span class="n">EMR</span> <span class="o">|=</span> <span class="n">maskline</span><span class="p">;</span>
+<a name="line-222"></a>  <span class="p">}</span>
+<a name="line-223"></a>  <span class="k">else</span>
+<a name="line-224"></a>  <span class="p">{</span>
+<a name="line-225"></a>    <span class="n">EXTI</span><span class="o">-&gt;</span><span class="n">EMR</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">maskline</span><span class="p">;</span>
+<a name="line-226"></a>  <span class="p">}</span>
 <a name="line-227"></a>
-<a name="line-228"></a>  <span class="n">pFlash</span><span class="p">.</span><span class="n">ProcedureOnGoing</span> <span class="o">=</span> <span class="n">FLASH_PROC_PROGRAM</span><span class="p">;</span>
-<a name="line-229"></a>  <span class="n">pFlash</span><span class="p">.</span><span class="n">Address</span> <span class="o">=</span> <span class="n">Address</span><span class="p">;</span>
+<a name="line-228"></a>  <span class="k">return</span> <span class="n">HAL_OK</span><span class="p">;</span>
+<a name="line-229"></a><span class="p">}</span>
 <a name="line-230"></a>
-<a name="line-231"></a>  <span class="k">if</span><span class="p">(</span><span class="n">TypeProgram</span> <span class="o">==</span> <span class="n">FLASH_TYPEPROGRAM_BYTE</span><span class="p">)</span>
-<a name="line-232"></a>  <span class="p">{</span>
-<a name="line-233"></a>    <span class="cm">/*Program byte (8-bit) at a specified address.*/</span>
-<a name="line-234"></a>      <span class="n">FLASH_Program_Byte</span><span class="p">(</span><span class="n">Address</span><span class="p">,</span> <span class="p">(</span><span class="kt">uint8_t</span><span class="p">)</span> <span class="n">Data</span><span class="p">);</span>
-<a name="line-235"></a>  <span class="p">}</span>
-<a name="line-236"></a>  <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">TypeProgram</span> <span class="o">==</span> <span class="n">FLASH_TYPEPROGRAM_HALFWORD</span><span class="p">)</span>
-<a name="line-237"></a>  <span class="p">{</span>
-<a name="line-238"></a>    <span class="cm">/*Program halfword (16-bit) at a specified address.*/</span>
-<a name="line-239"></a>    <span class="n">FLASH_Program_HalfWord</span><span class="p">(</span><span class="n">Address</span><span class="p">,</span> <span class="p">(</span><span class="kt">uint16_t</span><span class="p">)</span> <span class="n">Data</span><span class="p">);</span>
-<a name="line-240"></a>  <span class="p">}</span>
-<a name="line-241"></a>  <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">TypeProgram</span> <span class="o">==</span> <span class="n">FLASH_TYPEPROGRAM_WORD</span><span class="p">)</span>
-<a name="line-242"></a>  <span class="p">{</span>
-<a name="line-243"></a>    <span class="cm">/*Program word (32-bit) at a specified address.*/</span>
-<a name="line-244"></a>    <span class="n">FLASH_Program_Word</span><span class="p">(</span><span class="n">Address</span><span class="p">,</span> <span class="p">(</span><span class="kt">uint32_t</span><span class="p">)</span> <span class="n">Data</span><span class="p">);</span>
-<a name="line-245"></a>  <span class="p">}</span>
-<a name="line-246"></a>  <span class="k">else</span>
-<a name="line-247"></a>  <span class="p">{</span>
-<a name="line-248"></a>    <span class="cm">/*Program double word (64-bit) at a specified address.*/</span>
-<a name="line-249"></a>    <span class="n">FLASH_Program_DoubleWord</span><span class="p">(</span><span class="n">Address</span><span class="p">,</span> <span class="n">Data</span><span class="p">);</span>
-<a name="line-250"></a>  <span class="p">}</span>
+<a name="line-231"></a><span class="cm">/**</span>
+<a name="line-232"></a><span class="cm">  * @brief  Get configuration of a dedicated Exti line.</span>
+<a name="line-233"></a><span class="cm">  * @param  hexti Exti handle.</span>
+<a name="line-234"></a><span class="cm">  * @param  pExtiConfig Pointer on structure to store Exti configuration.</span>
+<a name="line-235"></a><span class="cm">  * @retval HAL Status.</span>
+<a name="line-236"></a><span class="cm">  */</span>
+<a name="line-237"></a><span class="hll"><span class="n">HAL_StatusTypeDef</span> <span class="nf">HAL_EXTI_GetConfigLine</span><span class="p">(</span><span class="n">EXTI_HandleTypeDef</span> <span class="o">*</span><span class="n">hexti</span><span class="p">,</span> <span class="n">EXTI_ConfigTypeDef</span> <span class="o">*</span><span class="n">pExtiConfig</span><span class="p">)</span><span class="error2">&lt;--- The function 'HAL_EXTI_GetConfigLine' is never used.</span>
+</span><a name="line-238"></a><span class="p">{</span>
+<a name="line-239"></a><span class="hll">  <span class="kt">uint32_t</span> <span class="n">regval</span><span class="p">;</span><div class="verbose expandable"><span class="error2">&lt;--- The scope of the variable 'regval' can be reduced. <span class="marker">[+]</span></span><div class="content">The scope of the variable &apos;regval&apos; can be reduced. Warning: Be careful when fixing this message, especially when there are inner loops. Here is an example where cppcheck will write that the scope for &apos;i&apos; can be reduced:
+void f(int x)
+{
+    int i = 0;
+    if (x) {
+        // it&apos;s safe to move &apos;int i = 0;&apos; here
+        for (int n = 0; n &lt; 10; ++n) {
+            // it is possible but not safe to move &apos;int i = 0;&apos; here
+            do_something(&amp;i);
+        }
+    }
+}
+When you see this message it is always safe to reduce the variable scope 1 level.</div></div>
+</span><a name="line-240"></a>  <span class="kt">uint32_t</span> <span class="n">linepos</span><span class="p">;</span>
+<a name="line-241"></a>  <span class="kt">uint32_t</span> <span class="n">maskline</span><span class="p">;</span>
+<a name="line-242"></a>
+<a name="line-243"></a>  <span class="cm">/* Check null pointer */</span>
+<a name="line-244"></a>  <span class="k">if</span> <span class="p">((</span><span class="n">hexti</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">pExtiConfig</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">))</span>
+<a name="line-245"></a>  <span class="p">{</span>
+<a name="line-246"></a>    <span class="k">return</span> <span class="n">HAL_ERROR</span><span class="p">;</span>
+<a name="line-247"></a>  <span class="p">}</span>
+<a name="line-248"></a>
+<a name="line-249"></a>  <span class="cm">/* Check the parameter */</span>
+<a name="line-250"></a>  <span class="n">assert_param</span><span class="p">(</span><span class="n">IS_EXTI_LINE</span><span class="p">(</span><span class="n">hexti</span><span class="o">-&gt;</span><span class="n">Line</span><span class="p">));</span>
 <a name="line-251"></a>
-<a name="line-252"></a>  <span class="k">return</span> <span class="n">status</span><span class="p">;</span>
-<a name="line-253"></a><span class="p">}</span>
+<a name="line-252"></a>  <span class="cm">/* Store handle line number to configuration structure */</span>
+<a name="line-253"></a>  <span class="n">pExtiConfig</span><span class="o">-&gt;</span><span class="n">Line</span> <span class="o">=</span> <span class="n">hexti</span><span class="o">-&gt;</span><span class="n">Line</span><span class="p">;</span>
 <a name="line-254"></a>
-<a name="line-255"></a><span class="cm">/**</span>
-<a name="line-256"></a><span class="cm">  * @brief This function handles FLASH interrupt request.</span>
-<a name="line-257"></a><span class="cm">  * @retval None</span>
-<a name="line-258"></a><span class="cm">  */</span>
-<a name="line-259"></a><span class="hll"><span class="kt">void</span> <span class="nf">HAL_FLASH_IRQHandler</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="error2">&lt;--- The function 'HAL_FLASH_IRQHandler' is never used.</span>
-</span><a name="line-260"></a><span class="p">{</span>
-<a name="line-261"></a><span class="hll">  <span class="kt">uint32_t</span> <span class="n">addresstmp</span> <span class="o">=</span> <span class="mi">0U</span><span class="p">;</span><span class="error2">&lt;--- Variable 'addresstmp' is assigned a value that is never used.</span>
-</span><a name="line-262"></a>  
-<a name="line-263"></a>  <span class="cm">/* Check FLASH operation error flags */</span>
-<a name="line-264"></a><span class="cp">#if defined(FLASH_SR_RDERR) </span>
-<a name="line-265"></a>  <span class="k">if</span><span class="p">(</span><span class="n">__HAL_FLASH_GET_FLAG</span><span class="p">((</span><span class="n">FLASH_FLAG_OPERR</span> <span class="o">|</span> <span class="n">FLASH_FLAG_WRPERR</span> <span class="o">|</span> <span class="n">FLASH_FLAG_PGAERR</span> <span class="o">|</span> \
-<a name="line-266"></a>    <span class="n">FLASH_FLAG_PGPERR</span> <span class="o">|</span> <span class="n">FLASH_FLAG_PGSERR</span> <span class="o">|</span> <span class="n">FLASH_FLAG_RDERR</span><span class="p">))</span> <span class="o">!=</span> <span class="n">RESET</span><span class="p">)</span>
-<a name="line-267"></a><span class="cp">#else</span>
-<a name="line-268"></a>  <span class="k">if</span><span class="p">(</span><span class="n">__HAL_FLASH_GET_FLAG</span><span class="p">((</span><span class="n">FLASH_FLAG_OPERR</span> <span class="o">|</span> <span class="n">FLASH_FLAG_WRPERR</span> <span class="o">|</span> <span class="n">FLASH_FLAG_PGAERR</span> <span class="o">|</span> \
-<a name="line-269"></a>    <span class="n">FLASH_FLAG_PGPERR</span> <span class="o">|</span> <span class="n">FLASH_FLAG_PGSERR</span><span class="p">))</span> <span class="o">!=</span> <span class="n">RESET</span><span class="p">)</span>
-<a name="line-270"></a><span class="cp">#endif </span><span class="cm">/* FLASH_SR_RDERR */</span><span class="cp"></span>
-<a name="line-271"></a>  <span class="p">{</span>
-<a name="line-272"></a>    <span class="k">if</span><span class="p">(</span><span class="n">pFlash</span><span class="p">.</span><span class="n">ProcedureOnGoing</span> <span class="o">==</span> <span class="n">FLASH_PROC_SECTERASE</span><span class="p">)</span>
-<a name="line-273"></a>    <span class="p">{</span>
-<a name="line-274"></a>      <span class="cm">/*return the faulty sector*/</span>
-<a name="line-275"></a>      <span class="n">addresstmp</span> <span class="o">=</span> <span class="n">pFlash</span><span class="p">.</span><span class="n">Sector</span><span class="p">;</span>
-<a name="line-276"></a>      <span class="n">pFlash</span><span class="p">.</span><span class="n">Sector</span> <span class="o">=</span> <span class="mh">0xFFFFFFFFU</span><span class="p">;</span>
-<a name="line-277"></a>    <span class="p">}</span>
-<a name="line-278"></a>    <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">pFlash</span><span class="p">.</span><span class="n">ProcedureOnGoing</span> <span class="o">==</span> <span class="n">FLASH_PROC_MASSERASE</span><span class="p">)</span>
-<a name="line-279"></a>    <span class="p">{</span>
-<a name="line-280"></a>      <span class="cm">/*return the faulty bank*/</span>
-<a name="line-281"></a>      <span class="n">addresstmp</span> <span class="o">=</span> <span class="n">pFlash</span><span class="p">.</span><span class="n">Bank</span><span class="p">;</span>
-<a name="line-282"></a>    <span class="p">}</span>
-<a name="line-283"></a>    <span class="k">else</span>
-<a name="line-284"></a>    <span class="p">{</span>
-<a name="line-285"></a>      <span class="cm">/*return the faulty address*/</span>
-<a name="line-286"></a>      <span class="n">addresstmp</span> <span class="o">=</span> <span class="n">pFlash</span><span class="p">.</span><span class="n">Address</span><span class="p">;</span>
-<a name="line-287"></a>    <span class="p">}</span>
-<a name="line-288"></a>    
-<a name="line-289"></a>    <span class="cm">/*Save the Error code*/</span>
-<a name="line-290"></a>    <span class="n">FLASH_SetErrorCode</span><span class="p">();</span>
-<a name="line-291"></a>    
-<a name="line-292"></a>    <span class="cm">/* FLASH error interrupt user callback */</span>
-<a name="line-293"></a>    <span class="n">HAL_FLASH_OperationErrorCallback</span><span class="p">(</span><span class="n">addresstmp</span><span class="p">);</span>
-<a name="line-294"></a>    
-<a name="line-295"></a>    <span class="cm">/*Stop the procedure ongoing*/</span>
-<a name="line-296"></a>    <span class="n">pFlash</span><span class="p">.</span><span class="n">ProcedureOnGoing</span> <span class="o">=</span> <span class="n">FLASH_PROC_NONE</span><span class="p">;</span>
-<a name="line-297"></a>  <span class="p">}</span>
-<a name="line-298"></a>  
-<a name="line-299"></a>  <span class="cm">/* Check FLASH End of Operation flag  */</span>
-<a name="line-300"></a>  <span class="k">if</span><span class="p">(</span><span class="n">__HAL_FLASH_GET_FLAG</span><span class="p">(</span><span class="n">FLASH_FLAG_EOP</span><span class="p">)</span> <span class="o">!=</span> <span class="n">RESET</span><span class="p">)</span>
-<a name="line-301"></a>  <span class="p">{</span>
-<a name="line-302"></a>    <span class="cm">/* Clear FLASH End of Operation pending bit */</span>
-<a name="line-303"></a>    <span class="n">__HAL_FLASH_CLEAR_FLAG</span><span class="p">(</span><span class="n">FLASH_FLAG_EOP</span><span class="p">);</span>
-<a name="line-304"></a>    
-<a name="line-305"></a>    <span class="k">if</span><span class="p">(</span><span class="n">pFlash</span><span class="p">.</span><span class="n">ProcedureOnGoing</span> <span class="o">==</span> <span class="n">FLASH_PROC_SECTERASE</span><span class="p">)</span>
-<a name="line-306"></a>    <span class="p">{</span>
-<a name="line-307"></a>      <span class="cm">/*Nb of sector to erased can be decreased*/</span>
-<a name="line-308"></a>      <span class="n">pFlash</span><span class="p">.</span><span class="n">NbSectorsToErase</span><span class="o">--</span><span class="p">;</span>
-<a name="line-309"></a>      
-<a name="line-310"></a>      <span class="cm">/* Check if there are still sectors to erase*/</span>
-<a name="line-311"></a>      <span class="k">if</span><span class="p">(</span><span class="n">pFlash</span><span class="p">.</span><span class="n">NbSectorsToErase</span> <span class="o">!=</span> <span class="mi">0U</span><span class="p">)</span>
-<a name="line-312"></a>      <span class="p">{</span>
-<a name="line-313"></a>        <span class="n">addresstmp</span> <span class="o">=</span> <span class="n">pFlash</span><span class="p">.</span><span class="n">Sector</span><span class="p">;</span>
-<a name="line-314"></a>        <span class="cm">/*Indicate user which sector has been erased*/</span>
-<a name="line-315"></a>        <span class="n">HAL_FLASH_EndOfOperationCallback</span><span class="p">(</span><span class="n">addresstmp</span><span class="p">);</span>
-<a name="line-316"></a>        
-<a name="line-317"></a>        <span class="cm">/*Increment sector number*/</span>
-<a name="line-318"></a>        <span class="n">pFlash</span><span class="p">.</span><span class="n">Sector</span><span class="o">++</span><span class="p">;</span>
-<a name="line-319"></a>        <span class="n">addresstmp</span> <span class="o">=</span> <span class="n">pFlash</span><span class="p">.</span><span class="n">Sector</span><span class="p">;</span>
-<a name="line-320"></a>        <span class="n">FLASH_Erase_Sector</span><span class="p">(</span><span class="n">addresstmp</span><span class="p">,</span> <span class="n">pFlash</span><span class="p">.</span><span class="n">VoltageForErase</span><span class="p">);</span>
-<a name="line-321"></a>      <span class="p">}</span>
-<a name="line-322"></a>      <span class="k">else</span>
-<a name="line-323"></a>      <span class="p">{</span>
-<a name="line-324"></a>        <span class="cm">/*No more sectors to Erase, user callback can be called.*/</span>
-<a name="line-325"></a>        <span class="cm">/*Reset Sector and stop Erase sectors procedure*/</span>
-<a name="line-326"></a>        <span class="n">pFlash</span><span class="p">.</span><span class="n">Sector</span> <span class="o">=</span> <span class="n">addresstmp</span> <span class="o">=</span> <span class="mh">0xFFFFFFFFU</span><span class="p">;</span>
-<a name="line-327"></a>        <span class="n">pFlash</span><span class="p">.</span><span class="n">ProcedureOnGoing</span> <span class="o">=</span> <span class="n">FLASH_PROC_NONE</span><span class="p">;</span>
-<a name="line-328"></a>        
-<a name="line-329"></a>        <span class="cm">/* Flush the caches to be sure of the data consistency */</span>
-<a name="line-330"></a>        <span class="n">FLASH_FlushCaches</span><span class="p">()</span> <span class="p">;</span>
-<a name="line-331"></a>                
-<a name="line-332"></a>        <span class="cm">/* FLASH EOP interrupt user callback */</span>
-<a name="line-333"></a>        <span class="n">HAL_FLASH_EndOfOperationCallback</span><span class="p">(</span><span class="n">addresstmp</span><span class="p">);</span>
-<a name="line-334"></a>      <span class="p">}</span>
-<a name="line-335"></a>    <span class="p">}</span>
-<a name="line-336"></a>    <span class="k">else</span> 
-<a name="line-337"></a>    <span class="p">{</span>
-<a name="line-338"></a>      <span class="k">if</span><span class="p">(</span><span class="n">pFlash</span><span class="p">.</span><span class="n">ProcedureOnGoing</span> <span class="o">==</span> <span class="n">FLASH_PROC_MASSERASE</span><span class="p">)</span> 
-<a name="line-339"></a>      <span class="p">{</span>
-<a name="line-340"></a>        <span class="cm">/* MassErase ended. Return the selected bank */</span>
-<a name="line-341"></a>        <span class="cm">/* Flush the caches to be sure of the data consistency */</span>
-<a name="line-342"></a>        <span class="n">FLASH_FlushCaches</span><span class="p">()</span> <span class="p">;</span>
-<a name="line-343"></a>
-<a name="line-344"></a>        <span class="cm">/* FLASH EOP interrupt user callback */</span>
-<a name="line-345"></a>        <span class="n">HAL_FLASH_EndOfOperationCallback</span><span class="p">(</span><span class="n">pFlash</span><span class="p">.</span><span class="n">Bank</span><span class="p">);</span>
-<a name="line-346"></a>      <span class="p">}</span>
-<a name="line-347"></a>      <span class="k">else</span>
-<a name="line-348"></a>      <span class="p">{</span>
-<a name="line-349"></a>        <span class="cm">/*Program ended. Return the selected address*/</span>
-<a name="line-350"></a>        <span class="cm">/* FLASH EOP interrupt user callback */</span>
-<a name="line-351"></a>        <span class="n">HAL_FLASH_EndOfOperationCallback</span><span class="p">(</span><span class="n">pFlash</span><span class="p">.</span><span class="n">Address</span><span class="p">);</span>
-<a name="line-352"></a>      <span class="p">}</span>
-<a name="line-353"></a>      <span class="n">pFlash</span><span class="p">.</span><span class="n">ProcedureOnGoing</span> <span class="o">=</span> <span class="n">FLASH_PROC_NONE</span><span class="p">;</span>
-<a name="line-354"></a>    <span class="p">}</span>
-<a name="line-355"></a>  <span class="p">}</span>
-<a name="line-356"></a>  
-<a name="line-357"></a>  <span class="k">if</span><span class="p">(</span><span class="n">pFlash</span><span class="p">.</span><span class="n">ProcedureOnGoing</span> <span class="o">==</span> <span class="n">FLASH_PROC_NONE</span><span class="p">)</span>
-<a name="line-358"></a>  <span class="p">{</span>
-<a name="line-359"></a>    <span class="cm">/* Operation is completed, disable the PG, SER, SNB and MER Bits */</span>
-<a name="line-360"></a>    <span class="n">CLEAR_BIT</span><span class="p">(</span><span class="n">FLASH</span><span class="o">-&gt;</span><span class="n">CR</span><span class="p">,</span> <span class="p">(</span><span class="n">FLASH_CR_PG</span> <span class="o">|</span> <span class="n">FLASH_CR_SER</span> <span class="o">|</span> <span class="n">FLASH_CR_SNB</span> <span class="o">|</span> <span class="n">FLASH_MER_BIT</span><span class="p">));</span>
-<a name="line-361"></a>
-<a name="line-362"></a>    <span class="cm">/* Disable End of FLASH Operation interrupt */</span>
-<a name="line-363"></a>    <span class="n">__HAL_FLASH_DISABLE_IT</span><span class="p">(</span><span class="n">FLASH_IT_EOP</span><span class="p">);</span>
-<a name="line-364"></a>    
-<a name="line-365"></a>    <span class="cm">/* Disable Error source interrupt */</span>
-<a name="line-366"></a>    <span class="n">__HAL_FLASH_DISABLE_IT</span><span class="p">(</span><span class="n">FLASH_IT_ERR</span><span class="p">);</span>
-<a name="line-367"></a>    
-<a name="line-368"></a>    <span class="cm">/* Process Unlocked */</span>
-<a name="line-369"></a>    <span class="n">__HAL_UNLOCK</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pFlash</span><span class="p">);</span>
-<a name="line-370"></a>  <span class="p">}</span>
-<a name="line-371"></a><span class="p">}</span>
+<a name="line-255"></a>  <span class="cm">/* Compute line mask */</span>
+<a name="line-256"></a>  <span class="n">linepos</span> <span class="o">=</span> <span class="p">(</span><span class="n">pExtiConfig</span><span class="o">-&gt;</span><span class="n">Line</span> <span class="o">&amp;</span> <span class="n">EXTI_PIN_MASK</span><span class="p">);</span>
+<a name="line-257"></a>  <span class="n">maskline</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1uL</span> <span class="o">&lt;&lt;</span> <span class="n">linepos</span><span class="p">);</span>
+<a name="line-258"></a>
+<a name="line-259"></a>  <span class="cm">/* 1] Get core mode : interrupt */</span>
+<a name="line-260"></a>
+<a name="line-261"></a>  <span class="cm">/* Check if selected line is enable */</span>
+<a name="line-262"></a>  <span class="k">if</span> <span class="p">((</span><span class="n">EXTI</span><span class="o">-&gt;</span><span class="n">IMR</span> <span class="o">&amp;</span> <span class="n">maskline</span><span class="p">)</span> <span class="o">!=</span> <span class="mh">0x00u</span><span class="p">)</span>
+<a name="line-263"></a>  <span class="p">{</span>
+<a name="line-264"></a>    <span class="n">pExtiConfig</span><span class="o">-&gt;</span><span class="n">Mode</span> <span class="o">=</span> <span class="n">EXTI_MODE_INTERRUPT</span><span class="p">;</span>
+<a name="line-265"></a>  <span class="p">}</span>
+<a name="line-266"></a>  <span class="k">else</span>
+<a name="line-267"></a>  <span class="p">{</span>
+<a name="line-268"></a>    <span class="n">pExtiConfig</span><span class="o">-&gt;</span><span class="n">Mode</span> <span class="o">=</span> <span class="n">EXTI_MODE_NONE</span><span class="p">;</span>
+<a name="line-269"></a>  <span class="p">}</span>
+<a name="line-270"></a>
+<a name="line-271"></a>  <span class="cm">/* Get event mode */</span>
+<a name="line-272"></a>  <span class="cm">/* Check if selected line is enable */</span>
+<a name="line-273"></a>  <span class="k">if</span> <span class="p">((</span><span class="n">EXTI</span><span class="o">-&gt;</span><span class="n">EMR</span> <span class="o">&amp;</span> <span class="n">maskline</span><span class="p">)</span> <span class="o">!=</span> <span class="mh">0x00u</span><span class="p">)</span>
+<a name="line-274"></a>  <span class="p">{</span>
+<a name="line-275"></a>    <span class="n">pExtiConfig</span><span class="o">-&gt;</span><span class="n">Mode</span> <span class="o">|=</span> <span class="n">EXTI_MODE_EVENT</span><span class="p">;</span>
+<a name="line-276"></a>  <span class="p">}</span>
+<a name="line-277"></a>
+<a name="line-278"></a>  <span class="cm">/* Get default Trigger and GPIOSel configuration */</span>
+<a name="line-279"></a>  <span class="n">pExtiConfig</span><span class="o">-&gt;</span><span class="n">Trigger</span> <span class="o">=</span> <span class="n">EXTI_TRIGGER_NONE</span><span class="p">;</span>
+<a name="line-280"></a>  <span class="n">pExtiConfig</span><span class="o">-&gt;</span><span class="n">GPIOSel</span> <span class="o">=</span> <span class="mh">0x00u</span><span class="p">;</span>
+<a name="line-281"></a>
+<a name="line-282"></a>  <span class="cm">/* 2] Get trigger for configurable lines : rising */</span>
+<a name="line-283"></a>  <span class="k">if</span> <span class="p">((</span><span class="n">pExtiConfig</span><span class="o">-&gt;</span><span class="n">Line</span> <span class="o">&amp;</span> <span class="n">EXTI_CONFIG</span><span class="p">)</span> <span class="o">!=</span> <span class="mh">0x00u</span><span class="p">)</span>
+<a name="line-284"></a>  <span class="p">{</span>
+<a name="line-285"></a>    <span class="cm">/* Check if configuration of selected line is enable */</span>
+<a name="line-286"></a>    <span class="k">if</span> <span class="p">((</span><span class="n">EXTI</span><span class="o">-&gt;</span><span class="n">RTSR</span> <span class="o">&amp;</span> <span class="n">maskline</span><span class="p">)</span> <span class="o">!=</span> <span class="mh">0x00u</span><span class="p">)</span>
+<a name="line-287"></a>    <span class="p">{</span>
+<a name="line-288"></a>      <span class="n">pExtiConfig</span><span class="o">-&gt;</span><span class="n">Trigger</span> <span class="o">=</span> <span class="n">EXTI_TRIGGER_RISING</span><span class="p">;</span>
+<a name="line-289"></a>    <span class="p">}</span>
+<a name="line-290"></a>
+<a name="line-291"></a>    <span class="cm">/* Get falling configuration */</span>
+<a name="line-292"></a>    <span class="cm">/* Check if configuration of selected line is enable */</span>
+<a name="line-293"></a>    <span class="k">if</span> <span class="p">((</span><span class="n">EXTI</span><span class="o">-&gt;</span><span class="n">FTSR</span> <span class="o">&amp;</span> <span class="n">maskline</span><span class="p">)</span> <span class="o">!=</span> <span class="mh">0x00u</span><span class="p">)</span>
+<a name="line-294"></a>    <span class="p">{</span>
+<a name="line-295"></a>      <span class="n">pExtiConfig</span><span class="o">-&gt;</span><span class="n">Trigger</span> <span class="o">|=</span> <span class="n">EXTI_TRIGGER_FALLING</span><span class="p">;</span>
+<a name="line-296"></a>    <span class="p">}</span>
+<a name="line-297"></a>
+<a name="line-298"></a>    <span class="cm">/* Get Gpio port selection for gpio lines */</span>
+<a name="line-299"></a>    <span class="k">if</span> <span class="p">((</span><span class="n">pExtiConfig</span><span class="o">-&gt;</span><span class="n">Line</span> <span class="o">&amp;</span> <span class="n">EXTI_GPIO</span><span class="p">)</span> <span class="o">==</span> <span class="n">EXTI_GPIO</span><span class="p">)</span>
+<a name="line-300"></a>    <span class="p">{</span>
+<a name="line-301"></a>      <span class="n">assert_param</span><span class="p">(</span><span class="n">IS_EXTI_GPIO_PIN</span><span class="p">(</span><span class="n">linepos</span><span class="p">));</span>
+<a name="line-302"></a>
+<a name="line-303"></a>      <span class="n">regval</span> <span class="o">=</span> <span class="p">(</span><span class="n">SYSCFG</span><span class="o">-&gt;</span><span class="n">EXTICR</span><span class="p">[</span><span class="n">linepos</span> <span class="o">&gt;&gt;</span> <span class="mi">2u</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">16u</span> <span class="p">);</span>
+<a name="line-304"></a>      <span class="n">pExtiConfig</span><span class="o">-&gt;</span><span class="n">GPIOSel</span> <span class="o">=</span> <span class="p">((</span><span class="n">regval</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">SYSCFG_EXTICR1_EXTI1_Pos</span> <span class="o">*</span> <span class="p">(</span><span class="mi">3uL</span> <span class="o">-</span> <span class="p">(</span><span class="n">linepos</span> <span class="o">&amp;</span> <span class="mh">0x03u</span><span class="p">))))</span> <span class="o">&gt;&gt;</span> <span class="mi">28u</span><span class="p">);</span>
+<a name="line-305"></a>    <span class="p">}</span>
+<a name="line-306"></a>  <span class="p">}</span>
+<a name="line-307"></a>
+<a name="line-308"></a>  <span class="k">return</span> <span class="n">HAL_OK</span><span class="p">;</span>
+<a name="line-309"></a><span class="p">}</span>
+<a name="line-310"></a>
+<a name="line-311"></a><span class="cm">/**</span>
+<a name="line-312"></a><span class="cm">  * @brief  Clear whole configuration of a dedicated Exti line.</span>
+<a name="line-313"></a><span class="cm">  * @param  hexti Exti handle.</span>
+<a name="line-314"></a><span class="cm">  * @retval HAL Status.</span>
+<a name="line-315"></a><span class="cm">  */</span>
+<a name="line-316"></a><span class="hll"><span class="n">HAL_StatusTypeDef</span> <span class="nf">HAL_EXTI_ClearConfigLine</span><span class="p">(</span><span class="n">EXTI_HandleTypeDef</span> <span class="o">*</span><span class="n">hexti</span><span class="p">)</span><span class="error2">&lt;--- The function 'HAL_EXTI_ClearConfigLine' is never used.</span>
+</span><a name="line-317"></a><span class="p">{</span>
+<a name="line-318"></a><span class="hll">  <span class="kt">uint32_t</span> <span class="n">regval</span><span class="p">;</span><div class="verbose expandable"><span class="error2">&lt;--- The scope of the variable 'regval' can be reduced. <span class="marker">[+]</span></span><div class="content">The scope of the variable &apos;regval&apos; can be reduced. Warning: Be careful when fixing this message, especially when there are inner loops. Here is an example where cppcheck will write that the scope for &apos;i&apos; can be reduced:
+void f(int x)
+{
+    int i = 0;
+    if (x) {
+        // it&apos;s safe to move &apos;int i = 0;&apos; here
+        for (int n = 0; n &lt; 10; ++n) {
+            // it is possible but not safe to move &apos;int i = 0;&apos; here
+            do_something(&amp;i);
+        }
+    }
+}
+When you see this message it is always safe to reduce the variable scope 1 level.</div></div>
+</span><a name="line-319"></a>  <span class="kt">uint32_t</span> <span class="n">linepos</span><span class="p">;</span>
+<a name="line-320"></a>  <span class="kt">uint32_t</span> <span class="n">maskline</span><span class="p">;</span>
+<a name="line-321"></a>
+<a name="line-322"></a>  <span class="cm">/* Check null pointer */</span>
+<a name="line-323"></a>  <span class="k">if</span> <span class="p">(</span><span class="n">hexti</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+<a name="line-324"></a>  <span class="p">{</span>
+<a name="line-325"></a>    <span class="k">return</span> <span class="n">HAL_ERROR</span><span class="p">;</span>
+<a name="line-326"></a>  <span class="p">}</span>
+<a name="line-327"></a>
+<a name="line-328"></a>  <span class="cm">/* Check the parameter */</span>
+<a name="line-329"></a>  <span class="n">assert_param</span><span class="p">(</span><span class="n">IS_EXTI_LINE</span><span class="p">(</span><span class="n">hexti</span><span class="o">-&gt;</span><span class="n">Line</span><span class="p">));</span>
+<a name="line-330"></a>
+<a name="line-331"></a>  <span class="cm">/* compute line mask */</span>
+<a name="line-332"></a>  <span class="n">linepos</span> <span class="o">=</span> <span class="p">(</span><span class="n">hexti</span><span class="o">-&gt;</span><span class="n">Line</span> <span class="o">&amp;</span> <span class="n">EXTI_PIN_MASK</span><span class="p">);</span>
+<a name="line-333"></a>  <span class="n">maskline</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1uL</span> <span class="o">&lt;&lt;</span> <span class="n">linepos</span><span class="p">);</span>
+<a name="line-334"></a>
+<a name="line-335"></a>  <span class="cm">/* 1] Clear interrupt mode */</span>
+<a name="line-336"></a>  <span class="n">EXTI</span><span class="o">-&gt;</span><span class="n">IMR</span> <span class="o">=</span> <span class="p">(</span><span class="n">EXTI</span><span class="o">-&gt;</span><span class="n">IMR</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">maskline</span><span class="p">);</span>
+<a name="line-337"></a>
+<a name="line-338"></a>  <span class="cm">/* 2] Clear event mode */</span>
+<a name="line-339"></a>  <span class="n">EXTI</span><span class="o">-&gt;</span><span class="n">EMR</span> <span class="o">=</span> <span class="p">(</span><span class="n">EXTI</span><span class="o">-&gt;</span><span class="n">EMR</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">maskline</span><span class="p">);</span>
+<a name="line-340"></a>
+<a name="line-341"></a>  <span class="cm">/* 3] Clear triggers in case of configurable lines */</span>
+<a name="line-342"></a>  <span class="k">if</span> <span class="p">((</span><span class="n">hexti</span><span class="o">-&gt;</span><span class="n">Line</span> <span class="o">&amp;</span> <span class="n">EXTI_CONFIG</span><span class="p">)</span> <span class="o">!=</span> <span class="mh">0x00u</span><span class="p">)</span>
+<a name="line-343"></a>  <span class="p">{</span>
+<a name="line-344"></a>    <span class="n">EXTI</span><span class="o">-&gt;</span><span class="n">RTSR</span> <span class="o">=</span> <span class="p">(</span><span class="n">EXTI</span><span class="o">-&gt;</span><span class="n">RTSR</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">maskline</span><span class="p">);</span>
+<a name="line-345"></a>    <span class="n">EXTI</span><span class="o">-&gt;</span><span class="n">FTSR</span> <span class="o">=</span> <span class="p">(</span><span class="n">EXTI</span><span class="o">-&gt;</span><span class="n">FTSR</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">maskline</span><span class="p">);</span>
+<a name="line-346"></a>
+<a name="line-347"></a>    <span class="cm">/* Get Gpio port selection for gpio lines */</span>
+<a name="line-348"></a>    <span class="k">if</span> <span class="p">((</span><span class="n">hexti</span><span class="o">-&gt;</span><span class="n">Line</span> <span class="o">&amp;</span> <span class="n">EXTI_GPIO</span><span class="p">)</span> <span class="o">==</span> <span class="n">EXTI_GPIO</span><span class="p">)</span>
+<a name="line-349"></a>    <span class="p">{</span>
+<a name="line-350"></a>      <span class="n">assert_param</span><span class="p">(</span><span class="n">IS_EXTI_GPIO_PIN</span><span class="p">(</span><span class="n">linepos</span><span class="p">));</span>
+<a name="line-351"></a>
+<a name="line-352"></a>      <span class="n">regval</span> <span class="o">=</span> <span class="n">SYSCFG</span><span class="o">-&gt;</span><span class="n">EXTICR</span><span class="p">[</span><span class="n">linepos</span> <span class="o">&gt;&gt;</span> <span class="mi">2u</span><span class="p">];</span>
+<a name="line-353"></a>      <span class="n">regval</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="p">(</span><span class="n">SYSCFG_EXTICR1_EXTI0</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">SYSCFG_EXTICR1_EXTI1_Pos</span> <span class="o">*</span> <span class="p">(</span><span class="n">linepos</span> <span class="o">&amp;</span> <span class="mh">0x03u</span><span class="p">)));</span>
+<a name="line-354"></a>      <span class="n">SYSCFG</span><span class="o">-&gt;</span><span class="n">EXTICR</span><span class="p">[</span><span class="n">linepos</span> <span class="o">&gt;&gt;</span> <span class="mi">2u</span><span class="p">]</span> <span class="o">=</span> <span class="n">regval</span><span class="p">;</span>
+<a name="line-355"></a>    <span class="p">}</span>
+<a name="line-356"></a>  <span class="p">}</span>
+<a name="line-357"></a>
+<a name="line-358"></a>  <span class="k">return</span> <span class="n">HAL_OK</span><span class="p">;</span>
+<a name="line-359"></a><span class="p">}</span>
+<a name="line-360"></a>
+<a name="line-361"></a><span class="cm">/**</span>
+<a name="line-362"></a><span class="cm">  * @brief  Register callback for a dedicated Exti line.</span>
+<a name="line-363"></a><span class="cm">  * @param  hexti Exti handle.</span>
+<a name="line-364"></a><span class="cm">  * @param  CallbackID User callback identifier.</span>
+<a name="line-365"></a><span class="cm">  *         This parameter can be one of @arg @ref EXTI_CallbackIDTypeDef values.</span>
+<a name="line-366"></a><span class="cm">  * @param  pPendingCbfn function pointer to be stored as callback.</span>
+<a name="line-367"></a><span class="cm">  * @retval HAL Status.</span>
+<a name="line-368"></a><span class="cm">  */</span>
+<a name="line-369"></a><span class="hll"><span class="n">HAL_StatusTypeDef</span> <span class="nf">HAL_EXTI_RegisterCallback</span><span class="p">(</span><span class="n">EXTI_HandleTypeDef</span> <span class="o">*</span><span class="n">hexti</span><span class="p">,</span> <span class="n">EXTI_CallbackIDTypeDef</span> <span class="n">CallbackID</span><span class="p">,</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">pPendingCbfn</span><span class="p">)(</span><span class="kt">void</span><span class="p">))</span><span class="error2">&lt;--- The function 'HAL_EXTI_RegisterCallback' is never used.</span>
+</span><a name="line-370"></a><span class="p">{</span>
+<a name="line-371"></a>  <span class="n">HAL_StatusTypeDef</span> <span class="n">status</span> <span class="o">=</span> <span class="n">HAL_OK</span><span class="p">;</span>
 <a name="line-372"></a>
-<a name="line-373"></a><span class="cm">/**</span>
-<a name="line-374"></a><span class="cm">  * @brief  FLASH end of operation interrupt callback</span>
-<a name="line-375"></a><span class="cm">  * @param  ReturnValue The value saved in this parameter depends on the ongoing procedure</span>
-<a name="line-376"></a><span class="cm">  *                  Mass Erase: Bank number which has been requested to erase</span>
-<a name="line-377"></a><span class="cm">  *                  Sectors Erase: Sector which has been erased </span>
-<a name="line-378"></a><span class="cm">  *                    (if 0xFFFFFFFFU, it means that all the selected sectors have been erased)</span>
-<a name="line-379"></a><span class="cm">  *                  Program: Address which was selected for data program</span>
-<a name="line-380"></a><span class="cm">  * @retval None</span>
-<a name="line-381"></a><span class="cm">  */</span>
-<a name="line-382"></a><span class="n">__weak</span> <span class="kt">void</span> <span class="n">HAL_FLASH_EndOfOperationCallback</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">ReturnValue</span><span class="p">)</span>
-<a name="line-383"></a><span class="p">{</span>
-<a name="line-384"></a>  <span class="cm">/* Prevent unused argument(s) compilation warning */</span>
-<a name="line-385"></a>  <span class="n">UNUSED</span><span class="p">(</span><span class="n">ReturnValue</span><span class="p">);</span>
-<a name="line-386"></a>  <span class="cm">/* NOTE : This function Should not be modified, when the callback is needed,</span>
-<a name="line-387"></a><span class="cm">            the HAL_FLASH_EndOfOperationCallback could be implemented in the user file</span>
-<a name="line-388"></a><span class="cm">   */</span> 
-<a name="line-389"></a><span class="p">}</span>
-<a name="line-390"></a>
-<a name="line-391"></a><span class="cm">/**</span>
-<a name="line-392"></a><span class="cm">  * @brief  FLASH operation error interrupt callback</span>
-<a name="line-393"></a><span class="cm">  * @param  ReturnValue The value saved in this parameter depends on the ongoing procedure</span>
-<a name="line-394"></a><span class="cm">  *                 Mass Erase: Bank number which has been requested to erase</span>
-<a name="line-395"></a><span class="cm">  *                 Sectors Erase: Sector number which returned an error</span>
-<a name="line-396"></a><span class="cm">  *                 Program: Address which was selected for data program</span>
-<a name="line-397"></a><span class="cm">  * @retval None</span>
-<a name="line-398"></a><span class="cm">  */</span>
-<a name="line-399"></a><span class="n">__weak</span> <span class="kt">void</span> <span class="n">HAL_FLASH_OperationErrorCallback</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">ReturnValue</span><span class="p">)</span>
-<a name="line-400"></a><span class="p">{</span>
-<a name="line-401"></a>  <span class="cm">/* Prevent unused argument(s) compilation warning */</span>
-<a name="line-402"></a>  <span class="n">UNUSED</span><span class="p">(</span><span class="n">ReturnValue</span><span class="p">);</span>
-<a name="line-403"></a>  <span class="cm">/* NOTE : This function Should not be modified, when the callback is needed,</span>
-<a name="line-404"></a><span class="cm">            the HAL_FLASH_OperationErrorCallback could be implemented in the user file</span>
-<a name="line-405"></a><span class="cm">   */</span> 
-<a name="line-406"></a><span class="p">}</span>
-<a name="line-407"></a>
-<a name="line-408"></a><span class="cm">/**</span>
-<a name="line-409"></a><span class="cm">  * @}</span>
-<a name="line-410"></a><span class="cm">  */</span>
-<a name="line-411"></a>
-<a name="line-412"></a><span class="cm">/** @defgroup FLASH_Exported_Functions_Group2 Peripheral Control functions </span>
-<a name="line-413"></a><span class="cm"> *  @brief   management functions </span>
-<a name="line-414"></a><span class="cm"> *</span>
-<a name="line-415"></a><span class="cm">@verbatim   </span>
-<a name="line-416"></a><span class="cm"> ===============================================================================</span>
-<a name="line-417"></a><span class="cm">                      ##### Peripheral Control functions #####</span>
-<a name="line-418"></a><span class="cm"> ===============================================================================  </span>
-<a name="line-419"></a><span class="cm">    [..]</span>
-<a name="line-420"></a><span class="cm">    This subsection provides a set of functions allowing to control the FLASH </span>
-<a name="line-421"></a><span class="cm">    memory operations.</span>
-<a name="line-422"></a>
-<a name="line-423"></a><span class="cm">@endverbatim</span>
-<a name="line-424"></a><span class="cm">  * @{</span>
-<a name="line-425"></a><span class="cm">  */</span>
-<a name="line-426"></a>
-<a name="line-427"></a><span class="cm">/**</span>
-<a name="line-428"></a><span class="cm">  * @brief  Unlock the FLASH control register access</span>
-<a name="line-429"></a><span class="cm">  * @retval HAL Status</span>
-<a name="line-430"></a><span class="cm">  */</span>
-<a name="line-431"></a><span class="hll"><span class="n">HAL_StatusTypeDef</span> <span class="n">HAL_FLASH_Unlock</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="error2">&lt;--- The function 'HAL_FLASH_Unlock' is never used.</span>
-</span><a name="line-432"></a><span class="p">{</span>
-<a name="line-433"></a>  <span class="n">HAL_StatusTypeDef</span> <span class="n">status</span> <span class="o">=</span> <span class="n">HAL_OK</span><span class="p">;</span>
-<a name="line-434"></a>
-<a name="line-435"></a>  <span class="k">if</span><span class="p">(</span><span class="n">READ_BIT</span><span class="p">(</span><span class="n">FLASH</span><span class="o">-&gt;</span><span class="n">CR</span><span class="p">,</span> <span class="n">FLASH_CR_LOCK</span><span class="p">)</span> <span class="o">!=</span> <span class="n">RESET</span><span class="p">)</span>
-<a name="line-436"></a>  <span class="p">{</span>
-<a name="line-437"></a>    <span class="cm">/* Authorize the FLASH Registers access */</span>
-<a name="line-438"></a>    <span class="n">WRITE_REG</span><span class="p">(</span><span class="n">FLASH</span><span class="o">-&gt;</span><span class="n">KEYR</span><span class="p">,</span> <span class="n">FLASH_KEY1</span><span class="p">);</span>
-<a name="line-439"></a>    <span class="n">WRITE_REG</span><span class="p">(</span><span class="n">FLASH</span><span class="o">-&gt;</span><span class="n">KEYR</span><span class="p">,</span> <span class="n">FLASH_KEY2</span><span class="p">);</span>
-<a name="line-440"></a>
-<a name="line-441"></a>    <span class="cm">/* Verify Flash is unlocked */</span>
-<a name="line-442"></a>    <span class="k">if</span><span class="p">(</span><span class="n">READ_BIT</span><span class="p">(</span><span class="n">FLASH</span><span class="o">-&gt;</span><span class="n">CR</span><span class="p">,</span> <span class="n">FLASH_CR_LOCK</span><span class="p">)</span> <span class="o">!=</span> <span class="n">RESET</span><span class="p">)</span>
-<a name="line-443"></a>    <span class="p">{</span>
-<a name="line-444"></a>      <span class="n">status</span> <span class="o">=</span> <span class="n">HAL_ERROR</span><span class="p">;</span>
-<a name="line-445"></a>    <span class="p">}</span>
-<a name="line-446"></a>  <span class="p">}</span>
-<a name="line-447"></a>
-<a name="line-448"></a>  <span class="k">return</span> <span class="n">status</span><span class="p">;</span>
-<a name="line-449"></a><span class="p">}</span>
-<a name="line-450"></a>
-<a name="line-451"></a><span class="cm">/**</span>
-<a name="line-452"></a><span class="cm">  * @brief  Locks the FLASH control register access</span>
-<a name="line-453"></a><span class="cm">  * @retval HAL Status</span>
-<a name="line-454"></a><span class="cm">  */</span>
-<a name="line-455"></a><span class="hll"><span class="n">HAL_StatusTypeDef</span> <span class="n">HAL_FLASH_Lock</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="error2">&lt;--- The function 'HAL_FLASH_Lock' is never used.</span>
-</span><a name="line-456"></a><span class="p">{</span>
-<a name="line-457"></a>  <span class="cm">/* Set the LOCK Bit to lock the FLASH Registers access */</span>
-<a name="line-458"></a>  <span class="n">FLASH</span><span class="o">-&gt;</span><span class="n">CR</span> <span class="o">|=</span> <span class="n">FLASH_CR_LOCK</span><span class="p">;</span>
-<a name="line-459"></a>  
-<a name="line-460"></a>  <span class="k">return</span> <span class="n">HAL_OK</span><span class="p">;</span>  
-<a name="line-461"></a><span class="p">}</span>
-<a name="line-462"></a>
-<a name="line-463"></a><span class="cm">/**</span>
-<a name="line-464"></a><span class="cm">  * @brief  Unlock the FLASH Option Control Registers access.</span>
-<a name="line-465"></a><span class="cm">  * @retval HAL Status</span>
-<a name="line-466"></a><span class="cm">  */</span>
-<a name="line-467"></a><span class="hll"><span class="n">HAL_StatusTypeDef</span> <span class="n">HAL_FLASH_OB_Unlock</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="error2">&lt;--- The function 'HAL_FLASH_OB_Unlock' is never used.</span>
-</span><a name="line-468"></a><span class="p">{</span>
-<a name="line-469"></a>  <span class="k">if</span><span class="p">((</span><span class="n">FLASH</span><span class="o">-&gt;</span><span class="n">OPTCR</span> <span class="o">&amp;</span> <span class="n">FLASH_OPTCR_OPTLOCK</span><span class="p">)</span> <span class="o">!=</span> <span class="n">RESET</span><span class="p">)</span>
-<a name="line-470"></a>  <span class="p">{</span>
-<a name="line-471"></a>    <span class="cm">/* Authorizes the Option Byte register programming */</span>
-<a name="line-472"></a>    <span class="n">FLASH</span><span class="o">-&gt;</span><span class="n">OPTKEYR</span> <span class="o">=</span> <span class="n">FLASH_OPT_KEY1</span><span class="p">;</span>
-<a name="line-473"></a>    <span class="n">FLASH</span><span class="o">-&gt;</span><span class="n">OPTKEYR</span> <span class="o">=</span> <span class="n">FLASH_OPT_KEY2</span><span class="p">;</span>
-<a name="line-474"></a>  <span class="p">}</span>
-<a name="line-475"></a>  <span class="k">else</span>
-<a name="line-476"></a>  <span class="p">{</span>
-<a name="line-477"></a>    <span class="k">return</span> <span class="n">HAL_ERROR</span><span class="p">;</span>
-<a name="line-478"></a>  <span class="p">}</span>  
-<a name="line-479"></a>  
-<a name="line-480"></a>  <span class="k">return</span> <span class="n">HAL_OK</span><span class="p">;</span>  
-<a name="line-481"></a><span class="p">}</span>
-<a name="line-482"></a>
-<a name="line-483"></a><span class="cm">/**</span>
-<a name="line-484"></a><span class="cm">  * @brief  Lock the FLASH Option Control Registers access.</span>
-<a name="line-485"></a><span class="cm">  * @retval HAL Status </span>
-<a name="line-486"></a><span class="cm">  */</span>
-<a name="line-487"></a><span class="hll"><span class="n">HAL_StatusTypeDef</span> <span class="n">HAL_FLASH_OB_Lock</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="error2">&lt;--- The function 'HAL_FLASH_OB_Lock' is never used.</span>
-</span><a name="line-488"></a><span class="p">{</span>
-<a name="line-489"></a>  <span class="cm">/* Set the OPTLOCK Bit to lock the FLASH Option Byte Registers access */</span>
-<a name="line-490"></a>  <span class="n">FLASH</span><span class="o">-&gt;</span><span class="n">OPTCR</span> <span class="o">|=</span> <span class="n">FLASH_OPTCR_OPTLOCK</span><span class="p">;</span>
-<a name="line-491"></a>  
-<a name="line-492"></a>  <span class="k">return</span> <span class="n">HAL_OK</span><span class="p">;</span>  
-<a name="line-493"></a><span class="p">}</span>
-<a name="line-494"></a>
-<a name="line-495"></a><span class="cm">/**</span>
-<a name="line-496"></a><span class="cm">  * @brief  Launch the option byte loading.</span>
-<a name="line-497"></a><span class="cm">  * @retval HAL Status</span>
-<a name="line-498"></a><span class="cm">  */</span>
-<a name="line-499"></a><span class="hll"><span class="n">HAL_StatusTypeDef</span> <span class="n">HAL_FLASH_OB_Launch</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="error2">&lt;--- The function 'HAL_FLASH_OB_Launch' is never used.</span>
-</span><a name="line-500"></a><span class="p">{</span>
-<a name="line-501"></a>  <span class="cm">/* Set the OPTSTRT bit in OPTCR register */</span>
-<a name="line-502"></a>  <span class="o">*</span><span class="p">(</span><span class="n">__IO</span> <span class="kt">uint8_t</span> <span class="o">*</span><span class="p">)</span><span class="n">OPTCR_BYTE0_ADDRESS</span> <span class="o">|=</span> <span class="n">FLASH_OPTCR_OPTSTRT</span><span class="p">;</span>
+<a name="line-373"></a>  <span class="k">switch</span> <span class="p">(</span><span class="n">CallbackID</span><span class="p">)</span>
+<a name="line-374"></a>  <span class="p">{</span>
+<a name="line-375"></a>    <span class="k">case</span>  <span class="nl">HAL_EXTI_COMMON_CB_ID</span><span class="p">:</span>
+<a name="line-376"></a>      <span class="n">hexti</span><span class="o">-&gt;</span><span class="n">PendingCallback</span> <span class="o">=</span> <span class="n">pPendingCbfn</span><span class="p">;</span>
+<a name="line-377"></a>      <span class="k">break</span><span class="p">;</span>
+<a name="line-378"></a>
+<a name="line-379"></a>    <span class="k">default</span><span class="o">:</span>
+<a name="line-380"></a>      <span class="n">status</span> <span class="o">=</span> <span class="n">HAL_ERROR</span><span class="p">;</span>
+<a name="line-381"></a>      <span class="k">break</span><span class="p">;</span>
+<a name="line-382"></a>  <span class="p">}</span>
+<a name="line-383"></a>
+<a name="line-384"></a>  <span class="k">return</span> <span class="n">status</span><span class="p">;</span>
+<a name="line-385"></a><span class="p">}</span>
+<a name="line-386"></a>
+<a name="line-387"></a><span class="cm">/**</span>
+<a name="line-388"></a><span class="cm">  * @brief  Store line number as handle private field.</span>
+<a name="line-389"></a><span class="cm">  * @param  hexti Exti handle.</span>
+<a name="line-390"></a><span class="cm">  * @param  ExtiLine Exti line number.</span>
+<a name="line-391"></a><span class="cm">  *         This parameter can be from 0 to @ref EXTI_LINE_NB.</span>
+<a name="line-392"></a><span class="cm">  * @retval HAL Status.</span>
+<a name="line-393"></a><span class="cm">  */</span>
+<a name="line-394"></a><span class="hll"><span class="n">HAL_StatusTypeDef</span> <span class="nf">HAL_EXTI_GetHandle</span><span class="p">(</span><span class="n">EXTI_HandleTypeDef</span> <span class="o">*</span><span class="n">hexti</span><span class="p">,</span> <span class="kt">uint32_t</span> <span class="n">ExtiLine</span><span class="p">)</span><span class="error2">&lt;--- The function 'HAL_EXTI_GetHandle' is never used.</span>
+</span><a name="line-395"></a><span class="p">{</span>
+<a name="line-396"></a>  <span class="cm">/* Check the parameters */</span>
+<a name="line-397"></a>  <span class="n">assert_param</span><span class="p">(</span><span class="n">IS_EXTI_LINE</span><span class="p">(</span><span class="n">ExtiLine</span><span class="p">));</span>
+<a name="line-398"></a>
+<a name="line-399"></a>  <span class="cm">/* Check null pointer */</span>
+<a name="line-400"></a>  <span class="k">if</span> <span class="p">(</span><span class="n">hexti</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+<a name="line-401"></a>  <span class="p">{</span>
+<a name="line-402"></a>    <span class="k">return</span> <span class="n">HAL_ERROR</span><span class="p">;</span>
+<a name="line-403"></a>  <span class="p">}</span>
+<a name="line-404"></a>  <span class="k">else</span>
+<a name="line-405"></a>  <span class="p">{</span>
+<a name="line-406"></a>    <span class="cm">/* Store line number as handle private field */</span>
+<a name="line-407"></a>    <span class="n">hexti</span><span class="o">-&gt;</span><span class="n">Line</span> <span class="o">=</span> <span class="n">ExtiLine</span><span class="p">;</span>
+<a name="line-408"></a>
+<a name="line-409"></a>    <span class="k">return</span> <span class="n">HAL_OK</span><span class="p">;</span>
+<a name="line-410"></a>  <span class="p">}</span>
+<a name="line-411"></a><span class="p">}</span>
+<a name="line-412"></a>
+<a name="line-413"></a><span class="cm">/**</span>
+<a name="line-414"></a><span class="cm">  * @}</span>
+<a name="line-415"></a><span class="cm">  */</span>
+<a name="line-416"></a>
+<a name="line-417"></a><span class="cm">/** @addtogroup EXTI_Exported_Functions_Group2</span>
+<a name="line-418"></a><span class="cm">  *  @brief EXTI IO functions.</span>
+<a name="line-419"></a><span class="cm">  *</span>
+<a name="line-420"></a><span class="cm">@verbatim</span>
+<a name="line-421"></a><span class="cm"> ===============================================================================</span>
+<a name="line-422"></a><span class="cm">                       ##### IO operation functions #####</span>
+<a name="line-423"></a><span class="cm"> ===============================================================================</span>
+<a name="line-424"></a>
+<a name="line-425"></a><span class="cm">@endverbatim</span>
+<a name="line-426"></a><span class="cm">  * @{</span>
+<a name="line-427"></a><span class="cm">  */</span>
+<a name="line-428"></a>
+<a name="line-429"></a><span class="cm">/**</span>
+<a name="line-430"></a><span class="cm">  * @brief  Handle EXTI interrupt request.</span>
+<a name="line-431"></a><span class="cm">  * @param  hexti Exti handle.</span>
+<a name="line-432"></a><span class="cm">  * @retval none.</span>
+<a name="line-433"></a><span class="cm">  */</span>
+<a name="line-434"></a><span class="hll"><span class="kt">void</span> <span class="nf">HAL_EXTI_IRQHandler</span><span class="p">(</span><span class="n">EXTI_HandleTypeDef</span> <span class="o">*</span><span class="n">hexti</span><span class="p">)</span><span class="error2">&lt;--- The function 'HAL_EXTI_IRQHandler' is never used.</span>
+</span><a name="line-435"></a><span class="p">{</span>
+<a name="line-436"></a>  <span class="kt">uint32_t</span> <span class="n">regval</span><span class="p">;</span>
+<a name="line-437"></a>  <span class="kt">uint32_t</span> <span class="n">maskline</span><span class="p">;</span>
+<a name="line-438"></a>
+<a name="line-439"></a>  <span class="cm">/* Compute line mask */</span>
+<a name="line-440"></a>  <span class="n">maskline</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1uL</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">hexti</span><span class="o">-&gt;</span><span class="n">Line</span> <span class="o">&amp;</span> <span class="n">EXTI_PIN_MASK</span><span class="p">));</span>
+<a name="line-441"></a>
+<a name="line-442"></a>  <span class="cm">/* Get pending bit  */</span>
+<a name="line-443"></a>  <span class="n">regval</span> <span class="o">=</span> <span class="p">(</span><span class="n">EXTI</span><span class="o">-&gt;</span><span class="n">PR</span> <span class="o">&amp;</span> <span class="n">maskline</span><span class="p">);</span>
+<a name="line-444"></a>  <span class="k">if</span> <span class="p">(</span><span class="n">regval</span> <span class="o">!=</span> <span class="mh">0x00u</span><span class="p">)</span>
+<a name="line-445"></a>  <span class="p">{</span>
+<a name="line-446"></a>    <span class="cm">/* Clear pending bit */</span>
+<a name="line-447"></a>    <span class="n">EXTI</span><span class="o">-&gt;</span><span class="n">PR</span> <span class="o">=</span> <span class="n">maskline</span><span class="p">;</span>
+<a name="line-448"></a>
+<a name="line-449"></a>    <span class="cm">/* Call callback */</span>
+<a name="line-450"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">hexti</span><span class="o">-&gt;</span><span class="n">PendingCallback</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
+<a name="line-451"></a>    <span class="p">{</span>
+<a name="line-452"></a>      <span class="n">hexti</span><span class="o">-&gt;</span><span class="n">PendingCallback</span><span class="p">();</span>
+<a name="line-453"></a>    <span class="p">}</span>
+<a name="line-454"></a>  <span class="p">}</span>
+<a name="line-455"></a><span class="p">}</span>
+<a name="line-456"></a>
+<a name="line-457"></a><span class="cm">/**</span>
+<a name="line-458"></a><span class="cm">  * @brief  Get interrupt pending bit of a dedicated line.</span>
+<a name="line-459"></a><span class="cm">  * @param  hexti Exti handle.</span>
+<a name="line-460"></a><span class="cm">  * @param  Edge Specify which pending edge as to be checked.</span>
+<a name="line-461"></a><span class="cm">  *         This parameter can be one of the following values:</span>
+<a name="line-462"></a><span class="cm">  *           @arg @ref EXTI_TRIGGER_RISING_FALLING</span>
+<a name="line-463"></a><span class="cm">  *         This parameter is kept for compatibility with other series.</span>
+<a name="line-464"></a><span class="cm">  * @retval 1 if interrupt is pending else 0.</span>
+<a name="line-465"></a><span class="cm">  */</span>
+<a name="line-466"></a><span class="hll"><span class="kt">uint32_t</span> <span class="nf">HAL_EXTI_GetPending</span><span class="p">(</span><span class="n">EXTI_HandleTypeDef</span> <span class="o">*</span><span class="n">hexti</span><span class="p">,</span> <span class="kt">uint32_t</span> <span class="n">Edge</span><span class="p">)</span><span class="error2">&lt;--- The function 'HAL_EXTI_GetPending' is never used.</span>
+</span><a name="line-467"></a><span class="p">{</span>
+<a name="line-468"></a>  <span class="kt">uint32_t</span> <span class="n">regval</span><span class="p">;</span>
+<a name="line-469"></a>  <span class="kt">uint32_t</span> <span class="n">linepos</span><span class="p">;</span>
+<a name="line-470"></a>  <span class="kt">uint32_t</span> <span class="n">maskline</span><span class="p">;</span>
+<a name="line-471"></a>
+<a name="line-472"></a>  <span class="cm">/* Check parameters */</span>
+<a name="line-473"></a>  <span class="n">assert_param</span><span class="p">(</span><span class="n">IS_EXTI_LINE</span><span class="p">(</span><span class="n">hexti</span><span class="o">-&gt;</span><span class="n">Line</span><span class="p">));</span>
+<a name="line-474"></a>  <span class="n">assert_param</span><span class="p">(</span><span class="n">IS_EXTI_CONFIG_LINE</span><span class="p">(</span><span class="n">hexti</span><span class="o">-&gt;</span><span class="n">Line</span><span class="p">));</span>
+<a name="line-475"></a>  <span class="n">assert_param</span><span class="p">(</span><span class="n">IS_EXTI_PENDING_EDGE</span><span class="p">(</span><span class="n">Edge</span><span class="p">));</span>
+<a name="line-476"></a>
+<a name="line-477"></a>  <span class="cm">/* Compute line mask */</span>
+<a name="line-478"></a>  <span class="n">linepos</span> <span class="o">=</span> <span class="p">(</span><span class="n">hexti</span><span class="o">-&gt;</span><span class="n">Line</span> <span class="o">&amp;</span> <span class="n">EXTI_PIN_MASK</span><span class="p">);</span>
+<a name="line-479"></a>  <span class="n">maskline</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1uL</span> <span class="o">&lt;&lt;</span> <span class="n">linepos</span><span class="p">);</span>
+<a name="line-480"></a>
+<a name="line-481"></a>  <span class="cm">/* return 1 if bit is set else 0 */</span>
+<a name="line-482"></a>  <span class="n">regval</span> <span class="o">=</span> <span class="p">((</span><span class="n">EXTI</span><span class="o">-&gt;</span><span class="n">PR</span> <span class="o">&amp;</span> <span class="n">maskline</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">linepos</span><span class="p">);</span>
+<a name="line-483"></a>  <span class="k">return</span> <span class="n">regval</span><span class="p">;</span>
+<a name="line-484"></a><span class="p">}</span>
+<a name="line-485"></a>
+<a name="line-486"></a><span class="cm">/**</span>
+<a name="line-487"></a><span class="cm">  * @brief  Clear interrupt pending bit of a dedicated line.</span>
+<a name="line-488"></a><span class="cm">  * @param  hexti Exti handle.</span>
+<a name="line-489"></a><span class="cm">  * @param  Edge Specify which pending edge as to be clear.</span>
+<a name="line-490"></a><span class="cm">  *         This parameter can be one of the following values:</span>
+<a name="line-491"></a><span class="cm">  *           @arg @ref EXTI_TRIGGER_RISING_FALLING</span>
+<a name="line-492"></a><span class="cm">  *         This parameter is kept for compatibility with other series.</span>
+<a name="line-493"></a><span class="cm">  * @retval None.</span>
+<a name="line-494"></a><span class="cm">  */</span>
+<a name="line-495"></a><span class="hll"><span class="kt">void</span> <span class="nf">HAL_EXTI_ClearPending</span><span class="p">(</span><span class="n">EXTI_HandleTypeDef</span> <span class="o">*</span><span class="n">hexti</span><span class="p">,</span> <span class="kt">uint32_t</span> <span class="n">Edge</span><span class="p">)</span><span class="error2">&lt;--- The function 'HAL_EXTI_ClearPending' is never used.</span>
+</span><a name="line-496"></a><span class="p">{</span>
+<a name="line-497"></a>  <span class="kt">uint32_t</span> <span class="n">maskline</span><span class="p">;</span>
+<a name="line-498"></a>
+<a name="line-499"></a>  <span class="cm">/* Check parameters */</span>
+<a name="line-500"></a>  <span class="n">assert_param</span><span class="p">(</span><span class="n">IS_EXTI_LINE</span><span class="p">(</span><span class="n">hexti</span><span class="o">-&gt;</span><span class="n">Line</span><span class="p">));</span>
+<a name="line-501"></a>  <span class="n">assert_param</span><span class="p">(</span><span class="n">IS_EXTI_CONFIG_LINE</span><span class="p">(</span><span class="n">hexti</span><span class="o">-&gt;</span><span class="n">Line</span><span class="p">));</span>
+<a name="line-502"></a>  <span class="n">assert_param</span><span class="p">(</span><span class="n">IS_EXTI_PENDING_EDGE</span><span class="p">(</span><span class="n">Edge</span><span class="p">));</span>
 <a name="line-503"></a>
-<a name="line-504"></a>  <span class="cm">/* Wait for last operation to be completed */</span>
-<a name="line-505"></a>  <span class="k">return</span><span class="p">(</span><span class="n">FLASH_WaitForLastOperation</span><span class="p">((</span><span class="kt">uint32_t</span><span class="p">)</span><span class="n">FLASH_TIMEOUT_VALUE</span><span class="p">));</span> 
-<a name="line-506"></a><span class="p">}</span>
-<a name="line-507"></a>
-<a name="line-508"></a><span class="cm">/**</span>
-<a name="line-509"></a><span class="cm">  * @}</span>
-<a name="line-510"></a><span class="cm">  */</span>
-<a name="line-511"></a>
-<a name="line-512"></a><span class="cm">/** @defgroup FLASH_Exported_Functions_Group3 Peripheral State and Errors functions </span>
-<a name="line-513"></a><span class="cm"> *  @brief   Peripheral Errors functions </span>
-<a name="line-514"></a><span class="cm"> *</span>
-<a name="line-515"></a><span class="cm">@verbatim   </span>
-<a name="line-516"></a><span class="cm"> ===============================================================================</span>
-<a name="line-517"></a><span class="cm">                ##### Peripheral Errors functions #####</span>
-<a name="line-518"></a><span class="cm"> ===============================================================================  </span>
-<a name="line-519"></a><span class="cm">    [..]</span>
-<a name="line-520"></a><span class="cm">    This subsection permits to get in run-time Errors of the FLASH peripheral.</span>
-<a name="line-521"></a>
-<a name="line-522"></a><span class="cm">@endverbatim</span>
-<a name="line-523"></a><span class="cm">  * @{</span>
-<a name="line-524"></a><span class="cm">  */</span>
-<a name="line-525"></a>
-<a name="line-526"></a><span class="cm">/**</span>
-<a name="line-527"></a><span class="cm">  * @brief  Get the specific FLASH error flag.</span>
-<a name="line-528"></a><span class="cm">  * @retval FLASH_ErrorCode: The returned value can be a combination of:</span>
-<a name="line-529"></a><span class="cm">  *            @arg HAL_FLASH_ERROR_RD: FLASH Read Protection error flag (PCROP)</span>
-<a name="line-530"></a><span class="cm">  *            @arg HAL_FLASH_ERROR_PGS: FLASH Programming Sequence error flag </span>
-<a name="line-531"></a><span class="cm">  *            @arg HAL_FLASH_ERROR_PGP: FLASH Programming Parallelism error flag  </span>
-<a name="line-532"></a><span class="cm">  *            @arg HAL_FLASH_ERROR_PGA: FLASH Programming Alignment error flag</span>
-<a name="line-533"></a><span class="cm">  *            @arg HAL_FLASH_ERROR_WRP: FLASH Write protected error flag</span>
-<a name="line-534"></a><span class="cm">  *            @arg HAL_FLASH_ERROR_OPERATION: FLASH operation Error flag </span>
-<a name="line-535"></a><span class="cm">  */</span>
-<a name="line-536"></a><span class="hll"><span class="kt">uint32_t</span> <span class="n">HAL_FLASH_GetError</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="error2">&lt;--- The function 'HAL_FLASH_GetError' is never used.</span>
-</span><a name="line-537"></a><span class="p">{</span> 
-<a name="line-538"></a>   <span class="k">return</span> <span class="n">pFlash</span><span class="p">.</span><span class="n">ErrorCode</span><span class="p">;</span>
-<a name="line-539"></a><span class="p">}</span>  
-<a name="line-540"></a>  
-<a name="line-541"></a><span class="cm">/**</span>
-<a name="line-542"></a><span class="cm">  * @}</span>
-<a name="line-543"></a><span class="cm">  */</span>    
-<a name="line-544"></a>
-<a name="line-545"></a><span class="cm">/**</span>
-<a name="line-546"></a><span class="cm">  * @brief  Wait for a FLASH operation to complete.</span>
-<a name="line-547"></a><span class="cm">  * @param  Timeout maximum flash operationtimeout</span>
-<a name="line-548"></a><span class="cm">  * @retval HAL Status</span>
-<a name="line-549"></a><span class="cm">  */</span>
-<a name="line-550"></a><span class="n">HAL_StatusTypeDef</span> <span class="n">FLASH_WaitForLastOperation</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">Timeout</span><span class="p">)</span>
-<a name="line-551"></a><span class="p">{</span> 
-<a name="line-552"></a>  <span class="kt">uint32_t</span> <span class="n">tickstart</span> <span class="o">=</span> <span class="mi">0U</span><span class="p">;</span>
-<a name="line-553"></a>  
-<a name="line-554"></a>  <span class="cm">/* Clear Error Code */</span>
-<a name="line-555"></a>  <span class="n">pFlash</span><span class="p">.</span><span class="n">ErrorCode</span> <span class="o">=</span> <span class="n">HAL_FLASH_ERROR_NONE</span><span class="p">;</span>
-<a name="line-556"></a>  
-<a name="line-557"></a>  <span class="cm">/* Wait for the FLASH operation to complete by polling on BUSY flag to be reset.</span>
-<a name="line-558"></a><span class="cm">     Even if the FLASH operation fails, the BUSY flag will be reset and an error</span>
-<a name="line-559"></a><span class="cm">     flag will be set */</span>
-<a name="line-560"></a>  <span class="cm">/* Get tick */</span>
-<a name="line-561"></a>  <span class="n">tickstart</span> <span class="o">=</span> <span class="n">HAL_GetTick</span><span class="p">();</span>
-<a name="line-562"></a>
-<a name="line-563"></a>  <span class="k">while</span><span class="p">(</span><span class="n">__HAL_FLASH_GET_FLAG</span><span class="p">(</span><span class="n">FLASH_FLAG_BSY</span><span class="p">)</span> <span class="o">!=</span> <span class="n">RESET</span><span class="p">)</span> 
-<a name="line-564"></a>  <span class="p">{</span> 
-<a name="line-565"></a>    <span class="k">if</span><span class="p">(</span><span class="n">Timeout</span> <span class="o">!=</span> <span class="n">HAL_MAX_DELAY</span><span class="p">)</span>
-<a name="line-566"></a>    <span class="p">{</span>
-<a name="line-567"></a>      <span class="k">if</span><span class="p">((</span><span class="n">Timeout</span> <span class="o">==</span> <span class="mi">0U</span><span class="p">)</span><span class="o">||</span><span class="p">((</span><span class="n">HAL_GetTick</span><span class="p">()</span> <span class="o">-</span> <span class="n">tickstart</span> <span class="p">)</span> <span class="o">&gt;</span> <span class="n">Timeout</span><span class="p">))</span>
-<a name="line-568"></a>      <span class="p">{</span>
-<a name="line-569"></a>        <span class="k">return</span> <span class="n">HAL_TIMEOUT</span><span class="p">;</span>
-<a name="line-570"></a>      <span class="p">}</span>
-<a name="line-571"></a>    <span class="p">}</span> 
-<a name="line-572"></a>  <span class="p">}</span>
-<a name="line-573"></a>
-<a name="line-574"></a>  <span class="cm">/* Check FLASH End of Operation flag  */</span>
-<a name="line-575"></a>  <span class="k">if</span> <span class="p">(</span><span class="n">__HAL_FLASH_GET_FLAG</span><span class="p">(</span><span class="n">FLASH_FLAG_EOP</span><span class="p">)</span> <span class="o">!=</span> <span class="n">RESET</span><span class="p">)</span>
-<a name="line-576"></a>  <span class="p">{</span>
-<a name="line-577"></a>    <span class="cm">/* Clear FLASH End of Operation pending bit */</span>
-<a name="line-578"></a>    <span class="n">__HAL_FLASH_CLEAR_FLAG</span><span class="p">(</span><span class="n">FLASH_FLAG_EOP</span><span class="p">);</span>
-<a name="line-579"></a>  <span class="p">}</span>
-<a name="line-580"></a><span class="cp">#if defined(FLASH_SR_RDERR)  </span>
-<a name="line-581"></a>  <span class="k">if</span><span class="p">(</span><span class="n">__HAL_FLASH_GET_FLAG</span><span class="p">((</span><span class="n">FLASH_FLAG_OPERR</span> <span class="o">|</span> <span class="n">FLASH_FLAG_WRPERR</span> <span class="o">|</span> <span class="n">FLASH_FLAG_PGAERR</span> <span class="o">|</span> \
-<a name="line-582"></a>                           <span class="n">FLASH_FLAG_PGPERR</span> <span class="o">|</span> <span class="n">FLASH_FLAG_PGSERR</span> <span class="o">|</span> <span class="n">FLASH_FLAG_RDERR</span><span class="p">))</span> <span class="o">!=</span> <span class="n">RESET</span><span class="p">)</span>
-<a name="line-583"></a><span class="cp">#else</span>
-<a name="line-584"></a>  <span class="k">if</span><span class="p">(</span><span class="n">__HAL_FLASH_GET_FLAG</span><span class="p">((</span><span class="n">FLASH_FLAG_OPERR</span> <span class="o">|</span> <span class="n">FLASH_FLAG_WRPERR</span> <span class="o">|</span> <span class="n">FLASH_FLAG_PGAERR</span> <span class="o">|</span> \
-<a name="line-585"></a>                           <span class="n">FLASH_FLAG_PGPERR</span> <span class="o">|</span> <span class="n">FLASH_FLAG_PGSERR</span><span class="p">))</span> <span class="o">!=</span> <span class="n">RESET</span><span class="p">)</span>
-<a name="line-586"></a><span class="cp">#endif </span><span class="cm">/* FLASH_SR_RDERR */</span><span class="cp"></span>
-<a name="line-587"></a>  <span class="p">{</span>
-<a name="line-588"></a>    <span class="cm">/*Save the error code*/</span>
-<a name="line-589"></a>    <span class="n">FLASH_SetErrorCode</span><span class="p">();</span>
-<a name="line-590"></a>    <span class="k">return</span> <span class="n">HAL_ERROR</span><span class="p">;</span>
-<a name="line-591"></a>  <span class="p">}</span>
-<a name="line-592"></a>
-<a name="line-593"></a>  <span class="cm">/* If there is no error flag set */</span>
-<a name="line-594"></a>  <span class="k">return</span> <span class="n">HAL_OK</span><span class="p">;</span>
-<a name="line-595"></a>  
-<a name="line-596"></a><span class="p">}</span>  
-<a name="line-597"></a>
-<a name="line-598"></a><span class="cm">/**</span>
-<a name="line-599"></a><span class="cm">  * @brief  Program a double word (64-bit) at a specified address.</span>
-<a name="line-600"></a><span class="cm">  * @note   This function must be used when the device voltage range is from</span>
-<a name="line-601"></a><span class="cm">  *         2.7V to 3.6V and Vpp in the range 7V to 9V.</span>
-<a name="line-602"></a><span class="cm">  *</span>
-<a name="line-603"></a><span class="cm">  * @note   If an erase and a program operations are requested simultaneously,    </span>
-<a name="line-604"></a><span class="cm">  *         the erase operation is performed before the program one.</span>
-<a name="line-605"></a><span class="cm">  *  </span>
-<a name="line-606"></a><span class="cm">  * @param  Address specifies the address to be programmed.</span>
-<a name="line-607"></a><span class="cm">  * @param  Data specifies the data to be programmed.</span>
-<a name="line-608"></a><span class="cm">  * @retval None</span>
-<a name="line-609"></a><span class="cm">  */</span>
-<a name="line-610"></a><span class="k">static</span> <span class="kt">void</span> <span class="n">FLASH_Program_DoubleWord</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">Address</span><span class="p">,</span> <span class="kt">uint64_t</span> <span class="n">Data</span><span class="p">)</span>
-<a name="line-611"></a><span class="p">{</span>
-<a name="line-612"></a>  <span class="cm">/* Check the parameters */</span>
-<a name="line-613"></a>  <span class="n">assert_param</span><span class="p">(</span><span class="n">IS_FLASH_ADDRESS</span><span class="p">(</span><span class="n">Address</span><span class="p">));</span>
-<a name="line-614"></a>  
-<a name="line-615"></a>  <span class="cm">/* If the previous operation is completed, proceed to program the new data */</span>
-<a name="line-616"></a>  <span class="n">CLEAR_BIT</span><span class="p">(</span><span class="n">FLASH</span><span class="o">-&gt;</span><span class="n">CR</span><span class="p">,</span> <span class="n">FLASH_CR_PSIZE</span><span class="p">);</span>
-<a name="line-617"></a>  <span class="n">FLASH</span><span class="o">-&gt;</span><span class="n">CR</span> <span class="o">|=</span> <span class="n">FLASH_PSIZE_DOUBLE_WORD</span><span class="p">;</span>
-<a name="line-618"></a>  <span class="n">FLASH</span><span class="o">-&gt;</span><span class="n">CR</span> <span class="o">|=</span> <span class="n">FLASH_CR_PG</span><span class="p">;</span>
-<a name="line-619"></a>
-<a name="line-620"></a>  <span class="cm">/* Program first word */</span>
-<a name="line-621"></a>  <span class="o">*</span><span class="p">(</span><span class="n">__IO</span> <span class="kt">uint32_t</span><span class="o">*</span><span class="p">)</span><span class="n">Address</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint32_t</span><span class="p">)</span><span class="n">Data</span><span class="p">;</span>
-<a name="line-622"></a>
-<a name="line-623"></a>  <span class="cm">/* Barrier to ensure programming is performed in 2 steps, in right order</span>
-<a name="line-624"></a><span class="cm">    (independently of compiler optimization behavior) */</span>
-<a name="line-625"></a>  <span class="n">__ISB</span><span class="p">();</span>
-<a name="line-626"></a>
-<a name="line-627"></a>  <span class="cm">/* Program second word */</span>
-<a name="line-628"></a>  <span class="o">*</span><span class="p">(</span><span class="n">__IO</span> <span class="kt">uint32_t</span><span class="o">*</span><span class="p">)(</span><span class="n">Address</span><span class="o">+</span><span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="kt">uint32_t</span><span class="p">)(</span><span class="n">Data</span> <span class="o">&gt;&gt;</span> <span class="mi">32</span><span class="p">);</span>
-<a name="line-629"></a><span class="p">}</span>
-<a name="line-630"></a>
-<a name="line-631"></a>
-<a name="line-632"></a><span class="cm">/**</span>
-<a name="line-633"></a><span class="cm">  * @brief  Program word (32-bit) at a specified address.</span>
-<a name="line-634"></a><span class="cm">  * @note   This function must be used when the device voltage range is from</span>
-<a name="line-635"></a><span class="cm">  *         2.7V to 3.6V.</span>
-<a name="line-636"></a><span class="cm">  *</span>
-<a name="line-637"></a><span class="cm">  * @note   If an erase and a program operations are requested simultaneously,    </span>
-<a name="line-638"></a><span class="cm">  *         the erase operation is performed before the program one.</span>
-<a name="line-639"></a><span class="cm">  *  </span>
-<a name="line-640"></a><span class="cm">  * @param  Address specifies the address to be programmed.</span>
-<a name="line-641"></a><span class="cm">  * @param  Data specifies the data to be programmed.</span>
-<a name="line-642"></a><span class="cm">  * @retval None</span>
-<a name="line-643"></a><span class="cm">  */</span>
-<a name="line-644"></a><span class="k">static</span> <span class="kt">void</span> <span class="n">FLASH_Program_Word</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">Address</span><span class="p">,</span> <span class="kt">uint32_t</span> <span class="n">Data</span><span class="p">)</span>
-<a name="line-645"></a><span class="p">{</span>
-<a name="line-646"></a>  <span class="cm">/* Check the parameters */</span>
-<a name="line-647"></a>  <span class="n">assert_param</span><span class="p">(</span><span class="n">IS_FLASH_ADDRESS</span><span class="p">(</span><span class="n">Address</span><span class="p">));</span>
-<a name="line-648"></a>  
-<a name="line-649"></a>  <span class="cm">/* If the previous operation is completed, proceed to program the new data */</span>
-<a name="line-650"></a>  <span class="n">CLEAR_BIT</span><span class="p">(</span><span class="n">FLASH</span><span class="o">-&gt;</span><span class="n">CR</span><span class="p">,</span> <span class="n">FLASH_CR_PSIZE</span><span class="p">);</span>
-<a name="line-651"></a>  <span class="n">FLASH</span><span class="o">-&gt;</span><span class="n">CR</span> <span class="o">|=</span> <span class="n">FLASH_PSIZE_WORD</span><span class="p">;</span>
-<a name="line-652"></a>  <span class="n">FLASH</span><span class="o">-&gt;</span><span class="n">CR</span> <span class="o">|=</span> <span class="n">FLASH_CR_PG</span><span class="p">;</span>
-<a name="line-653"></a>
-<a name="line-654"></a>  <span class="o">*</span><span class="p">(</span><span class="n">__IO</span> <span class="kt">uint32_t</span><span class="o">*</span><span class="p">)</span><span class="n">Address</span> <span class="o">=</span> <span class="n">Data</span><span class="p">;</span>
-<a name="line-655"></a><span class="p">}</span>
-<a name="line-656"></a>
-<a name="line-657"></a><span class="cm">/**</span>
-<a name="line-658"></a><span class="cm">  * @brief  Program a half-word (16-bit) at a specified address.</span>
-<a name="line-659"></a><span class="cm">  * @note   This function must be used when the device voltage range is from</span>
-<a name="line-660"></a><span class="cm">  *         2.1V to 3.6V.</span>
-<a name="line-661"></a><span class="cm">  *</span>
-<a name="line-662"></a><span class="cm">  * @note   If an erase and a program operations are requested simultaneously,    </span>
-<a name="line-663"></a><span class="cm">  *         the erase operation is performed before the program one.</span>
-<a name="line-664"></a><span class="cm">  *  </span>
-<a name="line-665"></a><span class="cm">  * @param  Address specifies the address to be programmed.</span>
-<a name="line-666"></a><span class="cm">  * @param  Data specifies the data to be programmed.</span>
-<a name="line-667"></a><span class="cm">  * @retval None</span>
-<a name="line-668"></a><span class="cm">  */</span>
-<a name="line-669"></a><span class="k">static</span> <span class="kt">void</span> <span class="n">FLASH_Program_HalfWord</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">Address</span><span class="p">,</span> <span class="kt">uint16_t</span> <span class="n">Data</span><span class="p">)</span>
-<a name="line-670"></a><span class="p">{</span>
-<a name="line-671"></a>  <span class="cm">/* Check the parameters */</span>
-<a name="line-672"></a>  <span class="n">assert_param</span><span class="p">(</span><span class="n">IS_FLASH_ADDRESS</span><span class="p">(</span><span class="n">Address</span><span class="p">));</span>
-<a name="line-673"></a>  
-<a name="line-674"></a>  <span class="cm">/* If the previous operation is completed, proceed to program the new data */</span>
-<a name="line-675"></a>  <span class="n">CLEAR_BIT</span><span class="p">(</span><span class="n">FLASH</span><span class="o">-&gt;</span><span class="n">CR</span><span class="p">,</span> <span class="n">FLASH_CR_PSIZE</span><span class="p">);</span>
-<a name="line-676"></a>  <span class="n">FLASH</span><span class="o">-&gt;</span><span class="n">CR</span> <span class="o">|=</span> <span class="n">FLASH_PSIZE_HALF_WORD</span><span class="p">;</span>
-<a name="line-677"></a>  <span class="n">FLASH</span><span class="o">-&gt;</span><span class="n">CR</span> <span class="o">|=</span> <span class="n">FLASH_CR_PG</span><span class="p">;</span>
-<a name="line-678"></a>
-<a name="line-679"></a>  <span class="o">*</span><span class="p">(</span><span class="n">__IO</span> <span class="kt">uint16_t</span><span class="o">*</span><span class="p">)</span><span class="n">Address</span> <span class="o">=</span> <span class="n">Data</span><span class="p">;</span>
-<a name="line-680"></a><span class="p">}</span>
-<a name="line-681"></a>
-<a name="line-682"></a><span class="cm">/**</span>
-<a name="line-683"></a><span class="cm">  * @brief  Program byte (8-bit) at a specified address.</span>
-<a name="line-684"></a><span class="cm">  * @note   This function must be used when the device voltage range is from</span>
-<a name="line-685"></a><span class="cm">  *         1.8V to 3.6V.</span>
-<a name="line-686"></a><span class="cm">  *</span>
-<a name="line-687"></a><span class="cm">  * @note   If an erase and a program operations are requested simultaneously,    </span>
-<a name="line-688"></a><span class="cm">  *         the erase operation is performed before the program one.</span>
-<a name="line-689"></a><span class="cm">  *  </span>
-<a name="line-690"></a><span class="cm">  * @param  Address specifies the address to be programmed.</span>
-<a name="line-691"></a><span class="cm">  * @param  Data specifies the data to be programmed.</span>
-<a name="line-692"></a><span class="cm">  * @retval None</span>
-<a name="line-693"></a><span class="cm">  */</span>
-<a name="line-694"></a><span class="k">static</span> <span class="kt">void</span> <span class="n">FLASH_Program_Byte</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">Address</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">Data</span><span class="p">)</span>
-<a name="line-695"></a><span class="p">{</span>
-<a name="line-696"></a>  <span class="cm">/* Check the parameters */</span>
-<a name="line-697"></a>  <span class="n">assert_param</span><span class="p">(</span><span class="n">IS_FLASH_ADDRESS</span><span class="p">(</span><span class="n">Address</span><span class="p">));</span>
-<a name="line-698"></a>  
-<a name="line-699"></a>  <span class="cm">/* If the previous operation is completed, proceed to program the new data */</span>
-<a name="line-700"></a>  <span class="n">CLEAR_BIT</span><span class="p">(</span><span class="n">FLASH</span><span class="o">-&gt;</span><span class="n">CR</span><span class="p">,</span> <span class="n">FLASH_CR_PSIZE</span><span class="p">);</span>
-<a name="line-701"></a>  <span class="n">FLASH</span><span class="o">-&gt;</span><span class="n">CR</span> <span class="o">|=</span> <span class="n">FLASH_PSIZE_BYTE</span><span class="p">;</span>
-<a name="line-702"></a>  <span class="n">FLASH</span><span class="o">-&gt;</span><span class="n">CR</span> <span class="o">|=</span> <span class="n">FLASH_CR_PG</span><span class="p">;</span>
-<a name="line-703"></a>
-<a name="line-704"></a>  <span class="o">*</span><span class="p">(</span><span class="n">__IO</span> <span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span><span class="n">Address</span> <span class="o">=</span> <span class="n">Data</span><span class="p">;</span>
-<a name="line-705"></a><span class="p">}</span>
-<a name="line-706"></a>
-<a name="line-707"></a><span class="cm">/**</span>
-<a name="line-708"></a><span class="cm">  * @brief  Set the specific FLASH error flag.</span>
-<a name="line-709"></a><span class="cm">  * @retval None</span>
-<a name="line-710"></a><span class="cm">  */</span>
-<a name="line-711"></a><span class="k">static</span> <span class="kt">void</span> <span class="n">FLASH_SetErrorCode</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<a name="line-712"></a><span class="p">{</span> 
-<a name="line-713"></a>  <span class="k">if</span><span class="p">(</span><span class="n">__HAL_FLASH_GET_FLAG</span><span class="p">(</span><span class="n">FLASH_FLAG_WRPERR</span><span class="p">)</span> <span class="o">!=</span> <span class="n">RESET</span><span class="p">)</span>
-<a name="line-714"></a>  <span class="p">{</span>
-<a name="line-715"></a>   <span class="n">pFlash</span><span class="p">.</span><span class="n">ErrorCode</span> <span class="o">|=</span> <span class="n">HAL_FLASH_ERROR_WRP</span><span class="p">;</span>
-<a name="line-716"></a>   
-<a name="line-717"></a>   <span class="cm">/* Clear FLASH write protection error pending bit */</span>
-<a name="line-718"></a>   <span class="n">__HAL_FLASH_CLEAR_FLAG</span><span class="p">(</span><span class="n">FLASH_FLAG_WRPERR</span><span class="p">);</span>
-<a name="line-719"></a>  <span class="p">}</span>
-<a name="line-720"></a>  
-<a name="line-721"></a>  <span class="k">if</span><span class="p">(</span><span class="n">__HAL_FLASH_GET_FLAG</span><span class="p">(</span><span class="n">FLASH_FLAG_PGAERR</span><span class="p">)</span> <span class="o">!=</span> <span class="n">RESET</span><span class="p">)</span>
-<a name="line-722"></a>  <span class="p">{</span>
-<a name="line-723"></a>   <span class="n">pFlash</span><span class="p">.</span><span class="n">ErrorCode</span> <span class="o">|=</span> <span class="n">HAL_FLASH_ERROR_PGA</span><span class="p">;</span>
-<a name="line-724"></a>   
-<a name="line-725"></a>   <span class="cm">/* Clear FLASH Programming alignment error pending bit */</span>
-<a name="line-726"></a>   <span class="n">__HAL_FLASH_CLEAR_FLAG</span><span class="p">(</span><span class="n">FLASH_FLAG_PGAERR</span><span class="p">);</span>
-<a name="line-727"></a>  <span class="p">}</span>
-<a name="line-728"></a>  
-<a name="line-729"></a>  <span class="k">if</span><span class="p">(</span><span class="n">__HAL_FLASH_GET_FLAG</span><span class="p">(</span><span class="n">FLASH_FLAG_PGPERR</span><span class="p">)</span> <span class="o">!=</span> <span class="n">RESET</span><span class="p">)</span>
-<a name="line-730"></a>  <span class="p">{</span>
-<a name="line-731"></a>    <span class="n">pFlash</span><span class="p">.</span><span class="n">ErrorCode</span> <span class="o">|=</span> <span class="n">HAL_FLASH_ERROR_PGP</span><span class="p">;</span>
-<a name="line-732"></a>    
-<a name="line-733"></a>    <span class="cm">/* Clear FLASH Programming parallelism error pending bit */</span>
-<a name="line-734"></a>    <span class="n">__HAL_FLASH_CLEAR_FLAG</span><span class="p">(</span><span class="n">FLASH_FLAG_PGPERR</span><span class="p">);</span>
-<a name="line-735"></a>  <span class="p">}</span>
-<a name="line-736"></a>  
-<a name="line-737"></a>  <span class="k">if</span><span class="p">(</span><span class="n">__HAL_FLASH_GET_FLAG</span><span class="p">(</span><span class="n">FLASH_FLAG_PGSERR</span><span class="p">)</span> <span class="o">!=</span> <span class="n">RESET</span><span class="p">)</span>
-<a name="line-738"></a>  <span class="p">{</span>
-<a name="line-739"></a>    <span class="n">pFlash</span><span class="p">.</span><span class="n">ErrorCode</span> <span class="o">|=</span> <span class="n">HAL_FLASH_ERROR_PGS</span><span class="p">;</span>
-<a name="line-740"></a>    
-<a name="line-741"></a>    <span class="cm">/* Clear FLASH Programming sequence error pending bit */</span>
-<a name="line-742"></a>    <span class="n">__HAL_FLASH_CLEAR_FLAG</span><span class="p">(</span><span class="n">FLASH_FLAG_PGSERR</span><span class="p">);</span>
-<a name="line-743"></a>  <span class="p">}</span>
-<a name="line-744"></a><span class="cp">#if defined(FLASH_SR_RDERR) </span>
-<a name="line-745"></a>  <span class="k">if</span><span class="p">(</span><span class="n">__HAL_FLASH_GET_FLAG</span><span class="p">(</span><span class="n">FLASH_FLAG_RDERR</span><span class="p">)</span> <span class="o">!=</span> <span class="n">RESET</span><span class="p">)</span>
-<a name="line-746"></a>  <span class="p">{</span>
-<a name="line-747"></a>    <span class="n">pFlash</span><span class="p">.</span><span class="n">ErrorCode</span> <span class="o">|=</span> <span class="n">HAL_FLASH_ERROR_RD</span><span class="p">;</span>
-<a name="line-748"></a>    
-<a name="line-749"></a>    <span class="cm">/* Clear FLASH Proprietary readout protection error pending bit */</span>
-<a name="line-750"></a>    <span class="n">__HAL_FLASH_CLEAR_FLAG</span><span class="p">(</span><span class="n">FLASH_FLAG_RDERR</span><span class="p">);</span>
-<a name="line-751"></a>  <span class="p">}</span>
-<a name="line-752"></a><span class="cp">#endif </span><span class="cm">/* FLASH_SR_RDERR */</span><span class="cp">  </span>
-<a name="line-753"></a>  <span class="k">if</span><span class="p">(</span><span class="n">__HAL_FLASH_GET_FLAG</span><span class="p">(</span><span class="n">FLASH_FLAG_OPERR</span><span class="p">)</span> <span class="o">!=</span> <span class="n">RESET</span><span class="p">)</span>
-<a name="line-754"></a>  <span class="p">{</span>
-<a name="line-755"></a>    <span class="n">pFlash</span><span class="p">.</span><span class="n">ErrorCode</span> <span class="o">|=</span> <span class="n">HAL_FLASH_ERROR_OPERATION</span><span class="p">;</span>
-<a name="line-756"></a>    
-<a name="line-757"></a>    <span class="cm">/* Clear FLASH Operation error pending bit */</span>
-<a name="line-758"></a>    <span class="n">__HAL_FLASH_CLEAR_FLAG</span><span class="p">(</span><span class="n">FLASH_FLAG_OPERR</span><span class="p">);</span>
-<a name="line-759"></a>  <span class="p">}</span>
-<a name="line-760"></a><span class="p">}</span>
-<a name="line-761"></a>
-<a name="line-762"></a><span class="cm">/**</span>
-<a name="line-763"></a><span class="cm">  * @}</span>
-<a name="line-764"></a><span class="cm">  */</span>
-<a name="line-765"></a>
-<a name="line-766"></a><span class="cp">#endif </span><span class="cm">/* HAL_FLASH_MODULE_ENABLED */</span><span class="cp"></span>
-<a name="line-767"></a>
-<a name="line-768"></a><span class="cm">/**</span>
-<a name="line-769"></a><span class="cm">  * @}</span>
-<a name="line-770"></a><span class="cm">  */</span>
-<a name="line-771"></a>
-<a name="line-772"></a><span class="cm">/**</span>
-<a name="line-773"></a><span class="cm">  * @}</span>
-<a name="line-774"></a><span class="cm">  */</span>
-<a name="line-775"></a>
+<a name="line-504"></a>  <span class="cm">/* Compute line mask */</span>
+<a name="line-505"></a>  <span class="n">maskline</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1uL</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">hexti</span><span class="o">-&gt;</span><span class="n">Line</span> <span class="o">&amp;</span> <span class="n">EXTI_PIN_MASK</span><span class="p">));</span>
+<a name="line-506"></a>
+<a name="line-507"></a>  <span class="cm">/* Clear Pending bit */</span>
+<a name="line-508"></a>  <span class="n">EXTI</span><span class="o">-&gt;</span><span class="n">PR</span> <span class="o">=</span>  <span class="n">maskline</span><span class="p">;</span>
+<a name="line-509"></a><span class="p">}</span>
+<a name="line-510"></a>
+<a name="line-511"></a><span class="cm">/**</span>
+<a name="line-512"></a><span class="cm">  * @brief  Generate a software interrupt for a dedicated line.</span>
+<a name="line-513"></a><span class="cm">  * @param  hexti Exti handle.</span>
+<a name="line-514"></a><span class="cm">  * @retval None.</span>
+<a name="line-515"></a><span class="cm">  */</span>
+<a name="line-516"></a><span class="hll"><span class="kt">void</span> <span class="nf">HAL_EXTI_GenerateSWI</span><span class="p">(</span><span class="n">EXTI_HandleTypeDef</span> <span class="o">*</span><span class="n">hexti</span><span class="p">)</span><span class="error2">&lt;--- The function 'HAL_EXTI_GenerateSWI' is never used.</span>
+</span><a name="line-517"></a><span class="p">{</span>
+<a name="line-518"></a>  <span class="kt">uint32_t</span> <span class="n">maskline</span><span class="p">;</span>
+<a name="line-519"></a>
+<a name="line-520"></a>  <span class="cm">/* Check parameters */</span>
+<a name="line-521"></a>  <span class="n">assert_param</span><span class="p">(</span><span class="n">IS_EXTI_LINE</span><span class="p">(</span><span class="n">hexti</span><span class="o">-&gt;</span><span class="n">Line</span><span class="p">));</span>
+<a name="line-522"></a>  <span class="n">assert_param</span><span class="p">(</span><span class="n">IS_EXTI_CONFIG_LINE</span><span class="p">(</span><span class="n">hexti</span><span class="o">-&gt;</span><span class="n">Line</span><span class="p">));</span>
+<a name="line-523"></a>
+<a name="line-524"></a>  <span class="cm">/* Compute line mask */</span>
+<a name="line-525"></a>  <span class="n">maskline</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1uL</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">hexti</span><span class="o">-&gt;</span><span class="n">Line</span> <span class="o">&amp;</span> <span class="n">EXTI_PIN_MASK</span><span class="p">));</span>
+<a name="line-526"></a>
+<a name="line-527"></a>  <span class="cm">/* Generate Software interrupt */</span>
+<a name="line-528"></a>  <span class="n">EXTI</span><span class="o">-&gt;</span><span class="n">SWIER</span> <span class="o">=</span> <span class="n">maskline</span><span class="p">;</span>
+<a name="line-529"></a><span class="p">}</span>
+<a name="line-530"></a>
+<a name="line-531"></a><span class="cm">/**</span>
+<a name="line-532"></a><span class="cm">  * @}</span>
+<a name="line-533"></a><span class="cm">  */</span>
+<a name="line-534"></a>
+<a name="line-535"></a><span class="cm">/**</span>
+<a name="line-536"></a><span class="cm">  * @}</span>
+<a name="line-537"></a><span class="cm">  */</span>
+<a name="line-538"></a>
+<a name="line-539"></a><span class="cp">#endif </span><span class="cm">/* HAL_EXTI_MODULE_ENABLED */</span><span class="cp"></span>
+<a name="line-540"></a><span class="cm">/**</span>
+<a name="line-541"></a><span class="cm">  * @}</span>
+<a name="line-542"></a><span class="cm">  */</span>
+<a name="line-543"></a>
+<a name="line-544"></a><span class="cm">/**</span>
+<a name="line-545"></a><span class="cm">  * @}</span>
+<a name="line-546"></a><span class="cm">  */</span>
+<a name="line-547"></a>
 </pre></div>
 </td></tr></table>
       </div> <!-- /.wrapper -->
