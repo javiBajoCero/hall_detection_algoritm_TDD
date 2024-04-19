@@ -5,7 +5,7 @@ import threading
 import sys
 
 
-waittime=3;
+waittime=0.5;
 stopthreads=True;
 serial_tester=None;
 serial_target=None;
@@ -155,6 +155,8 @@ def main():
     receive2_thread = threading.Thread(target=receive_messages_target, args=(serial_target,messages),daemon=True)
     receive2_thread.start();
 
+    serial_target.flush();#flush again for good measure, sometimes we get garbage stuff send by the target board 
+    serial_tester.flush();
     
     time.sleep(waittime)  # Add a delay to allow the device to process the message
     emulationmessage="emulation\n\r";
@@ -169,7 +171,7 @@ def main():
     global stopthreads
     stopthreads=False;
     #receive_thread.join();
-    receive2_thread.join();
+    #receive2_thread.join();
     # Close the serial connection
     serial_tester.close()
     print("Serial connection closed.")
