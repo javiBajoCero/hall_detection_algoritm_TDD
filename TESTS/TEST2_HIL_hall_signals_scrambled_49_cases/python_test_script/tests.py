@@ -4,7 +4,7 @@ import time
 import threading
 import sys
 
-waittime=0.25;
+waittime=1;
 stopthreads=True;
 listeningSerial=False;
 serial_tester=0;
