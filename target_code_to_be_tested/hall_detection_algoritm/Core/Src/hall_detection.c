@@ -284,7 +284,7 @@ void interpretation(detection_state_enum* state,hall_detection_general_struct *g
 	}
 
 	assign_closest_phase_to_hall(gen);
-	//assign_polarity(gen);
+	assign_polarity(gen);
 	gen->numberOfresults++;
 	*state=detection_VALIDATION;
 
@@ -575,24 +575,7 @@ detection_YES_NO are_all_periods_stable(hall_detection_general_struct *gen, uint
 	return 	is_deviation_from_period_acceptable(gen,TOLERANCE_FACTOR_FOR_STATIONARY_CURRENTS,samples);
 }
 
-///**
-//* \brief
-//* \param
-//*/
-//void evaluate_and_present_results(
-//		detection_state_enum* enabled_or_disabled,
-//		hall_pin_info* H1_gpio,
-//		hall_pin_info* H2_gpio,
-//		hall_pin_info* H3_gpio){
-//	if(*enabled_or_disabled==detection_DISABLED){
-//		calculateElectricPeriod_inTicks(&results.electricPeriod_ticks);
-//		assign_closest_phase_to_hall(&results);
-//		assign_polarity(&results);
-//		present_results();
-//		swap_hall_gpios_with_detected_results(H1_gpio,H2_gpio,H3_gpio);
-//	}
-//}
-//
+
 ///**
 //* \brief
 //* \param
@@ -740,29 +723,34 @@ void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
 
 
 
-///**
-//* \brief
-//* \param
-//*/
-//void assign_polarity(hall_detection_general_struct *gen){
-//
-//	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
-//		if(currents[res->hall_order[i]]->zerocrossings_polarity[1]==halls[i]->zerocrossings_polarity[1]){
-//			if(shifted_polarity[res->hall_order[i]][i]==0){
-//				res->hall_polarity[res->hall_order[i]]=hall_direct;
-//			}else{
-//				res->hall_polarity[res->hall_order[i]]=hall_inverse;
-//			}
-//		}else{
-//			if(shifted_polarity[res->hall_order[i]][i]==0){
-//				res->hall_polarity[res->hall_order[i]]=hall_inverse;
-//			}else{
-//				res->hall_polarity[res->hall_order[i]]=hall_direct;
-//			}
-//		}
-//	}
-//}
-//
+/**
+* \brief
+* \param
+*/
+void assign_polarity(hall_detection_general_struct *gen){
+	current_or_hall_measurements_struct*	currents[NUMBEROFPHASES]={&gen->currA,&gen->currB,&gen->currC};
+	hall_measurements_struct*	            halls[NUMBEROFPHASES]	={&gen->hallA,&gen->hallB,&gen->hallC};
+	detection_results_struct *pointerOfcurrentResult=&gen->results[gen->numberOfresults];
+
+
+	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
+		if(currents[pointerOfcurrentResult->hall_order[i]]->zerocrossings_polarity[1]==halls[i]->zerocrossings_polarity[1]){
+			if(gen->shifted_polarity[i][pointerOfcurrentResult->hall_order[i]]==0){
+				pointerOfcurrentResult->hall_polarity[i]=hall_direct;
+			}else{
+				pointerOfcurrentResult->hall_polarity[i]=hall_inverse;
+			}
+		}else{
+			if(gen->shifted_polarity[i][pointerOfcurrentResult->hall_order[i]]==0){
+				pointerOfcurrentResult->hall_polarity[i]=hall_inverse;
+			}else{
+				pointerOfcurrentResult->hall_polarity[i]=hall_direct;
+			}
+		}
+	}
+
+}
+
 
 
 

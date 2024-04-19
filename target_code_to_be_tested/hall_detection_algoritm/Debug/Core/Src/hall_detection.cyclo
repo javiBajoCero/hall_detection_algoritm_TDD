@@ -14,5 +14,6 @@
 ../Core/Src/hall_detection.c:526:6:calculateElectricPeriod_inTicks	2
 ../Core/Src/hall_detection.c:548:18:is_deviation_from_period_acceptable	6
 ../Core/Src/hall_detection.c:573:18:are_all_periods_stable	1
-../Core/Src/hall_detection.c:653:9:absolute	1
-../Core/Src/hall_detection.c:662:6:assign_closest_phase_to_hall	21
+../Core/Src/hall_detection.c:636:9:absolute	1
+../Core/Src/hall_detection.c:645:6:assign_closest_phase_to_hall	21
+../Core/Src/hall_detection.c:730:6:assign_polarity	5
