@@ -4,7 +4,7 @@ import time
 import threading
 import sys
 
-waittime=0.50;
+waittime=0.25;
 stopthreads=True;
 listeningSerial=False;
 serial_tester=0;
@@ -143,7 +143,7 @@ def main():
     time.sleep(1);
     serial_tester.flush();
     serial_target.flush();
-    
+
     listeningSerial=True
     send_thread = threading.Thread(target=send_messages_tester, args=(serial_tester,messages),daemon=True) 
     send_thread.start();
