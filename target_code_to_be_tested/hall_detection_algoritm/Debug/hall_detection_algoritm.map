@@ -4032,36 +4032,37 @@ LOAD C:/ST/STM32CubeIDE_1.12.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
                 0x00000000080012e0       0x4c ./Core/Src/hall_detection.o
                 0x00000000080012e0                interpretation
  .text.validation
-                0x000000000800132c      0x234 ./Core/Src/hall_detection.o
+                0x000000000800132c      0x230 ./Core/Src/hall_detection.o
                 0x000000000800132c                validation
  .text.present_and_finish
-                0x0000000008001560      0x144 ./Core/Src/hall_detection.o
-                0x0000000008001560                present_and_finish
+                0x000000000800155c      0x144 ./Core/Src/hall_detection.o
+                0x000000000800155c                present_and_finish
  .text.fill_buffers
-                0x00000000080016a4       0xa4 ./Core/Src/hall_detection.o
-                0x00000000080016a4                fill_buffers
+                0x00000000080016a0       0xa4 ./Core/Src/hall_detection.o
+                0x00000000080016a0                fill_buffers
  .text.detect_N_zerocrossings
-                0x0000000008001748       0xf8 ./Core/Src/hall_detection.o
-                0x0000000008001748                detect_N_zerocrossings
+                0x0000000008001744       0xf8 ./Core/Src/hall_detection.o
+                0x0000000008001744                detect_N_zerocrossings
  .text.detect_N_current_zerocrossings
-                0x0000000008001840       0xf6 ./Core/Src/hall_detection.o
-                0x0000000008001840                detect_N_current_zerocrossings
+                0x000000000800183c       0xf6 ./Core/Src/hall_detection.o
+                0x000000000800183c                detect_N_current_zerocrossings
  .text.detect_N_hall_zerocrossings
-                0x0000000008001936       0x6e ./Core/Src/hall_detection.o
-                0x0000000008001936                detect_N_hall_zerocrossings
+                0x0000000008001932       0x6e ./Core/Src/hall_detection.o
+                0x0000000008001932                detect_N_hall_zerocrossings
  .text.calculateElectricPeriod_inTicks
-                0x00000000080019a4      0x108 ./Core/Src/hall_detection.o
-                0x00000000080019a4                calculateElectricPeriod_inTicks
+                0x00000000080019a0      0x108 ./Core/Src/hall_detection.o
+                0x00000000080019a0                calculateElectricPeriod_inTicks
  .text.is_deviation_from_period_acceptable
-                0x0000000008001aac      0x102 ./Core/Src/hall_detection.o
-                0x0000000008001aac                is_deviation_from_period_acceptable
- *fill*         0x0000000008001bae        0x2 
+                0x0000000008001aa8      0x102 ./Core/Src/hall_detection.o
+                0x0000000008001aa8                is_deviation_from_period_acceptable
+ *fill*         0x0000000008001baa        0x2 
  .text.are_all_periods_stable
-                0x0000000008001bb0       0x2c ./Core/Src/hall_detection.o
-                0x0000000008001bb0                are_all_periods_stable
+                0x0000000008001bac       0x2c ./Core/Src/hall_detection.o
+                0x0000000008001bac                are_all_periods_stable
  .text.absolute
-                0x0000000008001bdc       0x1c ./Core/Src/hall_detection.o
-                0x0000000008001bdc                absolute
+                0x0000000008001bd8       0x1c ./Core/Src/hall_detection.o
+                0x0000000008001bd8                absolute
+ *fill*         0x0000000008001bf4        0x4 
  .text.assign_closest_phase_to_hall
                 0x0000000008001bf8      0x4ec ./Core/Src/hall_detection.o
                 0x0000000008001bf8                assign_closest_phase_to_hall
@@ -4882,29 +4883,29 @@ LOAD C:/ST/STM32CubeIDE_1.12.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_macro   0x00000000000231ab      0x1f6 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.o
  .debug_macro   0x00000000000233a1      0x1f7 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o
 
-.debug_line     0x0000000000000000    0x149f0
+.debug_line     0x0000000000000000    0x149ed
  .debug_line    0x0000000000000000      0x84b ./Core/Src/adc.o
  .debug_line    0x000000000000084b      0x791 ./Core/Src/dma.o
  .debug_line    0x0000000000000fdc      0x7cc ./Core/Src/gpio.o
- .debug_line    0x00000000000017a8     0x1152 ./Core/Src/hall_detection.o
- .debug_line    0x00000000000028fa      0x863 ./Core/Src/main.o
- .debug_line    0x000000000000315d      0x797 ./Core/Src/stm32f4xx_hal_msp.o
- .debug_line    0x00000000000038f4      0x8cf ./Core/Src/stm32f4xx_it.o
- .debug_line    0x00000000000041c3      0x817 ./Core/Src/system_stm32f4xx.o
- .debug_line    0x00000000000049da      0x804 ./Core/Src/tim.o
- .debug_line    0x00000000000051de      0x7ff ./Core/Src/usart.o
- .debug_line    0x00000000000059dd       0x7a ./Core/Startup/startup_stm32f446retx.o
- .debug_line    0x0000000000005a57      0xa7d ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
- .debug_line    0x00000000000064d4     0x12ed ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.o
- .debug_line    0x00000000000077c1      0xd2c ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
- .debug_line    0x00000000000084ed      0xfe1 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.o
- .debug_line    0x00000000000094ce      0xbdd ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
- .debug_line    0x000000000000a0ab      0x9a6 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.o
- .debug_line    0x000000000000aa51      0xe02 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.o
- .debug_line    0x000000000000b853     0x149b ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.o
- .debug_line    0x000000000000ccee     0x3769 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.o
- .debug_line    0x0000000000010457     0x1a7a ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.o
- .debug_line    0x0000000000011ed1     0x2b1f ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o
+ .debug_line    0x00000000000017a8     0x114f ./Core/Src/hall_detection.o
+ .debug_line    0x00000000000028f7      0x863 ./Core/Src/main.o
+ .debug_line    0x000000000000315a      0x797 ./Core/Src/stm32f4xx_hal_msp.o
+ .debug_line    0x00000000000038f1      0x8cf ./Core/Src/stm32f4xx_it.o
+ .debug_line    0x00000000000041c0      0x817 ./Core/Src/system_stm32f4xx.o
+ .debug_line    0x00000000000049d7      0x804 ./Core/Src/tim.o
+ .debug_line    0x00000000000051db      0x7ff ./Core/Src/usart.o
+ .debug_line    0x00000000000059da       0x7a ./Core/Startup/startup_stm32f446retx.o
+ .debug_line    0x0000000000005a54      0xa7d ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
+ .debug_line    0x00000000000064d1     0x12ed ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.o
+ .debug_line    0x00000000000077be      0xd2c ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
+ .debug_line    0x00000000000084ea      0xfe1 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.o
+ .debug_line    0x00000000000094cb      0xbdd ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
+ .debug_line    0x000000000000a0a8      0x9a6 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.o
+ .debug_line    0x000000000000aa4e      0xe02 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.o
+ .debug_line    0x000000000000b850     0x149b ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.o
+ .debug_line    0x000000000000cceb     0x3769 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.o
+ .debug_line    0x0000000000010454     0x1a7a ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.o
+ .debug_line    0x0000000000011ece     0x2b1f ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o
 
 .debug_str      0x0000000000000000    0xda1fe
  .debug_str     0x0000000000000000    0xd5afa ./Core/Src/adc.o

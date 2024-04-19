@@ -78,7 +78,9 @@ detection_YES_NO detect_N_zerocrossings	(hall_detection_general_struct *gen,uint
 void detect_N_current_zerocrossings	(uint32_t ticks,current_or_hall_measurements_struct* currx,uint32_t N);
 void detect_N_hall_zerocrossings	(uint32_t ticks,hall_measurements_struct* hallx,uint32_t N);
 void calculateElectricPeriod_inTicks(hall_detection_general_struct *gen, uint32_t samples);
+detection_YES_NO is_deviation_from_period_acceptable(hall_detection_general_struct *gen, float tolerance_factor,uint32_t samples);
 detection_YES_NO are_all_periods_stable(hall_detection_general_struct *gen, uint32_t samples);
+int32_t absolute(int32_t x);
 void assign_closest_phase_to_hall(hall_detection_general_struct *gen);
 void assign_polarity(hall_detection_general_struct *gen);
 
@@ -314,6 +316,7 @@ void interpretation(detection_state_enum* state,hall_detection_general_struct *g
 
 /**
 * \brief once we interpreted enough data, we validate results
+* this function has a cyclomatic complexity of 19, that should be improved
 * \param detection_state_enum* state,			pointer to the variable controling the state machine
 * \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
 */
@@ -670,19 +673,20 @@ detection_YES_NO are_all_periods_stable(hall_detection_general_struct *gen, uint
 //	}
 //
 //}
-/**
-* \brief
-* \param
-*/
 
+/**
+* \brief small and util to calculate signed absolute values
+* \param the number to be absoluted
+* \return |x|
+*/
 int32_t absolute(int32_t x){
     return (int32_t)x < (int32_t)0 ? -x : x;
 }
 
-//
 /**
-* \brief
-* \param
+* \brief magic function, from zerocrossings decides actuall order of hall/current signals, this function is super critical and should be optimiced
+* right now has a cyclomatic complexity of 21, that should be reduced.
+* \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
 */
 void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
 
@@ -766,8 +770,9 @@ void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
 
 
 /**
-* \brief
-* \param
+* \brief the other magic function, asigns polarity from risign or falling edges, it also takes into account tricky shifted signals
+* right now has a cyclomatic complexity of 21, that should be reduced.
+* \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
 */
 void assign_polarity(hall_detection_general_struct *gen){
 	current_or_hall_measurements_struct*	currents[NUMBEROFPHASES]={&gen->currA,&gen->currB,&gen->currC};

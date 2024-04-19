@@ -39,9 +39,9 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  17 .debug_macro  00023598  00000000  00000000  00035d42  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_line   000149f0  00000000  00000000  000592da  2**0
+ 18 .debug_line   000149ed  00000000  00000000  000592da  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    000da1fe  00000000  00000000  0006dcca  2**0
+ 19 .debug_str    000da1fe  00000000  00000000  0006dcc7  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  20 .debug_frame  00003ec8  00000000  00000000  00147ec8  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
@@ -1727,7 +1727,7 @@ uint32_t Hall_is_detection_finished(){
 			present_and_finish(&detection_state,&general);
  8001192:	490b      	ldr	r1, [pc, #44]	; (80011c0 <Hall_Identification_Test_measurement+0xfc>)
  8001194:	4808      	ldr	r0, [pc, #32]	; (80011b8 <Hall_Identification_Test_measurement+0xf4>)
- 8001196:	f000 f9e3 	bl	8001560 <present_and_finish>
+ 8001196:	f000 f9e1 	bl	800155c <present_and_finish>
 			ticks++;
  800119a:	4b08      	ldr	r3, [pc, #32]	; (80011bc <Hall_Identification_Test_measurement+0xf8>)
  800119c:	681b      	ldr	r3, [r3, #0]
@@ -1804,7 +1804,7 @@ void resetVariables(hall_detection_general_struct *gen){
  80011fc:	683a      	ldr	r2, [r7, #0]
  80011fe:	6879      	ldr	r1, [r7, #4]
  8001200:	68b8      	ldr	r0, [r7, #8]
- 8001202:	f000 fa4f 	bl	80016a4 <fill_buffers>
+ 8001202:	f000 fa4d 	bl	80016a0 <fill_buffers>
 	//timeout
 	if( ticks>MAXTICKs){
  8001206:	4b17      	ldr	r3, [pc, #92]	; (8001264 <wait_for_the_current_stationary+0x80>)
@@ -1832,14 +1832,14 @@ void resetVariables(hall_detection_general_struct *gen){
 		if(detect_N_zerocrossings(gen,WAITING_STATIONARY_MAXZEROCROSSINGS)==YES){
  8001226:	2103      	movs	r1, #3
  8001228:	68b8      	ldr	r0, [r7, #8]
- 800122a:	f000 fa8d 	bl	8001748 <detect_N_zerocrossings>
+ 800122a:	f000 fa8b 	bl	8001744 <detect_N_zerocrossings>
  800122e:	4603      	mov	r3, r0
  8001230:	2b01      	cmp	r3, #1
  8001232:	d114      	bne.n	800125e <wait_for_the_current_stationary+0x7a>
 			if(are_all_periods_stable(gen,WAITING_STATIONARY_MAXZEROCROSSINGS)==YES){
  8001234:	2103      	movs	r1, #3
  8001236:	68b8      	ldr	r0, [r7, #8]
- 8001238:	f000 fcba 	bl	8001bb0 <are_all_periods_stable>
+ 8001238:	f000 fcb8 	bl	8001bac <are_all_periods_stable>
  800123c:	4603      	mov	r3, r0
  800123e:	2b01      	cmp	r3, #1
  8001240:	d10a      	bne.n	8001258 <wait_for_the_current_stationary+0x74>
@@ -1896,7 +1896,7 @@ void resetVariables(hall_detection_general_struct *gen){
  8001288:	683a      	ldr	r2, [r7, #0]
  800128a:	6879      	ldr	r1, [r7, #4]
  800128c:	68b8      	ldr	r0, [r7, #8]
- 800128e:	f000 fa09 	bl	80016a4 <fill_buffers>
+ 800128e:	f000 fa07 	bl	80016a0 <fill_buffers>
 
 	//timeout
 	if( ticks>MAXTICKs){
@@ -1924,14 +1924,14 @@ void resetVariables(hall_detection_general_struct *gen){
 		if(detect_N_zerocrossings(gen,MAXZEROCROSSINGS)==YES){
  80012b2:	2106      	movs	r1, #6
  80012b4:	68b8      	ldr	r0, [r7, #8]
- 80012b6:	f000 fa47 	bl	8001748 <detect_N_zerocrossings>
+ 80012b6:	f000 fa45 	bl	8001744 <detect_N_zerocrossings>
  80012ba:	4603      	mov	r3, r0
  80012bc:	2b01      	cmp	r3, #1
  80012be:	d106      	bne.n	80012ce <adquisition+0x5e>
 			calculateElectricPeriod_inTicks(gen,MAXZEROCROSSINGS);
  80012c0:	2106      	movs	r1, #6
  80012c2:	68b8      	ldr	r0, [r7, #8]
- 80012c4:	f000 fb6e 	bl	80019a4 <calculateElectricPeriod_inTicks>
+ 80012c4:	f000 fb6c 	bl	80019a0 <calculateElectricPeriod_inTicks>
 			*state=detection_INTERPRETATION;
  80012c8:	68fb      	ldr	r3, [r7, #12]
  80012ca:	2204      	movs	r2, #4
@@ -2001,8 +2001,8 @@ void interpretation(detection_state_enum* state,hall_detection_general_struct *g
  8001328:	000d9038 	.word	0x000d9038
 
 0800132c <validation>:
-/**
 * \brief once we interpreted enough data, we validate results
+* this function has a cyclomatic complexity of 19, that should be improved
 * \param detection_state_enum* state,			pointer to the variable controling the state machine
 * \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
 */
@@ -2015,9 +2015,9 @@ void validation(detection_state_enum* state,hall_detection_general_struct *gen){
 
 	//timeout
 	if( ticks>MAXTICKs){
- 8001336:	4b88      	ldr	r3, [pc, #544]	; (8001558 <validation+0x22c>)
+ 8001336:	4b87      	ldr	r3, [pc, #540]	; (8001554 <validation+0x228>)
  8001338:	681b      	ldr	r3, [r3, #0]
- 800133a:	4a88      	ldr	r2, [pc, #544]	; (800155c <validation+0x230>)
+ 800133a:	4a87      	ldr	r2, [pc, #540]	; (8001558 <validation+0x22c>)
  800133c:	4293      	cmp	r3, r2
  800133e:	d903      	bls.n	8001348 <validation+0x1c>
 		*state=detection_ERROR_OR_TIMEOUT;
@@ -2025,7 +2025,7 @@ void validation(detection_state_enum* state,hall_detection_general_struct *gen){
  8001342:	2207      	movs	r2, #7
  8001344:	701a      	strb	r2, [r3, #0]
 		return;
- 8001346:	e102      	b.n	800154e <validation+0x222>
+ 8001346:	e100      	b.n	800154a <validation+0x21e>
 	}
 
 	//reached results buffer full capacity
@@ -2039,7 +2039,7 @@ void validation(detection_state_enum* state,hall_detection_general_struct *gen){
  8001354:	2207      	movs	r2, #7
  8001356:	701a      	strb	r2, [r3, #0]
 		return;
- 8001358:	e0f9      	b.n	800154e <validation+0x222>
+ 8001358:	e0f7      	b.n	800154a <validation+0x21e>
 	}
 
 	uint32_t all_phases_not_repeated=0;
@@ -2146,1164 +2146,1163 @@ void validation(detection_state_enum* state,hall_detection_general_struct *gen){
  8001410:	683b      	ldr	r3, [r7, #0]
  8001412:	f8d3 3148 	ldr.w	r3, [r3, #328]	; 0x148
  8001416:	2b02      	cmp	r3, #2
- 8001418:	f240 8095 	bls.w	8001546 <validation+0x21a>
-		uint32_t number_of_results_matching=0;
+ 8001418:	f240 8093 	bls.w	8001542 <validation+0x216>
+		for (uint32_t i = 0; i < gen->numberOfresults; ++i) {			//loop trough results
  800141c:	2300      	movs	r3, #0
  800141e:	617b      	str	r3, [r7, #20]
-		for (uint32_t i = 0; i < gen->numberOfresults; ++i) {			//loop trough results
- 8001420:	2300      	movs	r3, #0
- 8001422:	613b      	str	r3, [r7, #16]
- 8001424:	e087      	b.n	8001536 <validation+0x20a>
-			number_of_results_matching=0;
- 8001426:	2300      	movs	r3, #0
- 8001428:	617b      	str	r3, [r7, #20]
+ 8001420:	e087      	b.n	8001532 <validation+0x206>
+			uint32_t number_of_results_matching=0;
+ 8001422:	2300      	movs	r3, #0
+ 8001424:	613b      	str	r3, [r7, #16]
 			if(gen->results[i].is_valid==YES){							//skip the not valid results.
- 800142a:	683a      	ldr	r2, [r7, #0]
- 800142c:	693b      	ldr	r3, [r7, #16]
- 800142e:	3315      	adds	r3, #21
- 8001430:	011b      	lsls	r3, r3, #4
- 8001432:	4413      	add	r3, r2
- 8001434:	781b      	ldrb	r3, [r3, #0]
- 8001436:	2b01      	cmp	r3, #1
- 8001438:	d17a      	bne.n	8001530 <validation+0x204>
+ 8001426:	683a      	ldr	r2, [r7, #0]
+ 8001428:	697b      	ldr	r3, [r7, #20]
+ 800142a:	3315      	adds	r3, #21
+ 800142c:	011b      	lsls	r3, r3, #4
+ 800142e:	4413      	add	r3, r2
+ 8001430:	781b      	ldrb	r3, [r3, #0]
+ 8001432:	2b01      	cmp	r3, #1
+ 8001434:	d17a      	bne.n	800152c <validation+0x200>
 				for (uint32_t j = i+1; j < gen->numberOfresults; ++j) {	//compare that one result with the rest
- 800143a:	693b      	ldr	r3, [r7, #16]
- 800143c:	3301      	adds	r3, #1
- 800143e:	60fb      	str	r3, [r7, #12]
- 8001440:	e070      	b.n	8001524 <validation+0x1f8>
+ 8001436:	697b      	ldr	r3, [r7, #20]
+ 8001438:	3301      	adds	r3, #1
+ 800143a:	60fb      	str	r3, [r7, #12]
+ 800143c:	e070      	b.n	8001520 <validation+0x1f4>
 					if(
 							gen->results[i].hall_order[0]==gen->results[j].hall_order[0] &&
- 8001442:	683a      	ldr	r2, [r7, #0]
- 8001444:	693b      	ldr	r3, [r7, #16]
- 8001446:	011b      	lsls	r3, r3, #4
- 8001448:	4413      	add	r3, r2
- 800144a:	f503 73ac 	add.w	r3, r3, #344	; 0x158
- 800144e:	781a      	ldrb	r2, [r3, #0]
- 8001450:	6839      	ldr	r1, [r7, #0]
- 8001452:	68fb      	ldr	r3, [r7, #12]
- 8001454:	011b      	lsls	r3, r3, #4
- 8001456:	440b      	add	r3, r1
- 8001458:	f503 73ac 	add.w	r3, r3, #344	; 0x158
- 800145c:	781b      	ldrb	r3, [r3, #0]
+ 800143e:	683a      	ldr	r2, [r7, #0]
+ 8001440:	697b      	ldr	r3, [r7, #20]
+ 8001442:	011b      	lsls	r3, r3, #4
+ 8001444:	4413      	add	r3, r2
+ 8001446:	f503 73ac 	add.w	r3, r3, #344	; 0x158
+ 800144a:	781a      	ldrb	r2, [r3, #0]
+ 800144c:	6839      	ldr	r1, [r7, #0]
+ 800144e:	68fb      	ldr	r3, [r7, #12]
+ 8001450:	011b      	lsls	r3, r3, #4
+ 8001452:	440b      	add	r3, r1
+ 8001454:	f503 73ac 	add.w	r3, r3, #344	; 0x158
+ 8001458:	781b      	ldrb	r3, [r3, #0]
 					if(
- 800145e:	429a      	cmp	r2, r3
- 8001460:	d15d      	bne.n	800151e <validation+0x1f2>
+ 800145a:	429a      	cmp	r2, r3
+ 800145c:	d15d      	bne.n	800151a <validation+0x1ee>
 							gen->results[i].hall_order[1]==gen->results[j].hall_order[1] &&
- 8001462:	683a      	ldr	r2, [r7, #0]
- 8001464:	693b      	ldr	r3, [r7, #16]
- 8001466:	011b      	lsls	r3, r3, #4
- 8001468:	4413      	add	r3, r2
- 800146a:	f203 1359 	addw	r3, r3, #345	; 0x159
- 800146e:	781a      	ldrb	r2, [r3, #0]
- 8001470:	6839      	ldr	r1, [r7, #0]
- 8001472:	68fb      	ldr	r3, [r7, #12]
- 8001474:	011b      	lsls	r3, r3, #4
- 8001476:	440b      	add	r3, r1
- 8001478:	f203 1359 	addw	r3, r3, #345	; 0x159
- 800147c:	781b      	ldrb	r3, [r3, #0]
+ 800145e:	683a      	ldr	r2, [r7, #0]
+ 8001460:	697b      	ldr	r3, [r7, #20]
+ 8001462:	011b      	lsls	r3, r3, #4
+ 8001464:	4413      	add	r3, r2
+ 8001466:	f203 1359 	addw	r3, r3, #345	; 0x159
+ 800146a:	781a      	ldrb	r2, [r3, #0]
+ 800146c:	6839      	ldr	r1, [r7, #0]
+ 800146e:	68fb      	ldr	r3, [r7, #12]
+ 8001470:	011b      	lsls	r3, r3, #4
+ 8001472:	440b      	add	r3, r1
+ 8001474:	f203 1359 	addw	r3, r3, #345	; 0x159
+ 8001478:	781b      	ldrb	r3, [r3, #0]
 							gen->results[i].hall_order[0]==gen->results[j].hall_order[0] &&
- 800147e:	429a      	cmp	r2, r3
- 8001480:	d14d      	bne.n	800151e <validation+0x1f2>
+ 800147a:	429a      	cmp	r2, r3
+ 800147c:	d14d      	bne.n	800151a <validation+0x1ee>
 							gen->results[i].hall_order[2]==gen->results[j].hall_order[2] &&
- 8001482:	683a      	ldr	r2, [r7, #0]
- 8001484:	693b      	ldr	r3, [r7, #16]
- 8001486:	011b      	lsls	r3, r3, #4
- 8001488:	4413      	add	r3, r2
- 800148a:	f503 73ad 	add.w	r3, r3, #346	; 0x15a
- 800148e:	781a      	ldrb	r2, [r3, #0]
- 8001490:	6839      	ldr	r1, [r7, #0]
- 8001492:	68fb      	ldr	r3, [r7, #12]
- 8001494:	011b      	lsls	r3, r3, #4
- 8001496:	440b      	add	r3, r1
- 8001498:	f503 73ad 	add.w	r3, r3, #346	; 0x15a
- 800149c:	781b      	ldrb	r3, [r3, #0]
+ 800147e:	683a      	ldr	r2, [r7, #0]
+ 8001480:	697b      	ldr	r3, [r7, #20]
+ 8001482:	011b      	lsls	r3, r3, #4
+ 8001484:	4413      	add	r3, r2
+ 8001486:	f503 73ad 	add.w	r3, r3, #346	; 0x15a
+ 800148a:	781a      	ldrb	r2, [r3, #0]
+ 800148c:	6839      	ldr	r1, [r7, #0]
+ 800148e:	68fb      	ldr	r3, [r7, #12]
+ 8001490:	011b      	lsls	r3, r3, #4
+ 8001492:	440b      	add	r3, r1
+ 8001494:	f503 73ad 	add.w	r3, r3, #346	; 0x15a
+ 8001498:	781b      	ldrb	r3, [r3, #0]
 							gen->results[i].hall_order[1]==gen->results[j].hall_order[1] &&
- 800149e:	429a      	cmp	r2, r3
- 80014a0:	d13d      	bne.n	800151e <validation+0x1f2>
+ 800149a:	429a      	cmp	r2, r3
+ 800149c:	d13d      	bne.n	800151a <validation+0x1ee>
 							gen->results[i].hall_polarity[0]==gen->results[j].hall_polarity[0] &&
- 80014a2:	683a      	ldr	r2, [r7, #0]
- 80014a4:	693b      	ldr	r3, [r7, #16]
- 80014a6:	011b      	lsls	r3, r3, #4
- 80014a8:	4413      	add	r3, r2
- 80014aa:	f203 135b 	addw	r3, r3, #347	; 0x15b
- 80014ae:	781a      	ldrb	r2, [r3, #0]
- 80014b0:	6839      	ldr	r1, [r7, #0]
- 80014b2:	68fb      	ldr	r3, [r7, #12]
- 80014b4:	011b      	lsls	r3, r3, #4
- 80014b6:	440b      	add	r3, r1
- 80014b8:	f203 135b 	addw	r3, r3, #347	; 0x15b
- 80014bc:	781b      	ldrb	r3, [r3, #0]
+ 800149e:	683a      	ldr	r2, [r7, #0]
+ 80014a0:	697b      	ldr	r3, [r7, #20]
+ 80014a2:	011b      	lsls	r3, r3, #4
+ 80014a4:	4413      	add	r3, r2
+ 80014a6:	f203 135b 	addw	r3, r3, #347	; 0x15b
+ 80014aa:	781a      	ldrb	r2, [r3, #0]
+ 80014ac:	6839      	ldr	r1, [r7, #0]
+ 80014ae:	68fb      	ldr	r3, [r7, #12]
+ 80014b0:	011b      	lsls	r3, r3, #4
+ 80014b2:	440b      	add	r3, r1
+ 80014b4:	f203 135b 	addw	r3, r3, #347	; 0x15b
+ 80014b8:	781b      	ldrb	r3, [r3, #0]
 							gen->results[i].hall_order[2]==gen->results[j].hall_order[2] &&
- 80014be:	429a      	cmp	r2, r3
- 80014c0:	d12d      	bne.n	800151e <validation+0x1f2>
+ 80014ba:	429a      	cmp	r2, r3
+ 80014bc:	d12d      	bne.n	800151a <validation+0x1ee>
 							gen->results[i].hall_polarity[1]==gen->results[j].hall_polarity[1] &&
- 80014c2:	683a      	ldr	r2, [r7, #0]
- 80014c4:	693b      	ldr	r3, [r7, #16]
- 80014c6:	011b      	lsls	r3, r3, #4
- 80014c8:	4413      	add	r3, r2
- 80014ca:	f503 73ae 	add.w	r3, r3, #348	; 0x15c
- 80014ce:	781a      	ldrb	r2, [r3, #0]
- 80014d0:	6839      	ldr	r1, [r7, #0]
- 80014d2:	68fb      	ldr	r3, [r7, #12]
- 80014d4:	011b      	lsls	r3, r3, #4
- 80014d6:	440b      	add	r3, r1
- 80014d8:	f503 73ae 	add.w	r3, r3, #348	; 0x15c
- 80014dc:	781b      	ldrb	r3, [r3, #0]
+ 80014be:	683a      	ldr	r2, [r7, #0]
+ 80014c0:	697b      	ldr	r3, [r7, #20]
+ 80014c2:	011b      	lsls	r3, r3, #4
+ 80014c4:	4413      	add	r3, r2
+ 80014c6:	f503 73ae 	add.w	r3, r3, #348	; 0x15c
+ 80014ca:	781a      	ldrb	r2, [r3, #0]
+ 80014cc:	6839      	ldr	r1, [r7, #0]
+ 80014ce:	68fb      	ldr	r3, [r7, #12]
+ 80014d0:	011b      	lsls	r3, r3, #4
+ 80014d2:	440b      	add	r3, r1
+ 80014d4:	f503 73ae 	add.w	r3, r3, #348	; 0x15c
+ 80014d8:	781b      	ldrb	r3, [r3, #0]
 							gen->results[i].hall_polarity[0]==gen->results[j].hall_polarity[0] &&
- 80014de:	429a      	cmp	r2, r3
- 80014e0:	d11d      	bne.n	800151e <validation+0x1f2>
+ 80014da:	429a      	cmp	r2, r3
+ 80014dc:	d11d      	bne.n	800151a <validation+0x1ee>
 							gen->results[i].hall_polarity[2]==gen->results[j].hall_polarity[2]
- 80014e2:	683a      	ldr	r2, [r7, #0]
- 80014e4:	693b      	ldr	r3, [r7, #16]
- 80014e6:	011b      	lsls	r3, r3, #4
- 80014e8:	4413      	add	r3, r2
- 80014ea:	f203 135d 	addw	r3, r3, #349	; 0x15d
- 80014ee:	781a      	ldrb	r2, [r3, #0]
- 80014f0:	6839      	ldr	r1, [r7, #0]
- 80014f2:	68fb      	ldr	r3, [r7, #12]
- 80014f4:	011b      	lsls	r3, r3, #4
- 80014f6:	440b      	add	r3, r1
- 80014f8:	f203 135d 	addw	r3, r3, #349	; 0x15d
- 80014fc:	781b      	ldrb	r3, [r3, #0]
+ 80014de:	683a      	ldr	r2, [r7, #0]
+ 80014e0:	697b      	ldr	r3, [r7, #20]
+ 80014e2:	011b      	lsls	r3, r3, #4
+ 80014e4:	4413      	add	r3, r2
+ 80014e6:	f203 135d 	addw	r3, r3, #349	; 0x15d
+ 80014ea:	781a      	ldrb	r2, [r3, #0]
+ 80014ec:	6839      	ldr	r1, [r7, #0]
+ 80014ee:	68fb      	ldr	r3, [r7, #12]
+ 80014f0:	011b      	lsls	r3, r3, #4
+ 80014f2:	440b      	add	r3, r1
+ 80014f4:	f203 135d 	addw	r3, r3, #349	; 0x15d
+ 80014f8:	781b      	ldrb	r3, [r3, #0]
 							gen->results[i].hall_polarity[1]==gen->results[j].hall_polarity[1] &&
- 80014fe:	429a      	cmp	r2, r3
- 8001500:	d10d      	bne.n	800151e <validation+0x1f2>
+ 80014fa:	429a      	cmp	r2, r3
+ 80014fc:	d10d      	bne.n	800151a <validation+0x1ee>
 							){//do they match?
 							number_of_results_matching++;
- 8001502:	697b      	ldr	r3, [r7, #20]
- 8001504:	3301      	adds	r3, #1
- 8001506:	617b      	str	r3, [r7, #20]
+ 80014fe:	693b      	ldr	r3, [r7, #16]
+ 8001500:	3301      	adds	r3, #1
+ 8001502:	613b      	str	r3, [r7, #16]
 						if(number_of_results_matching>=NUMBER_OF_VALID_MATCHING_RESULTS-1){
- 8001508:	697b      	ldr	r3, [r7, #20]
- 800150a:	2b01      	cmp	r3, #1
- 800150c:	d907      	bls.n	800151e <validation+0x1f2>
+ 8001504:	693b      	ldr	r3, [r7, #16]
+ 8001506:	2b01      	cmp	r3, #1
+ 8001508:	d907      	bls.n	800151a <validation+0x1ee>
 							gen->indexOfcorrectResult=i;
- 800150e:	683b      	ldr	r3, [r7, #0]
- 8001510:	693a      	ldr	r2, [r7, #16]
- 8001512:	f8c3 214c 	str.w	r2, [r3, #332]	; 0x14c
+ 800150a:	683b      	ldr	r3, [r7, #0]
+ 800150c:	697a      	ldr	r2, [r7, #20]
+ 800150e:	f8c3 214c 	str.w	r2, [r3, #332]	; 0x14c
 							*state=detection_PRESENTATION_FINISH;
- 8001516:	687b      	ldr	r3, [r7, #4]
- 8001518:	2206      	movs	r2, #6
- 800151a:	701a      	strb	r2, [r3, #0]
+ 8001512:	687b      	ldr	r3, [r7, #4]
+ 8001514:	2206      	movs	r2, #6
+ 8001516:	701a      	strb	r2, [r3, #0]
 							return;
- 800151c:	e017      	b.n	800154e <validation+0x222>
+ 8001518:	e017      	b.n	800154a <validation+0x21e>
 				for (uint32_t j = i+1; j < gen->numberOfresults; ++j) {	//compare that one result with the rest
- 800151e:	68fb      	ldr	r3, [r7, #12]
- 8001520:	3301      	adds	r3, #1
- 8001522:	60fb      	str	r3, [r7, #12]
- 8001524:	683b      	ldr	r3, [r7, #0]
- 8001526:	f8d3 3148 	ldr.w	r3, [r3, #328]	; 0x148
- 800152a:	68fa      	ldr	r2, [r7, #12]
- 800152c:	429a      	cmp	r2, r3
- 800152e:	d388      	bcc.n	8001442 <validation+0x116>
+ 800151a:	68fb      	ldr	r3, [r7, #12]
+ 800151c:	3301      	adds	r3, #1
+ 800151e:	60fb      	str	r3, [r7, #12]
+ 8001520:	683b      	ldr	r3, [r7, #0]
+ 8001522:	f8d3 3148 	ldr.w	r3, [r3, #328]	; 0x148
+ 8001526:	68fa      	ldr	r2, [r7, #12]
+ 8001528:	429a      	cmp	r2, r3
+ 800152a:	d388      	bcc.n	800143e <validation+0x112>
 		for (uint32_t i = 0; i < gen->numberOfresults; ++i) {			//loop trough results
- 8001530:	693b      	ldr	r3, [r7, #16]
- 8001532:	3301      	adds	r3, #1
- 8001534:	613b      	str	r3, [r7, #16]
- 8001536:	683b      	ldr	r3, [r7, #0]
- 8001538:	f8d3 3148 	ldr.w	r3, [r3, #328]	; 0x148
- 800153c:	693a      	ldr	r2, [r7, #16]
- 800153e:	429a      	cmp	r2, r3
- 8001540:	f4ff af71 	bcc.w	8001426 <validation+0xfa>
- 8001544:	e003      	b.n	800154e <validation+0x222>
+ 800152c:	697b      	ldr	r3, [r7, #20]
+ 800152e:	3301      	adds	r3, #1
+ 8001530:	617b      	str	r3, [r7, #20]
+ 8001532:	683b      	ldr	r3, [r7, #0]
+ 8001534:	f8d3 3148 	ldr.w	r3, [r3, #328]	; 0x148
+ 8001538:	697a      	ldr	r2, [r7, #20]
+ 800153a:	429a      	cmp	r2, r3
+ 800153c:	f4ff af71 	bcc.w	8001422 <validation+0xf6>
+ 8001540:	e003      	b.n	800154a <validation+0x21e>
 				}
 			}
 
 		}
 	}else{
 		*state=detection_ADQUISITION;
- 8001546:	687b      	ldr	r3, [r7, #4]
- 8001548:	2203      	movs	r2, #3
- 800154a:	701a      	strb	r2, [r3, #0]
+ 8001542:	687b      	ldr	r3, [r7, #4]
+ 8001544:	2203      	movs	r2, #3
+ 8001546:	701a      	strb	r2, [r3, #0]
 		return;
- 800154c:	bf00      	nop
+ 8001548:	bf00      	nop
 	}
 }
- 800154e:	3724      	adds	r7, #36	; 0x24
- 8001550:	46bd      	mov	sp, r7
- 8001552:	f85d 7b04 	ldr.w	r7, [sp], #4
- 8001556:	4770      	bx	lr
- 8001558:	200000e8 	.word	0x200000e8
- 800155c:	000d9038 	.word	0x000d9038
+ 800154a:	3724      	adds	r7, #36	; 0x24
+ 800154c:	46bd      	mov	sp, r7
+ 800154e:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8001552:	4770      	bx	lr
+ 8001554:	200000e8 	.word	0x200000e8
+ 8001558:	000d9038 	.word	0x000d9038
 
-08001560 <present_and_finish>:
+0800155c <present_and_finish>:
 /**
 * \brief if the resutls are validated, lets present the data, load the ASCII message for uart and/or manage the logic swap for hall gpios.
 * \param detection_state_enum* state,			pointer to the variable controling the state machine
 * \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
 */
 void present_and_finish(detection_state_enum* state,hall_detection_general_struct *gen){
- 8001560:	b580      	push	{r7, lr}
- 8001562:	b084      	sub	sp, #16
- 8001564:	af00      	add	r7, sp, #0
- 8001566:	6078      	str	r0, [r7, #4]
- 8001568:	6039      	str	r1, [r7, #0]
+ 800155c:	b580      	push	{r7, lr}
+ 800155e:	b084      	sub	sp, #16
+ 8001560:	af00      	add	r7, sp, #0
+ 8001562:	6078      	str	r0, [r7, #4]
+ 8001564:	6039      	str	r1, [r7, #0]
 
 	for (uint32_t i = 0; i < messageLength; ++i) {
- 800156a:	2300      	movs	r3, #0
- 800156c:	60fb      	str	r3, [r7, #12]
- 800156e:	e009      	b.n	8001584 <present_and_finish+0x24>
+ 8001566:	2300      	movs	r3, #0
+ 8001568:	60fb      	str	r3, [r7, #12]
+ 800156a:	e009      	b.n	8001580 <present_and_finish+0x24>
 		gen->message[i]=' ';
- 8001570:	683a      	ldr	r2, [r7, #0]
- 8001572:	68fb      	ldr	r3, [r7, #12]
- 8001574:	4413      	add	r3, r2
- 8001576:	f503 73d8 	add.w	r3, r3, #432	; 0x1b0
- 800157a:	2220      	movs	r2, #32
- 800157c:	701a      	strb	r2, [r3, #0]
+ 800156c:	683a      	ldr	r2, [r7, #0]
+ 800156e:	68fb      	ldr	r3, [r7, #12]
+ 8001570:	4413      	add	r3, r2
+ 8001572:	f503 73d8 	add.w	r3, r3, #432	; 0x1b0
+ 8001576:	2220      	movs	r2, #32
+ 8001578:	701a      	strb	r2, [r3, #0]
 	for (uint32_t i = 0; i < messageLength; ++i) {
- 800157e:	68fb      	ldr	r3, [r7, #12]
- 8001580:	3301      	adds	r3, #1
- 8001582:	60fb      	str	r3, [r7, #12]
- 8001584:	68fb      	ldr	r3, [r7, #12]
- 8001586:	2b07      	cmp	r3, #7
- 8001588:	d9f2      	bls.n	8001570 <present_and_finish+0x10>
+ 800157a:	68fb      	ldr	r3, [r7, #12]
+ 800157c:	3301      	adds	r3, #1
+ 800157e:	60fb      	str	r3, [r7, #12]
+ 8001580:	68fb      	ldr	r3, [r7, #12]
+ 8001582:	2b07      	cmp	r3, #7
+ 8001584:	d9f2      	bls.n	800156c <present_and_finish+0x10>
 	}
 
 	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
- 800158a:	2300      	movs	r3, #0
- 800158c:	60bb      	str	r3, [r7, #8]
- 800158e:	e06c      	b.n	800166a <present_and_finish+0x10a>
+ 8001586:	2300      	movs	r3, #0
+ 8001588:	60bb      	str	r3, [r7, #8]
+ 800158a:	e06c      	b.n	8001666 <present_and_finish+0x10a>
 		if(gen->results[gen->indexOfcorrectResult].hall_order[i]==hall_A){
- 8001590:	683b      	ldr	r3, [r7, #0]
- 8001592:	f8d3 314c 	ldr.w	r3, [r3, #332]	; 0x14c
- 8001596:	683a      	ldr	r2, [r7, #0]
- 8001598:	011b      	lsls	r3, r3, #4
- 800159a:	441a      	add	r2, r3
- 800159c:	68bb      	ldr	r3, [r7, #8]
- 800159e:	4413      	add	r3, r2
- 80015a0:	f503 73ac 	add.w	r3, r3, #344	; 0x158
- 80015a4:	781b      	ldrb	r3, [r3, #0]
- 80015a6:	2b00      	cmp	r3, #0
- 80015a8:	d108      	bne.n	80015bc <present_and_finish+0x5c>
+ 800158c:	683b      	ldr	r3, [r7, #0]
+ 800158e:	f8d3 314c 	ldr.w	r3, [r3, #332]	; 0x14c
+ 8001592:	683a      	ldr	r2, [r7, #0]
+ 8001594:	011b      	lsls	r3, r3, #4
+ 8001596:	441a      	add	r2, r3
+ 8001598:	68bb      	ldr	r3, [r7, #8]
+ 800159a:	4413      	add	r3, r2
+ 800159c:	f503 73ac 	add.w	r3, r3, #344	; 0x158
+ 80015a0:	781b      	ldrb	r3, [r3, #0]
+ 80015a2:	2b00      	cmp	r3, #0
+ 80015a4:	d108      	bne.n	80015b8 <present_and_finish+0x5c>
 			gen->message[(i*2)+1]='A';
- 80015aa:	68bb      	ldr	r3, [r7, #8]
- 80015ac:	005b      	lsls	r3, r3, #1
- 80015ae:	3301      	adds	r3, #1
- 80015b0:	683a      	ldr	r2, [r7, #0]
- 80015b2:	4413      	add	r3, r2
- 80015b4:	2241      	movs	r2, #65	; 0x41
- 80015b6:	f883 21b0 	strb.w	r2, [r3, #432]	; 0x1b0
- 80015ba:	e02a      	b.n	8001612 <present_and_finish+0xb2>
+ 80015a6:	68bb      	ldr	r3, [r7, #8]
+ 80015a8:	005b      	lsls	r3, r3, #1
+ 80015aa:	3301      	adds	r3, #1
+ 80015ac:	683a      	ldr	r2, [r7, #0]
+ 80015ae:	4413      	add	r3, r2
+ 80015b0:	2241      	movs	r2, #65	; 0x41
+ 80015b2:	f883 21b0 	strb.w	r2, [r3, #432]	; 0x1b0
+ 80015b6:	e02a      	b.n	800160e <present_and_finish+0xb2>
 		}else if(gen->results[gen->indexOfcorrectResult].hall_order[i]==hall_B){
- 80015bc:	683b      	ldr	r3, [r7, #0]
- 80015be:	f8d3 314c 	ldr.w	r3, [r3, #332]	; 0x14c
- 80015c2:	683a      	ldr	r2, [r7, #0]
- 80015c4:	011b      	lsls	r3, r3, #4
- 80015c6:	441a      	add	r2, r3
- 80015c8:	68bb      	ldr	r3, [r7, #8]
- 80015ca:	4413      	add	r3, r2
- 80015cc:	f503 73ac 	add.w	r3, r3, #344	; 0x158
- 80015d0:	781b      	ldrb	r3, [r3, #0]
- 80015d2:	2b01      	cmp	r3, #1
- 80015d4:	d108      	bne.n	80015e8 <present_and_finish+0x88>
+ 80015b8:	683b      	ldr	r3, [r7, #0]
+ 80015ba:	f8d3 314c 	ldr.w	r3, [r3, #332]	; 0x14c
+ 80015be:	683a      	ldr	r2, [r7, #0]
+ 80015c0:	011b      	lsls	r3, r3, #4
+ 80015c2:	441a      	add	r2, r3
+ 80015c4:	68bb      	ldr	r3, [r7, #8]
+ 80015c6:	4413      	add	r3, r2
+ 80015c8:	f503 73ac 	add.w	r3, r3, #344	; 0x158
+ 80015cc:	781b      	ldrb	r3, [r3, #0]
+ 80015ce:	2b01      	cmp	r3, #1
+ 80015d0:	d108      	bne.n	80015e4 <present_and_finish+0x88>
 			gen->message[(i*2)+1]='B';
- 80015d6:	68bb      	ldr	r3, [r7, #8]
- 80015d8:	005b      	lsls	r3, r3, #1
- 80015da:	3301      	adds	r3, #1
- 80015dc:	683a      	ldr	r2, [r7, #0]
- 80015de:	4413      	add	r3, r2
- 80015e0:	2242      	movs	r2, #66	; 0x42
- 80015e2:	f883 21b0 	strb.w	r2, [r3, #432]	; 0x1b0
- 80015e6:	e014      	b.n	8001612 <present_and_finish+0xb2>
+ 80015d2:	68bb      	ldr	r3, [r7, #8]
+ 80015d4:	005b      	lsls	r3, r3, #1
+ 80015d6:	3301      	adds	r3, #1
+ 80015d8:	683a      	ldr	r2, [r7, #0]
+ 80015da:	4413      	add	r3, r2
+ 80015dc:	2242      	movs	r2, #66	; 0x42
+ 80015de:	f883 21b0 	strb.w	r2, [r3, #432]	; 0x1b0
+ 80015e2:	e014      	b.n	800160e <present_and_finish+0xb2>
 		}else if(gen->results[gen->indexOfcorrectResult].hall_order[i]==hall_C){
- 80015e8:	683b      	ldr	r3, [r7, #0]
- 80015ea:	f8d3 314c 	ldr.w	r3, [r3, #332]	; 0x14c
- 80015ee:	683a      	ldr	r2, [r7, #0]
- 80015f0:	011b      	lsls	r3, r3, #4
- 80015f2:	441a      	add	r2, r3
- 80015f4:	68bb      	ldr	r3, [r7, #8]
- 80015f6:	4413      	add	r3, r2
- 80015f8:	f503 73ac 	add.w	r3, r3, #344	; 0x158
- 80015fc:	781b      	ldrb	r3, [r3, #0]
- 80015fe:	2b02      	cmp	r3, #2
- 8001600:	d107      	bne.n	8001612 <present_and_finish+0xb2>
+ 80015e4:	683b      	ldr	r3, [r7, #0]
+ 80015e6:	f8d3 314c 	ldr.w	r3, [r3, #332]	; 0x14c
+ 80015ea:	683a      	ldr	r2, [r7, #0]
+ 80015ec:	011b      	lsls	r3, r3, #4
+ 80015ee:	441a      	add	r2, r3
+ 80015f0:	68bb      	ldr	r3, [r7, #8]
+ 80015f2:	4413      	add	r3, r2
+ 80015f4:	f503 73ac 	add.w	r3, r3, #344	; 0x158
+ 80015f8:	781b      	ldrb	r3, [r3, #0]
+ 80015fa:	2b02      	cmp	r3, #2
+ 80015fc:	d107      	bne.n	800160e <present_and_finish+0xb2>
 			gen->message[(i*2)+1]='C';
- 8001602:	68bb      	ldr	r3, [r7, #8]
- 8001604:	005b      	lsls	r3, r3, #1
- 8001606:	3301      	adds	r3, #1
- 8001608:	683a      	ldr	r2, [r7, #0]
- 800160a:	4413      	add	r3, r2
- 800160c:	2243      	movs	r2, #67	; 0x43
- 800160e:	f883 21b0 	strb.w	r2, [r3, #432]	; 0x1b0
+ 80015fe:	68bb      	ldr	r3, [r7, #8]
+ 8001600:	005b      	lsls	r3, r3, #1
+ 8001602:	3301      	adds	r3, #1
+ 8001604:	683a      	ldr	r2, [r7, #0]
+ 8001606:	4413      	add	r3, r2
+ 8001608:	2243      	movs	r2, #67	; 0x43
+ 800160a:	f883 21b0 	strb.w	r2, [r3, #432]	; 0x1b0
 		}
 
 		if(gen->results[gen->indexOfcorrectResult].hall_polarity[i]==hall_direct){
- 8001612:	683b      	ldr	r3, [r7, #0]
- 8001614:	f8d3 314c 	ldr.w	r3, [r3, #332]	; 0x14c
- 8001618:	683a      	ldr	r2, [r7, #0]
- 800161a:	011b      	lsls	r3, r3, #4
- 800161c:	441a      	add	r2, r3
- 800161e:	68bb      	ldr	r3, [r7, #8]
- 8001620:	4413      	add	r3, r2
- 8001622:	f203 135b 	addw	r3, r3, #347	; 0x15b
- 8001626:	781b      	ldrb	r3, [r3, #0]
- 8001628:	2b00      	cmp	r3, #0
- 800162a:	d107      	bne.n	800163c <present_and_finish+0xdc>
+ 800160e:	683b      	ldr	r3, [r7, #0]
+ 8001610:	f8d3 314c 	ldr.w	r3, [r3, #332]	; 0x14c
+ 8001614:	683a      	ldr	r2, [r7, #0]
+ 8001616:	011b      	lsls	r3, r3, #4
+ 8001618:	441a      	add	r2, r3
+ 800161a:	68bb      	ldr	r3, [r7, #8]
+ 800161c:	4413      	add	r3, r2
+ 800161e:	f203 135b 	addw	r3, r3, #347	; 0x15b
+ 8001622:	781b      	ldrb	r3, [r3, #0]
+ 8001624:	2b00      	cmp	r3, #0
+ 8001626:	d107      	bne.n	8001638 <present_and_finish+0xdc>
 			gen->message[i*2]=' ';
- 800162c:	68bb      	ldr	r3, [r7, #8]
- 800162e:	005b      	lsls	r3, r3, #1
- 8001630:	683a      	ldr	r2, [r7, #0]
- 8001632:	4413      	add	r3, r2
- 8001634:	2220      	movs	r2, #32
- 8001636:	f883 21b0 	strb.w	r2, [r3, #432]	; 0x1b0
- 800163a:	e013      	b.n	8001664 <present_and_finish+0x104>
+ 8001628:	68bb      	ldr	r3, [r7, #8]
+ 800162a:	005b      	lsls	r3, r3, #1
+ 800162c:	683a      	ldr	r2, [r7, #0]
+ 800162e:	4413      	add	r3, r2
+ 8001630:	2220      	movs	r2, #32
+ 8001632:	f883 21b0 	strb.w	r2, [r3, #432]	; 0x1b0
+ 8001636:	e013      	b.n	8001660 <present_and_finish+0x104>
 		}else if(gen->results[gen->indexOfcorrectResult].hall_polarity[i]==hall_inverse){
- 800163c:	683b      	ldr	r3, [r7, #0]
- 800163e:	f8d3 314c 	ldr.w	r3, [r3, #332]	; 0x14c
- 8001642:	683a      	ldr	r2, [r7, #0]
- 8001644:	011b      	lsls	r3, r3, #4
- 8001646:	441a      	add	r2, r3
- 8001648:	68bb      	ldr	r3, [r7, #8]
- 800164a:	4413      	add	r3, r2
- 800164c:	f203 135b 	addw	r3, r3, #347	; 0x15b
- 8001650:	781b      	ldrb	r3, [r3, #0]
- 8001652:	2b01      	cmp	r3, #1
- 8001654:	d106      	bne.n	8001664 <present_and_finish+0x104>
+ 8001638:	683b      	ldr	r3, [r7, #0]
+ 800163a:	f8d3 314c 	ldr.w	r3, [r3, #332]	; 0x14c
+ 800163e:	683a      	ldr	r2, [r7, #0]
+ 8001640:	011b      	lsls	r3, r3, #4
+ 8001642:	441a      	add	r2, r3
+ 8001644:	68bb      	ldr	r3, [r7, #8]
+ 8001646:	4413      	add	r3, r2
+ 8001648:	f203 135b 	addw	r3, r3, #347	; 0x15b
+ 800164c:	781b      	ldrb	r3, [r3, #0]
+ 800164e:	2b01      	cmp	r3, #1
+ 8001650:	d106      	bne.n	8001660 <present_and_finish+0x104>
 			gen->message[i*2]='!';
- 8001656:	68bb      	ldr	r3, [r7, #8]
- 8001658:	005b      	lsls	r3, r3, #1
- 800165a:	683a      	ldr	r2, [r7, #0]
- 800165c:	4413      	add	r3, r2
- 800165e:	2221      	movs	r2, #33	; 0x21
- 8001660:	f883 21b0 	strb.w	r2, [r3, #432]	; 0x1b0
+ 8001652:	68bb      	ldr	r3, [r7, #8]
+ 8001654:	005b      	lsls	r3, r3, #1
+ 8001656:	683a      	ldr	r2, [r7, #0]
+ 8001658:	4413      	add	r3, r2
+ 800165a:	2221      	movs	r2, #33	; 0x21
+ 800165c:	f883 21b0 	strb.w	r2, [r3, #432]	; 0x1b0
 	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
- 8001664:	68bb      	ldr	r3, [r7, #8]
- 8001666:	3301      	adds	r3, #1
- 8001668:	60bb      	str	r3, [r7, #8]
- 800166a:	68bb      	ldr	r3, [r7, #8]
- 800166c:	2b02      	cmp	r3, #2
- 800166e:	d98f      	bls.n	8001590 <present_and_finish+0x30>
+ 8001660:	68bb      	ldr	r3, [r7, #8]
+ 8001662:	3301      	adds	r3, #1
+ 8001664:	60bb      	str	r3, [r7, #8]
+ 8001666:	68bb      	ldr	r3, [r7, #8]
+ 8001668:	2b02      	cmp	r3, #2
+ 800166a:	d98f      	bls.n	800158c <present_and_finish+0x30>
 		}
 	}
 
 	gen->message[messageLength-2]='\n';//two last characters
- 8001670:	683b      	ldr	r3, [r7, #0]
- 8001672:	220a      	movs	r2, #10
- 8001674:	f883 21b6 	strb.w	r2, [r3, #438]	; 0x1b6
+ 800166c:	683b      	ldr	r3, [r7, #0]
+ 800166e:	220a      	movs	r2, #10
+ 8001670:	f883 21b6 	strb.w	r2, [r3, #438]	; 0x1b6
 	gen->message[messageLength-1]='\r';
- 8001678:	683b      	ldr	r3, [r7, #0]
- 800167a:	220d      	movs	r2, #13
- 800167c:	f883 21b7 	strb.w	r2, [r3, #439]	; 0x1b7
+ 8001674:	683b      	ldr	r3, [r7, #0]
+ 8001676:	220d      	movs	r2, #13
+ 8001678:	f883 21b7 	strb.w	r2, [r3, #439]	; 0x1b7
 
 #ifdef TESTuart
 	HAL_UART_Transmit(&huart2, (const uint8_t *)&general.message, messageLength,100);
- 8001680:	2364      	movs	r3, #100	; 0x64
- 8001682:	2208      	movs	r2, #8
- 8001684:	4905      	ldr	r1, [pc, #20]	; (800169c <present_and_finish+0x13c>)
- 8001686:	4806      	ldr	r0, [pc, #24]	; (80016a0 <present_and_finish+0x140>)
- 8001688:	f003 fe8f 	bl	80053aa <HAL_UART_Transmit>
+ 800167c:	2364      	movs	r3, #100	; 0x64
+ 800167e:	2208      	movs	r2, #8
+ 8001680:	4905      	ldr	r1, [pc, #20]	; (8001698 <present_and_finish+0x13c>)
+ 8001682:	4806      	ldr	r0, [pc, #24]	; (800169c <present_and_finish+0x140>)
+ 8001684:	f003 fe91 	bl	80053aa <HAL_UART_Transmit>
 #endif
 
 	*state=detection_DISABLED;
- 800168c:	687b      	ldr	r3, [r7, #4]
- 800168e:	2200      	movs	r2, #0
- 8001690:	701a      	strb	r2, [r3, #0]
+ 8001688:	687b      	ldr	r3, [r7, #4]
+ 800168a:	2200      	movs	r2, #0
+ 800168c:	701a      	strb	r2, [r3, #0]
 }
- 8001692:	bf00      	nop
- 8001694:	3710      	adds	r7, #16
- 8001696:	46bd      	mov	sp, r7
- 8001698:	bd80      	pop	{r7, pc}
- 800169a:	bf00      	nop
- 800169c:	200002a0 	.word	0x200002a0
- 80016a0:	20000300 	.word	0x20000300
+ 800168e:	bf00      	nop
+ 8001690:	3710      	adds	r7, #16
+ 8001692:	46bd      	mov	sp, r7
+ 8001694:	bd80      	pop	{r7, pc}
+ 8001696:	bf00      	nop
+ 8001698:	200002a0 	.word	0x200002a0
+ 800169c:	20000300 	.word	0x20000300
 
-080016a4 <fill_buffers>:
+080016a0 <fill_buffers>:
 		hall_pin_info* H1_gpio,
 		hall_pin_info* H2_gpio,
 		hall_pin_info* H3_gpio,
 		volatile float* ADCcurr1,
 		volatile float* ADCcurr2
 		){
- 80016a4:	b480      	push	{r7}
- 80016a6:	b085      	sub	sp, #20
- 80016a8:	af00      	add	r7, sp, #0
- 80016aa:	60f8      	str	r0, [r7, #12]
- 80016ac:	60b9      	str	r1, [r7, #8]
- 80016ae:	607a      	str	r2, [r7, #4]
- 80016b0:	603b      	str	r3, [r7, #0]
+ 80016a0:	b480      	push	{r7}
+ 80016a2:	b085      	sub	sp, #20
+ 80016a4:	af00      	add	r7, sp, #0
+ 80016a6:	60f8      	str	r0, [r7, #12]
+ 80016a8:	60b9      	str	r1, [r7, #8]
+ 80016aa:	607a      	str	r2, [r7, #4]
+ 80016ac:	603b      	str	r3, [r7, #0]
 	gen->currC.two_samples_buffer[1]=gen->currC.two_samples_buffer[0];
 	gen->currC.two_samples_buffer[0]= currentAplusBplusC-*ADCcurr1-*ADCcurr2;
 #endif
 
 #ifdef REAL_PHASES_A_C_calculated_B
 	gen->currA.two_samples_buffer[1]=gen->currA.two_samples_buffer[0];
+ 80016ae:	68fb      	ldr	r3, [r7, #12]
+ 80016b0:	685a      	ldr	r2, [r3, #4]
  80016b2:	68fb      	ldr	r3, [r7, #12]
- 80016b4:	685a      	ldr	r2, [r3, #4]
- 80016b6:	68fb      	ldr	r3, [r7, #12]
- 80016b8:	609a      	str	r2, [r3, #8]
+ 80016b4:	609a      	str	r2, [r3, #8]
 	gen->currA.two_samples_buffer[0]= *ADCcurr1;
- 80016ba:	69bb      	ldr	r3, [r7, #24]
- 80016bc:	681a      	ldr	r2, [r3, #0]
- 80016be:	68fb      	ldr	r3, [r7, #12]
- 80016c0:	605a      	str	r2, [r3, #4]
+ 80016b6:	69bb      	ldr	r3, [r7, #24]
+ 80016b8:	681a      	ldr	r2, [r3, #0]
+ 80016ba:	68fb      	ldr	r3, [r7, #12]
+ 80016bc:	605a      	str	r2, [r3, #4]
 	//b=-a-c, NO REAL MEASUREMENT OF CURRENT B, assuming ABC currents ortogonality:
 	gen->currB.two_samples_buffer[1]=gen->currB.two_samples_buffer[0];
+ 80016be:	68fb      	ldr	r3, [r7, #12]
+ 80016c0:	6b1a      	ldr	r2, [r3, #48]	; 0x30
  80016c2:	68fb      	ldr	r3, [r7, #12]
- 80016c4:	6b1a      	ldr	r2, [r3, #48]	; 0x30
- 80016c6:	68fb      	ldr	r3, [r7, #12]
- 80016c8:	635a      	str	r2, [r3, #52]	; 0x34
+ 80016c4:	635a      	str	r2, [r3, #52]	; 0x34
 	gen->currB.two_samples_buffer[0]= -*ADCcurr1-*ADCcurr2;
- 80016ca:	69bb      	ldr	r3, [r7, #24]
- 80016cc:	edd3 7a00 	vldr	s15, [r3]
- 80016d0:	eeb1 7a67 	vneg.f32	s14, s15
- 80016d4:	69fb      	ldr	r3, [r7, #28]
- 80016d6:	edd3 7a00 	vldr	s15, [r3]
- 80016da:	ee77 7a67 	vsub.f32	s15, s14, s15
- 80016de:	68fb      	ldr	r3, [r7, #12]
- 80016e0:	edc3 7a0c 	vstr	s15, [r3, #48]	; 0x30
+ 80016c6:	69bb      	ldr	r3, [r7, #24]
+ 80016c8:	edd3 7a00 	vldr	s15, [r3]
+ 80016cc:	eeb1 7a67 	vneg.f32	s14, s15
+ 80016d0:	69fb      	ldr	r3, [r7, #28]
+ 80016d2:	edd3 7a00 	vldr	s15, [r3]
+ 80016d6:	ee77 7a67 	vsub.f32	s15, s14, s15
+ 80016da:	68fb      	ldr	r3, [r7, #12]
+ 80016dc:	edc3 7a0c 	vstr	s15, [r3, #48]	; 0x30
 
 	gen->currC.two_samples_buffer[1]=gen->currC.two_samples_buffer[0];
+ 80016e0:	68fb      	ldr	r3, [r7, #12]
+ 80016e2:	6dda      	ldr	r2, [r3, #92]	; 0x5c
  80016e4:	68fb      	ldr	r3, [r7, #12]
- 80016e6:	6dda      	ldr	r2, [r3, #92]	; 0x5c
- 80016e8:	68fb      	ldr	r3, [r7, #12]
- 80016ea:	661a      	str	r2, [r3, #96]	; 0x60
+ 80016e6:	661a      	str	r2, [r3, #96]	; 0x60
 	gen->currC.two_samples_buffer[0]= *ADCcurr2;
- 80016ec:	69fb      	ldr	r3, [r7, #28]
- 80016ee:	681a      	ldr	r2, [r3, #0]
- 80016f0:	68fb      	ldr	r3, [r7, #12]
- 80016f2:	65da      	str	r2, [r3, #92]	; 0x5c
+ 80016e8:	69fb      	ldr	r3, [r7, #28]
+ 80016ea:	681a      	ldr	r2, [r3, #0]
+ 80016ec:	68fb      	ldr	r3, [r7, #12]
+ 80016ee:	65da      	str	r2, [r3, #92]	; 0x5c
 	gen->currC.two_samples_buffer[1]=gen->currC.two_samples_buffer[0];
 	gen->currC.two_samples_buffer[0]= *ADCcurr2;
 #endif
 
 
 	gen->hallA.two_samples_buffer[1]=gen->hallA.two_samples_buffer[0];
- 80016f4:	68fb      	ldr	r3, [r7, #12]
- 80016f6:	f893 3088 	ldrb.w	r3, [r3, #136]	; 0x88
- 80016fa:	b2da      	uxtb	r2, r3
- 80016fc:	68fb      	ldr	r3, [r7, #12]
- 80016fe:	f883 2089 	strb.w	r2, [r3, #137]	; 0x89
+ 80016f0:	68fb      	ldr	r3, [r7, #12]
+ 80016f2:	f893 3088 	ldrb.w	r3, [r3, #136]	; 0x88
+ 80016f6:	b2da      	uxtb	r2, r3
+ 80016f8:	68fb      	ldr	r3, [r7, #12]
+ 80016fa:	f883 2089 	strb.w	r2, [r3, #137]	; 0x89
 	gen->hallA.two_samples_buffer[0]= H1_gpio->state;
- 8001702:	68bb      	ldr	r3, [r7, #8]
- 8001704:	79da      	ldrb	r2, [r3, #7]
- 8001706:	68fb      	ldr	r3, [r7, #12]
- 8001708:	f883 2088 	strb.w	r2, [r3, #136]	; 0x88
+ 80016fe:	68bb      	ldr	r3, [r7, #8]
+ 8001700:	79da      	ldrb	r2, [r3, #7]
+ 8001702:	68fb      	ldr	r3, [r7, #12]
+ 8001704:	f883 2088 	strb.w	r2, [r3, #136]	; 0x88
 
 	gen->hallB.two_samples_buffer[1]=gen->hallB.two_samples_buffer[0];
- 800170c:	68fb      	ldr	r3, [r7, #12]
- 800170e:	f893 30b0 	ldrb.w	r3, [r3, #176]	; 0xb0
- 8001712:	b2da      	uxtb	r2, r3
- 8001714:	68fb      	ldr	r3, [r7, #12]
- 8001716:	f883 20b1 	strb.w	r2, [r3, #177]	; 0xb1
+ 8001708:	68fb      	ldr	r3, [r7, #12]
+ 800170a:	f893 30b0 	ldrb.w	r3, [r3, #176]	; 0xb0
+ 800170e:	b2da      	uxtb	r2, r3
+ 8001710:	68fb      	ldr	r3, [r7, #12]
+ 8001712:	f883 20b1 	strb.w	r2, [r3, #177]	; 0xb1
 	gen->hallB.two_samples_buffer[0]= H2_gpio->state;
- 800171a:	687b      	ldr	r3, [r7, #4]
- 800171c:	79da      	ldrb	r2, [r3, #7]
- 800171e:	68fb      	ldr	r3, [r7, #12]
- 8001720:	f883 20b0 	strb.w	r2, [r3, #176]	; 0xb0
+ 8001716:	687b      	ldr	r3, [r7, #4]
+ 8001718:	79da      	ldrb	r2, [r3, #7]
+ 800171a:	68fb      	ldr	r3, [r7, #12]
+ 800171c:	f883 20b0 	strb.w	r2, [r3, #176]	; 0xb0
 
 	gen->hallC.two_samples_buffer[1]=gen->hallC.two_samples_buffer[0];
- 8001724:	68fb      	ldr	r3, [r7, #12]
- 8001726:	f893 30d8 	ldrb.w	r3, [r3, #216]	; 0xd8
- 800172a:	b2da      	uxtb	r2, r3
- 800172c:	68fb      	ldr	r3, [r7, #12]
- 800172e:	f883 20d9 	strb.w	r2, [r3, #217]	; 0xd9
+ 8001720:	68fb      	ldr	r3, [r7, #12]
+ 8001722:	f893 30d8 	ldrb.w	r3, [r3, #216]	; 0xd8
+ 8001726:	b2da      	uxtb	r2, r3
+ 8001728:	68fb      	ldr	r3, [r7, #12]
+ 800172a:	f883 20d9 	strb.w	r2, [r3, #217]	; 0xd9
 	gen->hallC.two_samples_buffer[0]= H3_gpio->state;
- 8001732:	683b      	ldr	r3, [r7, #0]
- 8001734:	79da      	ldrb	r2, [r3, #7]
- 8001736:	68fb      	ldr	r3, [r7, #12]
- 8001738:	f883 20d8 	strb.w	r2, [r3, #216]	; 0xd8
+ 800172e:	683b      	ldr	r3, [r7, #0]
+ 8001730:	79da      	ldrb	r2, [r3, #7]
+ 8001732:	68fb      	ldr	r3, [r7, #12]
+ 8001734:	f883 20d8 	strb.w	r2, [r3, #216]	; 0xd8
 }
- 800173c:	bf00      	nop
- 800173e:	3714      	adds	r7, #20
- 8001740:	46bd      	mov	sp, r7
- 8001742:	f85d 7b04 	ldr.w	r7, [sp], #4
- 8001746:	4770      	bx	lr
+ 8001738:	bf00      	nop
+ 800173a:	3714      	adds	r7, #20
+ 800173c:	46bd      	mov	sp, r7
+ 800173e:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8001742:	4770      	bx	lr
 
-08001748 <detect_N_zerocrossings>:
-
+08001744 <detect_N_zerocrossings>:
 /**
-* \brief
-* \param
+* \brief reading the buffers we just filled detects if a zero crossing happened in between them, it has a low pass filter just in case spurious stuff happens, once all zerocrossings are filled it signals done detecting
+* \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
+* \return YES//done detecting or NO//still ongoing
 */
 detection_YES_NO detect_N_zerocrossings(hall_detection_general_struct *gen,uint32_t N){
- 8001748:	b580      	push	{r7, lr}
- 800174a:	b082      	sub	sp, #8
- 800174c:	af00      	add	r7, sp, #0
- 800174e:	6078      	str	r0, [r7, #4]
- 8001750:	6039      	str	r1, [r7, #0]
+ 8001744:	b580      	push	{r7, lr}
+ 8001746:	b082      	sub	sp, #8
+ 8001748:	af00      	add	r7, sp, #0
+ 800174a:	6078      	str	r0, [r7, #4]
+ 800174c:	6039      	str	r1, [r7, #0]
 	if((ticks-general.start_adquisition_ticks)>2){ //skip the first two samples to fill the buffers
- 8001752:	4b39      	ldr	r3, [pc, #228]	; (8001838 <detect_N_zerocrossings+0xf0>)
- 8001754:	681a      	ldr	r2, [r3, #0]
- 8001756:	4b39      	ldr	r3, [pc, #228]	; (800183c <detect_N_zerocrossings+0xf4>)
- 8001758:	681b      	ldr	r3, [r3, #0]
- 800175a:	1ad3      	subs	r3, r2, r3
- 800175c:	2b02      	cmp	r3, #2
- 800175e:	d941      	bls.n	80017e4 <detect_N_zerocrossings+0x9c>
+ 800174e:	4b39      	ldr	r3, [pc, #228]	; (8001834 <detect_N_zerocrossings+0xf0>)
+ 8001750:	681a      	ldr	r2, [r3, #0]
+ 8001752:	4b39      	ldr	r3, [pc, #228]	; (8001838 <detect_N_zerocrossings+0xf4>)
+ 8001754:	681b      	ldr	r3, [r3, #0]
+ 8001756:	1ad3      	subs	r3, r2, r3
+ 8001758:	2b02      	cmp	r3, #2
+ 800175a:	d941      	bls.n	80017e0 <detect_N_zerocrossings+0x9c>
 		detect_N_current_zerocrossings((ticks-general.start_adquisition_ticks),&gen->currA,MAXZEROCROSSINGS);
- 8001760:	4b35      	ldr	r3, [pc, #212]	; (8001838 <detect_N_zerocrossings+0xf0>)
- 8001762:	681a      	ldr	r2, [r3, #0]
- 8001764:	4b35      	ldr	r3, [pc, #212]	; (800183c <detect_N_zerocrossings+0xf4>)
- 8001766:	681b      	ldr	r3, [r3, #0]
- 8001768:	1ad0      	subs	r0, r2, r3
- 800176a:	687b      	ldr	r3, [r7, #4]
- 800176c:	3304      	adds	r3, #4
- 800176e:	2206      	movs	r2, #6
- 8001770:	4619      	mov	r1, r3
- 8001772:	f000 f865 	bl	8001840 <detect_N_current_zerocrossings>
+ 800175c:	4b35      	ldr	r3, [pc, #212]	; (8001834 <detect_N_zerocrossings+0xf0>)
+ 800175e:	681a      	ldr	r2, [r3, #0]
+ 8001760:	4b35      	ldr	r3, [pc, #212]	; (8001838 <detect_N_zerocrossings+0xf4>)
+ 8001762:	681b      	ldr	r3, [r3, #0]
+ 8001764:	1ad0      	subs	r0, r2, r3
+ 8001766:	687b      	ldr	r3, [r7, #4]
+ 8001768:	3304      	adds	r3, #4
+ 800176a:	2206      	movs	r2, #6
+ 800176c:	4619      	mov	r1, r3
+ 800176e:	f000 f865 	bl	800183c <detect_N_current_zerocrossings>
 		detect_N_current_zerocrossings((ticks-general.start_adquisition_ticks),&gen->currB,MAXZEROCROSSINGS);
- 8001776:	4b30      	ldr	r3, [pc, #192]	; (8001838 <detect_N_zerocrossings+0xf0>)
- 8001778:	681a      	ldr	r2, [r3, #0]
- 800177a:	4b30      	ldr	r3, [pc, #192]	; (800183c <detect_N_zerocrossings+0xf4>)
- 800177c:	681b      	ldr	r3, [r3, #0]
- 800177e:	1ad0      	subs	r0, r2, r3
- 8001780:	687b      	ldr	r3, [r7, #4]
- 8001782:	3330      	adds	r3, #48	; 0x30
- 8001784:	2206      	movs	r2, #6
- 8001786:	4619      	mov	r1, r3
- 8001788:	f000 f85a 	bl	8001840 <detect_N_current_zerocrossings>
+ 8001772:	4b30      	ldr	r3, [pc, #192]	; (8001834 <detect_N_zerocrossings+0xf0>)
+ 8001774:	681a      	ldr	r2, [r3, #0]
+ 8001776:	4b30      	ldr	r3, [pc, #192]	; (8001838 <detect_N_zerocrossings+0xf4>)
+ 8001778:	681b      	ldr	r3, [r3, #0]
+ 800177a:	1ad0      	subs	r0, r2, r3
+ 800177c:	687b      	ldr	r3, [r7, #4]
+ 800177e:	3330      	adds	r3, #48	; 0x30
+ 8001780:	2206      	movs	r2, #6
+ 8001782:	4619      	mov	r1, r3
+ 8001784:	f000 f85a 	bl	800183c <detect_N_current_zerocrossings>
 		detect_N_current_zerocrossings((ticks-general.start_adquisition_ticks),&gen->currC,MAXZEROCROSSINGS);
- 800178c:	4b2a      	ldr	r3, [pc, #168]	; (8001838 <detect_N_zerocrossings+0xf0>)
- 800178e:	681a      	ldr	r2, [r3, #0]
- 8001790:	4b2a      	ldr	r3, [pc, #168]	; (800183c <detect_N_zerocrossings+0xf4>)
- 8001792:	681b      	ldr	r3, [r3, #0]
- 8001794:	1ad0      	subs	r0, r2, r3
- 8001796:	687b      	ldr	r3, [r7, #4]
- 8001798:	335c      	adds	r3, #92	; 0x5c
- 800179a:	2206      	movs	r2, #6
- 800179c:	4619      	mov	r1, r3
- 800179e:	f000 f84f 	bl	8001840 <detect_N_current_zerocrossings>
+ 8001788:	4b2a      	ldr	r3, [pc, #168]	; (8001834 <detect_N_zerocrossings+0xf0>)
+ 800178a:	681a      	ldr	r2, [r3, #0]
+ 800178c:	4b2a      	ldr	r3, [pc, #168]	; (8001838 <detect_N_zerocrossings+0xf4>)
+ 800178e:	681b      	ldr	r3, [r3, #0]
+ 8001790:	1ad0      	subs	r0, r2, r3
+ 8001792:	687b      	ldr	r3, [r7, #4]
+ 8001794:	335c      	adds	r3, #92	; 0x5c
+ 8001796:	2206      	movs	r2, #6
+ 8001798:	4619      	mov	r1, r3
+ 800179a:	f000 f84f 	bl	800183c <detect_N_current_zerocrossings>
 		detect_N_hall_zerocrossings	((ticks-general.start_adquisition_ticks),&gen->hallA,MAXZEROCROSSINGS);
- 80017a2:	4b25      	ldr	r3, [pc, #148]	; (8001838 <detect_N_zerocrossings+0xf0>)
- 80017a4:	681a      	ldr	r2, [r3, #0]
- 80017a6:	4b25      	ldr	r3, [pc, #148]	; (800183c <detect_N_zerocrossings+0xf4>)
- 80017a8:	681b      	ldr	r3, [r3, #0]
- 80017aa:	1ad0      	subs	r0, r2, r3
- 80017ac:	687b      	ldr	r3, [r7, #4]
- 80017ae:	3388      	adds	r3, #136	; 0x88
- 80017b0:	2206      	movs	r2, #6
- 80017b2:	4619      	mov	r1, r3
- 80017b4:	f000 f8bf 	bl	8001936 <detect_N_hall_zerocrossings>
+ 800179e:	4b25      	ldr	r3, [pc, #148]	; (8001834 <detect_N_zerocrossings+0xf0>)
+ 80017a0:	681a      	ldr	r2, [r3, #0]
+ 80017a2:	4b25      	ldr	r3, [pc, #148]	; (8001838 <detect_N_zerocrossings+0xf4>)
+ 80017a4:	681b      	ldr	r3, [r3, #0]
+ 80017a6:	1ad0      	subs	r0, r2, r3
+ 80017a8:	687b      	ldr	r3, [r7, #4]
+ 80017aa:	3388      	adds	r3, #136	; 0x88
+ 80017ac:	2206      	movs	r2, #6
+ 80017ae:	4619      	mov	r1, r3
+ 80017b0:	f000 f8bf 	bl	8001932 <detect_N_hall_zerocrossings>
 		detect_N_hall_zerocrossings	((ticks-general.start_adquisition_ticks),&gen->hallB,MAXZEROCROSSINGS);
- 80017b8:	4b1f      	ldr	r3, [pc, #124]	; (8001838 <detect_N_zerocrossings+0xf0>)
- 80017ba:	681a      	ldr	r2, [r3, #0]
- 80017bc:	4b1f      	ldr	r3, [pc, #124]	; (800183c <detect_N_zerocrossings+0xf4>)
- 80017be:	681b      	ldr	r3, [r3, #0]
- 80017c0:	1ad0      	subs	r0, r2, r3
- 80017c2:	687b      	ldr	r3, [r7, #4]
- 80017c4:	33b0      	adds	r3, #176	; 0xb0
- 80017c6:	2206      	movs	r2, #6
- 80017c8:	4619      	mov	r1, r3
- 80017ca:	f000 f8b4 	bl	8001936 <detect_N_hall_zerocrossings>
+ 80017b4:	4b1f      	ldr	r3, [pc, #124]	; (8001834 <detect_N_zerocrossings+0xf0>)
+ 80017b6:	681a      	ldr	r2, [r3, #0]
+ 80017b8:	4b1f      	ldr	r3, [pc, #124]	; (8001838 <detect_N_zerocrossings+0xf4>)
+ 80017ba:	681b      	ldr	r3, [r3, #0]
+ 80017bc:	1ad0      	subs	r0, r2, r3
+ 80017be:	687b      	ldr	r3, [r7, #4]
+ 80017c0:	33b0      	adds	r3, #176	; 0xb0
+ 80017c2:	2206      	movs	r2, #6
+ 80017c4:	4619      	mov	r1, r3
+ 80017c6:	f000 f8b4 	bl	8001932 <detect_N_hall_zerocrossings>
 		detect_N_hall_zerocrossings	((ticks-general.start_adquisition_ticks),&gen->hallC,MAXZEROCROSSINGS);
- 80017ce:	4b1a      	ldr	r3, [pc, #104]	; (8001838 <detect_N_zerocrossings+0xf0>)
- 80017d0:	681a      	ldr	r2, [r3, #0]
- 80017d2:	4b1a      	ldr	r3, [pc, #104]	; (800183c <detect_N_zerocrossings+0xf4>)
- 80017d4:	681b      	ldr	r3, [r3, #0]
- 80017d6:	1ad0      	subs	r0, r2, r3
- 80017d8:	687b      	ldr	r3, [r7, #4]
- 80017da:	33d8      	adds	r3, #216	; 0xd8
- 80017dc:	2206      	movs	r2, #6
- 80017de:	4619      	mov	r1, r3
- 80017e0:	f000 f8a9 	bl	8001936 <detect_N_hall_zerocrossings>
+ 80017ca:	4b1a      	ldr	r3, [pc, #104]	; (8001834 <detect_N_zerocrossings+0xf0>)
+ 80017cc:	681a      	ldr	r2, [r3, #0]
+ 80017ce:	4b1a      	ldr	r3, [pc, #104]	; (8001838 <detect_N_zerocrossings+0xf4>)
+ 80017d0:	681b      	ldr	r3, [r3, #0]
+ 80017d2:	1ad0      	subs	r0, r2, r3
+ 80017d4:	687b      	ldr	r3, [r7, #4]
+ 80017d6:	33d8      	adds	r3, #216	; 0xd8
+ 80017d8:	2206      	movs	r2, #6
+ 80017da:	4619      	mov	r1, r3
+ 80017dc:	f000 f8a9 	bl	8001932 <detect_N_hall_zerocrossings>
 	}
 	if(//if all buffers are full
 			(gen->currA.numberof_zerocrossings>=N) &&
- 80017e4:	687b      	ldr	r3, [r7, #4]
- 80017e6:	6adb      	ldr	r3, [r3, #44]	; 0x2c
+ 80017e0:	687b      	ldr	r3, [r7, #4]
+ 80017e2:	6adb      	ldr	r3, [r3, #44]	; 0x2c
 	if(//if all buffers are full
- 80017e8:	683a      	ldr	r2, [r7, #0]
- 80017ea:	429a      	cmp	r2, r3
- 80017ec:	d81e      	bhi.n	800182c <detect_N_zerocrossings+0xe4>
+ 80017e4:	683a      	ldr	r2, [r7, #0]
+ 80017e6:	429a      	cmp	r2, r3
+ 80017e8:	d81e      	bhi.n	8001828 <detect_N_zerocrossings+0xe4>
 			(gen->currB.numberof_zerocrossings>=N) &&
- 80017ee:	687b      	ldr	r3, [r7, #4]
- 80017f0:	6d9b      	ldr	r3, [r3, #88]	; 0x58
+ 80017ea:	687b      	ldr	r3, [r7, #4]
+ 80017ec:	6d9b      	ldr	r3, [r3, #88]	; 0x58
 			(gen->currA.numberof_zerocrossings>=N) &&
- 80017f2:	683a      	ldr	r2, [r7, #0]
- 80017f4:	429a      	cmp	r2, r3
- 80017f6:	d819      	bhi.n	800182c <detect_N_zerocrossings+0xe4>
+ 80017ee:	683a      	ldr	r2, [r7, #0]
+ 80017f0:	429a      	cmp	r2, r3
+ 80017f2:	d819      	bhi.n	8001828 <detect_N_zerocrossings+0xe4>
 			(gen->currC.numberof_zerocrossings>=N) &&
- 80017f8:	687b      	ldr	r3, [r7, #4]
- 80017fa:	f8d3 3084 	ldr.w	r3, [r3, #132]	; 0x84
+ 80017f4:	687b      	ldr	r3, [r7, #4]
+ 80017f6:	f8d3 3084 	ldr.w	r3, [r3, #132]	; 0x84
 			(gen->currB.numberof_zerocrossings>=N) &&
- 80017fe:	683a      	ldr	r2, [r7, #0]
- 8001800:	429a      	cmp	r2, r3
- 8001802:	d813      	bhi.n	800182c <detect_N_zerocrossings+0xe4>
+ 80017fa:	683a      	ldr	r2, [r7, #0]
+ 80017fc:	429a      	cmp	r2, r3
+ 80017fe:	d813      	bhi.n	8001828 <detect_N_zerocrossings+0xe4>
 			(gen->hallA.numberof_zerocrossings>=N) &&
- 8001804:	687b      	ldr	r3, [r7, #4]
- 8001806:	f8d3 30ac 	ldr.w	r3, [r3, #172]	; 0xac
+ 8001800:	687b      	ldr	r3, [r7, #4]
+ 8001802:	f8d3 30ac 	ldr.w	r3, [r3, #172]	; 0xac
 			(gen->currC.numberof_zerocrossings>=N) &&
- 800180a:	683a      	ldr	r2, [r7, #0]
- 800180c:	429a      	cmp	r2, r3
- 800180e:	d80d      	bhi.n	800182c <detect_N_zerocrossings+0xe4>
+ 8001806:	683a      	ldr	r2, [r7, #0]
+ 8001808:	429a      	cmp	r2, r3
+ 800180a:	d80d      	bhi.n	8001828 <detect_N_zerocrossings+0xe4>
 			(gen->hallB.numberof_zerocrossings>=N) &&
- 8001810:	687b      	ldr	r3, [r7, #4]
- 8001812:	f8d3 30d4 	ldr.w	r3, [r3, #212]	; 0xd4
+ 800180c:	687b      	ldr	r3, [r7, #4]
+ 800180e:	f8d3 30d4 	ldr.w	r3, [r3, #212]	; 0xd4
 			(gen->hallA.numberof_zerocrossings>=N) &&
- 8001816:	683a      	ldr	r2, [r7, #0]
- 8001818:	429a      	cmp	r2, r3
- 800181a:	d807      	bhi.n	800182c <detect_N_zerocrossings+0xe4>
+ 8001812:	683a      	ldr	r2, [r7, #0]
+ 8001814:	429a      	cmp	r2, r3
+ 8001816:	d807      	bhi.n	8001828 <detect_N_zerocrossings+0xe4>
 			(gen->hallC.numberof_zerocrossings>=N)
- 800181c:	687b      	ldr	r3, [r7, #4]
- 800181e:	f8d3 30fc 	ldr.w	r3, [r3, #252]	; 0xfc
+ 8001818:	687b      	ldr	r3, [r7, #4]
+ 800181a:	f8d3 30fc 	ldr.w	r3, [r3, #252]	; 0xfc
 			(gen->hallB.numberof_zerocrossings>=N) &&
- 8001822:	683a      	ldr	r2, [r7, #0]
- 8001824:	429a      	cmp	r2, r3
- 8001826:	d801      	bhi.n	800182c <detect_N_zerocrossings+0xe4>
+ 800181e:	683a      	ldr	r2, [r7, #0]
+ 8001820:	429a      	cmp	r2, r3
+ 8001822:	d801      	bhi.n	8001828 <detect_N_zerocrossings+0xe4>
 			){
 		return YES;//done detecting
- 8001828:	2301      	movs	r3, #1
- 800182a:	e000      	b.n	800182e <detect_N_zerocrossings+0xe6>
+ 8001824:	2301      	movs	r3, #1
+ 8001826:	e000      	b.n	800182a <detect_N_zerocrossings+0xe6>
 	}else{
 		return NO;//still ongoing
- 800182c:	2300      	movs	r3, #0
+ 8001828:	2300      	movs	r3, #0
 	}
 }
- 800182e:	4618      	mov	r0, r3
- 8001830:	3708      	adds	r7, #8
- 8001832:	46bd      	mov	sp, r7
- 8001834:	bd80      	pop	{r7, pc}
- 8001836:	bf00      	nop
- 8001838:	200000e8 	.word	0x200000e8
- 800183c:	200000f0 	.word	0x200000f0
+ 800182a:	4618      	mov	r0, r3
+ 800182c:	3708      	adds	r7, #8
+ 800182e:	46bd      	mov	sp, r7
+ 8001830:	bd80      	pop	{r7, pc}
+ 8001832:	bf00      	nop
+ 8001834:	200000e8 	.word	0x200000e8
+ 8001838:	200000f0 	.word	0x200000f0
 
-08001840 <detect_N_current_zerocrossings>:
+0800183c <detect_N_current_zerocrossings>:
 
 /**
-* \brief
-* \param
+* \brief reading the current buffers detects 0 crossings and takes notes of the tick number.
+* \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
 */
 void detect_N_current_zerocrossings(uint32_t ticks,current_or_hall_measurements_struct* currx,uint32_t N){
- 8001840:	b480      	push	{r7}
- 8001842:	b085      	sub	sp, #20
- 8001844:	af00      	add	r7, sp, #0
- 8001846:	60f8      	str	r0, [r7, #12]
- 8001848:	60b9      	str	r1, [r7, #8]
- 800184a:	607a      	str	r2, [r7, #4]
+ 800183c:	b480      	push	{r7}
+ 800183e:	b085      	sub	sp, #20
+ 8001840:	af00      	add	r7, sp, #0
+ 8001842:	60f8      	str	r0, [r7, #12]
+ 8001844:	60b9      	str	r1, [r7, #8]
+ 8001846:	607a      	str	r2, [r7, #4]
 	if(	   (((currx->two_samples_buffer[0]-currentADCoffset)*
- 800184c:	68bb      	ldr	r3, [r7, #8]
- 800184e:	ed93 7a00 	vldr	s14, [r3]
+ 8001848:	68bb      	ldr	r3, [r7, #8]
+ 800184a:	ed93 7a00 	vldr	s14, [r3]
 			 (currx->two_samples_buffer[1]-currentADCoffset))<=0)
- 8001852:	68bb      	ldr	r3, [r7, #8]
- 8001854:	edd3 7a01 	vldr	s15, [r3, #4]
+ 800184e:	68bb      	ldr	r3, [r7, #8]
+ 8001850:	edd3 7a01 	vldr	s15, [r3, #4]
 	if(	   (((currx->two_samples_buffer[0]-currentADCoffset)*
- 8001858:	ee67 7a27 	vmul.f32	s15, s14, s15
- 800185c:	eef5 7ac0 	vcmpe.f32	s15, #0.0
- 8001860:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
- 8001864:	d900      	bls.n	8001868 <detect_N_current_zerocrossings+0x28>
+ 8001854:	ee67 7a27 	vmul.f32	s15, s14, s15
+ 8001858:	eef5 7ac0 	vcmpe.f32	s15, #0.0
+ 800185c:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
+ 8001860:	d900      	bls.n	8001864 <detect_N_current_zerocrossings+0x28>
 					}
 					currx->numberof_zerocrossings++;
 			}
 		}
 	}
 }
- 8001866:	e060      	b.n	800192a <detect_N_current_zerocrossings+0xea>
+ 8001862:	e060      	b.n	8001926 <detect_N_current_zerocrossings+0xea>
 			 && currx->numberof_zerocrossings<N
- 8001868:	68bb      	ldr	r3, [r7, #8]
- 800186a:	6a9b      	ldr	r3, [r3, #40]	; 0x28
- 800186c:	687a      	ldr	r2, [r7, #4]
- 800186e:	429a      	cmp	r2, r3
- 8001870:	d95b      	bls.n	800192a <detect_N_current_zerocrossings+0xea>
+ 8001864:	68bb      	ldr	r3, [r7, #8]
+ 8001866:	6a9b      	ldr	r3, [r3, #40]	; 0x28
+ 8001868:	687a      	ldr	r2, [r7, #4]
+ 800186a:	429a      	cmp	r2, r3
+ 800186c:	d95b      	bls.n	8001926 <detect_N_current_zerocrossings+0xea>
 		if(currx->numberof_zerocrossings==0){			//only if this is the first zerocrossing detected
- 8001872:	68bb      	ldr	r3, [r7, #8]
- 8001874:	6a9b      	ldr	r3, [r3, #40]	; 0x28
- 8001876:	2b00      	cmp	r3, #0
- 8001878:	d126      	bne.n	80018c8 <detect_N_current_zerocrossings+0x88>
+ 800186e:	68bb      	ldr	r3, [r7, #8]
+ 8001870:	6a9b      	ldr	r3, [r3, #40]	; 0x28
+ 8001872:	2b00      	cmp	r3, #0
+ 8001874:	d126      	bne.n	80018c4 <detect_N_current_zerocrossings+0x88>
 					currx->zerocrossings_tick[currx->numberof_zerocrossings]=ticks;
+ 8001876:	68bb      	ldr	r3, [r7, #8]
+ 8001878:	6a9a      	ldr	r2, [r3, #40]	; 0x28
  800187a:	68bb      	ldr	r3, [r7, #8]
- 800187c:	6a9a      	ldr	r2, [r3, #40]	; 0x28
- 800187e:	68bb      	ldr	r3, [r7, #8]
- 8001880:	3202      	adds	r2, #2
- 8001882:	68f9      	ldr	r1, [r7, #12]
- 8001884:	f843 1022 	str.w	r1, [r3, r2, lsl #2]
+ 800187c:	3202      	adds	r2, #2
+ 800187e:	68f9      	ldr	r1, [r7, #12]
+ 8001880:	f843 1022 	str.w	r1, [r3, r2, lsl #2]
 					if(currx->two_samples_buffer[0]>currx->two_samples_buffer[1]){
- 8001888:	68bb      	ldr	r3, [r7, #8]
- 800188a:	ed93 7a00 	vldr	s14, [r3]
- 800188e:	68bb      	ldr	r3, [r7, #8]
- 8001890:	edd3 7a01 	vldr	s15, [r3, #4]
- 8001894:	eeb4 7ae7 	vcmpe.f32	s14, s15
- 8001898:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
- 800189c:	dd07      	ble.n	80018ae <detect_N_current_zerocrossings+0x6e>
+ 8001884:	68bb      	ldr	r3, [r7, #8]
+ 8001886:	ed93 7a00 	vldr	s14, [r3]
+ 800188a:	68bb      	ldr	r3, [r7, #8]
+ 800188c:	edd3 7a01 	vldr	s15, [r3, #4]
+ 8001890:	eeb4 7ae7 	vcmpe.f32	s14, s15
+ 8001894:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
+ 8001898:	dd07      	ble.n	80018aa <detect_N_current_zerocrossings+0x6e>
 						currx->zerocrossings_polarity[currx->numberof_zerocrossings]=rising_polarity;
- 800189e:	68bb      	ldr	r3, [r7, #8]
- 80018a0:	6a9b      	ldr	r3, [r3, #40]	; 0x28
- 80018a2:	68ba      	ldr	r2, [r7, #8]
- 80018a4:	4413      	add	r3, r2
- 80018a6:	2200      	movs	r2, #0
- 80018a8:	f883 2020 	strb.w	r2, [r3, #32]
- 80018ac:	e006      	b.n	80018bc <detect_N_current_zerocrossings+0x7c>
+ 800189a:	68bb      	ldr	r3, [r7, #8]
+ 800189c:	6a9b      	ldr	r3, [r3, #40]	; 0x28
+ 800189e:	68ba      	ldr	r2, [r7, #8]
+ 80018a0:	4413      	add	r3, r2
+ 80018a2:	2200      	movs	r2, #0
+ 80018a4:	f883 2020 	strb.w	r2, [r3, #32]
+ 80018a8:	e006      	b.n	80018b8 <detect_N_current_zerocrossings+0x7c>
 						currx->zerocrossings_polarity[currx->numberof_zerocrossings]=falling_polarity;
- 80018ae:	68bb      	ldr	r3, [r7, #8]
- 80018b0:	6a9b      	ldr	r3, [r3, #40]	; 0x28
- 80018b2:	68ba      	ldr	r2, [r7, #8]
- 80018b4:	4413      	add	r3, r2
- 80018b6:	2201      	movs	r2, #1
- 80018b8:	f883 2020 	strb.w	r2, [r3, #32]
+ 80018aa:	68bb      	ldr	r3, [r7, #8]
+ 80018ac:	6a9b      	ldr	r3, [r3, #40]	; 0x28
+ 80018ae:	68ba      	ldr	r2, [r7, #8]
+ 80018b0:	4413      	add	r3, r2
+ 80018b2:	2201      	movs	r2, #1
+ 80018b4:	f883 2020 	strb.w	r2, [r3, #32]
 					currx->numberof_zerocrossings++;
- 80018bc:	68bb      	ldr	r3, [r7, #8]
- 80018be:	6a9b      	ldr	r3, [r3, #40]	; 0x28
- 80018c0:	1c5a      	adds	r2, r3, #1
- 80018c2:	68bb      	ldr	r3, [r7, #8]
- 80018c4:	629a      	str	r2, [r3, #40]	; 0x28
+ 80018b8:	68bb      	ldr	r3, [r7, #8]
+ 80018ba:	6a9b      	ldr	r3, [r3, #40]	; 0x28
+ 80018bc:	1c5a      	adds	r2, r3, #1
+ 80018be:	68bb      	ldr	r3, [r7, #8]
+ 80018c0:	629a      	str	r2, [r3, #40]	; 0x28
 }
- 80018c6:	e030      	b.n	800192a <detect_N_current_zerocrossings+0xea>
+ 80018c2:	e030      	b.n	8001926 <detect_N_current_zerocrossings+0xea>
 			if((int32_t)(ticks-(currx->zerocrossings_tick[currx->numberof_zerocrossings-1]))>lowpassfilter_ticks){ //not the first zerocrossing, compare with the previous one to filter noisy signals
- 80018c8:	68bb      	ldr	r3, [r7, #8]
- 80018ca:	6a9b      	ldr	r3, [r3, #40]	; 0x28
- 80018cc:	1e5a      	subs	r2, r3, #1
- 80018ce:	68bb      	ldr	r3, [r7, #8]
- 80018d0:	3202      	adds	r2, #2
- 80018d2:	f853 3022 	ldr.w	r3, [r3, r2, lsl #2]
- 80018d6:	68fa      	ldr	r2, [r7, #12]
- 80018d8:	1ad3      	subs	r3, r2, r3
- 80018da:	2b0f      	cmp	r3, #15
- 80018dc:	dd25      	ble.n	800192a <detect_N_current_zerocrossings+0xea>
+ 80018c4:	68bb      	ldr	r3, [r7, #8]
+ 80018c6:	6a9b      	ldr	r3, [r3, #40]	; 0x28
+ 80018c8:	1e5a      	subs	r2, r3, #1
+ 80018ca:	68bb      	ldr	r3, [r7, #8]
+ 80018cc:	3202      	adds	r2, #2
+ 80018ce:	f853 3022 	ldr.w	r3, [r3, r2, lsl #2]
+ 80018d2:	68fa      	ldr	r2, [r7, #12]
+ 80018d4:	1ad3      	subs	r3, r2, r3
+ 80018d6:	2b0f      	cmp	r3, #15
+ 80018d8:	dd25      	ble.n	8001926 <detect_N_current_zerocrossings+0xea>
 					currx->zerocrossings_tick[currx->numberof_zerocrossings]=ticks;
+ 80018da:	68bb      	ldr	r3, [r7, #8]
+ 80018dc:	6a9a      	ldr	r2, [r3, #40]	; 0x28
  80018de:	68bb      	ldr	r3, [r7, #8]
- 80018e0:	6a9a      	ldr	r2, [r3, #40]	; 0x28
- 80018e2:	68bb      	ldr	r3, [r7, #8]
- 80018e4:	3202      	adds	r2, #2
- 80018e6:	68f9      	ldr	r1, [r7, #12]
- 80018e8:	f843 1022 	str.w	r1, [r3, r2, lsl #2]
+ 80018e0:	3202      	adds	r2, #2
+ 80018e2:	68f9      	ldr	r1, [r7, #12]
+ 80018e4:	f843 1022 	str.w	r1, [r3, r2, lsl #2]
 					if(currx->two_samples_buffer[0]>currx->two_samples_buffer[1]){
- 80018ec:	68bb      	ldr	r3, [r7, #8]
- 80018ee:	ed93 7a00 	vldr	s14, [r3]
- 80018f2:	68bb      	ldr	r3, [r7, #8]
- 80018f4:	edd3 7a01 	vldr	s15, [r3, #4]
- 80018f8:	eeb4 7ae7 	vcmpe.f32	s14, s15
- 80018fc:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
- 8001900:	dd07      	ble.n	8001912 <detect_N_current_zerocrossings+0xd2>
+ 80018e8:	68bb      	ldr	r3, [r7, #8]
+ 80018ea:	ed93 7a00 	vldr	s14, [r3]
+ 80018ee:	68bb      	ldr	r3, [r7, #8]
+ 80018f0:	edd3 7a01 	vldr	s15, [r3, #4]
+ 80018f4:	eeb4 7ae7 	vcmpe.f32	s14, s15
+ 80018f8:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
+ 80018fc:	dd07      	ble.n	800190e <detect_N_current_zerocrossings+0xd2>
 						currx->zerocrossings_polarity[currx->numberof_zerocrossings]=rising_polarity;
- 8001902:	68bb      	ldr	r3, [r7, #8]
- 8001904:	6a9b      	ldr	r3, [r3, #40]	; 0x28
- 8001906:	68ba      	ldr	r2, [r7, #8]
- 8001908:	4413      	add	r3, r2
- 800190a:	2200      	movs	r2, #0
- 800190c:	f883 2020 	strb.w	r2, [r3, #32]
- 8001910:	e006      	b.n	8001920 <detect_N_current_zerocrossings+0xe0>
+ 80018fe:	68bb      	ldr	r3, [r7, #8]
+ 8001900:	6a9b      	ldr	r3, [r3, #40]	; 0x28
+ 8001902:	68ba      	ldr	r2, [r7, #8]
+ 8001904:	4413      	add	r3, r2
+ 8001906:	2200      	movs	r2, #0
+ 8001908:	f883 2020 	strb.w	r2, [r3, #32]
+ 800190c:	e006      	b.n	800191c <detect_N_current_zerocrossings+0xe0>
 						currx->zerocrossings_polarity[currx->numberof_zerocrossings]=falling_polarity;
- 8001912:	68bb      	ldr	r3, [r7, #8]
- 8001914:	6a9b      	ldr	r3, [r3, #40]	; 0x28
- 8001916:	68ba      	ldr	r2, [r7, #8]
- 8001918:	4413      	add	r3, r2
- 800191a:	2201      	movs	r2, #1
- 800191c:	f883 2020 	strb.w	r2, [r3, #32]
+ 800190e:	68bb      	ldr	r3, [r7, #8]
+ 8001910:	6a9b      	ldr	r3, [r3, #40]	; 0x28
+ 8001912:	68ba      	ldr	r2, [r7, #8]
+ 8001914:	4413      	add	r3, r2
+ 8001916:	2201      	movs	r2, #1
+ 8001918:	f883 2020 	strb.w	r2, [r3, #32]
 					currx->numberof_zerocrossings++;
- 8001920:	68bb      	ldr	r3, [r7, #8]
- 8001922:	6a9b      	ldr	r3, [r3, #40]	; 0x28
- 8001924:	1c5a      	adds	r2, r3, #1
- 8001926:	68bb      	ldr	r3, [r7, #8]
- 8001928:	629a      	str	r2, [r3, #40]	; 0x28
+ 800191c:	68bb      	ldr	r3, [r7, #8]
+ 800191e:	6a9b      	ldr	r3, [r3, #40]	; 0x28
+ 8001920:	1c5a      	adds	r2, r3, #1
+ 8001922:	68bb      	ldr	r3, [r7, #8]
+ 8001924:	629a      	str	r2, [r3, #40]	; 0x28
 }
- 800192a:	bf00      	nop
- 800192c:	3714      	adds	r7, #20
- 800192e:	46bd      	mov	sp, r7
- 8001930:	f85d 7b04 	ldr.w	r7, [sp], #4
- 8001934:	4770      	bx	lr
+ 8001926:	bf00      	nop
+ 8001928:	3714      	adds	r7, #20
+ 800192a:	46bd      	mov	sp, r7
+ 800192c:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8001930:	4770      	bx	lr
 
-08001936 <detect_N_hall_zerocrossings>:
+08001932 <detect_N_hall_zerocrossings>:
 
 /**
-* \brief
-* \param
+* \brief similar to detect_N_current_zerocrossings() reading the hall buffers detects logic changes and notes down the tick number
+* \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
 */
 void detect_N_hall_zerocrossings(uint32_t ticks,hall_measurements_struct* hallx,uint32_t N){
- 8001936:	b480      	push	{r7}
- 8001938:	b085      	sub	sp, #20
- 800193a:	af00      	add	r7, sp, #0
- 800193c:	60f8      	str	r0, [r7, #12]
- 800193e:	60b9      	str	r1, [r7, #8]
- 8001940:	607a      	str	r2, [r7, #4]
+ 8001932:	b480      	push	{r7}
+ 8001934:	b085      	sub	sp, #20
+ 8001936:	af00      	add	r7, sp, #0
+ 8001938:	60f8      	str	r0, [r7, #12]
+ 800193a:	60b9      	str	r1, [r7, #8]
+ 800193c:	607a      	str	r2, [r7, #4]
 	if(hallx->two_samples_buffer[0]!=hallx->two_samples_buffer[1]){
- 8001942:	68bb      	ldr	r3, [r7, #8]
- 8001944:	781b      	ldrb	r3, [r3, #0]
- 8001946:	b2da      	uxtb	r2, r3
- 8001948:	68bb      	ldr	r3, [r7, #8]
- 800194a:	785b      	ldrb	r3, [r3, #1]
- 800194c:	b2db      	uxtb	r3, r3
- 800194e:	429a      	cmp	r2, r3
- 8001950:	d022      	beq.n	8001998 <detect_N_hall_zerocrossings+0x62>
+ 800193e:	68bb      	ldr	r3, [r7, #8]
+ 8001940:	781b      	ldrb	r3, [r3, #0]
+ 8001942:	b2da      	uxtb	r2, r3
+ 8001944:	68bb      	ldr	r3, [r7, #8]
+ 8001946:	785b      	ldrb	r3, [r3, #1]
+ 8001948:	b2db      	uxtb	r3, r3
+ 800194a:	429a      	cmp	r2, r3
+ 800194c:	d022      	beq.n	8001994 <detect_N_hall_zerocrossings+0x62>
 		if(hallx->numberof_zerocrossings<N){
- 8001952:	68bb      	ldr	r3, [r7, #8]
- 8001954:	6a5b      	ldr	r3, [r3, #36]	; 0x24
- 8001956:	687a      	ldr	r2, [r7, #4]
- 8001958:	429a      	cmp	r2, r3
- 800195a:	d91d      	bls.n	8001998 <detect_N_hall_zerocrossings+0x62>
+ 800194e:	68bb      	ldr	r3, [r7, #8]
+ 8001950:	6a5b      	ldr	r3, [r3, #36]	; 0x24
+ 8001952:	687a      	ldr	r2, [r7, #4]
+ 8001954:	429a      	cmp	r2, r3
+ 8001956:	d91d      	bls.n	8001994 <detect_N_hall_zerocrossings+0x62>
 			hallx->zerocrossings_tick[hallx->numberof_zerocrossings]=ticks;
- 800195c:	68bb      	ldr	r3, [r7, #8]
- 800195e:	6a5b      	ldr	r3, [r3, #36]	; 0x24
- 8001960:	68ba      	ldr	r2, [r7, #8]
- 8001962:	009b      	lsls	r3, r3, #2
- 8001964:	4413      	add	r3, r2
- 8001966:	68fa      	ldr	r2, [r7, #12]
- 8001968:	605a      	str	r2, [r3, #4]
+ 8001958:	68bb      	ldr	r3, [r7, #8]
+ 800195a:	6a5b      	ldr	r3, [r3, #36]	; 0x24
+ 800195c:	68ba      	ldr	r2, [r7, #8]
+ 800195e:	009b      	lsls	r3, r3, #2
+ 8001960:	4413      	add	r3, r2
+ 8001962:	68fa      	ldr	r2, [r7, #12]
+ 8001964:	605a      	str	r2, [r3, #4]
 			if(hallx->two_samples_buffer[0]!=0){
- 800196a:	68bb      	ldr	r3, [r7, #8]
- 800196c:	781b      	ldrb	r3, [r3, #0]
- 800196e:	b2db      	uxtb	r3, r3
- 8001970:	2b00      	cmp	r3, #0
- 8001972:	d006      	beq.n	8001982 <detect_N_hall_zerocrossings+0x4c>
+ 8001966:	68bb      	ldr	r3, [r7, #8]
+ 8001968:	781b      	ldrb	r3, [r3, #0]
+ 800196a:	b2db      	uxtb	r3, r3
+ 800196c:	2b00      	cmp	r3, #0
+ 800196e:	d006      	beq.n	800197e <detect_N_hall_zerocrossings+0x4c>
 				hallx->zerocrossings_polarity[hallx->numberof_zerocrossings]=rising_polarity;
- 8001974:	68bb      	ldr	r3, [r7, #8]
- 8001976:	6a5b      	ldr	r3, [r3, #36]	; 0x24
- 8001978:	68ba      	ldr	r2, [r7, #8]
- 800197a:	4413      	add	r3, r2
- 800197c:	2200      	movs	r2, #0
- 800197e:	771a      	strb	r2, [r3, #28]
- 8001980:	e005      	b.n	800198e <detect_N_hall_zerocrossings+0x58>
+ 8001970:	68bb      	ldr	r3, [r7, #8]
+ 8001972:	6a5b      	ldr	r3, [r3, #36]	; 0x24
+ 8001974:	68ba      	ldr	r2, [r7, #8]
+ 8001976:	4413      	add	r3, r2
+ 8001978:	2200      	movs	r2, #0
+ 800197a:	771a      	strb	r2, [r3, #28]
+ 800197c:	e005      	b.n	800198a <detect_N_hall_zerocrossings+0x58>
 			}else{
 				hallx->zerocrossings_polarity[hallx->numberof_zerocrossings]=falling_polarity;
- 8001982:	68bb      	ldr	r3, [r7, #8]
- 8001984:	6a5b      	ldr	r3, [r3, #36]	; 0x24
- 8001986:	68ba      	ldr	r2, [r7, #8]
- 8001988:	4413      	add	r3, r2
- 800198a:	2201      	movs	r2, #1
- 800198c:	771a      	strb	r2, [r3, #28]
+ 800197e:	68bb      	ldr	r3, [r7, #8]
+ 8001980:	6a5b      	ldr	r3, [r3, #36]	; 0x24
+ 8001982:	68ba      	ldr	r2, [r7, #8]
+ 8001984:	4413      	add	r3, r2
+ 8001986:	2201      	movs	r2, #1
+ 8001988:	771a      	strb	r2, [r3, #28]
 			}
 			hallx->numberof_zerocrossings++;
- 800198e:	68bb      	ldr	r3, [r7, #8]
- 8001990:	6a5b      	ldr	r3, [r3, #36]	; 0x24
- 8001992:	1c5a      	adds	r2, r3, #1
- 8001994:	68bb      	ldr	r3, [r7, #8]
- 8001996:	625a      	str	r2, [r3, #36]	; 0x24
+ 800198a:	68bb      	ldr	r3, [r7, #8]
+ 800198c:	6a5b      	ldr	r3, [r3, #36]	; 0x24
+ 800198e:	1c5a      	adds	r2, r3, #1
+ 8001990:	68bb      	ldr	r3, [r7, #8]
+ 8001992:	625a      	str	r2, [r3, #36]	; 0x24
 		}
 	}
 }
- 8001998:	bf00      	nop
- 800199a:	3714      	adds	r7, #20
- 800199c:	46bd      	mov	sp, r7
- 800199e:	f85d 7b04 	ldr.w	r7, [sp], #4
- 80019a2:	4770      	bx	lr
+ 8001994:	bf00      	nop
+ 8001996:	3714      	adds	r7, #20
+ 8001998:	46bd      	mov	sp, r7
+ 800199a:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 800199e:	4770      	bx	lr
 
-080019a4 <calculateElectricPeriod_inTicks>:
-
+080019a0 <calculateElectricPeriod_inTicks>:
 /**
-* \brief
-* \param
+* \brief reading differences between noted ticks zerocrossigns averages our motor electric period
+* \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
+* \param samples number of zerocrossings to be used in the diff calculation
 */
 void calculateElectricPeriod_inTicks(hall_detection_general_struct *gen, uint32_t samples){
- 80019a4:	b480      	push	{r7}
- 80019a6:	b085      	sub	sp, #20
- 80019a8:	af00      	add	r7, sp, #0
- 80019aa:	6078      	str	r0, [r7, #4]
- 80019ac:	6039      	str	r1, [r7, #0]
+ 80019a0:	b480      	push	{r7}
+ 80019a2:	b085      	sub	sp, #20
+ 80019a4:	af00      	add	r7, sp, #0
+ 80019a6:	6078      	str	r0, [r7, #4]
+ 80019a8:	6039      	str	r1, [r7, #0]
 	uint32_t averagedsemiPeriod=0;
+ 80019aa:	2300      	movs	r3, #0
+ 80019ac:	60fb      	str	r3, [r7, #12]
+	for (uint32_t i = 0; i < samples-1; ++i) {
  80019ae:	2300      	movs	r3, #0
- 80019b0:	60fb      	str	r3, [r7, #12]
-	for (uint32_t i = 0; i < samples-1; ++i) {
- 80019b2:	2300      	movs	r3, #0
- 80019b4:	60bb      	str	r3, [r7, #8]
- 80019b6:	e055      	b.n	8001a64 <calculateElectricPeriod_inTicks+0xc0>
+ 80019b0:	60bb      	str	r3, [r7, #8]
+ 80019b2:	e055      	b.n	8001a60 <calculateElectricPeriod_inTicks+0xc0>
 		averagedsemiPeriod+=(gen->currA.zerocrossings_tick[i+1]-gen->currA.zerocrossings_tick[i]);
- 80019b8:	68bb      	ldr	r3, [r7, #8]
- 80019ba:	3301      	adds	r3, #1
- 80019bc:	687a      	ldr	r2, [r7, #4]
- 80019be:	3302      	adds	r3, #2
- 80019c0:	009b      	lsls	r3, r3, #2
- 80019c2:	4413      	add	r3, r2
- 80019c4:	685a      	ldr	r2, [r3, #4]
- 80019c6:	6879      	ldr	r1, [r7, #4]
- 80019c8:	68bb      	ldr	r3, [r7, #8]
- 80019ca:	3302      	adds	r3, #2
- 80019cc:	009b      	lsls	r3, r3, #2
- 80019ce:	440b      	add	r3, r1
- 80019d0:	685b      	ldr	r3, [r3, #4]
- 80019d2:	1ad3      	subs	r3, r2, r3
- 80019d4:	68fa      	ldr	r2, [r7, #12]
- 80019d6:	4413      	add	r3, r2
- 80019d8:	60fb      	str	r3, [r7, #12]
+ 80019b4:	68bb      	ldr	r3, [r7, #8]
+ 80019b6:	3301      	adds	r3, #1
+ 80019b8:	687a      	ldr	r2, [r7, #4]
+ 80019ba:	3302      	adds	r3, #2
+ 80019bc:	009b      	lsls	r3, r3, #2
+ 80019be:	4413      	add	r3, r2
+ 80019c0:	685a      	ldr	r2, [r3, #4]
+ 80019c2:	6879      	ldr	r1, [r7, #4]
+ 80019c4:	68bb      	ldr	r3, [r7, #8]
+ 80019c6:	3302      	adds	r3, #2
+ 80019c8:	009b      	lsls	r3, r3, #2
+ 80019ca:	440b      	add	r3, r1
+ 80019cc:	685b      	ldr	r3, [r3, #4]
+ 80019ce:	1ad3      	subs	r3, r2, r3
+ 80019d0:	68fa      	ldr	r2, [r7, #12]
+ 80019d2:	4413      	add	r3, r2
+ 80019d4:	60fb      	str	r3, [r7, #12]
 		averagedsemiPeriod+=(gen->currB.zerocrossings_tick[i+1]-gen->currB.zerocrossings_tick[i]);
- 80019da:	68bb      	ldr	r3, [r7, #8]
- 80019dc:	1c5a      	adds	r2, r3, #1
- 80019de:	687b      	ldr	r3, [r7, #4]
- 80019e0:	320e      	adds	r2, #14
- 80019e2:	f853 2022 	ldr.w	r2, [r3, r2, lsl #2]
- 80019e6:	687b      	ldr	r3, [r7, #4]
- 80019e8:	68b9      	ldr	r1, [r7, #8]
- 80019ea:	310e      	adds	r1, #14
- 80019ec:	f853 3021 	ldr.w	r3, [r3, r1, lsl #2]
- 80019f0:	1ad3      	subs	r3, r2, r3
- 80019f2:	68fa      	ldr	r2, [r7, #12]
- 80019f4:	4413      	add	r3, r2
- 80019f6:	60fb      	str	r3, [r7, #12]
+ 80019d6:	68bb      	ldr	r3, [r7, #8]
+ 80019d8:	1c5a      	adds	r2, r3, #1
+ 80019da:	687b      	ldr	r3, [r7, #4]
+ 80019dc:	320e      	adds	r2, #14
+ 80019de:	f853 2022 	ldr.w	r2, [r3, r2, lsl #2]
+ 80019e2:	687b      	ldr	r3, [r7, #4]
+ 80019e4:	68b9      	ldr	r1, [r7, #8]
+ 80019e6:	310e      	adds	r1, #14
+ 80019e8:	f853 3021 	ldr.w	r3, [r3, r1, lsl #2]
+ 80019ec:	1ad3      	subs	r3, r2, r3
+ 80019ee:	68fa      	ldr	r2, [r7, #12]
+ 80019f0:	4413      	add	r3, r2
+ 80019f2:	60fb      	str	r3, [r7, #12]
 		averagedsemiPeriod+=(gen->hallA.zerocrossings_tick[i+1]-gen->hallA.zerocrossings_tick[i]);
- 80019f8:	68bb      	ldr	r3, [r7, #8]
- 80019fa:	3301      	adds	r3, #1
- 80019fc:	687a      	ldr	r2, [r7, #4]
- 80019fe:	3322      	adds	r3, #34	; 0x22
- 8001a00:	009b      	lsls	r3, r3, #2
- 8001a02:	4413      	add	r3, r2
- 8001a04:	685a      	ldr	r2, [r3, #4]
- 8001a06:	6879      	ldr	r1, [r7, #4]
- 8001a08:	68bb      	ldr	r3, [r7, #8]
- 8001a0a:	3322      	adds	r3, #34	; 0x22
- 8001a0c:	009b      	lsls	r3, r3, #2
- 8001a0e:	440b      	add	r3, r1
- 8001a10:	685b      	ldr	r3, [r3, #4]
- 8001a12:	1ad3      	subs	r3, r2, r3
- 8001a14:	68fa      	ldr	r2, [r7, #12]
- 8001a16:	4413      	add	r3, r2
- 8001a18:	60fb      	str	r3, [r7, #12]
+ 80019f4:	68bb      	ldr	r3, [r7, #8]
+ 80019f6:	3301      	adds	r3, #1
+ 80019f8:	687a      	ldr	r2, [r7, #4]
+ 80019fa:	3322      	adds	r3, #34	; 0x22
+ 80019fc:	009b      	lsls	r3, r3, #2
+ 80019fe:	4413      	add	r3, r2
+ 8001a00:	685a      	ldr	r2, [r3, #4]
+ 8001a02:	6879      	ldr	r1, [r7, #4]
+ 8001a04:	68bb      	ldr	r3, [r7, #8]
+ 8001a06:	3322      	adds	r3, #34	; 0x22
+ 8001a08:	009b      	lsls	r3, r3, #2
+ 8001a0a:	440b      	add	r3, r1
+ 8001a0c:	685b      	ldr	r3, [r3, #4]
+ 8001a0e:	1ad3      	subs	r3, r2, r3
+ 8001a10:	68fa      	ldr	r2, [r7, #12]
+ 8001a12:	4413      	add	r3, r2
+ 8001a14:	60fb      	str	r3, [r7, #12]
 		averagedsemiPeriod+=(gen->hallB.zerocrossings_tick[i+1]-gen->hallB.zerocrossings_tick[i]);
- 8001a1a:	68bb      	ldr	r3, [r7, #8]
- 8001a1c:	3301      	adds	r3, #1
- 8001a1e:	687a      	ldr	r2, [r7, #4]
- 8001a20:	332c      	adds	r3, #44	; 0x2c
- 8001a22:	009b      	lsls	r3, r3, #2
- 8001a24:	4413      	add	r3, r2
- 8001a26:	685a      	ldr	r2, [r3, #4]
- 8001a28:	6879      	ldr	r1, [r7, #4]
- 8001a2a:	68bb      	ldr	r3, [r7, #8]
- 8001a2c:	332c      	adds	r3, #44	; 0x2c
- 8001a2e:	009b      	lsls	r3, r3, #2
- 8001a30:	440b      	add	r3, r1
- 8001a32:	685b      	ldr	r3, [r3, #4]
- 8001a34:	1ad3      	subs	r3, r2, r3
- 8001a36:	68fa      	ldr	r2, [r7, #12]
- 8001a38:	4413      	add	r3, r2
- 8001a3a:	60fb      	str	r3, [r7, #12]
+ 8001a16:	68bb      	ldr	r3, [r7, #8]
+ 8001a18:	3301      	adds	r3, #1
+ 8001a1a:	687a      	ldr	r2, [r7, #4]
+ 8001a1c:	332c      	adds	r3, #44	; 0x2c
+ 8001a1e:	009b      	lsls	r3, r3, #2
+ 8001a20:	4413      	add	r3, r2
+ 8001a22:	685a      	ldr	r2, [r3, #4]
+ 8001a24:	6879      	ldr	r1, [r7, #4]
+ 8001a26:	68bb      	ldr	r3, [r7, #8]
+ 8001a28:	332c      	adds	r3, #44	; 0x2c
+ 8001a2a:	009b      	lsls	r3, r3, #2
+ 8001a2c:	440b      	add	r3, r1
+ 8001a2e:	685b      	ldr	r3, [r3, #4]
+ 8001a30:	1ad3      	subs	r3, r2, r3
+ 8001a32:	68fa      	ldr	r2, [r7, #12]
+ 8001a34:	4413      	add	r3, r2
+ 8001a36:	60fb      	str	r3, [r7, #12]
 		averagedsemiPeriod+=(gen->hallC.zerocrossings_tick[i+1]-gen->hallC.zerocrossings_tick[i]);
- 8001a3c:	68bb      	ldr	r3, [r7, #8]
- 8001a3e:	3301      	adds	r3, #1
- 8001a40:	687a      	ldr	r2, [r7, #4]
- 8001a42:	3336      	adds	r3, #54	; 0x36
- 8001a44:	009b      	lsls	r3, r3, #2
- 8001a46:	4413      	add	r3, r2
- 8001a48:	685a      	ldr	r2, [r3, #4]
- 8001a4a:	6879      	ldr	r1, [r7, #4]
- 8001a4c:	68bb      	ldr	r3, [r7, #8]
- 8001a4e:	3336      	adds	r3, #54	; 0x36
- 8001a50:	009b      	lsls	r3, r3, #2
- 8001a52:	440b      	add	r3, r1
- 8001a54:	685b      	ldr	r3, [r3, #4]
- 8001a56:	1ad3      	subs	r3, r2, r3
- 8001a58:	68fa      	ldr	r2, [r7, #12]
- 8001a5a:	4413      	add	r3, r2
- 8001a5c:	60fb      	str	r3, [r7, #12]
+ 8001a38:	68bb      	ldr	r3, [r7, #8]
+ 8001a3a:	3301      	adds	r3, #1
+ 8001a3c:	687a      	ldr	r2, [r7, #4]
+ 8001a3e:	3336      	adds	r3, #54	; 0x36
+ 8001a40:	009b      	lsls	r3, r3, #2
+ 8001a42:	4413      	add	r3, r2
+ 8001a44:	685a      	ldr	r2, [r3, #4]
+ 8001a46:	6879      	ldr	r1, [r7, #4]
+ 8001a48:	68bb      	ldr	r3, [r7, #8]
+ 8001a4a:	3336      	adds	r3, #54	; 0x36
+ 8001a4c:	009b      	lsls	r3, r3, #2
+ 8001a4e:	440b      	add	r3, r1
+ 8001a50:	685b      	ldr	r3, [r3, #4]
+ 8001a52:	1ad3      	subs	r3, r2, r3
+ 8001a54:	68fa      	ldr	r2, [r7, #12]
+ 8001a56:	4413      	add	r3, r2
+ 8001a58:	60fb      	str	r3, [r7, #12]
 	for (uint32_t i = 0; i < samples-1; ++i) {
- 8001a5e:	68bb      	ldr	r3, [r7, #8]
- 8001a60:	3301      	adds	r3, #1
- 8001a62:	60bb      	str	r3, [r7, #8]
- 8001a64:	683b      	ldr	r3, [r7, #0]
- 8001a66:	3b01      	subs	r3, #1
- 8001a68:	68ba      	ldr	r2, [r7, #8]
- 8001a6a:	429a      	cmp	r2, r3
- 8001a6c:	d3a4      	bcc.n	80019b8 <calculateElectricPeriod_inTicks+0x14>
+ 8001a5a:	68bb      	ldr	r3, [r7, #8]
+ 8001a5c:	3301      	adds	r3, #1
+ 8001a5e:	60bb      	str	r3, [r7, #8]
+ 8001a60:	683b      	ldr	r3, [r7, #0]
+ 8001a62:	3b01      	subs	r3, #1
+ 8001a64:	68ba      	ldr	r2, [r7, #8]
+ 8001a66:	429a      	cmp	r2, r3
+ 8001a68:	d3a4      	bcc.n	80019b4 <calculateElectricPeriod_inTicks+0x14>
 	}
 
 	averagedsemiPeriod/=(samples-1);
- 8001a6e:	683b      	ldr	r3, [r7, #0]
- 8001a70:	3b01      	subs	r3, #1
- 8001a72:	68fa      	ldr	r2, [r7, #12]
- 8001a74:	fbb2 f3f3 	udiv	r3, r2, r3
- 8001a78:	60fb      	str	r3, [r7, #12]
+ 8001a6a:	683b      	ldr	r3, [r7, #0]
+ 8001a6c:	3b01      	subs	r3, #1
+ 8001a6e:	68fa      	ldr	r2, [r7, #12]
+ 8001a70:	fbb2 f3f3 	udiv	r3, r2, r3
+ 8001a74:	60fb      	str	r3, [r7, #12]
 	averagedsemiPeriod/=5;
- 8001a7a:	68fb      	ldr	r3, [r7, #12]
- 8001a7c:	4a0a      	ldr	r2, [pc, #40]	; (8001aa8 <calculateElectricPeriod_inTicks+0x104>)
- 8001a7e:	fba2 2303 	umull	r2, r3, r2, r3
- 8001a82:	089b      	lsrs	r3, r3, #2
- 8001a84:	60fb      	str	r3, [r7, #12]
+ 8001a76:	68fb      	ldr	r3, [r7, #12]
+ 8001a78:	4a0a      	ldr	r2, [pc, #40]	; (8001aa4 <calculateElectricPeriod_inTicks+0x104>)
+ 8001a7a:	fba2 2303 	umull	r2, r3, r2, r3
+ 8001a7e:	089b      	lsrs	r3, r3, #2
+ 8001a80:	60fb      	str	r3, [r7, #12]
 
 	gen->results[gen->numberOfresults].electricPeriod_ticks=averagedsemiPeriod*2; //FOR torrot emulated this should be 66*2
- 8001a86:	687b      	ldr	r3, [r7, #4]
- 8001a88:	f8d3 3148 	ldr.w	r3, [r3, #328]	; 0x148
- 8001a8c:	68fa      	ldr	r2, [r7, #12]
- 8001a8e:	0052      	lsls	r2, r2, #1
- 8001a90:	6879      	ldr	r1, [r7, #4]
- 8001a92:	3315      	adds	r3, #21
- 8001a94:	011b      	lsls	r3, r3, #4
- 8001a96:	440b      	add	r3, r1
- 8001a98:	3304      	adds	r3, #4
- 8001a9a:	601a      	str	r2, [r3, #0]
+ 8001a82:	687b      	ldr	r3, [r7, #4]
+ 8001a84:	f8d3 3148 	ldr.w	r3, [r3, #328]	; 0x148
+ 8001a88:	68fa      	ldr	r2, [r7, #12]
+ 8001a8a:	0052      	lsls	r2, r2, #1
+ 8001a8c:	6879      	ldr	r1, [r7, #4]
+ 8001a8e:	3315      	adds	r3, #21
+ 8001a90:	011b      	lsls	r3, r3, #4
+ 8001a92:	440b      	add	r3, r1
+ 8001a94:	3304      	adds	r3, #4
+ 8001a96:	601a      	str	r2, [r3, #0]
 }
- 8001a9c:	bf00      	nop
- 8001a9e:	3714      	adds	r7, #20
- 8001aa0:	46bd      	mov	sp, r7
- 8001aa2:	f85d 7b04 	ldr.w	r7, [sp], #4
- 8001aa6:	4770      	bx	lr
- 8001aa8:	cccccccd 	.word	0xcccccccd
+ 8001a98:	bf00      	nop
+ 8001a9a:	3714      	adds	r7, #20
+ 8001a9c:	46bd      	mov	sp, r7
+ 8001a9e:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8001aa2:	4770      	bx	lr
+ 8001aa4:	cccccccd 	.word	0xcccccccd
 
-08001aac <is_deviation_from_period_acceptable>:
-* \brief
-* \param
+08001aa8 <is_deviation_from_period_acceptable>:
+* \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
+* \param float tolerance_factor, 0.1 would mean +-10%tolerance of deviation from average
+* \param samples number of zerocrossings to be used in the diff calculation
+* \return YES if all deviations are accceptable, or NO if they are not
 */
-
-
 detection_YES_NO is_deviation_from_period_acceptable(hall_detection_general_struct *gen, float tolerance_factor,uint32_t samples){
- 8001aac:	b580      	push	{r7, lr}
- 8001aae:	b08a      	sub	sp, #40	; 0x28
- 8001ab0:	af00      	add	r7, sp, #0
- 8001ab2:	60f8      	str	r0, [r7, #12]
- 8001ab4:	ed87 0a02 	vstr	s0, [r7, #8]
- 8001ab8:	6079      	str	r1, [r7, #4]
+ 8001aa8:	b580      	push	{r7, lr}
+ 8001aaa:	b08a      	sub	sp, #40	; 0x28
+ 8001aac:	af00      	add	r7, sp, #0
+ 8001aae:	60f8      	str	r0, [r7, #12]
+ 8001ab0:	ed87 0a02 	vstr	s0, [r7, #8]
+ 8001ab4:	6079      	str	r1, [r7, #4]
 	float _semiperiod=gen->results[gen->numberOfresults].electricPeriod_ticks/2.0;
- 8001aba:	68fb      	ldr	r3, [r7, #12]
- 8001abc:	f8d3 3148 	ldr.w	r3, [r3, #328]	; 0x148
- 8001ac0:	68fa      	ldr	r2, [r7, #12]
- 8001ac2:	3315      	adds	r3, #21
- 8001ac4:	011b      	lsls	r3, r3, #4
- 8001ac6:	4413      	add	r3, r2
- 8001ac8:	3304      	adds	r3, #4
- 8001aca:	681b      	ldr	r3, [r3, #0]
- 8001acc:	4618      	mov	r0, r3
- 8001ace:	f7fe fcdd 	bl	800048c <__aeabi_ui2d>
- 8001ad2:	f04f 0200 	mov.w	r2, #0
- 8001ad6:	f04f 4380 	mov.w	r3, #1073741824	; 0x40000000
- 8001ada:	f7fe fe7b 	bl	80007d4 <__aeabi_ddiv>
- 8001ade:	4602      	mov	r2, r0
- 8001ae0:	460b      	mov	r3, r1
- 8001ae2:	4610      	mov	r0, r2
- 8001ae4:	4619      	mov	r1, r3
- 8001ae6:	f7fe ff85 	bl	80009f4 <__aeabi_d2f>
- 8001aea:	4603      	mov	r3, r0
- 8001aec:	623b      	str	r3, [r7, #32]
+ 8001ab6:	68fb      	ldr	r3, [r7, #12]
+ 8001ab8:	f8d3 3148 	ldr.w	r3, [r3, #328]	; 0x148
+ 8001abc:	68fa      	ldr	r2, [r7, #12]
+ 8001abe:	3315      	adds	r3, #21
+ 8001ac0:	011b      	lsls	r3, r3, #4
+ 8001ac2:	4413      	add	r3, r2
+ 8001ac4:	3304      	adds	r3, #4
+ 8001ac6:	681b      	ldr	r3, [r3, #0]
+ 8001ac8:	4618      	mov	r0, r3
+ 8001aca:	f7fe fcdf 	bl	800048c <__aeabi_ui2d>
+ 8001ace:	f04f 0200 	mov.w	r2, #0
+ 8001ad2:	f04f 4380 	mov.w	r3, #1073741824	; 0x40000000
+ 8001ad6:	f7fe fe7d 	bl	80007d4 <__aeabi_ddiv>
+ 8001ada:	4602      	mov	r2, r0
+ 8001adc:	460b      	mov	r3, r1
+ 8001ade:	4610      	mov	r0, r2
+ 8001ae0:	4619      	mov	r1, r3
+ 8001ae2:	f7fe ff87 	bl	80009f4 <__aeabi_d2f>
+ 8001ae6:	4603      	mov	r3, r0
+ 8001ae8:	623b      	str	r3, [r7, #32]
 	uint32_t _deviation_top=	_semiperiod +_semiperiod*tolerance_factor;
- 8001aee:	ed97 7a08 	vldr	s14, [r7, #32]
- 8001af2:	edd7 7a02 	vldr	s15, [r7, #8]
- 8001af6:	ee27 7a27 	vmul.f32	s14, s14, s15
- 8001afa:	edd7 7a08 	vldr	s15, [r7, #32]
- 8001afe:	ee77 7a27 	vadd.f32	s15, s14, s15
- 8001b02:	eefc 7ae7 	vcvt.u32.f32	s15, s15
- 8001b06:	ee17 3a90 	vmov	r3, s15
- 8001b0a:	61fb      	str	r3, [r7, #28]
+ 8001aea:	ed97 7a08 	vldr	s14, [r7, #32]
+ 8001aee:	edd7 7a02 	vldr	s15, [r7, #8]
+ 8001af2:	ee27 7a27 	vmul.f32	s14, s14, s15
+ 8001af6:	edd7 7a08 	vldr	s15, [r7, #32]
+ 8001afa:	ee77 7a27 	vadd.f32	s15, s14, s15
+ 8001afe:	eefc 7ae7 	vcvt.u32.f32	s15, s15
+ 8001b02:	ee17 3a90 	vmov	r3, s15
+ 8001b06:	61fb      	str	r3, [r7, #28]
 	uint32_t _deviation_bottom=	_semiperiod	-_semiperiod*tolerance_factor;
- 8001b0c:	ed97 7a08 	vldr	s14, [r7, #32]
- 8001b10:	edd7 7a02 	vldr	s15, [r7, #8]
- 8001b14:	ee67 7a27 	vmul.f32	s15, s14, s15
- 8001b18:	ed97 7a08 	vldr	s14, [r7, #32]
- 8001b1c:	ee77 7a67 	vsub.f32	s15, s14, s15
- 8001b20:	eefc 7ae7 	vcvt.u32.f32	s15, s15
- 8001b24:	ee17 3a90 	vmov	r3, s15
- 8001b28:	61bb      	str	r3, [r7, #24]
+ 8001b08:	ed97 7a08 	vldr	s14, [r7, #32]
+ 8001b0c:	edd7 7a02 	vldr	s15, [r7, #8]
+ 8001b10:	ee67 7a27 	vmul.f32	s15, s14, s15
+ 8001b14:	ed97 7a08 	vldr	s14, [r7, #32]
+ 8001b18:	ee77 7a67 	vsub.f32	s15, s14, s15
+ 8001b1c:	eefc 7ae7 	vcvt.u32.f32	s15, s15
+ 8001b20:	ee17 3a90 	vmov	r3, s15
+ 8001b24:	61bb      	str	r3, [r7, #24]
 
 	for (uint32_t i = 0; i < samples-1; ++i) {
- 8001b2a:	2300      	movs	r3, #0
- 8001b2c:	627b      	str	r3, [r7, #36]	; 0x24
- 8001b2e:	e034      	b.n	8001b9a <is_deviation_from_period_acceptable+0xee>
+ 8001b26:	2300      	movs	r3, #0
+ 8001b28:	627b      	str	r3, [r7, #36]	; 0x24
+ 8001b2a:	e034      	b.n	8001b96 <is_deviation_from_period_acceptable+0xee>
 		uint32_t _sampled_period=(gen->currA.zerocrossings_tick[i+1]-gen->currA.zerocrossings_tick[i]);
- 8001b30:	6a7b      	ldr	r3, [r7, #36]	; 0x24
- 8001b32:	3301      	adds	r3, #1
- 8001b34:	68fa      	ldr	r2, [r7, #12]
- 8001b36:	3302      	adds	r3, #2
- 8001b38:	009b      	lsls	r3, r3, #2
- 8001b3a:	4413      	add	r3, r2
- 8001b3c:	685a      	ldr	r2, [r3, #4]
- 8001b3e:	68f9      	ldr	r1, [r7, #12]
- 8001b40:	6a7b      	ldr	r3, [r7, #36]	; 0x24
- 8001b42:	3302      	adds	r3, #2
- 8001b44:	009b      	lsls	r3, r3, #2
- 8001b46:	440b      	add	r3, r1
- 8001b48:	685b      	ldr	r3, [r3, #4]
- 8001b4a:	1ad3      	subs	r3, r2, r3
- 8001b4c:	617b      	str	r3, [r7, #20]
+ 8001b2c:	6a7b      	ldr	r3, [r7, #36]	; 0x24
+ 8001b2e:	3301      	adds	r3, #1
+ 8001b30:	68fa      	ldr	r2, [r7, #12]
+ 8001b32:	3302      	adds	r3, #2
+ 8001b34:	009b      	lsls	r3, r3, #2
+ 8001b36:	4413      	add	r3, r2
+ 8001b38:	685a      	ldr	r2, [r3, #4]
+ 8001b3a:	68f9      	ldr	r1, [r7, #12]
+ 8001b3c:	6a7b      	ldr	r3, [r7, #36]	; 0x24
+ 8001b3e:	3302      	adds	r3, #2
+ 8001b40:	009b      	lsls	r3, r3, #2
+ 8001b42:	440b      	add	r3, r1
+ 8001b44:	685b      	ldr	r3, [r3, #4]
+ 8001b46:	1ad3      	subs	r3, r2, r3
+ 8001b48:	617b      	str	r3, [r7, #20]
 		if((_sampled_period<(_deviation_bottom))||(_sampled_period>(_deviation_top))){
- 8001b4e:	697a      	ldr	r2, [r7, #20]
- 8001b50:	69bb      	ldr	r3, [r7, #24]
- 8001b52:	429a      	cmp	r2, r3
- 8001b54:	d303      	bcc.n	8001b5e <is_deviation_from_period_acceptable+0xb2>
- 8001b56:	697a      	ldr	r2, [r7, #20]
- 8001b58:	69fb      	ldr	r3, [r7, #28]
- 8001b5a:	429a      	cmp	r2, r3
- 8001b5c:	d901      	bls.n	8001b62 <is_deviation_from_period_acceptable+0xb6>
-			return NO;
- 8001b5e:	2300      	movs	r3, #0
- 8001b60:	e021      	b.n	8001ba6 <is_deviation_from_period_acceptable+0xfa>
+ 8001b4a:	697a      	ldr	r2, [r7, #20]
+ 8001b4c:	69bb      	ldr	r3, [r7, #24]
+ 8001b4e:	429a      	cmp	r2, r3
+ 8001b50:	d303      	bcc.n	8001b5a <is_deviation_from_period_acceptable+0xb2>
+ 8001b52:	697a      	ldr	r2, [r7, #20]
+ 8001b54:	69fb      	ldr	r3, [r7, #28]
+ 8001b56:	429a      	cmp	r2, r3
+ 8001b58:	d901      	bls.n	8001b5e <is_deviation_from_period_acceptable+0xb6>
+			return NO;//early return, bad news
+ 8001b5a:	2300      	movs	r3, #0
+ 8001b5c:	e021      	b.n	8001ba2 <is_deviation_from_period_acceptable+0xfa>
 		}
 
 		_sampled_period=(gen->currC.zerocrossings_tick[i+1]-gen->currC.zerocrossings_tick[i]);
- 8001b62:	6a7b      	ldr	r3, [r7, #36]	; 0x24
- 8001b64:	3301      	adds	r3, #1
- 8001b66:	68fa      	ldr	r2, [r7, #12]
- 8001b68:	3318      	adds	r3, #24
- 8001b6a:	009b      	lsls	r3, r3, #2
- 8001b6c:	4413      	add	r3, r2
- 8001b6e:	685a      	ldr	r2, [r3, #4]
- 8001b70:	68f9      	ldr	r1, [r7, #12]
- 8001b72:	6a7b      	ldr	r3, [r7, #36]	; 0x24
- 8001b74:	3318      	adds	r3, #24
- 8001b76:	009b      	lsls	r3, r3, #2
- 8001b78:	440b      	add	r3, r1
- 8001b7a:	685b      	ldr	r3, [r3, #4]
- 8001b7c:	1ad3      	subs	r3, r2, r3
- 8001b7e:	617b      	str	r3, [r7, #20]
+ 8001b5e:	6a7b      	ldr	r3, [r7, #36]	; 0x24
+ 8001b60:	3301      	adds	r3, #1
+ 8001b62:	68fa      	ldr	r2, [r7, #12]
+ 8001b64:	3318      	adds	r3, #24
+ 8001b66:	009b      	lsls	r3, r3, #2
+ 8001b68:	4413      	add	r3, r2
+ 8001b6a:	685a      	ldr	r2, [r3, #4]
+ 8001b6c:	68f9      	ldr	r1, [r7, #12]
+ 8001b6e:	6a7b      	ldr	r3, [r7, #36]	; 0x24
+ 8001b70:	3318      	adds	r3, #24
+ 8001b72:	009b      	lsls	r3, r3, #2
+ 8001b74:	440b      	add	r3, r1
+ 8001b76:	685b      	ldr	r3, [r3, #4]
+ 8001b78:	1ad3      	subs	r3, r2, r3
+ 8001b7a:	617b      	str	r3, [r7, #20]
 		if((_sampled_period<(_deviation_bottom))||(_sampled_period>(_deviation_top))){
- 8001b80:	697a      	ldr	r2, [r7, #20]
- 8001b82:	69bb      	ldr	r3, [r7, #24]
- 8001b84:	429a      	cmp	r2, r3
- 8001b86:	d303      	bcc.n	8001b90 <is_deviation_from_period_acceptable+0xe4>
- 8001b88:	697a      	ldr	r2, [r7, #20]
- 8001b8a:	69fb      	ldr	r3, [r7, #28]
- 8001b8c:	429a      	cmp	r2, r3
- 8001b8e:	d901      	bls.n	8001b94 <is_deviation_from_period_acceptable+0xe8>
-			return NO;
- 8001b90:	2300      	movs	r3, #0
- 8001b92:	e008      	b.n	8001ba6 <is_deviation_from_period_acceptable+0xfa>
+ 8001b7c:	697a      	ldr	r2, [r7, #20]
+ 8001b7e:	69bb      	ldr	r3, [r7, #24]
+ 8001b80:	429a      	cmp	r2, r3
+ 8001b82:	d303      	bcc.n	8001b8c <is_deviation_from_period_acceptable+0xe4>
+ 8001b84:	697a      	ldr	r2, [r7, #20]
+ 8001b86:	69fb      	ldr	r3, [r7, #28]
+ 8001b88:	429a      	cmp	r2, r3
+ 8001b8a:	d901      	bls.n	8001b90 <is_deviation_from_period_acceptable+0xe8>
+			return NO;//early return, bad news
+ 8001b8c:	2300      	movs	r3, #0
+ 8001b8e:	e008      	b.n	8001ba2 <is_deviation_from_period_acceptable+0xfa>
 	for (uint32_t i = 0; i < samples-1; ++i) {
- 8001b94:	6a7b      	ldr	r3, [r7, #36]	; 0x24
- 8001b96:	3301      	adds	r3, #1
- 8001b98:	627b      	str	r3, [r7, #36]	; 0x24
- 8001b9a:	687b      	ldr	r3, [r7, #4]
- 8001b9c:	3b01      	subs	r3, #1
- 8001b9e:	6a7a      	ldr	r2, [r7, #36]	; 0x24
- 8001ba0:	429a      	cmp	r2, r3
- 8001ba2:	d3c5      	bcc.n	8001b30 <is_deviation_from_period_acceptable+0x84>
+ 8001b90:	6a7b      	ldr	r3, [r7, #36]	; 0x24
+ 8001b92:	3301      	adds	r3, #1
+ 8001b94:	627b      	str	r3, [r7, #36]	; 0x24
+ 8001b96:	687b      	ldr	r3, [r7, #4]
+ 8001b98:	3b01      	subs	r3, #1
+ 8001b9a:	6a7a      	ldr	r2, [r7, #36]	; 0x24
+ 8001b9c:	429a      	cmp	r2, r3
+ 8001b9e:	d3c5      	bcc.n	8001b2c <is_deviation_from_period_acceptable+0x84>
 		}
 	}
 	return YES;//acceptable
- 8001ba4:	2301      	movs	r3, #1
+ 8001ba0:	2301      	movs	r3, #1
 }
- 8001ba6:	4618      	mov	r0, r3
- 8001ba8:	3728      	adds	r7, #40	; 0x28
- 8001baa:	46bd      	mov	sp, r7
- 8001bac:	bd80      	pop	{r7, pc}
+ 8001ba2:	4618      	mov	r0, r3
+ 8001ba4:	3728      	adds	r7, #40	; 0x28
+ 8001ba6:	46bd      	mov	sp, r7
+ 8001ba8:	bd80      	pop	{r7, pc}
 	...
 
-08001bb0 <are_all_periods_stable>:
-
-/**
-* \brief
-* \param
+08001bac <are_all_periods_stable>:
+* \brief a wrapper to tidy up and make sure we calculate the electric period before calculating deviations.
+* \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
+* \param samples number of zerocrossings to be used in the diff calculation
+* \return YES if we are in the stable zone of steady periods. NO otherwise
 */
 detection_YES_NO are_all_periods_stable(hall_detection_general_struct *gen, uint32_t samples){
- 8001bb0:	b580      	push	{r7, lr}
- 8001bb2:	b082      	sub	sp, #8
- 8001bb4:	af00      	add	r7, sp, #0
- 8001bb6:	6078      	str	r0, [r7, #4]
- 8001bb8:	6039      	str	r1, [r7, #0]
+ 8001bac:	b580      	push	{r7, lr}
+ 8001bae:	b082      	sub	sp, #8
+ 8001bb0:	af00      	add	r7, sp, #0
+ 8001bb2:	6078      	str	r0, [r7, #4]
+ 8001bb4:	6039      	str	r1, [r7, #0]
 			calculateElectricPeriod_inTicks(gen,samples);
- 8001bba:	6839      	ldr	r1, [r7, #0]
- 8001bbc:	6878      	ldr	r0, [r7, #4]
- 8001bbe:	f7ff fef1 	bl	80019a4 <calculateElectricPeriod_inTicks>
+ 8001bb6:	6839      	ldr	r1, [r7, #0]
+ 8001bb8:	6878      	ldr	r0, [r7, #4]
+ 8001bba:	f7ff fef1 	bl	80019a0 <calculateElectricPeriod_inTicks>
 	return 	is_deviation_from_period_acceptable(gen,TOLERANCE_FACTOR_FOR_STATIONARY_CURRENTS,samples);
- 8001bc2:	6839      	ldr	r1, [r7, #0]
- 8001bc4:	ed9f 0a04 	vldr	s0, [pc, #16]	; 8001bd8 <are_all_periods_stable+0x28>
- 8001bc8:	6878      	ldr	r0, [r7, #4]
- 8001bca:	f7ff ff6f 	bl	8001aac <is_deviation_from_period_acceptable>
- 8001bce:	4603      	mov	r3, r0
+ 8001bbe:	6839      	ldr	r1, [r7, #0]
+ 8001bc0:	ed9f 0a04 	vldr	s0, [pc, #16]	; 8001bd4 <are_all_periods_stable+0x28>
+ 8001bc4:	6878      	ldr	r0, [r7, #4]
+ 8001bc6:	f7ff ff6f 	bl	8001aa8 <is_deviation_from_period_acceptable>
+ 8001bca:	4603      	mov	r3, r0
 }
- 8001bd0:	4618      	mov	r0, r3
- 8001bd2:	3708      	adds	r7, #8
- 8001bd4:	46bd      	mov	sp, r7
- 8001bd6:	bd80      	pop	{r7, pc}
- 8001bd8:	3dcccccd 	.word	0x3dcccccd
+ 8001bcc:	4618      	mov	r0, r3
+ 8001bce:	3708      	adds	r7, #8
+ 8001bd0:	46bd      	mov	sp, r7
+ 8001bd2:	bd80      	pop	{r7, pc}
+ 8001bd4:	3dcccccd 	.word	0x3dcccccd
 
-08001bdc <absolute>:
+08001bd8 <absolute>:
 /**
-* \brief
-* \param
+* \brief small and util to calculate signed absolute values
+* \param the number to be absoluted
+* \return |x|
 */
-
 int32_t absolute(int32_t x){
- 8001bdc:	b480      	push	{r7}
- 8001bde:	b083      	sub	sp, #12
- 8001be0:	af00      	add	r7, sp, #0
- 8001be2:	6078      	str	r0, [r7, #4]
+ 8001bd8:	b480      	push	{r7}
+ 8001bda:	b083      	sub	sp, #12
+ 8001bdc:	af00      	add	r7, sp, #0
+ 8001bde:	6078      	str	r0, [r7, #4]
     return (int32_t)x < (int32_t)0 ? -x : x;
- 8001be4:	687b      	ldr	r3, [r7, #4]
- 8001be6:	2b00      	cmp	r3, #0
- 8001be8:	bfb8      	it	lt
- 8001bea:	425b      	neglt	r3, r3
+ 8001be0:	687b      	ldr	r3, [r7, #4]
+ 8001be2:	2b00      	cmp	r3, #0
+ 8001be4:	bfb8      	it	lt
+ 8001be6:	425b      	neglt	r3, r3
 }
- 8001bec:	4618      	mov	r0, r3
- 8001bee:	370c      	adds	r7, #12
- 8001bf0:	46bd      	mov	sp, r7
- 8001bf2:	f85d 7b04 	ldr.w	r7, [sp], #4
- 8001bf6:	4770      	bx	lr
+ 8001be8:	4618      	mov	r0, r3
+ 8001bea:	370c      	adds	r7, #12
+ 8001bec:	46bd      	mov	sp, r7
+ 8001bee:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8001bf2:	4770      	bx	lr
+ 8001bf4:	0000      	movs	r0, r0
+	...
 
 08001bf8 <assign_closest_phase_to_hall>:
-//
 /**
-* \brief
-* \param
+* \brief magic function, from zerocrossings decides actuall order of hall/current signals, this function is super critical and should be optimiced
+* right now has a cyclomatic complexity of 21, that should be reduced.
+* \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
 */
 void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
  8001bf8:	b580      	push	{r7, lr}
@@ -3331,7 +3330,7 @@ void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
  8001c1e:	685b      	ldr	r3, [r3, #4]
  8001c20:	1acb      	subs	r3, r1, r3
  8001c22:	4618      	mov	r0, r3
- 8001c24:	f7ff ffda 	bl	8001bdc <absolute>
+ 8001c24:	f7ff ffd8 	bl	8001bd8 <absolute>
  8001c28:	4602      	mov	r2, r0
  8001c2a:	687b      	ldr	r3, [r7, #4]
  8001c2c:	f8d3 3100 	ldr.w	r3, [r3, #256]	; 0x100
@@ -3354,7 +3353,7 @@ void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
  8001c50:	685b      	ldr	r3, [r3, #4]
  8001c52:	1acb      	subs	r3, r1, r3
  8001c54:	4618      	mov	r0, r3
- 8001c56:	f7ff ffc1 	bl	8001bdc <absolute>
+ 8001c56:	f7ff ffbf 	bl	8001bd8 <absolute>
  8001c5a:	4602      	mov	r2, r0
  8001c5c:	687b      	ldr	r3, [r7, #4]
  8001c5e:	f8d3 3104 	ldr.w	r3, [r3, #260]	; 0x104
@@ -3377,7 +3376,7 @@ void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
  8001c82:	685b      	ldr	r3, [r3, #4]
  8001c84:	1acb      	subs	r3, r1, r3
  8001c86:	4618      	mov	r0, r3
- 8001c88:	f7ff ffa8 	bl	8001bdc <absolute>
+ 8001c88:	f7ff ffa6 	bl	8001bd8 <absolute>
  8001c8c:	4602      	mov	r2, r0
  8001c8e:	687b      	ldr	r3, [r7, #4]
  8001c90:	f8d3 3108 	ldr.w	r3, [r3, #264]	; 0x108
@@ -3399,7 +3398,7 @@ void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
  8001cb2:	685b      	ldr	r3, [r3, #4]
  8001cb4:	1acb      	subs	r3, r1, r3
  8001cb6:	4618      	mov	r0, r3
- 8001cb8:	f7ff ff90 	bl	8001bdc <absolute>
+ 8001cb8:	f7ff ff8e 	bl	8001bd8 <absolute>
  8001cbc:	4602      	mov	r2, r0
  8001cbe:	687b      	ldr	r3, [r7, #4]
  8001cc0:	f8d3 310c 	ldr.w	r3, [r3, #268]	; 0x10c
@@ -3420,7 +3419,7 @@ void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
  8001ce2:	685b      	ldr	r3, [r3, #4]
  8001ce4:	1acb      	subs	r3, r1, r3
  8001ce6:	4618      	mov	r0, r3
- 8001ce8:	f7ff ff78 	bl	8001bdc <absolute>
+ 8001ce8:	f7ff ff76 	bl	8001bd8 <absolute>
  8001cec:	4602      	mov	r2, r0
  8001cee:	687b      	ldr	r3, [r7, #4]
  8001cf0:	f8d3 3110 	ldr.w	r3, [r3, #272]	; 0x110
@@ -3441,7 +3440,7 @@ void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
  8001d12:	685b      	ldr	r3, [r3, #4]
  8001d14:	1acb      	subs	r3, r1, r3
  8001d16:	4618      	mov	r0, r3
- 8001d18:	f7ff ff60 	bl	8001bdc <absolute>
+ 8001d18:	f7ff ff5e 	bl	8001bd8 <absolute>
  8001d1c:	4602      	mov	r2, r0
  8001d1e:	687b      	ldr	r3, [r7, #4]
  8001d20:	f8d3 3114 	ldr.w	r3, [r3, #276]	; 0x114
@@ -3465,7 +3464,7 @@ void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
  8001d44:	685b      	ldr	r3, [r3, #4]
  8001d46:	1acb      	subs	r3, r1, r3
  8001d48:	4618      	mov	r0, r3
- 8001d4a:	f7ff ff47 	bl	8001bdc <absolute>
+ 8001d4a:	f7ff ff45 	bl	8001bd8 <absolute>
  8001d4e:	4602      	mov	r2, r0
  8001d50:	687b      	ldr	r3, [r7, #4]
  8001d52:	f8d3 3118 	ldr.w	r3, [r3, #280]	; 0x118
@@ -3488,7 +3487,7 @@ void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
  8001d76:	685b      	ldr	r3, [r3, #4]
  8001d78:	1acb      	subs	r3, r1, r3
  8001d7a:	4618      	mov	r0, r3
- 8001d7c:	f7ff ff2e 	bl	8001bdc <absolute>
+ 8001d7c:	f7ff ff2c 	bl	8001bd8 <absolute>
  8001d80:	4602      	mov	r2, r0
  8001d82:	687b      	ldr	r3, [r7, #4]
  8001d84:	f8d3 311c 	ldr.w	r3, [r3, #284]	; 0x11c
@@ -3511,7 +3510,7 @@ void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
  8001da8:	685b      	ldr	r3, [r3, #4]
  8001daa:	1acb      	subs	r3, r1, r3
  8001dac:	4618      	mov	r0, r3
- 8001dae:	f7ff ff15 	bl	8001bdc <absolute>
+ 8001dae:	f7ff ff13 	bl	8001bd8 <absolute>
  8001db2:	4602      	mov	r2, r0
  8001db4:	687b      	ldr	r3, [r7, #4]
  8001db6:	f8d3 3120 	ldr.w	r3, [r3, #288]	; 0x120
@@ -3949,10 +3948,10 @@ void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
  80020e2:	bf00      	nop
 
 080020e4 <assign_polarity>:
-
 /**
-* \brief
-* \param
+* \brief the other magic function, asigns polarity from risign or falling edges, it also takes into account tricky shifted signals
+* right now has a cyclomatic complexity of 21, that should be reduced.
+* \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
 */
 void assign_polarity(hall_detection_general_struct *gen){
  80020e4:	b480      	push	{r7}
