@@ -145,11 +145,10 @@ def main():
     stopthreads=False;
     #receive_thread.join();
     receive_thread_test.join();
-    
+
     # Close the serial connection
     serial_tester.close()
     print("Serial connection closed.")
-    f.write("Serial connection closed.")
 
     for i in range(len(messages)):
         messages[i]=messages[i].replace('\r','');
