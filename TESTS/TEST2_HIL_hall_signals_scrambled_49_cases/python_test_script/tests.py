@@ -155,6 +155,6 @@ def main():
         for i in range(len(receivedMessages)):
             if messages[i].replace('\r','')!=receivedMessages[i]:
                 print(f"error in test case number {i}, it was supposed to be:{messages[i]} instead of: {receivedMessages[i]}")
-            
+        return 255;
 
 main()

@@ -685,7 +685,7 @@ int32_t absolute(int32_t x){
 
 /**
 * \brief magic function, from zerocrossings decides actuall order of hall/current signals, this function is super critical and should be optimiced
-* right now has a cyclomatic complexity of 21, that should be reduced.
+* right now has a cyclomatic complexity of 17, that should be reduced.
 * \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
 */
 void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
@@ -706,7 +706,7 @@ void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
 
 	int32_t _bottom_limit	=(int32_t)((gen->results[gen->numberOfresults].electricPeriod_ticks/2)*0.95);
 	int32_t _top_limit		=(int32_t)(gen->results[gen->numberOfresults].electricPeriod_ticks);
-
+	int32_t minimum[NUMBEROFPHASES]={0xFF,0xFF,0xFF};
 	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
 		gen->differences_phaseA[i]/=MAXZEROCROSSINGS;
 		gen->differences_phaseB[i]/=MAXZEROCROSSINGS;
@@ -727,10 +727,8 @@ void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
 			gen->differences_phaseC[i]%=_bottom_limit;
 			gen->shifted_polarity[hall_C][i]=1;
 		}
-	}
 
-	int32_t minimum[NUMBEROFPHASES]={0xFF,0xFF,0xFF};
-	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {//learns what the minimum differences are
+		//learns what the minimum differences are
 		if(gen->differences_phaseA[i]<minimum[phase_A]){
 			minimum[phase_A]=gen->differences_phaseA[i];
 		}
@@ -742,7 +740,8 @@ void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
 		}
 	}
 
-	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {//if the difference is the minimum one thats the winnner
+	//if the difference is the minimum one thats the winnner
+	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
 		if(gen->differences_phaseA[i]==minimum[phase_A]){
 			gen->results[gen->numberOfresults].hall_order[i]=phase_A;
 		}
