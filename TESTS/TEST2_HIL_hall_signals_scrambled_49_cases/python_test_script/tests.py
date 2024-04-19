@@ -2,7 +2,8 @@ import serial
 import serial.tools.list_ports
 import time
 import threading
-    
+import sys
+
 waittime=0.25;
 stopthreads=True;
 serial_tester=0;
@@ -122,7 +123,10 @@ def main():
     # List and open available serial ports
     find_out_tester_and_open_ports()
 
-
+    time.sleedp(1);
+    serial_tester.flush();
+    serial_target.flush();
+    
     # Start a thread or a separate process to receive incoming messages
     receive_thread = threading.Thread(target=receive_messages_tester, args=(serial_tester,messages),daemon=True)
 
@@ -155,6 +159,6 @@ def main():
         for i in range(len(receivedMessages)):
             if messages[i].replace('\r','')!=receivedMessages[i]:
                 print(f"error in test case number {i}, it was supposed to be:{messages[i]} instead of: {receivedMessages[i]}")
-        return 255;
+        sys.exit(-1);
 
 main()
