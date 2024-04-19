@@ -349,8 +349,9 @@ void validation(detection_state_enum* state,hall_detection_general_struct *gen){
 	}
 
 
-	uint32_t number_of_results_matching=0;
+
 	if(gen->numberOfresults>=NUMBER_OF_VALID_MATCHING_RESULTS){			//only if enough adquisitions were made
+		uint32_t number_of_results_matching=0;
 		for (uint32_t i = 0; i < gen->numberOfresults; ++i) {			//loop trough results
 			number_of_results_matching=0;
 			if(gen->results[i].is_valid==YES){							//skip the not valid results.
@@ -587,10 +588,9 @@ detection_YES_NO is_deviation_from_period_acceptable(hall_detection_general_stru
 	float _semiperiod=gen->results[gen->numberOfresults].electricPeriod_ticks/2.0;
 	uint32_t _deviation_top=	_semiperiod +_semiperiod*tolerance_factor;
 	uint32_t _deviation_bottom=	_semiperiod	-_semiperiod*tolerance_factor;
-	uint32_t _sampled_period=0;
 
 	for (uint32_t i = 0; i < samples-1; ++i) {
-		_sampled_period=(gen->currA.zerocrossings_tick[i+1]-gen->currA.zerocrossings_tick[i]);
+		uint32_t _sampled_period=(gen->currA.zerocrossings_tick[i+1]-gen->currA.zerocrossings_tick[i]);
 		if((_sampled_period<(_deviation_bottom))||(_sampled_period>(_deviation_top))){
 			return NO;
 		}
