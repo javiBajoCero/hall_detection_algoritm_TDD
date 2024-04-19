@@ -123,7 +123,7 @@ def main():
     # List and open available serial ports
     find_out_tester_and_open_ports()
 
-    time.sleed(1);
+    time.sleep(1);
     serial_tester.flush();
     serial_target.flush();
 
