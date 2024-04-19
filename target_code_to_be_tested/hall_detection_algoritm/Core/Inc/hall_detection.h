@@ -11,11 +11,24 @@
 
 #include "main.h"
 
+
 #define MAXZEROCROSSINGS 6
+#define NUMBEROFPHASES 3
+#define messageLength (NUMBEROFPHASES*2)+2		/*!< ASCII results char array length to use with UART*/
+
+#define TOTAL_NUMBEROFRESULTS 6
+#define VALID_NUMBEROFRESULTS 3
 
 typedef enum {
-  detection_DISABLED =(uint32_t)0,
-  detection_ENABLED  =(uint32_t)1
+  detection_DISABLED 					=(uint32_t)0,
+  detection_ENABLED  					=(uint32_t)1,
+
+  detection_WAIT_CURRENT_STATIONARY  	=(uint32_t)2,
+  detection_ADQUISITION  				=(uint32_t)3,
+  detection_INTERPRETATION  			=(uint32_t)4,
+  detection_VALIDATION  				=(uint32_t)5,
+  detection_PRESENTATION_FINISH  		=(uint32_t)6,
+  detection_ERROR_OR_TIMEOUT  			=(uint32_t)7
 } detection_state_enum ;
 
 typedef enum {		//this enum is used as an index for arrays, so it should start in 0
@@ -28,8 +41,7 @@ typedef enum {		//this enum is used as an index for arrays, so it should start i
 typedef enum {		//this enum is used as an index for arrays, so it should start in 0
   phase_A = (uint32_t) 0,
   phase_B = (uint32_t) 1,
-  phase_C = (uint32_t) 2,
-  number_of_phases = (uint32_t) 3
+  phase_C = (uint32_t) 2
 } phase_order_enum;
 
 
@@ -58,11 +70,40 @@ typedef struct{
 	uint32_t numberof_zerocrossings;
 }hall_measurements_struct;
 
+typedef enum{
+	NO	= (uint32_t) 0,
+	YES	= (uint32_t) 1
+}detection_YES_NO;
+
 typedef struct{
+	detection_YES_NO is_valid;
 	uint32_t electricPeriod_ticks;
 	hall_signals_order_enum hall_order[3];
 	hall_curr_relation_enum hall_polarity[3];
 }detection_results_struct;
+
+
+
+typedef struct{
+	uint32_t start_adquisition_ticks;
+	current_or_hall_measurements_struct currA;
+	current_or_hall_measurements_struct currB;
+	current_or_hall_measurements_struct currC;
+	hall_measurements_struct hallA;
+	hall_measurements_struct hallB;
+	hall_measurements_struct hallC;
+
+	int32_t differences_phaseA[NUMBEROFPHASES];	/*!< auxiliar variable storing average distances between zerocrossings between each hall and phaseA*/
+	int32_t differences_phaseB[NUMBEROFPHASES];	/*!< auxiliar variable storing average distances between zerocrossings between each hall and phaseB*/
+	int32_t differences_phaseC[NUMBEROFPHASES];	/*!< auxiliar variable storing average distances between zerocrossings between each hall and phaseC*/
+	uint32_t shifted_polarity[NUMBEROFPHASES][NUMBEROFPHASES];	/*!< when phase and hall signals are measured out of phase due to unlucky timming when detecting, it is noted down in this variable for the polarity calculation */
+
+	uint32_t numberOfresults;
+	uint32_t indexOfcorrectResult;
+	detection_results_struct results[TOTAL_NUMBEROFRESULTS];
+	uint8_t message[messageLength];					/*!< ASCII results char array to use with UART*/
+
+}hall_detection_general_struct;
 
 
 void Hall_start_detection();

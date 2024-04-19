@@ -7,61 +7,46 @@
 
 #include "hall_detection.h" 		/*!< contains all enums, structs and includes neccesary for this .c, it also exposes the run_hall_detection_inside_20Khz_interruption() function to the outside world */
 
-//#define TESTuart
-//uncomment only one
+//Uncomment only one
 //#define REAL_PHASES_A_B_calculated_C		/*!< our ADC is reading real current signals A and B, C=-A-B */
 #define REAL_PHASES_A_C_calculated_B		/*!< our ADC is reading real current signals A and C, B=-A-C */
 //#define REAL_PHASES_B_C_calculated_A		/*!< our ADC is reading real current signals B and C, A=-B-C */
+
 #define TESTuart
+#define TESTnodelay
+
 #ifdef TESTuart
 #include "usart.h"
 #endif
 
-#define TESTnodelay
-#ifdef TESTuart
-#define INITIAL_WAIT_TICKS 0
-#elif
-#define INITIAL_WAIT_TICKS 3*20000
-#endif
-//local defines
-
-#define MAXTICKs 1*20000 +INITIAL_WAIT_TICKS			/*!< timeout for the algorithm, measured in 0.05s ticks , so 1000*0.05=50ms (it takes only 380 ticks to get 6/2=3 electric periods from torrot emulated) */
+#define MAXTICKs 1*888888		/*!< timeout for the algorithm, measured in 0.05s ticks , so 1000*0.05=50ms (it takes only 380 ticks to get 6/2=3 electric periods from torrot emulated) */
 #define lowpassfilter_ticks 15 						/*!< minimum number of ticks that should have passed in between zerocrossings (lowpassfilter) */
 #define currentAplusBplusC (uint32_t)(3*(4096)/2)	/*!< the sum of the average of each currents should be this number aprox, used to calculate currentC ortogonally*/
-#define messageLength (number_of_phases*2)+2		/*!< ASCII results char array length to use with UART*/
+#define currentADCoffset (float) 0.0				/*!< as we are using already processed filtered currents, no offset is take into account */
+#define TOLERANCE_FACTOR_FOR_STATIONARY_CURRENTS 0.1
+#define WAITING_STATIONARY_MAXZEROCROSSINGS 3
+#define NUMBER_OF_VALID_MATCHING_RESULTS 3
 
-//local variables
+
+
+
+//LOCAL VARIABLES (only declared inside this .c file)
+uint32_t ticks; 								/*!< ticks are the time measurement unit of this algorithm, each run of the algorithm (0.05s) the tick is incremented +1 */
 detection_state_enum detection_state=detection_DISABLED;	/*!< main enable disable variable, when it flips to enabled it starts the detection, when the detection is finished it flips back to disabled*/
-
-uint32_t ticks=0; 								/*!< ticks are the time measurement unit of this algorithm, each run of the algorithm (0.05s) the tick is incremented +1 */
-float currentADCoffset=0.0;						/*!< as we are using already processed filtered currents, no offset is take into account */
-current_or_hall_measurements_struct currA;		/*!< contains all variables relevant for currA measurements*/
-current_or_hall_measurements_struct currB;		/*!< contains all variables relevant for currB measurements*/
-current_or_hall_measurements_struct currC;		/*!< contains all variables relevant for currC measurements*/
-hall_measurements_struct hallA;		/*!< contains all variables relevant for hallA measurements*/
-hall_measurements_struct hallB;		/*!< contains all variables relevant for hallB measurements*/
-hall_measurements_struct hallC;		/*!< contains all variables relevant for hallC measurements*/
-detection_results_struct results;				/*!< once the algorithm finishes, the detection results will be stored in this struct*/
-const detection_results_struct emptyresults={0};
-const hall_measurements_struct empty_hall_measurements={0};
-const current_or_hall_measurements_struct empty_current_measurements={0};
-
-uint8_t message[messageLength];					/*!< ASCII results char array to use with UART*/
+hall_detection_general_struct general={0};
+const hall_detection_general_struct empty_general={0};
 
 
-int32_t differences_phaseA[number_of_phases]={0};	/*!< auxiliar variable storing average distances between zerocrossings between each hall and phaseA*/
-int32_t differences_phaseB[number_of_phases]={0};	/*!< auxiliar variable storing average distances between zerocrossings between each hall and phaseB*/
-int32_t differences_phaseC[number_of_phases]={0};	/*!< auxiliar variable storing average distances between zerocrossings between each hall and phaseC*/
 
-uint32_t toggled_polarity[number_of_phases]={0};	/*!< when phase and hall signals are measured out of phase due to unlucky timming when detecting, it is noted down in this variable for the polarity calculation */
 
-current_or_hall_measurements_struct *currents[number_of_phases]={&currA,&currB,&currC};
-hall_measurements_struct *halls[number_of_phases]={&hallA,&hallB,&hallC};
 
-//all functions declared inside this .c are listed here:
+
+
+
+
+//PUBLIC FUNCTIONS (also declared in the .h file)
 void Hall_start_detection();
 uint32_t Hall_is_detection_finished();
-
 void Hall_Identification_Test_measurement(
 		hall_pin_info* H1_gpio,
 		hall_pin_info* H2_gpio,
@@ -70,32 +55,40 @@ void Hall_Identification_Test_measurement(
 		volatile float* ADCcurr2
 		);
 
-void signals_adquisition(
+
+
+//PRIVATE FUNCTIONS (only declared inside this .c file)
+//state machine
+void resetVariables					(hall_detection_general_struct *gen);
+void wait_for_the_current_stationary(detection_state_enum* state,hall_detection_general_struct *gen,hall_pin_info* H1_gpio,hall_pin_info* H2_gpio,hall_pin_info* H3_gpio,volatile float* ADCcurr1,volatile float* ADCcurr2);
+void adquisition					(detection_state_enum* state,hall_detection_general_struct *gen,hall_pin_info* H1_gpio,hall_pin_info* H2_gpio,hall_pin_info* H3_gpio,volatile float* ADCcurr1,volatile float* ADCcurr2);
+void interpretation					(detection_state_enum* state,hall_detection_general_struct *gen);
+void validation						(detection_state_enum* state,hall_detection_general_struct *gen);
+void present_and_finish				(detection_state_enum* state,hall_detection_general_struct *gen);
+
+void fill_buffers(detection_state_enum* state,hall_detection_general_struct *gen,
 		hall_pin_info* H1_gpio,
 		hall_pin_info* H2_gpio,
 		hall_pin_info* H3_gpio,
 		volatile float* ADCcurr1,
 		volatile float* ADCcurr2
 		);
+detection_YES_NO detect_N_zerocrossings	(hall_detection_general_struct *gen,uint32_t N);
+void detect_N_current_zerocrossings	(uint32_t ticks,current_or_hall_measurements_struct* currx,uint32_t N);
+void detect_N_hall_zerocrossings	(uint32_t ticks,hall_measurements_struct* hallx,uint32_t N);
+void calculateElectricPeriod_inTicks(hall_detection_general_struct *gen, uint32_t samples);
+detection_YES_NO are_all_periods_stable(hall_detection_general_struct *gen, uint32_t samples);
+void assign_closest_phase_to_hall(hall_detection_general_struct *gen);
+void assign_polarity(hall_detection_general_struct *gen);
 
-void detect_all_zerocrossings();
-void detect_current_zerocrossings(current_or_hall_measurements_struct* currx);
-void detect_hall_zerocrossings(hall_measurements_struct* hallx);
-void end_detection(detection_state_enum* enabled_or_disabled);
 
-void evaluate_and_present_results(	detection_state_enum* enabled_or_disabled,
-									hall_pin_info* H1_gpio,
-									hall_pin_info* H2_gpio,
-									hall_pin_info* H3_gpio
-									);
-void present_results_uart();
 
-void swap_hall_gpios_with_detected_results(hall_pin_info* pin_infoH1,hall_pin_info* pin_infoH2,hall_pin_info* pin_infoH3);
-void calculateElectricPeriod_inTicks(uint32_t* resulting_period);
-void assign_closest_phase_to_hall(detection_results_struct* res);
-int32_t absolute(int32_t x);
-void assign_polarity(detection_results_struct* res);
-void present_results();
+
+
+
+
+
+
 
 /**
 * \brief
@@ -103,14 +96,6 @@ void present_results();
 */
 void Hall_start_detection(){
 	detection_state=detection_ENABLED;
-	ticks=0;
-	results=emptyresults;
-	currA=empty_current_measurements;
-	currB=empty_current_measurements;
-	currC=empty_current_measurements;
-	hallA=empty_hall_measurements;
-	hallB=empty_hall_measurements;
-	hallC=empty_hall_measurements;
 }
 
 /**
@@ -118,12 +103,59 @@ void Hall_start_detection(){
 * \param
 */
 uint32_t Hall_is_detection_finished(){
-	if(detection_state==detection_ENABLED){
-		return 0;
+	if(detection_state==detection_DISABLED){
+		return YES;
 	}else{
-		return 1;
+		return NO;
 	}
 }
+
+//https://dot-to-ascii.ggerganov.com/
+/*
+ *
++-------------------------+
+|          start          |
++-------------------------+
+  |
+  |
+  v
++-------------------------+
+|                         | ---+
+| WAIT_CURRENT_STATIONARY |    | still not stationary
+|                         | <--+
++-------------------------+
+  |
+  |	the openloop stabilished
+  v
++-------------------------+
+|       ADQUISITION       | <+
++-------------------------+  |
+  |                          |
+  | zerocrossings detected   |
+  v                          |
++-------------------------+  | still not 3 matching X!X!X! type results
+|     INTERPRETATION      |  |
++-------------------------+  |
+  |                          |
+  | X!X!X! type result       |
+  v                          |
++-------------------------+  |
+|       VALIDATION        | -+
++-------------------------+
+  |
+  |	3 matching results, we are confident now
+  v
++-------------------------+
+|   PRESENTATION_FINISH   |
++-------------------------+
+  |
+  |
+  v
++-------------------------+
+|           end           |
++-------------------------+
+
+*/
 /**
 * \brief
 * \param
@@ -135,23 +167,229 @@ void Hall_Identification_Test_measurement(
 		volatile float* ADCcurr1,
 		volatile float* ADCcurr2
 		){
-	if(detection_state==detection_ENABLED){
-		if(ticks>INITIAL_WAIT_TICKS){
-			signals_adquisition(H1_gpio,H2_gpio,H3_gpio,ADCcurr1,ADCcurr2);
-			detect_all_zerocrossings();
-			end_detection(&detection_state);
-			evaluate_and_present_results(&detection_state,H1_gpio,H2_gpio,H3_gpio);
-		}
-		ticks++;
+	switch (detection_state) {
+		case detection_ENABLED:
+			ticks=0;
+			resetVariables(&general);
+			detection_state=detection_WAIT_CURRENT_STATIONARY;
+			general.start_adquisition_ticks=ticks;
+			break;
+		case detection_WAIT_CURRENT_STATIONARY:
+			wait_for_the_current_stationary(&detection_state,&general,H1_gpio,H2_gpio,H3_gpio,ADCcurr1,ADCcurr2);
+			break;
+		case detection_ADQUISITION:
+			adquisition(&detection_state,&general,H1_gpio,H2_gpio,H3_gpio,ADCcurr1,ADCcurr2);
+			break;
+		case detection_INTERPRETATION:
+			interpretation(&detection_state, &general);
+			break;
+		case detection_VALIDATION:
+			validation(&detection_state,&general);
+			break;
+		case detection_PRESENTATION_FINISH:
+			present_and_finish(&detection_state,&general);
+			break;
+		case detection_ERROR_OR_TIMEOUT:
+		case detection_DISABLED://do nothing
+		default:
+			detection_state=detection_DISABLED;
+			break;
 	}
-
+	ticks++;
 }
 
 /**
 * \brief
 * \param
 */
-void signals_adquisition(
+void resetVariables(hall_detection_general_struct *gen){
+	*gen=empty_general;		//set everything to 0, im not memsetting
+}
+
+
+/**
+* \brief
+* \param
+*/
+void wait_for_the_current_stationary(detection_state_enum* state,hall_detection_general_struct *gen,
+		hall_pin_info* H1_gpio,
+		hall_pin_info* H2_gpio,
+		hall_pin_info* H3_gpio,
+		volatile float* ADCcurr1,
+		volatile float* ADCcurr2
+		){
+	//timeout or currentisstationary
+	fill_buffers(state, gen, H1_gpio, H2_gpio, H3_gpio, ADCcurr1, ADCcurr2);
+	//timeout
+	if( ticks>MAXTICKs){
+		*state=detection_ERROR_OR_TIMEOUT;
+		return;
+	}
+
+    //endofadquisition
+	if(ticks>general.start_adquisition_ticks+2){//run alone signals_adquisition() to pre-fill the buffers
+		if(detect_N_zerocrossings(gen,WAITING_STATIONARY_MAXZEROCROSSINGS)==YES){
+			if(are_all_periods_stable(gen,WAITING_STATIONARY_MAXZEROCROSSINGS)==YES){
+				resetVariables(gen);
+				general.start_adquisition_ticks=ticks;
+				*state=detection_ADQUISITION;
+				return;
+			}else{
+				resetVariables(gen);
+			}
+		}
+	}
+}
+
+/**
+* \brief
+* \param
+*/
+void adquisition(
+		detection_state_enum* state,
+		hall_detection_general_struct *gen,
+		hall_pin_info* H1_gpio,
+		hall_pin_info* H2_gpio,
+		hall_pin_info* H3_gpio,
+		volatile float* ADCcurr1,
+		volatile float* ADCcurr2
+		){
+
+	fill_buffers(state, gen, H1_gpio, H2_gpio, H3_gpio, ADCcurr1, ADCcurr2);
+
+	//timeout
+	if( ticks>MAXTICKs){
+		*state=detection_ERROR_OR_TIMEOUT;
+		return;
+	}
+
+	if(ticks>general.start_adquisition_ticks+2){//run alone signals_adquisition() to pre-fill the buffers
+		if(detect_N_zerocrossings(gen,MAXZEROCROSSINGS)==YES){
+			calculateElectricPeriod_inTicks(gen,MAXZEROCROSSINGS);
+			*state=detection_INTERPRETATION;
+		}
+	}
+}
+
+/**
+* \brief
+* \param
+*/
+void interpretation(detection_state_enum* state,hall_detection_general_struct *gen){
+
+	//timeout
+	if( ticks>MAXTICKs){
+		*state=detection_ERROR_OR_TIMEOUT;
+		return;
+	}
+
+	assign_closest_phase_to_hall(gen);
+	//assign_polarity(gen);
+	gen->numberOfresults++;
+	*state=detection_VALIDATION;
+
+
+}
+
+void validation(detection_state_enum* state,hall_detection_general_struct *gen){
+
+	//timeout
+	if( ticks>MAXTICKs){
+		*state=detection_ERROR_OR_TIMEOUT;
+		return;
+	}
+
+	//reached results buffer full capacity
+	if(gen->numberOfresults>TOTAL_NUMBEROFRESULTS){
+		*state=detection_ERROR_OR_TIMEOUT;
+		return;
+	}
+
+	uint32_t all_phases_not_repeated=0;
+	for (uint32_t i = 0;  i < NUMBEROFPHASES; ++ i) {
+		if(gen->results[gen->numberOfresults-1].hall_order[i]==hall_A){
+			all_phases_not_repeated|=(1<<hall_A);
+		}else if(gen->results[gen->numberOfresults-1].hall_order[i]==hall_B){
+			all_phases_not_repeated|=(1<<hall_B);
+		}else if(gen->results[gen->numberOfresults-1].hall_order[i]==hall_C){
+			all_phases_not_repeated|=(1<<hall_C);
+		}
+	}
+
+	if(all_phases_not_repeated==((1<<hall_A)+(1<<hall_B)+(1<<hall_C))){
+		gen->results[gen->numberOfresults-1].is_valid=YES;
+	}else{
+		gen->results[gen->numberOfresults-1].is_valid=NO;
+	}
+
+
+	uint32_t number_of_results_matching=0;
+	if(gen->numberOfresults>=NUMBER_OF_VALID_MATCHING_RESULTS){			//only if enough adquisitions were made
+		for (uint32_t i = 0; i < gen->numberOfresults; ++i) {			//loop trough results
+			number_of_results_matching=0;
+			if(gen->results[i].is_valid==YES){							//skip the not valid results.
+				for (uint32_t j = i+1; j < gen->numberOfresults; ++j) {	//compare that one result with the rest
+					if(
+							gen->results[i].hall_order[0]==gen->results[j].hall_order[0] &&
+							gen->results[i].hall_order[1]==gen->results[j].hall_order[1] &&
+							gen->results[i].hall_order[2]==gen->results[j].hall_order[2] &&
+							gen->results[i].hall_polarity[0]==gen->results[j].hall_polarity[0] &&
+							gen->results[i].hall_polarity[1]==gen->results[j].hall_polarity[1] &&
+							gen->results[i].hall_polarity[2]==gen->results[j].hall_polarity[2]
+							){//do they match?
+							number_of_results_matching++;
+						if(number_of_results_matching>=NUMBER_OF_VALID_MATCHING_RESULTS-1){
+							gen->indexOfcorrectResult=i;
+							*state=detection_PRESENTATION_FINISH;
+							return;
+						}
+					}
+				}
+			}
+
+		}
+	}else{
+		*state=detection_ADQUISITION;
+		return;
+	}
+}
+void present_and_finish(detection_state_enum* state,hall_detection_general_struct *gen){
+
+	for (uint32_t i = 0; i < messageLength; ++i) {
+		gen->message[i]=' ';
+	}
+
+	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
+		if(gen->results[gen->indexOfcorrectResult].hall_order[i]==hall_A){
+			gen->message[(i*2)+1]='A';
+		}else if(gen->results[gen->indexOfcorrectResult].hall_order[i]==hall_B){
+			gen->message[(i*2)+1]='B';
+		}else if(gen->results[gen->indexOfcorrectResult].hall_order[i]==hall_C){
+			gen->message[(i*2)+1]='C';
+		}
+
+		if(gen->results[gen->indexOfcorrectResult].hall_polarity[i]==hall_direct){
+			gen->message[i*2]=' ';
+		}else if(gen->results[gen->indexOfcorrectResult].hall_polarity[i]==hall_inverse){
+			gen->message[i*2]='!';
+		}
+	}
+
+	gen->message[messageLength-2]='\n';//two last characters
+	gen->message[messageLength-1]='\r';
+
+#ifdef TESTuart
+	HAL_UART_Transmit(&huart2, (const uint8_t *)&general.message, messageLength,100);
+#endif
+
+	*state=detection_DISABLED;
+}
+
+/**
+* \brief
+* \param
+*/
+void fill_buffers(detection_state_enum* state,hall_detection_general_struct *gen,
 		hall_pin_info* H1_gpio,
 		hall_pin_info* H2_gpio,
 		hall_pin_info* H3_gpio,
@@ -160,62 +398,74 @@ void signals_adquisition(
 		){
 
 #ifdef REAL_PHASES_A_B_calculated_C
-	currA.two_samples_buffer[1]=currA.two_samples_buffer[0];
-	currA.two_samples_buffer[0]= *ADCcurr1; //i suspect ADC measurements are one sample late, because of the ADC being triggered at the end of the TIM interruption
+	gen->currA.two_samples_buffer[1]=gen->currA.two_samples_buffer[0];
+	gen->currA.two_samples_buffer[0]= *ADCcurr1; //i suspect ADC measurements are one sample late, because of the ADC being triggered at the end of the TIM interruption
 
-	currB.two_samples_buffer[1]=currB.two_samples_buffer[0];
-	currB.two_samples_buffer[0]= *ADCcurr2;
+	gen->currB.two_samples_buffer[1]=gen->currB.two_samples_buffer[0];
+	gen->currB.two_samples_buffer[0]= *ADCcurr2;
 	//c=-a-b, NO REAL MEASUREMENT OF CURRENT C, assuming ABC currents ortogonality:
-	currC.two_samples_buffer[1]=currC.two_samples_buffer[0];
-	currC.two_samples_buffer[0]= currentAplusBplusC-*ADCcurr1-*ADCcurr2;
+	gen->currC.two_samples_buffer[1]=gen->currC.two_samples_buffer[0];
+	gen->currC.two_samples_buffer[0]= currentAplusBplusC-*ADCcurr1-*ADCcurr2;
 #endif
 
 #ifdef REAL_PHASES_A_C_calculated_B
-	currA.two_samples_buffer[1]=currA.two_samples_buffer[0];
-	currA.two_samples_buffer[0]= *ADCcurr1;
+	gen->currA.two_samples_buffer[1]=gen->currA.two_samples_buffer[0];
+	gen->currA.two_samples_buffer[0]= *ADCcurr1;
 	//b=-a-c, NO REAL MEASUREMENT OF CURRENT B, assuming ABC currents ortogonality:
-	currB.two_samples_buffer[1]=currB.two_samples_buffer[0];
-	currB.two_samples_buffer[0]= -*ADCcurr1-*ADCcurr2;
+	gen->currB.two_samples_buffer[1]=gen->currB.two_samples_buffer[0];
+	gen->currB.two_samples_buffer[0]= -*ADCcurr1-*ADCcurr2;
 
-	currC.two_samples_buffer[1]=currC.two_samples_buffer[0];
-	currC.two_samples_buffer[0]= *ADCcurr2;
+	gen->currC.two_samples_buffer[1]=gen->currC.two_samples_buffer[0];
+	gen->currC.two_samples_buffer[0]= *ADCcurr2;
 #endif
 
 #ifdef REAL_PHASES_B_C_calculated_A
 	//a=-b-bc, NO REAL MEASUREMENT OF CURRENT A, assuming ABC currents ortogonality:
-	currA.two_samples_buffer[1]=currA.two_samples_buffer[0];
-	currA.two_samples_buffer[0]= currentAplusBplusC-*ADCcurr1-*ADCcurr2;
+	gen->currA.two_samples_buffer[1]=gen->currA.two_samples_buffer[0];
+	gen->currA.two_samples_buffer[0]= currentAplusBplusC-*ADCcurr1-*ADCcurr2;
 
-	currB.two_samples_buffer[1]=currB.two_samples_buffer[0];
-	currB.two_samples_buffer[0]= *ADCcurr1;
+	gen->currB.two_samples_buffer[1]=gen->currB.two_samples_buffer[0];
+	gen->currB.two_samples_buffer[0]= *ADCcurr1;
 
-	currC.two_samples_buffer[1]=currC.two_samples_buffer[0];
-	currC.two_samples_buffer[0]= *ADCcurr2;
+	gen->currC.two_samples_buffer[1]=gen->currC.two_samples_buffer[0];
+	gen->currC.two_samples_buffer[0]= *ADCcurr2;
 #endif
 
 
-	hallA.two_samples_buffer[1]=hallA.two_samples_buffer[0];
-	hallA.two_samples_buffer[0]= H1_gpio->state;
+	gen->hallA.two_samples_buffer[1]=gen->hallA.two_samples_buffer[0];
+	gen->hallA.two_samples_buffer[0]= H1_gpio->state;
 
-	hallB.two_samples_buffer[1]=hallB.two_samples_buffer[0];
-	hallB.two_samples_buffer[0]= H2_gpio->state;
+	gen->hallB.two_samples_buffer[1]=gen->hallB.two_samples_buffer[0];
+	gen->hallB.two_samples_buffer[0]= H2_gpio->state;
 
-	hallC.two_samples_buffer[1]=hallC.two_samples_buffer[0];
-	hallC.two_samples_buffer[0]= H3_gpio->state;
+	gen->hallC.two_samples_buffer[1]=gen->hallC.two_samples_buffer[0];
+	gen->hallC.two_samples_buffer[0]= H3_gpio->state;
 }
 
 /**
 * \brief
 * \param
 */
-void detect_all_zerocrossings(){
-	if(ticks>2){ //skip the first two samples to fill the buffers
-		detect_current_zerocrossings(&currA);
-		detect_current_zerocrossings(&currB);
-		detect_current_zerocrossings(&currC);
-		detect_hall_zerocrossings(&hallA);
-		detect_hall_zerocrossings(&hallB);
-		detect_hall_zerocrossings(&hallC);
+detection_YES_NO detect_N_zerocrossings(hall_detection_general_struct *gen,uint32_t N){
+	if((ticks-general.start_adquisition_ticks)>2){ //skip the first two samples to fill the buffers
+		detect_N_current_zerocrossings((ticks-general.start_adquisition_ticks),&gen->currA,MAXZEROCROSSINGS);
+		detect_N_current_zerocrossings((ticks-general.start_adquisition_ticks),&gen->currB,MAXZEROCROSSINGS);
+		detect_N_current_zerocrossings((ticks-general.start_adquisition_ticks),&gen->currC,MAXZEROCROSSINGS);
+		detect_N_hall_zerocrossings	((ticks-general.start_adquisition_ticks),&gen->hallA,MAXZEROCROSSINGS);
+		detect_N_hall_zerocrossings	((ticks-general.start_adquisition_ticks),&gen->hallB,MAXZEROCROSSINGS);
+		detect_N_hall_zerocrossings	((ticks-general.start_adquisition_ticks),&gen->hallC,MAXZEROCROSSINGS);
+	}
+	if(//if all buffers are full
+			(gen->currA.numberof_zerocrossings>=N) &&
+			(gen->currB.numberof_zerocrossings>=N) &&
+			(gen->currC.numberof_zerocrossings>=N) &&
+			(gen->hallA.numberof_zerocrossings>=N) &&
+			(gen->hallB.numberof_zerocrossings>=N) &&
+			(gen->hallC.numberof_zerocrossings>=N)
+			){
+		return YES;//done detecting
+	}else{
+		return NO;//still ongoing
 	}
 }
 
@@ -223,10 +473,10 @@ void detect_all_zerocrossings(){
 * \brief
 * \param
 */
-void detect_current_zerocrossings(current_or_hall_measurements_struct* currx){
+void detect_N_current_zerocrossings(uint32_t ticks,current_or_hall_measurements_struct* currx,uint32_t N){
 	if(	   (((currx->two_samples_buffer[0]-currentADCoffset)*
 			 (currx->two_samples_buffer[1]-currentADCoffset))<=0)
-			 && currx->numberof_zerocrossings<MAXZEROCROSSINGS
+			 && currx->numberof_zerocrossings<N
 			){
 
 		if(currx->numberof_zerocrossings==0){			//only if this is the first zerocrossing detected
@@ -255,9 +505,9 @@ void detect_current_zerocrossings(current_or_hall_measurements_struct* currx){
 * \brief
 * \param
 */
-void detect_hall_zerocrossings(hall_measurements_struct* hallx){
+void detect_N_hall_zerocrossings(uint32_t ticks,hall_measurements_struct* hallx,uint32_t N){
 	if(hallx->two_samples_buffer[0]!=hallx->two_samples_buffer[1]){
-		if(hallx->numberof_zerocrossings<MAXZEROCROSSINGS){
+		if(hallx->numberof_zerocrossings<N){
 			hallx->zerocrossings_tick[hallx->numberof_zerocrossings]=ticks;
 			if(hallx->two_samples_buffer[0]!=0){
 				hallx->zerocrossings_polarity[hallx->numberof_zerocrossings]=rising_polarity;
@@ -273,257 +523,246 @@ void detect_hall_zerocrossings(hall_measurements_struct* hallx){
 * \brief
 * \param
 */
-void end_detection(detection_state_enum* enabled_or_disabled){
-	if(
-			(currA.numberof_zerocrossings>=MAXZEROCROSSINGS) &&
-			(currB.numberof_zerocrossings>=MAXZEROCROSSINGS) &&
-			(currC.numberof_zerocrossings>=MAXZEROCROSSINGS) &&
-			(hallA.numberof_zerocrossings>=MAXZEROCROSSINGS) &&
-			(hallB.numberof_zerocrossings>=MAXZEROCROSSINGS) &&
-			(hallC.numberof_zerocrossings>=MAXZEROCROSSINGS)
-	){
-		*enabled_or_disabled=detection_DISABLED; //end of detection because the zerocrossing buffers are full
-	}else if(ticks>=MAXTICKs){
-		*enabled_or_disabled=detection_DISABLED; //end of detection because of timeout
-	}
-}
-
-/**
-* \brief
-* \param
-*/
-void evaluate_and_present_results(
-		detection_state_enum* enabled_or_disabled,
-		hall_pin_info* H1_gpio,
-		hall_pin_info* H2_gpio,
-		hall_pin_info* H3_gpio){
-	if(*enabled_or_disabled==detection_DISABLED){
-		calculateElectricPeriod_inTicks(&results.electricPeriod_ticks);
-		assign_closest_phase_to_hall(&results);
-		assign_polarity(&results);
-		present_results();
-		swap_hall_gpios_with_detected_results(H1_gpio,H2_gpio,H3_gpio);
-	}
-}
-
-/**
-* \brief
-* \param
-*/
-void swap_hall_gpios_with_detected_results(hall_pin_info* pin_infoH1,hall_pin_info* pin_infoH2,hall_pin_info* pin_infoH3){
-	hall_pin_info old_pin_infoH1=*pin_infoH1;
-	hall_pin_info old_pin_infoH2=*pin_infoH2;
-	hall_pin_info old_pin_infoH3=*pin_infoH3;
-
-	switch (results.hall_order[phase_A]) {
-		case hall_A:
-			*pin_infoH1=old_pin_infoH1;
-			break;
-		case hall_B:
-			*pin_infoH2=old_pin_infoH1;
-			break;
-		case hall_C:
-			*pin_infoH3=old_pin_infoH1;
-			break;
-		default:
-			break;
-	}
-
-	switch (results.hall_order[phase_B]) {
-		case hall_A:
-			*pin_infoH1=old_pin_infoH2;
-			break;
-		case hall_B:
-			*pin_infoH2=old_pin_infoH2;
-			break;
-		case hall_C:
-			*pin_infoH3=old_pin_infoH2;
-			break;
-		default:
-			break;
-	}
-
-	switch (results.hall_order[phase_C]) {
-		case hall_A:
-			*pin_infoH1=old_pin_infoH3;
-			break;
-		case hall_B:
-			*pin_infoH2=old_pin_infoH3;
-			break;
-		case hall_C:
-			*pin_infoH3=old_pin_infoH3;
-			break;
-		default:
-			break;
-	}
-
-}
-/**
-* \brief
-* \param
-*/
-void calculateElectricPeriod_inTicks(uint32_t* resulting_period){
+void calculateElectricPeriod_inTicks(hall_detection_general_struct *gen, uint32_t samples){
 	uint32_t averagedsemiPeriod=0;
-	for (uint32_t i = 0; i < MAXZEROCROSSINGS-1; ++i) {
-		averagedsemiPeriod+=(currA.zerocrossings_tick[i+1]-currA.zerocrossings_tick[i]);
-		averagedsemiPeriod+=(currB.zerocrossings_tick[i+1]-currB.zerocrossings_tick[i]);
-		averagedsemiPeriod+=(hallA.zerocrossings_tick[i+1]-hallA.zerocrossings_tick[i]);
-		averagedsemiPeriod+=(hallB.zerocrossings_tick[i+1]-hallB.zerocrossings_tick[i]);
-		averagedsemiPeriod+=(hallC.zerocrossings_tick[i+1]-hallC.zerocrossings_tick[i]);
+	for (uint32_t i = 0; i < samples-1; ++i) {
+		averagedsemiPeriod+=(gen->currA.zerocrossings_tick[i+1]-gen->currA.zerocrossings_tick[i]);
+		averagedsemiPeriod+=(gen->currB.zerocrossings_tick[i+1]-gen->currB.zerocrossings_tick[i]);
+		averagedsemiPeriod+=(gen->hallA.zerocrossings_tick[i+1]-gen->hallA.zerocrossings_tick[i]);
+		averagedsemiPeriod+=(gen->hallB.zerocrossings_tick[i+1]-gen->hallB.zerocrossings_tick[i]);
+		averagedsemiPeriod+=(gen->hallC.zerocrossings_tick[i+1]-gen->hallC.zerocrossings_tick[i]);
 	}
 
-	averagedsemiPeriod/=(MAXZEROCROSSINGS-1);
+	averagedsemiPeriod/=(samples-1);
 	averagedsemiPeriod/=5;
 
-	*resulting_period=averagedsemiPeriod*2; //FOR torrot emulated this should be 66*2
+	gen->results[gen->numberOfresults].electricPeriod_ticks=averagedsemiPeriod*2; //FOR torrot emulated this should be 66*2
 }
 
 /**
 * \brief
 * \param
 */
-void assign_closest_phase_to_hall(detection_results_struct* res){
 
 
-	for (uint32_t i = 0; i < MAXZEROCROSSINGS; ++i) {// all zerocrossings loop
-		differences_phaseA[phase_A]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallA.zerocrossings_tick[i]);
-		differences_phaseA[phase_B]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_tick[i]);
-		differences_phaseA[phase_C]+=absolute((int32_t)currA.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_tick[i]);
+detection_YES_NO is_deviation_from_period_acceptable(hall_detection_general_struct *gen, float tolerance_factor,uint32_t samples){
+	float _semiperiod=gen->results[gen->numberOfresults].electricPeriod_ticks/2.0;
+	uint32_t _deviation_top=	_semiperiod +_semiperiod*tolerance_factor;
+	uint32_t _deviation_bottom=	_semiperiod	-_semiperiod*tolerance_factor;
+	uint32_t _sampled_period=0;
 
-		differences_phaseB[phase_A]+=absolute((int32_t)currB.zerocrossings_tick[i]-(int32_t)hallA.zerocrossings_tick[i]);
-		differences_phaseB[phase_B]+=absolute((int32_t)currB.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_tick[i]);
-		differences_phaseB[phase_C]+=absolute((int32_t)currB.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_tick[i]);
-
-		differences_phaseC[phase_A]+=absolute((int32_t)currC.zerocrossings_tick[i]-(int32_t)hallA.zerocrossings_tick[i]);
-		differences_phaseC[phase_B]+=absolute((int32_t)currC.zerocrossings_tick[i]-(int32_t)hallB.zerocrossings_tick[i]);
-		differences_phaseC[phase_C]+=absolute((int32_t)currC.zerocrossings_tick[i]-(int32_t)hallC.zerocrossings_tick[i]);
-	}
-
-	for (uint32_t i = 0; i < number_of_phases; ++i) {
-		differences_phaseA[i]/=MAXZEROCROSSINGS;
-		differences_phaseB[i]/=MAXZEROCROSSINGS;
-		differences_phaseC[i]/=MAXZEROCROSSINGS;
-
-		if(differences_phaseA[i]>((int32_t)(res->electricPeriod_ticks/2)-lowpassfilter_ticks) && differences_phaseA[i]<(int32_t)(res->electricPeriod_ticks)){
-			differences_phaseA[i]=(int32_t)(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
-			toggled_polarity[hall_A]=1;
-
+	for (uint32_t i = 0; i < samples-1; ++i) {
+		_sampled_period=(gen->currA.zerocrossings_tick[i+1]-gen->currA.zerocrossings_tick[i]);
+		if((_sampled_period<(_deviation_bottom))||(_sampled_period>(_deviation_top))){
+			return NO;
 		}
 
-		if(differences_phaseB[i]>((int32_t)(res->electricPeriod_ticks/2)-lowpassfilter_ticks) && differences_phaseB[i]<(int32_t)(res->electricPeriod_ticks)){
-			differences_phaseB[i]=(int32_t)(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
-			toggled_polarity[hall_B]=1;
-		}
-
-		if(differences_phaseC[i]>((int32_t)(res->electricPeriod_ticks/2)-lowpassfilter_ticks) && differences_phaseC[i]<(int32_t)(res->electricPeriod_ticks)){
-			differences_phaseC[i]=(int32_t)(res->electricPeriod_ticks/2)%lowpassfilter_ticks;
-			toggled_polarity[hall_C]=1;
+		_sampled_period=(gen->currC.zerocrossings_tick[i+1]-gen->currC.zerocrossings_tick[i]);
+		if((_sampled_period<(_deviation_bottom))||(_sampled_period>(_deviation_top))){
+			return NO;
 		}
 	}
-
-	int32_t minimum=0xFF;
-	for (uint32_t i = 0; i < number_of_phases; ++i) {
-		if(differences_phaseA[i]<minimum){
-			minimum=differences_phaseA[i];
-		}
-	}
-	for (uint32_t i = 0; i < number_of_phases; ++i) {
-		if(differences_phaseA[i]==minimum){
-			res->hall_order[i]=phase_A;
-		}
-	}
-
-	minimum=0xFF;
-	for (uint32_t i = 0; i < number_of_phases; ++i) {
-		if(differences_phaseB[i]<minimum){
-			minimum=differences_phaseB[i];
-		}
-	}
-	for (uint32_t i = 0; i < number_of_phases; ++i) {
-		if(differences_phaseB[i]==minimum){
-			res->hall_order[i]=phase_B;
-		}
-	}
-
-	minimum=0xFF;
-	for (uint32_t i = 0; i < number_of_phases; ++i) {
-		if(differences_phaseC[i]<minimum){
-			minimum=differences_phaseC[i];
-		}
-	}
-	for (uint32_t i = 0; i < number_of_phases; ++i) {
-		if(differences_phaseC[i]==minimum){
-			res->hall_order[i]=phase_C;
-		}
-	}
+	return YES;//acceptable
 }
+
 
 /**
 * \brief
 * \param
 */
+detection_YES_NO are_all_periods_stable(hall_detection_general_struct *gen, uint32_t samples){
+			calculateElectricPeriod_inTicks(gen,samples);
+	return 	is_deviation_from_period_acceptable(gen,TOLERANCE_FACTOR_FOR_STATIONARY_CURRENTS,samples);
+}
+
+///**
+//* \brief
+//* \param
+//*/
+//void evaluate_and_present_results(
+//		detection_state_enum* enabled_or_disabled,
+//		hall_pin_info* H1_gpio,
+//		hall_pin_info* H2_gpio,
+//		hall_pin_info* H3_gpio){
+//	if(*enabled_or_disabled==detection_DISABLED){
+//		calculateElectricPeriod_inTicks(&results.electricPeriod_ticks);
+//		assign_closest_phase_to_hall(&results);
+//		assign_polarity(&results);
+//		present_results();
+//		swap_hall_gpios_with_detected_results(H1_gpio,H2_gpio,H3_gpio);
+//	}
+//}
+//
+///**
+//* \brief
+//* \param
+//*/
+//void swap_hall_gpios_with_detected_results(hall_pin_info* pin_infoH1,hall_pin_info* pin_infoH2,hall_pin_info* pin_infoH3){
+//	hall_pin_info old_pin_infoH1=*pin_infoH1;
+//	hall_pin_info old_pin_infoH2=*pin_infoH2;
+//	hall_pin_info old_pin_infoH3=*pin_infoH3;
+//
+//	switch (results.hall_order[phase_A]) {
+//		case hall_A:
+//			*pin_infoH1=old_pin_infoH1;
+//			break;
+//		case hall_B:
+//			*pin_infoH2=old_pin_infoH1;
+//			break;
+//		case hall_C:
+//			*pin_infoH3=old_pin_infoH1;
+//			break;
+//		default:
+//			break;
+//	}
+//
+//	switch (results.hall_order[phase_B]) {
+//		case hall_A:
+//			*pin_infoH1=old_pin_infoH2;
+//			break;
+//		case hall_B:
+//			*pin_infoH2=old_pin_infoH2;
+//			break;
+//		case hall_C:
+//			*pin_infoH3=old_pin_infoH2;
+//			break;
+//		default:
+//			break;
+//	}
+//
+//	switch (results.hall_order[phase_C]) {
+//		case hall_A:
+//			*pin_infoH1=old_pin_infoH3;
+//			break;
+//		case hall_B:
+//			*pin_infoH2=old_pin_infoH3;
+//			break;
+//		case hall_C:
+//			*pin_infoH3=old_pin_infoH3;
+//			break;
+//		default:
+//			break;
+//	}
+//
+//}
+/**
+* \brief
+* \param
+*/
+
 int32_t absolute(int32_t x){
     return (int32_t)x < (int32_t)0 ? -x : x;
 }
 
+//
 /**
 * \brief
 * \param
 */
-void assign_polarity(detection_results_struct* res){
+void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
 
-	for (uint32_t i = 0; i < number_of_phases; ++i) {
-		if(currents[res->hall_order[i]]->zerocrossings_polarity[1]==halls[i]->zerocrossings_polarity[1]){
-			if(toggled_polarity[res->hall_order[i]]==0){
-				res->hall_polarity[res->hall_order[i]]=hall_direct;
-			}else{
-				res->hall_polarity[res->hall_order[i]]=hall_inverse;
-			}
-		}else{
-			if(toggled_polarity[res->hall_order[i]]==0){
-				res->hall_polarity[res->hall_order[i]]=hall_inverse;
-			}else{
-				res->hall_polarity[res->hall_order[i]]=hall_direct;
-			}
-		}
-	}
-}
+	for (uint32_t i = 0; i < MAXZEROCROSSINGS; ++i) {// all zerocrossings loop
+		gen->differences_phaseA[phase_A]+=absolute((int32_t)gen->currA.zerocrossings_tick[i]-(int32_t)gen->hallA.zerocrossings_tick[i]);
+		gen->differences_phaseA[phase_B]+=absolute((int32_t)gen->currA.zerocrossings_tick[i]-(int32_t)gen->hallB.zerocrossings_tick[i]);
+		gen->differences_phaseA[phase_C]+=absolute((int32_t)gen->currA.zerocrossings_tick[i]-(int32_t)gen->hallC.zerocrossings_tick[i]);
 
-/**
-* \brief
-* \param
-*/
-void present_results(){
+		gen->differences_phaseB[phase_A]+=absolute((int32_t)gen->currB.zerocrossings_tick[i]-(int32_t)gen->hallA.zerocrossings_tick[i]);
+		gen->differences_phaseB[phase_B]+=absolute((int32_t)gen->currB.zerocrossings_tick[i]-(int32_t)gen->hallB.zerocrossings_tick[i]);
+		gen->differences_phaseB[phase_C]+=absolute((int32_t)gen->currB.zerocrossings_tick[i]-(int32_t)gen->hallC.zerocrossings_tick[i]);
 
-	for (uint32_t i = 0; i < messageLength; ++i) {
-		message[i]=' ';
+		gen->differences_phaseC[phase_A]+=absolute((int32_t)gen->currC.zerocrossings_tick[i]-(int32_t)gen->hallA.zerocrossings_tick[i]);
+		gen->differences_phaseC[phase_B]+=absolute((int32_t)gen->currC.zerocrossings_tick[i]-(int32_t)gen->hallB.zerocrossings_tick[i]);
+		gen->differences_phaseC[phase_C]+=absolute((int32_t)gen->currC.zerocrossings_tick[i]-(int32_t)gen->hallC.zerocrossings_tick[i]);
 	}
 
-	for (uint32_t i = 0; i < number_of_phases; ++i) {
-		if(results.hall_order[i]==hall_A){
-			message[(i*2)+1]='A';
-		}else if(results.hall_order[i]==hall_B){
-			message[(i*2)+1]='B';
-		}else if(results.hall_order[i]==hall_C){
-			message[(i*2)+1]='C';
+	int32_t _bottom_limit	=(int32_t)((gen->results[gen->numberOfresults].electricPeriod_ticks/2)*0.95);
+	int32_t _top_limit		=(int32_t)(gen->results[gen->numberOfresults].electricPeriod_ticks);
+
+	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
+		gen->differences_phaseA[i]/=MAXZEROCROSSINGS;
+		gen->differences_phaseB[i]/=MAXZEROCROSSINGS;
+		gen->differences_phaseC[i]/=MAXZEROCROSSINGS;
+
+		//sometimes the toggled polarity is detected from a non relevant phase, in this case we are wrongly applying te toggle, TODO lets increase the toogle array, and make it case sensitive, if the togled signals is actually the one we use do something if not just do nothing
+		if(gen->differences_phaseA[i]>_bottom_limit && gen->differences_phaseA[i]<_top_limit){
+			gen->differences_phaseA[i]%=_bottom_limit;
+			gen->shifted_polarity[hall_A][i]=1;
 		}
 
-		if(results.hall_polarity[i]==hall_direct){
-				message[i*2]=' ';
-		}else if(results.hall_polarity[i]==hall_inverse){
-				message[i*2]='!';
+		if(gen->differences_phaseB[i]>_bottom_limit && gen->differences_phaseB[i]<_top_limit){
+			gen->differences_phaseB[i]%=_bottom_limit;
+			gen->shifted_polarity[hall_B][i]=1;
+		}
+
+		if(gen->differences_phaseC[i]>_bottom_limit && gen->differences_phaseC[i]<_top_limit){
+			gen->differences_phaseC[i]%=_bottom_limit;
+			gen->shifted_polarity[hall_C][i]=1;
 		}
 	}
 
-	message[messageLength-2]='\n';//two last characters
-	message[messageLength-1]='\r';
+	int32_t minimum=0xFF;
+	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
+		if(gen->differences_phaseA[i]<minimum){
+			minimum=gen->differences_phaseA[i];
+		}
+	}
+	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
+		if(gen->differences_phaseA[i]==minimum){
+			gen->results[gen->numberOfresults].hall_order[i]=phase_A;
+		}
+	}
 
+	minimum=0xFF;
+	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
+		if(gen->differences_phaseB[i]<minimum){
+			minimum=gen->differences_phaseB[i];
+		}
+	}
+	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
+		if(gen->differences_phaseB[i]==minimum){
+			gen->results[gen->numberOfresults].hall_order[i]=phase_B;
+		}
+	}
 
+	minimum=0xFF;
+	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
+		if(gen->differences_phaseC[i]<minimum){
+			minimum=gen->differences_phaseC[i];
+		}
+	}
+	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
+		if(gen->differences_phaseC[i]==minimum){
+			gen->results[gen->numberOfresults].hall_order[i]=phase_C;
+		}
+	}
 
 }
 
-void present_results_uart(){
-#ifdef TESTuart
-	HAL_UART_Transmit(&huart2, (const uint8_t *)&message, messageLength,100);
-#endif
-}
+
+
+///**
+//* \brief
+//* \param
+//*/
+//void assign_polarity(hall_detection_general_struct *gen){
+//
+//	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
+//		if(currents[res->hall_order[i]]->zerocrossings_polarity[1]==halls[i]->zerocrossings_polarity[1]){
+//			if(shifted_polarity[res->hall_order[i]][i]==0){
+//				res->hall_polarity[res->hall_order[i]]=hall_direct;
+//			}else{
+//				res->hall_polarity[res->hall_order[i]]=hall_inverse;
+//			}
+//		}else{
+//			if(shifted_polarity[res->hall_order[i]][i]==0){
+//				res->hall_polarity[res->hall_order[i]]=hall_inverse;
+//			}else{
+//				res->hall_polarity[res->hall_order[i]]=hall_direct;
+//			}
+//		}
+//	}
+//}
+//
+
+
+
