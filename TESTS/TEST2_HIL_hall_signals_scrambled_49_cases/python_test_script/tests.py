@@ -5,7 +5,7 @@ import threading
 import sys
 
 
-waittime=2;
+waittime=3;
 stopthreads=True;
 serial_tester=None;
 serial_target=None;
