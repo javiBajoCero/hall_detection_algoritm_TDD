@@ -355,7 +355,7 @@ void validation(detection_state_enum* state,hall_detection_general_struct *gen){
 
 	if(gen->numberOfresults>=NUMBER_OF_VALID_MATCHING_RESULTS){			//only if enough adquisitions were made
 		for (uint32_t i = 0; i < gen->numberOfresults; ++i) {			//loop trough results
-			if(gen->results[i].is_valid==YES){							//skip the not valid results.
+			if(gen->results[i].is_valid==YES){	//skip the not valid results.
 				uint32_t number_of_results_matching=0;
 				for (uint32_t j = i+1; j < gen->numberOfresults; ++j) {	//compare that one result with the rest
 					if(
@@ -685,7 +685,7 @@ int32_t absolute(int32_t x){
 
 /**
 * \brief magic function, from zerocrossings decides actuall order of hall/current signals, this function is super critical and should be optimiced
-* right now has a cyclomatic complexity of 17, that should be reduced.
+* right now has a cyclomatic complexity of 21, that should be reduced.
 * \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
 */
 void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
@@ -706,7 +706,7 @@ void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
 
 	int32_t _bottom_limit	=(int32_t)((gen->results[gen->numberOfresults].electricPeriod_ticks/2)*0.95);
 	int32_t _top_limit		=(int32_t)(gen->results[gen->numberOfresults].electricPeriod_ticks);
-	int32_t minimum[NUMBEROFPHASES]={0xFF,0xFF,0xFF};
+
 	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
 		gen->differences_phaseA[i]/=MAXZEROCROSSINGS;
 		gen->differences_phaseB[i]/=MAXZEROCROSSINGS;
@@ -727,31 +727,44 @@ void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
 			gen->differences_phaseC[i]%=_bottom_limit;
 			gen->shifted_polarity[hall_C][i]=1;
 		}
+	}
 
-		//learns what the minimum differences are
-		if(gen->differences_phaseA[i]<minimum[phase_A]){
-			minimum[phase_A]=gen->differences_phaseA[i];
+	int32_t minimum=0xFF;
+	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
+		if(gen->differences_phaseA[i]<minimum){
+			minimum=gen->differences_phaseA[i];
 		}
-		if(gen->differences_phaseA[i]<minimum[phase_B]){
-			minimum[phase_B]=gen->differences_phaseB[i];
-		}
-		if(gen->differences_phaseA[i]<minimum[phase_C]){
-			minimum[phase_C]=gen->differences_phaseC[i];
+	}
+	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
+		if(gen->differences_phaseA[i]==minimum){
+			gen->results[gen->numberOfresults].hall_order[i]=phase_A;
 		}
 	}
 
-	//if the difference is the minimum one thats the winnner
+	minimum=0xFF;
 	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
-		if(gen->differences_phaseA[i]==minimum[phase_A]){
-			gen->results[gen->numberOfresults].hall_order[i]=phase_A;
+		if(gen->differences_phaseB[i]<minimum){
+			minimum=gen->differences_phaseB[i];
 		}
-		if(gen->differences_phaseB[i]==minimum[phase_B]){
+	}
+	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
+		if(gen->differences_phaseB[i]==minimum){
 			gen->results[gen->numberOfresults].hall_order[i]=phase_B;
 		}
-		if(gen->differences_phaseC[i]==minimum[phase_C]){
+	}
+
+	minimum=0xFF;
+	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
+		if(gen->differences_phaseC[i]<minimum){
+			minimum=gen->differences_phaseC[i];
+		}
+	}
+	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
+		if(gen->differences_phaseC[i]==minimum){
 			gen->results[gen->numberOfresults].hall_order[i]=phase_C;
 		}
 	}
+
 }
 
 
