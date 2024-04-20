@@ -5,7 +5,7 @@ import threading
 import sys
 from datetime import datetime
 
-waittime=4;
+waittime=3;
 serial_emulator=0;
 serial_target=0;
 succesfulltests=0;
