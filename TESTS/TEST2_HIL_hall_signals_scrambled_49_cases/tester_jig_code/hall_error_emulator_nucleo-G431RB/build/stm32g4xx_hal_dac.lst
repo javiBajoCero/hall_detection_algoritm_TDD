@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccGh0P8z.s 			page 1
+ARM GAS  /tmp/cceAfkyh.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
   27:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****                       ##### DAC Peripheral features #####
   28:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   ==============================================================================
   29:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****     [..]
-ARM GAS  /tmp/ccGh0P8z.s 			page 2
+ARM GAS  /tmp/cceAfkyh.s 			page 2
 
 
   30:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****       *** DAC Channels ***
@@ -118,7 +118,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
   84:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****       Note: On this STM32 series, parameter only available if HRTIM feature is
   85:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****             supported (refer to device datasheet for supported features list)
   86:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** 
-ARM GAS  /tmp/ccGh0P8z.s 			page 3
+ARM GAS  /tmp/cceAfkyh.s 			page 3
 
 
   87:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****       *** DAC Buffer mode feature ***
@@ -178,7 +178,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  141:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****       Enable LSI using HAL_RCC_OscConfig with RCC_OSCILLATORTYPE_LSI &
  142:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****       RCC_LSI_ON parameters.
  143:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** 
-ARM GAS  /tmp/ccGh0P8z.s 			page 4
+ARM GAS  /tmp/cceAfkyh.s 			page 4
 
 
  144:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****       Use DAC_InitStructure.DAC_SampleAndHold = DAC_SAMPLEANDHOLD_ENABLE;
@@ -238,7 +238,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  198:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****        [..]
  199:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****        A DMAMUX request can be generated when an external trigger (but not a software trigger)
  200:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****        occurs if DMAMUX requests are enabled using HAL_DAC_Start_DMA().
-ARM GAS  /tmp/ccGh0P8z.s 			page 5
+ARM GAS  /tmp/cceAfkyh.s 			page 5
 
 
  201:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****        DMAMUX requests are mapped as following:
@@ -298,7 +298,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  255:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****            of data to be transferred at each end of conversion
  256:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****            First issued trigger will start the conversion of the value previously set by HAL_DAC_Se
  257:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****        (+) At the middle of data transfer HAL_DAC_ConvHalfCpltCallbackCh1() or HAL_DACEx_ConvHalfCp
-ARM GAS  /tmp/ccGh0P8z.s 			page 6
+ARM GAS  /tmp/cceAfkyh.s 			page 6
 
 
  258:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****            function is executed and user can add his own code by customization of function pointer
@@ -358,7 +358,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  312:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****       and  HAL_DAC_DeInit only when these callbacks are null (not registered beforehand).
  313:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****       If not, MspInit or MspDeInit are not null, the HAL_DAC_Init and HAL_DAC_DeInit
  314:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****       keep and use the user MspInit/MspDeInit callbacks (registered beforehand)
-ARM GAS  /tmp/ccGh0P8z.s 			page 7
+ARM GAS  /tmp/cceAfkyh.s 			page 7
 
 
  315:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** 
@@ -418,7 +418,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  369:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** 
  370:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** /**
  371:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   * @}
-ARM GAS  /tmp/ccGh0P8z.s 			page 8
+ARM GAS  /tmp/cceAfkyh.s 			page 8
 
 
  372:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   */
@@ -478,7 +478,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  426:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****     hdac->ErrorCallbackCh2              = HAL_DACEx_ErrorCallbackCh2;
  427:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****     hdac->DMAUnderrunCallbackCh2        = HAL_DACEx_DMAUnderrunCallbackCh2;
  428:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** 
-ARM GAS  /tmp/ccGh0P8z.s 			page 9
+ARM GAS  /tmp/cceAfkyh.s 			page 9
 
 
  429:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****     if (hdac->MspInitCallback == NULL)
@@ -538,7 +538,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  483:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****     hdac->MspDeInitCallback = HAL_DAC_MspDeInit;
  484:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   }
  485:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   /* DeInit the low level hardware */
-ARM GAS  /tmp/ccGh0P8z.s 			page 10
+ARM GAS  /tmp/cceAfkyh.s 			page 10
 
 
  486:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   hdac->MspDeInitCallback(hdac);
@@ -598,7 +598,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  406:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   /* Check DAC handle */
   52              		.loc 1 406 1 is_stmt 1 view -0
   53              		.cfi_startproc
-ARM GAS  /tmp/ccGh0P8z.s 			page 11
+ARM GAS  /tmp/cceAfkyh.s 			page 11
 
 
   54              		@ args = 0, pretend = 0, frame = 0
@@ -658,7 +658,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  436:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** 
   92              		.loc 1 436 16 is_stmt 0 view .LVU20
   93 0018 4371     		strb	r3, [r0, #5]
-ARM GAS  /tmp/ccGh0P8z.s 			page 12
+ARM GAS  /tmp/cceAfkyh.s 			page 12
 
 
  443:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** #endif /* USE_HAL_DAC_REGISTER_CALLBACKS */
@@ -718,7 +718,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  130              		.loc 1 535 1 is_stmt 0 view .LVU27
  131 0000 7047     		bx	lr
  132              		.cfi_endproc
-ARM GAS  /tmp/ccGh0P8z.s 			page 13
+ARM GAS  /tmp/cceAfkyh.s 			page 13
 
 
  133              	.LFE135:
@@ -778,7 +778,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  499:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** 
  176              		.loc 1 499 3 view .LVU41
  177 0014 6071     		strb	r0, [r4, #5]
-ARM GAS  /tmp/ccGh0P8z.s 			page 14
+ARM GAS  /tmp/cceAfkyh.s 			page 14
 
 
  502:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** }
@@ -838,7 +838,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  560:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   * @brief  Enables DAC and starts conversion of channel.
  561:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   * @param  hdac pointer to a DAC_HandleTypeDef structure that contains
  562:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   *         the configuration information for the specified DAC.
-ARM GAS  /tmp/ccGh0P8z.s 			page 15
+ARM GAS  /tmp/cceAfkyh.s 			page 15
 
 
  563:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   * @param  Channel The selected DAC channel.
@@ -898,7 +898,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  237 0016 1368     		ldr	r3, [r2]
  238 0018 01F01006 		and	r6, r1, #16
  239 001c 00FA06F1 		lsl	r1, r0, r6
-ARM GAS  /tmp/ccGh0P8z.s 			page 16
+ARM GAS  /tmp/cceAfkyh.s 			page 16
 
 
  240              	.LVL14:
@@ -958,7 +958,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  265              		.loc 1 613 3 is_stmt 1 view .LVU67
  266              		.loc 1 613 3 view .LVU68
  267 003a 0020     		movs	r0, #0
-ARM GAS  /tmp/ccGh0P8z.s 			page 17
+ARM GAS  /tmp/cceAfkyh.s 			page 17
 
 
  268 003c 6071     		strb	r0, [r4, #5]
@@ -1018,7 +1018,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  309              		.loc 1 617 1 view .LVU80
  310 0068 7047     		bx	lr
  311              		.cfi_endproc
-ARM GAS  /tmp/ccGh0P8z.s 			page 18
+ARM GAS  /tmp/cceAfkyh.s 			page 18
 
 
  312              	.LFE136:
@@ -1078,7 +1078,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  347 0012 23EA0103 		bic	r3, r3, r1
  348 0016 1360     		str	r3, [r2]
  639:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   /* Ensure minimum wait before enabling peripheral after disabling it */
-ARM GAS  /tmp/ccGh0P8z.s 			page 19
+ARM GAS  /tmp/cceAfkyh.s 			page 19
 
 
  640:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   HAL_Delay(1);
@@ -1138,7 +1138,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  668:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   */
  669:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** HAL_StatusTypeDef HAL_DAC_Start_DMA(DAC_HandleTypeDef *hdac, uint32_t Channel, uint32_t *pData, uin
  670:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****                                     uint32_t Alignment)
-ARM GAS  /tmp/ccGh0P8z.s 			page 20
+ARM GAS  /tmp/cceAfkyh.s 			page 20
 
 
  671:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** {
@@ -1198,7 +1198,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  413              		.loc 1 688 5 is_stmt 1 view .LVU106
  414              		.loc 1 688 9 is_stmt 0 view .LVU107
  415 0016 8568     		ldr	r5, [r0, #8]
-ARM GAS  /tmp/ccGh0P8z.s 			page 21
+ARM GAS  /tmp/cceAfkyh.s 			page 21
 
 
  416              		.loc 1 688 41 view .LVU108
@@ -1258,7 +1258,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  706:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****       case DAC_ALIGN_12B_L:
  707:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****         /* Get DHR12L1 address */
  708:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****         tmpreg = (uint32_t)&hdac->Instance->DHR12L1;
-ARM GAS  /tmp/ccGh0P8z.s 			page 22
+ARM GAS  /tmp/cceAfkyh.s 			page 22
 
 
  709:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****         break;
@@ -1318,7 +1318,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  455              		.loc 1 758 5 is_stmt 1 view .LVU121
  456 0048 0168     		ldr	r1, [r0]
  457              	.LVL27:
-ARM GAS  /tmp/ccGh0P8z.s 			page 23
+ARM GAS  /tmp/cceAfkyh.s 			page 23
 
 
  458              		.loc 1 758 5 is_stmt 0 view .LVU122
@@ -1378,7 +1378,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  786:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****     hdac->ErrorCode |= HAL_DAC_ERROR_DMA;
  485              		.loc 1 786 5 is_stmt 1 view .LVU132
  486              		.loc 1 786 21 is_stmt 0 view .LVU133
-ARM GAS  /tmp/ccGh0P8z.s 			page 24
+ARM GAS  /tmp/cceAfkyh.s 			page 24
 
 
  487 0066 3369     		ldr	r3, [r6, #16]
@@ -1438,7 +1438,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  524 0082 DCE7     		b	.L36
  525              	.LVL39:
  526              	.L33:
-ARM GAS  /tmp/ccGh0P8z.s 			page 25
+ARM GAS  /tmp/cceAfkyh.s 			page 25
 
 
  722:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** 
@@ -1498,7 +1498,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  739:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****       case DAC_ALIGN_12B_L:
  566              		.loc 1 739 9 is_stmt 1 view .LVU162
  567 00b2 C4E7     		b	.L36
-ARM GAS  /tmp/ccGh0P8z.s 			page 26
+ARM GAS  /tmp/cceAfkyh.s 			page 26
 
 
  568              	.LVL41:
@@ -1558,7 +1558,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  607              		.loc 1 770 14 view .LVU177
  608 00d4 0446     		mov	r4, r0
  609              	.LVL49:
-ARM GAS  /tmp/ccGh0P8z.s 			page 27
+ARM GAS  /tmp/cceAfkyh.s 			page 27
 
 
  770:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   }
@@ -1618,7 +1618,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  801:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   *
  802:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   *         (1) On this STM32 series, parameter not available on all instances.
  803:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   *             Refer to device datasheet for channels availability.
-ARM GAS  /tmp/ccGh0P8z.s 			page 28
+ARM GAS  /tmp/cceAfkyh.s 			page 28
 
 
  804:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   * @retval HAL status
@@ -1678,7 +1678,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  693              	.LVL55:
  818:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** 
  819:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   /* Disable the DMA channel */
-ARM GAS  /tmp/ccGh0P8z.s 			page 29
+ARM GAS  /tmp/cceAfkyh.s 			page 29
 
 
  820:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** 
@@ -1738,7 +1738,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  719              		.loc 1 834 11 is_stmt 0 view .LVU204
  720 0048 E068     		ldr	r0, [r4, #12]
  721 004a FFF7FEFF 		bl	HAL_DMA_Abort
-ARM GAS  /tmp/ccGh0P8z.s 			page 30
+ARM GAS  /tmp/cceAfkyh.s 			page 30
 
 
  722              	.LVL58:
@@ -1798,7 +1798,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  881:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****     }
  882:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   }
  883:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** 
-ARM GAS  /tmp/ccGh0P8z.s 			page 31
+ARM GAS  /tmp/cceAfkyh.s 			page 31
 
 
  884:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** 
@@ -1858,7 +1858,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  747              		@ link register save eliminated.
  748              		.loc 1 933 1 is_stmt 0 view .LVU207
  749 0000 10B4     		push	{r4}
-ARM GAS  /tmp/ccGh0P8z.s 			page 32
+ARM GAS  /tmp/cceAfkyh.s 			page 32
 
 
  750              	.LCFI9:
@@ -1918,7 +1918,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  954:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   }
  955:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** 
  956:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** 
-ARM GAS  /tmp/ccGh0P8z.s 			page 33
+ARM GAS  /tmp/cceAfkyh.s 			page 33
 
 
  957:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   /* Set the DAC channel selected data holding register */
@@ -1978,7 +1978,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  964:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** /**
  965:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   * @brief  Conversion complete callback in non-blocking mode for Channel1
  966:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   * @param  hdac pointer to a DAC_HandleTypeDef structure that contains
-ARM GAS  /tmp/ccGh0P8z.s 			page 34
+ARM GAS  /tmp/cceAfkyh.s 			page 34
 
 
  967:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   *         the configuration information for the specified DAC.
@@ -2038,7 +2038,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
 1001:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   */
 1002:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** __weak void HAL_DAC_ErrorCallbackCh1(DAC_HandleTypeDef *hdac)
 1003:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** {
-ARM GAS  /tmp/ccGh0P8z.s 			page 35
+ARM GAS  /tmp/cceAfkyh.s 			page 35
 
 
 1004:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   /* Prevent unused argument(s) compilation warning */
@@ -2098,7 +2098,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
 1058:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   * @retval The selected DAC channel data output value.
 1059:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   */
 1060:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** uint32_t HAL_DAC_GetValue(DAC_HandleTypeDef *hdac, uint32_t Channel)
-ARM GAS  /tmp/ccGh0P8z.s 			page 36
+ARM GAS  /tmp/cceAfkyh.s 			page 36
 
 
 1061:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** {
@@ -2158,7 +2158,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
 1115:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   if ((sConfig->DAC_UserTrimming) == DAC_TRIMMING_USER)
 1116:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   {
 1117:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****     assert_param(IS_DAC_TRIMMINGVALUE(sConfig->DAC_TrimmingValue));
-ARM GAS  /tmp/ccGh0P8z.s 			page 37
+ARM GAS  /tmp/cceAfkyh.s 			page 37
 
 
 1118:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   }
@@ -2218,7 +2218,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
 1172:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****           SET_BIT(hdac->ErrorCode, HAL_DAC_ERROR_TIMEOUT);
 1173:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** 
 1174:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****           /* Change the DMA state */
-ARM GAS  /tmp/ccGh0P8z.s 			page 38
+ARM GAS  /tmp/cceAfkyh.s 			page 38
 
 
 1175:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****           hdac->State = HAL_DAC_STATE_TIMEOUT;
@@ -2278,7 +2278,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
 1229:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****     else
 1230:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****     {
 1231:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****       connectOnChip = 0x00000000UL;
-ARM GAS  /tmp/ccGh0P8z.s 			page 39
+ARM GAS  /tmp/cceAfkyh.s 			page 39
 
 
 1232:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****     }
@@ -2338,7 +2338,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
 1286:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   CLEAR_BIT(hdac->Instance->CR, (DAC_CR_WAVE1 << (Channel & 0x10UL)));
 1287:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** 
 1288:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   /* Set STRSTTRIGSELx and STINCTRIGSELx bits according to DAC_Trigger & DAC_Trigger2 values */
-ARM GAS  /tmp/ccGh0P8z.s 			page 40
+ARM GAS  /tmp/cceAfkyh.s 			page 40
 
 
 1289:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   tmpreg2 = ((sConfig->DAC_Trigger & DAC_CR_TSEL1) >> DAC_CR_TSEL1_Pos) << DAC_STMODR_STRSTTRIGSEL1
@@ -2398,7 +2398,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
 1343:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** {
 1344:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   return hdac->ErrorCode;
 1345:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** }
-ARM GAS  /tmp/ccGh0P8z.s 			page 41
+ARM GAS  /tmp/cceAfkyh.s 			page 41
 
 
 1346:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** 
@@ -2458,7 +2458,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
 1400:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   {
 1401:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****     switch (CallbackID)
 1402:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****     {
-ARM GAS  /tmp/ccGh0P8z.s 			page 42
+ARM GAS  /tmp/cceAfkyh.s 			page 42
 
 
 1403:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****       case HAL_DAC_CH1_COMPLETE_CB_ID :
@@ -2518,7 +2518,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
 1457:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****         status =  HAL_ERROR;
 1458:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****         break;
 1459:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****     }
-ARM GAS  /tmp/ccGh0P8z.s 			page 43
+ARM GAS  /tmp/cceAfkyh.s 			page 43
 
 
 1460:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   }
@@ -2578,7 +2578,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
 1514:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****         hdac->DMAUnderrunCallbackCh1 = HAL_DAC_DMAUnderrunCallbackCh1;
 1515:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****         break;
 1516:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** 
-ARM GAS  /tmp/ccGh0P8z.s 			page 44
+ARM GAS  /tmp/cceAfkyh.s 			page 44
 
 
 1517:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****       case HAL_DAC_CH2_COMPLETE_CB_ID :
@@ -2638,7 +2638,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
 1571:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****         /* update return status */
 1572:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****         status =  HAL_ERROR;
 1573:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****         break;
-ARM GAS  /tmp/ccGh0P8z.s 			page 45
+ARM GAS  /tmp/cceAfkyh.s 			page 45
 
 
 1574:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****     }
@@ -2698,7 +2698,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
 1614:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** #else
 1615:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   HAL_DAC_ConvCpltCallbackCh1(hdac);
  866              		.loc 1 1615 3 is_stmt 1 view .LVU238
-ARM GAS  /tmp/ccGh0P8z.s 			page 46
+ARM GAS  /tmp/cceAfkyh.s 			page 46
 
 
  867 0004 2046     		mov	r0, r4
@@ -2758,7 +2758,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
 1623:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   * @param  hdma pointer to a DMA_HandleTypeDef structure that contains
 1624:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   *                the configuration information for the specified DMA module.
 1625:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   * @retval None
-ARM GAS  /tmp/ccGh0P8z.s 			page 47
+ARM GAS  /tmp/cceAfkyh.s 			page 47
 
 
 1626:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   */
@@ -2818,7 +2818,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  957              		.cfi_endproc
  958              	.LFE144:
  960              		.section	.text.DAC_DMAErrorCh1,"ax",%progbits
-ARM GAS  /tmp/ccGh0P8z.s 			page 48
+ARM GAS  /tmp/cceAfkyh.s 			page 48
 
 
  961              		.align	1
@@ -2878,7 +2878,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
 1657:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   hdac->State = HAL_DAC_STATE_READY;
  996              		.loc 1 1657 3 is_stmt 1 view .LVU264
  997              		.loc 1 1657 15 is_stmt 0 view .LVU265
-ARM GAS  /tmp/ccGh0P8z.s 			page 49
+ARM GAS  /tmp/cceAfkyh.s 			page 49
 
 
  998 0012 0123     		movs	r3, #1
@@ -2938,7 +2938,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  858:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   {
  1050              		.loc 1 858 3 is_stmt 1 view .LVU273
  858:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   {
-ARM GAS  /tmp/ccGh0P8z.s 			page 50
+ARM GAS  /tmp/cceAfkyh.s 			page 50
 
 
  1051              		.loc 1 858 7 is_stmt 0 view .LVU274
@@ -2998,7 +2998,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  870:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** 
  1091              		.loc 1 870 7 view .LVU289
  1092 0036 4FF40052 		mov	r2, #8192
-ARM GAS  /tmp/ccGh0P8z.s 			page 51
+ARM GAS  /tmp/cceAfkyh.s 			page 51
 
 
  1093 003a 5A63     		str	r2, [r3, #52]
@@ -3058,7 +3058,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  1139              	.LVL86:
  1140              	.LFB146:
 1061:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   uint32_t result;
-ARM GAS  /tmp/ccGh0P8z.s 			page 52
+ARM GAS  /tmp/cceAfkyh.s 			page 52
 
 
  1141              		.loc 1 1061 1 is_stmt 1 view -0
@@ -3118,7 +3118,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
 1101:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   uint32_t tmpreg1;
  1184              		.loc 1 1101 1 is_stmt 1 view -0
  1185              		.cfi_startproc
-ARM GAS  /tmp/ccGh0P8z.s 			page 53
+ARM GAS  /tmp/cceAfkyh.s 			page 53
 
 
  1186              		@ args = 0, pretend = 0, frame = 0
@@ -3178,7 +3178,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  1216              	.LCFI18:
  1217              		.cfi_def_cfa_offset 24
  1218              		.cfi_offset 4, -24
-ARM GAS  /tmp/ccGh0P8z.s 			page 54
+ARM GAS  /tmp/cceAfkyh.s 			page 54
 
 
  1219              		.cfi_offset 5, -20
@@ -3238,7 +3238,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
 1213:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   /* Configure for the selected DAC channel: mode, buffer output & on chip peripheral connect */
  1259              		.loc 1 1213 44 view .LVU353
  1260 002e 0723     		movs	r3, #7
-ARM GAS  /tmp/ccGh0P8z.s 			page 55
+ARM GAS  /tmp/cceAfkyh.s 			page 55
 
 
  1261 0030 AB40     		lsls	r3, r3, r5
@@ -3298,7 +3298,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  1299 0058 2368     		ldr	r3, [r4]
 1166:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****       {
  1300              		.loc 1 1166 30 view .LVU370
-ARM GAS  /tmp/ccGh0P8z.s 			page 56
+ARM GAS  /tmp/cceAfkyh.s 			page 56
 
 
  1301 005a 5B6B     		ldr	r3, [r3, #52]
@@ -3358,7 +3358,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
 1148:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****         {
  1339              		.loc 1 1148 12 view .LVU387
  1340 0088 0128     		cmp	r0, #1
-ARM GAS  /tmp/ccGh0P8z.s 			page 57
+ARM GAS  /tmp/cceAfkyh.s 			page 57
 
 
  1341 008a F5D9     		bls	.L81
@@ -3418,7 +3418,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  1383 00cc F26A     		ldr	r2, [r6, #44]
  1384 00ce 02FA01F1 		lsl	r1, r2, r1
  1385 00d2 0B43     		orrs	r3, r3, r1
-ARM GAS  /tmp/ccGh0P8z.s 			page 58
+ARM GAS  /tmp/cceAfkyh.s 			page 58
 
 
  1386 00d4 C364     		str	r3, [r0, #76]
@@ -3478,7 +3478,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  1424 00f8 8340     		lsls	r3, r3, r0
  1425              	.LVL107:
 1203:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****     /* Write to DAC CCR */
-ARM GAS  /tmp/ccGh0P8z.s 			page 59
+ARM GAS  /tmp/cceAfkyh.s 			page 59
 
 
  1426              		.loc 1 1203 13 view .LVU416
@@ -3538,7 +3538,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  1465              	.LVL114:
  1466              	.L88:
 1238:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   /* Clear DAC_MCR_SINFORMATx */
-ARM GAS  /tmp/ccGh0P8z.s 			page 60
+ARM GAS  /tmp/cceAfkyh.s 			page 60
 
 
  1467              		.loc 1 1238 11 discriminator 4 view .LVU432
@@ -3598,7 +3598,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
 1267:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   /* Write to DAC MCR */
  1505              		.loc 1 1267 22 is_stmt 0 view .LVU449
  1506 014a 08FA05F8 		lsl	r8, r8, r5
-ARM GAS  /tmp/ccGh0P8z.s 			page 61
+ARM GAS  /tmp/cceAfkyh.s 			page 61
 
 
  1507              	.LVL120:
@@ -3658,7 +3658,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  1545 0178 1343     		orrs	r3, r3, r2
  1546              	.LVL126:
 1284:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   /* Disable wave generation */
-ARM GAS  /tmp/ccGh0P8z.s 			page 62
+ARM GAS  /tmp/cceAfkyh.s 			page 62
 
 
  1547              		.loc 1 1284 3 is_stmt 1 view .LVU466
@@ -3718,7 +3718,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  1587              		.loc 1 1294 15 is_stmt 0 view .LVU480
  1588 01b2 0123     		movs	r3, #1
  1589 01b4 2371     		strb	r3, [r4, #4]
-ARM GAS  /tmp/ccGh0P8z.s 			page 63
+ARM GAS  /tmp/cceAfkyh.s 			page 63
 
 
 1297:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c **** 
@@ -3778,7 +3778,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  1630              		.loc 1 1251 7 is_stmt 1 view .LVU494
 1251:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****     }
  1631              		.loc 1 1251 15 is_stmt 0 view .LVU495
-ARM GAS  /tmp/ccGh0P8z.s 			page 64
+ARM GAS  /tmp/cceAfkyh.s 			page 64
 
 
  1632 01e0 47F40047 		orr	r7, r7, #32768
@@ -3838,7 +3838,7 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  1680              	.LVL141:
  1681              	.LFB148:
 1330:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c ****   /* Return DAC handle state */
-ARM GAS  /tmp/ccGh0P8z.s 			page 65
+ARM GAS  /tmp/cceAfkyh.s 			page 65
 
 
  1682              		.loc 1 1330 1 is_stmt 1 view -0
@@ -3898,59 +3898,59 @@ ARM GAS  /tmp/ccGh0P8z.s 			page 1
  1732              		.file 11 "Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h"
  1733              		.file 12 "Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h"
  1734              		.file 13 "Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h"
-ARM GAS  /tmp/ccGh0P8z.s 			page 66
+ARM GAS  /tmp/cceAfkyh.s 			page 66
 
 
  1735              		.file 14 "Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_dac_ex.h"
-ARM GAS  /tmp/ccGh0P8z.s 			page 67
+ARM GAS  /tmp/cceAfkyh.s 			page 67
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 stm32g4xx_hal_dac.c
-     /tmp/ccGh0P8z.s:18     .text.HAL_DAC_MspInit:0000000000000000 $t
-     /tmp/ccGh0P8z.s:26     .text.HAL_DAC_MspInit:0000000000000000 HAL_DAC_MspInit
-     /tmp/ccGh0P8z.s:42     .text.HAL_DAC_Init:0000000000000000 $t
-     /tmp/ccGh0P8z.s:49     .text.HAL_DAC_Init:0000000000000000 HAL_DAC_Init
-     /tmp/ccGh0P8z.s:114    .text.HAL_DAC_MspDeInit:0000000000000000 $t
-     /tmp/ccGh0P8z.s:121    .text.HAL_DAC_MspDeInit:0000000000000000 HAL_DAC_MspDeInit
-     /tmp/ccGh0P8z.s:136    .text.HAL_DAC_DeInit:0000000000000000 $t
-     /tmp/ccGh0P8z.s:143    .text.HAL_DAC_DeInit:0000000000000000 HAL_DAC_DeInit
-     /tmp/ccGh0P8z.s:196    .text.HAL_DAC_Start:0000000000000000 $t
-     /tmp/ccGh0P8z.s:203    .text.HAL_DAC_Start:0000000000000000 HAL_DAC_Start
-     /tmp/ccGh0P8z.s:315    .text.HAL_DAC_Stop:0000000000000000 $t
-     /tmp/ccGh0P8z.s:322    .text.HAL_DAC_Stop:0000000000000000 HAL_DAC_Stop
-     /tmp/ccGh0P8z.s:367    .text.HAL_DAC_Start_DMA:0000000000000000 $t
-     /tmp/ccGh0P8z.s:374    .text.HAL_DAC_Start_DMA:0000000000000000 HAL_DAC_Start_DMA
-     /tmp/ccGh0P8z.s:633    .text.HAL_DAC_Start_DMA:00000000000000f4 $d
-     /tmp/ccGh0P8z.s:849    .text.DAC_DMAConvCpltCh1:0000000000000000 DAC_DMAConvCpltCh1
-     /tmp/ccGh0P8z.s:912    .text.DAC_DMAHalfConvCpltCh1:0000000000000000 DAC_DMAHalfConvCpltCh1
-     /tmp/ccGh0P8z.s:968    .text.DAC_DMAErrorCh1:0000000000000000 DAC_DMAErrorCh1
-     /tmp/ccGh0P8z.s:643    .text.HAL_DAC_Stop_DMA:0000000000000000 $t
-     /tmp/ccGh0P8z.s:650    .text.HAL_DAC_Stop_DMA:0000000000000000 HAL_DAC_Stop_DMA
-     /tmp/ccGh0P8z.s:733    .text.HAL_DAC_SetValue:0000000000000000 $t
-     /tmp/ccGh0P8z.s:740    .text.HAL_DAC_SetValue:0000000000000000 HAL_DAC_SetValue
-     /tmp/ccGh0P8z.s:820    .text.HAL_DAC_ConvCpltCallbackCh1:0000000000000000 $t
-     /tmp/ccGh0P8z.s:827    .text.HAL_DAC_ConvCpltCallbackCh1:0000000000000000 HAL_DAC_ConvCpltCallbackCh1
-     /tmp/ccGh0P8z.s:842    .text.DAC_DMAConvCpltCh1:0000000000000000 $t
-     /tmp/ccGh0P8z.s:883    .text.HAL_DAC_ConvHalfCpltCallbackCh1:0000000000000000 $t
-     /tmp/ccGh0P8z.s:890    .text.HAL_DAC_ConvHalfCpltCallbackCh1:0000000000000000 HAL_DAC_ConvHalfCpltCallbackCh1
-     /tmp/ccGh0P8z.s:905    .text.DAC_DMAHalfConvCpltCh1:0000000000000000 $t
-     /tmp/ccGh0P8z.s:939    .text.HAL_DAC_ErrorCallbackCh1:0000000000000000 $t
-     /tmp/ccGh0P8z.s:946    .text.HAL_DAC_ErrorCallbackCh1:0000000000000000 HAL_DAC_ErrorCallbackCh1
-     /tmp/ccGh0P8z.s:961    .text.DAC_DMAErrorCh1:0000000000000000 $t
-     /tmp/ccGh0P8z.s:1007   .text.HAL_DAC_DMAUnderrunCallbackCh1:0000000000000000 $t
-     /tmp/ccGh0P8z.s:1014   .text.HAL_DAC_DMAUnderrunCallbackCh1:0000000000000000 HAL_DAC_DMAUnderrunCallbackCh1
-     /tmp/ccGh0P8z.s:1029   .text.HAL_DAC_IRQHandler:0000000000000000 $t
-     /tmp/ccGh0P8z.s:1036   .text.HAL_DAC_IRQHandler:0000000000000000 HAL_DAC_IRQHandler
-     /tmp/ccGh0P8z.s:1131   .text.HAL_DAC_GetValue:0000000000000000 $t
-     /tmp/ccGh0P8z.s:1138   .text.HAL_DAC_GetValue:0000000000000000 HAL_DAC_GetValue
-     /tmp/ccGh0P8z.s:1174   .text.HAL_DAC_ConfigChannel:0000000000000000 $t
-     /tmp/ccGh0P8z.s:1181   .text.HAL_DAC_ConfigChannel:0000000000000000 HAL_DAC_ConfigChannel
-     /tmp/ccGh0P8z.s:1666   .text.HAL_DAC_ConfigChannel:00000000000001f8 $d
-     /tmp/ccGh0P8z.s:1672   .text.HAL_DAC_GetState:0000000000000000 $t
-     /tmp/ccGh0P8z.s:1679   .text.HAL_DAC_GetState:0000000000000000 HAL_DAC_GetState
-     /tmp/ccGh0P8z.s:1697   .text.HAL_DAC_GetError:0000000000000000 $t
-     /tmp/ccGh0P8z.s:1704   .text.HAL_DAC_GetError:0000000000000000 HAL_DAC_GetError
+     /tmp/cceAfkyh.s:18     .text.HAL_DAC_MspInit:0000000000000000 $t
+     /tmp/cceAfkyh.s:26     .text.HAL_DAC_MspInit:0000000000000000 HAL_DAC_MspInit
+     /tmp/cceAfkyh.s:42     .text.HAL_DAC_Init:0000000000000000 $t
+     /tmp/cceAfkyh.s:49     .text.HAL_DAC_Init:0000000000000000 HAL_DAC_Init
+     /tmp/cceAfkyh.s:114    .text.HAL_DAC_MspDeInit:0000000000000000 $t
+     /tmp/cceAfkyh.s:121    .text.HAL_DAC_MspDeInit:0000000000000000 HAL_DAC_MspDeInit
+     /tmp/cceAfkyh.s:136    .text.HAL_DAC_DeInit:0000000000000000 $t
+     /tmp/cceAfkyh.s:143    .text.HAL_DAC_DeInit:0000000000000000 HAL_DAC_DeInit
+     /tmp/cceAfkyh.s:196    .text.HAL_DAC_Start:0000000000000000 $t
+     /tmp/cceAfkyh.s:203    .text.HAL_DAC_Start:0000000000000000 HAL_DAC_Start
+     /tmp/cceAfkyh.s:315    .text.HAL_DAC_Stop:0000000000000000 $t
+     /tmp/cceAfkyh.s:322    .text.HAL_DAC_Stop:0000000000000000 HAL_DAC_Stop
+     /tmp/cceAfkyh.s:367    .text.HAL_DAC_Start_DMA:0000000000000000 $t
+     /tmp/cceAfkyh.s:374    .text.HAL_DAC_Start_DMA:0000000000000000 HAL_DAC_Start_DMA
+     /tmp/cceAfkyh.s:633    .text.HAL_DAC_Start_DMA:00000000000000f4 $d
+     /tmp/cceAfkyh.s:849    .text.DAC_DMAConvCpltCh1:0000000000000000 DAC_DMAConvCpltCh1
+     /tmp/cceAfkyh.s:912    .text.DAC_DMAHalfConvCpltCh1:0000000000000000 DAC_DMAHalfConvCpltCh1
+     /tmp/cceAfkyh.s:968    .text.DAC_DMAErrorCh1:0000000000000000 DAC_DMAErrorCh1
+     /tmp/cceAfkyh.s:643    .text.HAL_DAC_Stop_DMA:0000000000000000 $t
+     /tmp/cceAfkyh.s:650    .text.HAL_DAC_Stop_DMA:0000000000000000 HAL_DAC_Stop_DMA
+     /tmp/cceAfkyh.s:733    .text.HAL_DAC_SetValue:0000000000000000 $t
+     /tmp/cceAfkyh.s:740    .text.HAL_DAC_SetValue:0000000000000000 HAL_DAC_SetValue
+     /tmp/cceAfkyh.s:820    .text.HAL_DAC_ConvCpltCallbackCh1:0000000000000000 $t
+     /tmp/cceAfkyh.s:827    .text.HAL_DAC_ConvCpltCallbackCh1:0000000000000000 HAL_DAC_ConvCpltCallbackCh1
+     /tmp/cceAfkyh.s:842    .text.DAC_DMAConvCpltCh1:0000000000000000 $t
+     /tmp/cceAfkyh.s:883    .text.HAL_DAC_ConvHalfCpltCallbackCh1:0000000000000000 $t
+     /tmp/cceAfkyh.s:890    .text.HAL_DAC_ConvHalfCpltCallbackCh1:0000000000000000 HAL_DAC_ConvHalfCpltCallbackCh1
+     /tmp/cceAfkyh.s:905    .text.DAC_DMAHalfConvCpltCh1:0000000000000000 $t
+     /tmp/cceAfkyh.s:939    .text.HAL_DAC_ErrorCallbackCh1:0000000000000000 $t
+     /tmp/cceAfkyh.s:946    .text.HAL_DAC_ErrorCallbackCh1:0000000000000000 HAL_DAC_ErrorCallbackCh1
+     /tmp/cceAfkyh.s:961    .text.DAC_DMAErrorCh1:0000000000000000 $t
+     /tmp/cceAfkyh.s:1007   .text.HAL_DAC_DMAUnderrunCallbackCh1:0000000000000000 $t
+     /tmp/cceAfkyh.s:1014   .text.HAL_DAC_DMAUnderrunCallbackCh1:0000000000000000 HAL_DAC_DMAUnderrunCallbackCh1
+     /tmp/cceAfkyh.s:1029   .text.HAL_DAC_IRQHandler:0000000000000000 $t
+     /tmp/cceAfkyh.s:1036   .text.HAL_DAC_IRQHandler:0000000000000000 HAL_DAC_IRQHandler
+     /tmp/cceAfkyh.s:1131   .text.HAL_DAC_GetValue:0000000000000000 $t
+     /tmp/cceAfkyh.s:1138   .text.HAL_DAC_GetValue:0000000000000000 HAL_DAC_GetValue
+     /tmp/cceAfkyh.s:1174   .text.HAL_DAC_ConfigChannel:0000000000000000 $t
+     /tmp/cceAfkyh.s:1181   .text.HAL_DAC_ConfigChannel:0000000000000000 HAL_DAC_ConfigChannel
+     /tmp/cceAfkyh.s:1666   .text.HAL_DAC_ConfigChannel:00000000000001f8 $d
+     /tmp/cceAfkyh.s:1672   .text.HAL_DAC_GetState:0000000000000000 $t
+     /tmp/cceAfkyh.s:1679   .text.HAL_DAC_GetState:0000000000000000 HAL_DAC_GetState
+     /tmp/cceAfkyh.s:1697   .text.HAL_DAC_GetError:0000000000000000 $t
+     /tmp/cceAfkyh.s:1704   .text.HAL_DAC_GetError:0000000000000000 HAL_DAC_GetError
 
 UNDEFINED SYMBOLS
 HAL_Delay
@@ -3962,6 +3962,6 @@ HAL_DMA_Abort
 HAL_DACEx_DMAUnderrunCallbackCh2
 HAL_GetTick
 HAL_RCC_GetHCLKFreq
-ARM GAS  /tmp/ccGh0P8z.s 			page 68
+ARM GAS  /tmp/cceAfkyh.s 			page 68
 
 
