@@ -53,6 +53,8 @@ def setup_emulator(serial_out):
     emulationmessage="emulation\n\r";
     serial_out.write(emulationmessage.encode());
     time.sleep(waittime)  # Add a delay to allow the device to process the message
+    serial_out.flush()    
+    serial_in.flush()
         
 def run_single_test(test_number,serial_out,serial_in,messages):
     global succesfulltests;
