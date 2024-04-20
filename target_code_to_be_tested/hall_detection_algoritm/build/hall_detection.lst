@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccGla46d.s 			page 1
+ARM GAS  /tmp/cces1Dgo.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
   28:Core/Src/hall_detection.c **** #define NUMBER_OF_VALID_MATCHING_RESULTS 3
   29:Core/Src/hall_detection.c **** 
   30:Core/Src/hall_detection.c **** 
-ARM GAS  /tmp/ccGla46d.s 			page 2
+ARM GAS  /tmp/cces1Dgo.s 			page 2
 
 
   31:Core/Src/hall_detection.c **** 
@@ -118,7 +118,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
   85:Core/Src/hall_detection.c **** void assign_polarity(hall_detection_general_struct *gen);
   86:Core/Src/hall_detection.c **** 
   87:Core/Src/hall_detection.c **** 
-ARM GAS  /tmp/ccGla46d.s 			page 3
+ARM GAS  /tmp/cces1Dgo.s 			page 3
 
 
   88:Core/Src/hall_detection.c **** 
@@ -178,7 +178,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
   65 0000 034B     		ldr	r3, .L7
   66 0002 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
   67              		.loc 1 107 4 view .LVU7
-ARM GAS  /tmp/ccGla46d.s 			page 4
+ARM GAS  /tmp/cces1Dgo.s 			page 4
 
 
   68 0004 0BB9     		cbnz	r3, .L6
@@ -238,7 +238,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  137:Core/Src/hall_detection.c **** +-------------------------+  | still not 3 matching X!X!X! type results
  138:Core/Src/hall_detection.c **** |     INTERPRETATION      |  |
  139:Core/Src/hall_detection.c **** +-------------------------+  |
-ARM GAS  /tmp/ccGla46d.s 			page 5
+ARM GAS  /tmp/cces1Dgo.s 			page 5
 
 
  140:Core/Src/hall_detection.c ****   |                          |
@@ -298,7 +298,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  194:Core/Src/hall_detection.c **** 		case detection_VALIDATION:
  195:Core/Src/hall_detection.c **** 			ticks++;
  196:Core/Src/hall_detection.c **** 			validation(&detection_state,&general);
-ARM GAS  /tmp/ccGla46d.s 			page 6
+ARM GAS  /tmp/cces1Dgo.s 			page 6
 
 
  197:Core/Src/hall_detection.c **** 			ticks++;
@@ -308,9 +308,9 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  201:Core/Src/hall_detection.c **** 			ticks++;
  202:Core/Src/hall_detection.c **** 			break;
  203:Core/Src/hall_detection.c **** 		case detection_ERROR_OR_TIMEOUT:
- 204:Core/Src/hall_detection.c **** 		case detection_DISABLED://do nothing
- 205:Core/Src/hall_detection.c **** 		default:
- 206:Core/Src/hall_detection.c **** 			detection_state=detection_DISABLED;
+ 204:Core/Src/hall_detection.c **** 			detection_state=detection_DISABLED;
+ 205:Core/Src/hall_detection.c **** 		case detection_DISABLED://do nothing
+ 206:Core/Src/hall_detection.c **** 		default:
  207:Core/Src/hall_detection.c **** 			break;
  208:Core/Src/hall_detection.c **** 	}
  209:Core/Src/hall_detection.c **** }
@@ -358,7 +358,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  221:Core/Src/hall_detection.c **** * \brief the motor running in open loop control needs a bit of time to lock in place so current sig
  222:Core/Src/hall_detection.c **** * \param detection_state_enum* state,			pointer to the variable controling the state machine
  223:Core/Src/hall_detection.c **** * \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything t
-ARM GAS  /tmp/ccGla46d.s 			page 7
+ARM GAS  /tmp/cces1Dgo.s 			page 7
 
 
  224:Core/Src/hall_detection.c **** * \param hall_pin_info * H1_gpio, pointer to gpio info about the hall A
@@ -418,7 +418,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  278:Core/Src/hall_detection.c **** 		){
  279:Core/Src/hall_detection.c **** 
  280:Core/Src/hall_detection.c **** 	fill_buffers(gen, H1_gpio, H2_gpio, H3_gpio, ADCcurr1, ADCcurr2);
-ARM GAS  /tmp/ccGla46d.s 			page 8
+ARM GAS  /tmp/cces1Dgo.s 			page 8
 
 
  281:Core/Src/hall_detection.c **** 
@@ -478,7 +478,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  135 0002 1A68     		ldr	r2, [r3]
  136              		.loc 1 326 4 view .LVU19
  137 0004 494B     		ldr	r3, .L41+4
-ARM GAS  /tmp/ccGla46d.s 			page 9
+ARM GAS  /tmp/cces1Dgo.s 			page 9
 
 
  138 0006 9A42     		cmp	r2, r3
@@ -538,7 +538,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  175              	.LCFI3:
  176              		.cfi_def_cfa_offset 16
  177              		.cfi_offset 4, -16
-ARM GAS  /tmp/ccGla46d.s 			page 10
+ARM GAS  /tmp/cces1Dgo.s 			page 10
 
 
  178              		.cfi_offset 5, -12
@@ -598,7 +598,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  381:Core/Src/hall_detection.c **** 		*state=detection_ADQUISITION;
  382:Core/Src/hall_detection.c **** 		return;
  383:Core/Src/hall_detection.c **** 	}
-ARM GAS  /tmp/ccGla46d.s 			page 11
+ARM GAS  /tmp/cces1Dgo.s 			page 11
 
 
  384:Core/Src/hall_detection.c **** }
@@ -658,7 +658,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  340:Core/Src/hall_detection.c **** 		}else if(gen->results[gen->numberOfresults-1].hall_order[i]==hall_B){
  229              		.loc 1 340 27 is_stmt 0 view .LVU44
  230 0046 44F00104 		orr	r4, r4, #1
-ARM GAS  /tmp/ccGla46d.s 			page 12
+ARM GAS  /tmp/cces1Dgo.s 			page 12
 
 
  231              	.LVL5:
@@ -718,7 +718,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  269              		.loc 1 357 17 view .LVU60
  270 006a 0022     		movs	r2, #0
  271 006c 4DE0     		b	.L21
-ARM GAS  /tmp/ccGla46d.s 			page 13
+ARM GAS  /tmp/cces1Dgo.s 			page 13
 
 
  272              	.LVL9:
@@ -778,7 +778,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  313              		.loc 1 362 69 view .LVU73
  314 00a4 A542     		cmp	r5, r4
  315 00a6 E8D1     		bne	.L25
-ARM GAS  /tmp/ccGla46d.s 			page 14
+ARM GAS  /tmp/cces1Dgo.s 			page 14
 
 
  364:Core/Src/hall_detection.c **** 							gen->results[i].hall_polarity[0]==gen->results[j].hall_polarity[0] &&
@@ -838,7 +838,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  370:Core/Src/hall_detection.c **** 							gen->indexOfcorrectResult=i;
  356              		.loc 1 370 7 is_stmt 1 view .LVU88
  370:Core/Src/hall_detection.c **** 							gen->indexOfcorrectResult=i;
-ARM GAS  /tmp/ccGla46d.s 			page 15
+ARM GAS  /tmp/cces1Dgo.s 			page 15
 
 
  357              		.loc 1 370 9 is_stmt 0 view .LVU89
@@ -898,7 +898,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  396              		.loc 1 360 10 view .LVU104
  360:Core/Src/hall_detection.c **** 					if(
  397              		.loc 1 360 19 is_stmt 0 view .LVU105
-ARM GAS  /tmp/ccGla46d.s 			page 16
+ARM GAS  /tmp/cces1Dgo.s 			page 16
 
 
  398 011a 531C     		adds	r3, r2, #1
@@ -958,7 +958,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  440              		@ args = 0, pretend = 0, frame = 0
  441              		@ frame_needed = 0, uses_anonymous_args = 0
  442              		.loc 1 391 88 is_stmt 0 view .LVU114
-ARM GAS  /tmp/ccGla46d.s 			page 17
+ARM GAS  /tmp/cces1Dgo.s 			page 17
 
 
  443 0000 38B5     		push	{r3, r4, r5, lr}
@@ -1018,7 +1018,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  486 0020 90F85801 		ldrb	r0, [r0, #344]	@ zero_extendqisi2
  487              		.loc 1 400 11 view .LVU127
  488 0024 0128     		cmp	r0, #1
-ARM GAS  /tmp/ccGla46d.s 			page 18
+ARM GAS  /tmp/cces1Dgo.s 			page 18
 
 
  489 0026 08D0     		beq	.L54
@@ -1078,7 +1078,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  528              		.loc 1 398 3 is_stmt 1 view .LVU142
  398:Core/Src/hall_detection.c **** 			gen->message[(i*2)+1]='A';
  529              		.loc 1 398 22 is_stmt 0 view .LVU143
-ARM GAS  /tmp/ccGla46d.s 			page 19
+ARM GAS  /tmp/cces1Dgo.s 			page 19
 
 
  530 0052 D1F84C21 		ldr	r2, [r1, #332]
@@ -1138,7 +1138,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  410:Core/Src/hall_detection.c **** 		}
  411:Core/Src/hall_detection.c **** 	}
  412:Core/Src/hall_detection.c **** 
-ARM GAS  /tmp/ccGla46d.s 			page 20
+ARM GAS  /tmp/cces1Dgo.s 			page 20
 
 
  413:Core/Src/hall_detection.c **** 	gen->message[messageLength-2]='\n';//two last characters
@@ -1198,7 +1198,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  423:Core/Src/hall_detection.c **** /**
  424:Core/Src/hall_detection.c **** * \brief these buffers need to be filled, not much to this function, manages the "circularity" of t
  425:Core/Src/hall_detection.c **** * \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything t
-ARM GAS  /tmp/ccGla46d.s 			page 21
+ARM GAS  /tmp/cces1Dgo.s 			page 21
 
 
  426:Core/Src/hall_detection.c **** * \param hall_pin_info * H1_gpio, pointer to gpio info about the hall A
@@ -1258,7 +1258,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  456:Core/Src/hall_detection.c **** 	gen->currB.two_samples_buffer[1]=gen->currB.two_samples_buffer[0];
  642              		.loc 1 456 2 is_stmt 1 view .LVU177
  643              		.loc 1 456 64 is_stmt 0 view .LVU178
-ARM GAS  /tmp/ccGla46d.s 			page 22
+ARM GAS  /tmp/cces1Dgo.s 			page 22
 
 
  644 000e 066B     		ldr	r6, [r0, #48]	@ float
@@ -1318,7 +1318,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  677              	.LVL32:
  678              		.loc 1 477 34 view .LVU197
  679 003a 80F88810 		strb	r1, [r0, #136]
-ARM GAS  /tmp/ccGla46d.s 			page 23
+ARM GAS  /tmp/cces1Dgo.s 			page 23
 
 
  478:Core/Src/hall_detection.c **** 
@@ -1378,7 +1378,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  486:Core/Src/hall_detection.c **** /**
  487:Core/Src/hall_detection.c **** * \brief reading the buffers we just filled detects if a zero crossing happened in between them, it
  488:Core/Src/hall_detection.c **** * \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything t
-ARM GAS  /tmp/ccGla46d.s 			page 24
+ARM GAS  /tmp/cces1Dgo.s 			page 24
 
 
  489:Core/Src/hall_detection.c **** * \return YES//done detecting or NO//still ongoing
@@ -1438,7 +1438,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  523:Core/Src/hall_detection.c **** 
  524:Core/Src/hall_detection.c **** 		if(currx->numberof_zerocrossings==0){			//only if this is the first zerocrossing detected
  525:Core/Src/hall_detection.c **** 					currx->zerocrossings_tick[currx->numberof_zerocrossings]=ticks;
-ARM GAS  /tmp/ccGla46d.s 			page 25
+ARM GAS  /tmp/cces1Dgo.s 			page 25
 
 
  526:Core/Src/hall_detection.c **** 					if(currx->two_samples_buffer[0]>currx->two_samples_buffer[1]){
@@ -1498,7 +1498,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  770 002e B4EEE77A 		vcmpe.f32	s14, s15
  771 0032 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
  772 0036 06DD     		ble	.L74
-ARM GAS  /tmp/ccGla46d.s 			page 26
+ARM GAS  /tmp/cces1Dgo.s 			page 26
 
 
  527:Core/Src/hall_detection.c **** 					}else{
@@ -1558,7 +1558,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  812              		.loc 1 534 6 is_stmt 1 view .LVU244
  534:Core/Src/hall_detection.c **** 					if(currx->two_samples_buffer[0]>currx->two_samples_buffer[1]){
  813              		.loc 1 534 62 is_stmt 0 view .LVU245
-ARM GAS  /tmp/ccGla46d.s 			page 27
+ARM GAS  /tmp/cces1Dgo.s 			page 27
 
 
  814 005c 9A1C     		adds	r2, r3, #2
@@ -1618,7 +1618,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  856              		.align	1
  857              		.global	detect_N_hall_zerocrossings
  858              		.syntax unified
-ARM GAS  /tmp/ccGla46d.s 			page 28
+ARM GAS  /tmp/cces1Dgo.s 			page 28
 
 
  859              		.thumb
@@ -1678,7 +1678,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  903              		.loc 1 555 5 is_stmt 1 view .LVU275
  904              		.loc 1 555 65 is_stmt 0 view .LVU276
  905 001e CA18     		adds	r2, r1, r3
-ARM GAS  /tmp/ccGla46d.s 			page 29
+ARM GAS  /tmp/cces1Dgo.s 			page 29
 
 
  906 0020 0020     		movs	r0, #0
@@ -1738,7 +1738,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  951              	.LFB245:
  491:Core/Src/hall_detection.c **** 	if((ticks-general.start_adquisition_ticks)>2){ //skip the first two samples to fill the buffers
  952              		.loc 1 491 87 is_stmt 1 view -0
-ARM GAS  /tmp/ccGla46d.s 			page 30
+ARM GAS  /tmp/cces1Dgo.s 			page 30
 
 
  953              		.cfi_startproc
@@ -1798,7 +1798,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  995 0020 D4F88430 		ldr	r3, [r4, #132]
  502:Core/Src/hall_detection.c **** 			(gen->currC.numberof_zerocrossings>=N) &&
  996              		.loc 1 502 43 view .LVU298
-ARM GAS  /tmp/ccGla46d.s 			page 31
+ARM GAS  /tmp/cces1Dgo.s 			page 31
 
 
  997 0024 AB42     		cmp	r3, r5
@@ -1858,7 +1858,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  1038              		.loc 1 495 3 is_stmt 1 view .LVU311
  495:Core/Src/hall_detection.c **** 		detect_N_hall_zerocrossings	((ticks-general.start_adquisition_ticks),&gen->hallA,MAXZEROCROSSINGS
  1039              		.loc 1 495 48 is_stmt 0 view .LVU312
-ARM GAS  /tmp/ccGla46d.s 			page 32
+ARM GAS  /tmp/cces1Dgo.s 			page 32
 
 
  1040 0060 3B68     		ldr	r3, [r7]
@@ -1918,7 +1918,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  512:Core/Src/hall_detection.c **** 
  1083              		.loc 1 512 1 view .LVU324
  1084 00a4 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
-ARM GAS  /tmp/ccGla46d.s 			page 33
+ARM GAS  /tmp/cces1Dgo.s 			page 33
 
 
  1085              	.LVL70:
@@ -1978,7 +1978,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  1132              		.cfi_offset 5, -4
  570:Core/Src/hall_detection.c **** 	uint32_t averagedsemiPeriod=0;
  1133              		.loc 1 570 2 is_stmt 1 view .LVU329
-ARM GAS  /tmp/ccGla46d.s 			page 34
+ARM GAS  /tmp/cces1Dgo.s 			page 34
 
 
  1134              	.LVL72:
@@ -2038,7 +2038,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  1183 003e 03F12205 		add	r5, r3, #34
  1184 0042 00EB8505 		add	r5, r0, r5, lsl #2
  1185 0046 6D68     		ldr	r5, [r5, #4]
-ARM GAS  /tmp/ccGla46d.s 			page 35
+ARM GAS  /tmp/cces1Dgo.s 			page 35
 
 
  1186              		.loc 1 574 58 discriminator 3 view .LVU349
@@ -2098,7 +2098,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  1231              		.loc 1 580 2 is_stmt 1 view .LVU366
  1232              		.loc 1 580 20 is_stmt 0 view .LVU367
  1233 0084 064A     		ldr	r2, .L100
-ARM GAS  /tmp/ccGla46d.s 			page 36
+ARM GAS  /tmp/cces1Dgo.s 			page 36
 
 
  1234 0086 A2FB0323 		umull	r2, r3, r2, r3
@@ -2158,7 +2158,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  1285              		.cfi_offset 5, -8
  1286              		.cfi_offset 14, -4
  1287 0002 83B0     		sub	sp, sp, #12
-ARM GAS  /tmp/ccGla46d.s 			page 37
+ARM GAS  /tmp/cces1Dgo.s 			page 37
 
 
  1288              	.LCFI16:
@@ -2218,7 +2218,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  1330              	.LCFI17:
  1331              		.cfi_remember_state
  1332              		.cfi_def_cfa_offset 12
-ARM GAS  /tmp/ccGla46d.s 			page 38
+ARM GAS  /tmp/cces1Dgo.s 			page 38
 
 
  1333              		@ sp needed
@@ -2278,7 +2278,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  1379              		.global	is_deviation_from_period_acceptable
  1380              		.syntax unified
  1381              		.thumb
-ARM GAS  /tmp/ccGla46d.s 			page 39
+ARM GAS  /tmp/cces1Dgo.s 			page 39
 
 
  1382              		.thumb_func
@@ -2338,7 +2338,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  1427              		.loc 1 593 8 view .LVU406
  1428 0026 FFF7FEFF 		bl	__aeabi_d2f
  1429              	.LVL98:
-ARM GAS  /tmp/ccGla46d.s 			page 40
+ARM GAS  /tmp/cces1Dgo.s 			page 40
 
 
  1430 002a 07EE900A 		vmov	s15, r0
@@ -2398,7 +2398,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  1478 0068 16D8     		bhi	.L114
  1479              		.loc 1 599 43 discriminator 1 view .LVU426
  1480 006a 9742     		cmp	r7, r2
-ARM GAS  /tmp/ccGla46d.s 			page 41
+ARM GAS  /tmp/cces1Dgo.s 			page 41
 
 
  1481 006c 16D3     		bcc	.L115
@@ -2458,7 +2458,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  609:Core/Src/hall_detection.c **** }
  1525              		.loc 1 609 1 view .LVU442
  1526 0092 BDEC028B 		vldm	sp!, {d8}
-ARM GAS  /tmp/ccGla46d.s 			page 42
+ARM GAS  /tmp/cces1Dgo.s 			page 42
 
 
  1527              	.LCFI21:
@@ -2518,7 +2518,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  614:Core/Src/hall_detection.c **** * \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything t
  615:Core/Src/hall_detection.c **** * \param samples number of zerocrossings to be used in the diff calculation
  616:Core/Src/hall_detection.c **** * \return YES if we are in the stable zone of steady periods. NO otherwise
-ARM GAS  /tmp/ccGla46d.s 			page 43
+ARM GAS  /tmp/cces1Dgo.s 			page 43
 
 
  617:Core/Src/hall_detection.c **** */
@@ -2578,7 +2578,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  236:Core/Src/hall_detection.c **** 	//timeout or currentisstationary
  1625              		.loc 1 236 4 is_stmt 0 view .LVU456
  1626 0000 30B5     		push	{r4, r5, lr}
-ARM GAS  /tmp/ccGla46d.s 			page 44
+ARM GAS  /tmp/cces1Dgo.s 			page 44
 
 
  1627              	.LCFI24:
@@ -2638,7 +2638,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  1670 002c 9342     		cmp	r3, r2
  1671 002e 04D8     		bhi	.L132
  1672              	.L126:
-ARM GAS  /tmp/ccGla46d.s 			page 45
+ARM GAS  /tmp/cces1Dgo.s 			page 45
 
 
  258:Core/Src/hall_detection.c **** 
@@ -2698,7 +2698,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  1715              		.loc 1 249 5 view .LVU479
  1716 005a 2046     		mov	r0, r4
  1717 005c FFF7FEFF 		bl	resetVariables
-ARM GAS  /tmp/ccGla46d.s 			page 46
+ARM GAS  /tmp/cces1Dgo.s 			page 46
 
 
  1718              	.LVL129:
@@ -2758,7 +2758,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  640:Core/Src/hall_detection.c **** //		case hall_C:
  641:Core/Src/hall_detection.c **** //			*pin_infoH3=old_pin_infoH1;
  642:Core/Src/hall_detection.c **** //			break;
-ARM GAS  /tmp/ccGla46d.s 			page 47
+ARM GAS  /tmp/cces1Dgo.s 			page 47
 
 
  643:Core/Src/hall_detection.c **** //		default:
@@ -2818,7 +2818,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  1763 0006 7047     		bx	lr
  1764              		.cfi_endproc
  1765              	.LFE251:
-ARM GAS  /tmp/ccGla46d.s 			page 48
+ARM GAS  /tmp/cces1Dgo.s 			page 48
 
 
  1767              		.global	__aeabi_d2iz
@@ -2878,7 +2878,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  1812 0010 04EB8303 		add	r3, r4, r3, lsl #2
  1813 0014 5F68     		ldr	r7, [r3, #4]
  1814              		.loc 1 694 126 discriminator 3 view .LVU497
-ARM GAS  /tmp/ccGla46d.s 			page 49
+ARM GAS  /tmp/cces1Dgo.s 			page 49
 
 
  1815 0016 05F12203 		add	r3, r5, #34
@@ -2938,7 +2938,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  1864              		.loc 1 699 3 is_stmt 1 discriminator 3 view .LVU512
  1865              		.loc 1 699 37 is_stmt 0 discriminator 3 view .LVU513
  1866 0086 A7EB0800 		sub	r0, r7, r8
-ARM GAS  /tmp/ccGla46d.s 			page 50
+ARM GAS  /tmp/cces1Dgo.s 			page 50
 
 
  1867 008a FFF7FEFF 		bl	absolute
@@ -2998,7 +2998,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  1915              	.LVL144:
  693:Core/Src/hall_detection.c **** 		gen->differences_phaseA[phase_A]+=absolute((int32_t)gen->currA.zerocrossings_tick[i]-(int32_t)gen
  1916              		.loc 1 693 45 discriminator 3 view .LVU529
-ARM GAS  /tmp/ccGla46d.s 			page 51
+ARM GAS  /tmp/cces1Dgo.s 			page 51
 
 
  1917 00e8 8FE7     		b	.L138
@@ -3058,7 +3058,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  1963              	.L143:
  712:Core/Src/hall_detection.c **** 		gen->differences_phaseA[i]/=MAXZEROCROSSINGS;
  713:Core/Src/hall_detection.c **** 		gen->differences_phaseB[i]/=MAXZEROCROSSINGS;
-ARM GAS  /tmp/ccGla46d.s 			page 52
+ARM GAS  /tmp/cces1Dgo.s 			page 52
 
 
  714:Core/Src/hall_detection.c **** 		gen->differences_phaseC[i]/=MAXZEROCROSSINGS;
@@ -3079,7 +3079,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  729:Core/Src/hall_detection.c **** 			gen->shifted_polarity[hall_C][i]=1;
  730:Core/Src/hall_detection.c **** 		}
  731:Core/Src/hall_detection.c **** 
- 732:Core/Src/hall_detection.c **** 
+ 732:Core/Src/hall_detection.c **** 		//takes notes of the minimum difference
  733:Core/Src/hall_detection.c **** 		if(gen->differences_phaseA[i]<minimum[phase_A]){
  1964              		.loc 1 733 3 is_stmt 1 view .LVU545
  1965              		.loc 1 733 29 is_stmt 0 view .LVU546
@@ -3118,7 +3118,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  741:Core/Src/hall_detection.c **** 		if(gen->differences_phaseC[i]<minimum[phase_C]){
  1991              		.loc 1 741 3 is_stmt 1 view .LVU557
  1992              		.loc 1 741 29 is_stmt 0 view .LVU558
-ARM GAS  /tmp/ccGla46d.s 			page 53
+ARM GAS  /tmp/cces1Dgo.s 			page 53
 
 
  1993 0142 03F14602 		add	r2, r3, #70
@@ -3178,7 +3178,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  2036 0196 B842     		cmp	r0, r7
  2037 0198 0FDD     		ble	.L141
  717:Core/Src/hall_detection.c **** 			gen->differences_phaseA[i]%=_bottom_limit;
-ARM GAS  /tmp/ccGla46d.s 			page 54
+ARM GAS  /tmp/cces1Dgo.s 			page 54
 
 
  2038              		.loc 1 717 47 discriminator 1 view .LVU573
@@ -3238,7 +3238,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  727:Core/Src/hall_detection.c **** 			gen->differences_phaseC[i]%=_bottom_limit;
  2079              		.loc 1 727 47 discriminator 1 view .LVU587
  2080 01e4 6245     		cmp	r2, ip
-ARM GAS  /tmp/ccGla46d.s 			page 55
+ARM GAS  /tmp/cces1Dgo.s 			page 55
 
 
  2081 01e6 9BDA     		bge	.L143
@@ -3267,108 +3267,109 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  743:Core/Src/hall_detection.c **** 		}
  744:Core/Src/hall_detection.c **** 	}
  745:Core/Src/hall_detection.c **** 
- 746:Core/Src/hall_detection.c **** 	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
- 2099              		.loc 1 746 16 view .LVU593
+ 746:Core/Src/hall_detection.c **** 	//finds out whicone is the minimum diff
+ 747:Core/Src/hall_detection.c **** 	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
+ 2099              		.loc 1 747 16 view .LVU593
  2100 0206 0023     		movs	r3, #0
  2101              	.LVL155:
- 2102              		.loc 1 746 16 view .LVU594
+ 2102              		.loc 1 747 16 view .LVU594
  2103 0208 0EE0     		b	.L148
  2104              	.LVL156:
  2105              	.L157:
- 747:Core/Src/hall_detection.c **** 		if(gen->differences_phaseA[i]==minimum[phase_A]){
- 748:Core/Src/hall_detection.c **** 			gen->results[gen->numberOfresults].hall_order[i]=phase_A;
- 2106              		.loc 1 748 4 is_stmt 1 view .LVU595
- 2107              		.loc 1 748 52 is_stmt 0 view .LVU596
+ 748:Core/Src/hall_detection.c **** 		if(gen->differences_phaseA[i]==minimum[phase_A]){
+ 749:Core/Src/hall_detection.c **** 			gen->results[gen->numberOfresults].hall_order[i]=phase_A;
+ 2106              		.loc 1 749 4 is_stmt 1 view .LVU595
+ 2107              		.loc 1 749 52 is_stmt 0 view .LVU596
  2108 020a 04EB0512 		add	r2, r4, r5, lsl #4
  2109 020e 1A44     		add	r2, r2, r3
  2110 0210 0021     		movs	r1, #0
  2111 0212 82F85811 		strb	r1, [r2, #344]
  2112 0216 10E0     		b	.L149
  2113              	.L158:
- 749:Core/Src/hall_detection.c **** 		}
- 750:Core/Src/hall_detection.c **** 
- 751:Core/Src/hall_detection.c **** 		if(gen->differences_phaseB[i]==minimum[phase_B]){
- 752:Core/Src/hall_detection.c **** 			gen->results[gen->numberOfresults].hall_order[i]=phase_B;
- 2114              		.loc 1 752 4 is_stmt 1 view .LVU597
- 2115              		.loc 1 752 52 is_stmt 0 view .LVU598
+ 750:Core/Src/hall_detection.c **** 		}
+ 751:Core/Src/hall_detection.c **** 
+ 752:Core/Src/hall_detection.c **** 		if(gen->differences_phaseB[i]==minimum[phase_B]){
+ 753:Core/Src/hall_detection.c **** 			gen->results[gen->numberOfresults].hall_order[i]=phase_B;
+ 2114              		.loc 1 753 4 is_stmt 1 view .LVU597
+ 2115              		.loc 1 753 52 is_stmt 0 view .LVU598
  2116 0218 04EB0512 		add	r2, r4, r5, lsl #4
  2117 021c 1A44     		add	r2, r2, r3
  2118 021e 0121     		movs	r1, #1
  2119 0220 82F85811 		strb	r1, [r2, #344]
  2120 0224 11E0     		b	.L150
  2121              	.L151:
- 746:Core/Src/hall_detection.c **** 		if(gen->differences_phaseA[i]==minimum[phase_A]){
-ARM GAS  /tmp/ccGla46d.s 			page 56
+ARM GAS  /tmp/cces1Dgo.s 			page 56
 
 
- 2122              		.loc 1 746 43 discriminator 2 view .LVU599
+ 747:Core/Src/hall_detection.c **** 		if(gen->differences_phaseA[i]==minimum[phase_A]){
+ 2122              		.loc 1 747 43 discriminator 2 view .LVU599
  2123 0226 0133     		adds	r3, r3, #1
  2124              	.LVL157:
  2125              	.L148:
- 746:Core/Src/hall_detection.c **** 		if(gen->differences_phaseA[i]==minimum[phase_A]){
- 2126              		.loc 1 746 2 discriminator 1 view .LVU600
+ 747:Core/Src/hall_detection.c **** 		if(gen->differences_phaseA[i]==minimum[phase_A]){
+ 2126              		.loc 1 747 2 discriminator 1 view .LVU600
  2127 0228 022B     		cmp	r3, #2
  2128 022a 1CD8     		bhi	.L156
- 747:Core/Src/hall_detection.c **** 		if(gen->differences_phaseA[i]==minimum[phase_A]){
- 2129              		.loc 1 747 3 is_stmt 1 view .LVU601
- 747:Core/Src/hall_detection.c **** 		if(gen->differences_phaseA[i]==minimum[phase_A]){
- 2130              		.loc 1 747 29 is_stmt 0 view .LVU602
+ 748:Core/Src/hall_detection.c **** 		if(gen->differences_phaseA[i]==minimum[phase_A]){
+ 2129              		.loc 1 748 3 is_stmt 1 view .LVU601
+ 748:Core/Src/hall_detection.c **** 		if(gen->differences_phaseA[i]==minimum[phase_A]){
+ 2130              		.loc 1 748 29 is_stmt 0 view .LVU602
  2131 022c 03F14002 		add	r2, r3, #64
  2132 0230 54F82210 		ldr	r1, [r4, r2, lsl #2]
- 747:Core/Src/hall_detection.c **** 		if(gen->differences_phaseA[i]==minimum[phase_A]){
- 2133              		.loc 1 747 41 view .LVU603
+ 748:Core/Src/hall_detection.c **** 		if(gen->differences_phaseA[i]==minimum[phase_A]){
+ 2133              		.loc 1 748 41 view .LVU603
  2134 0234 019A     		ldr	r2, [sp, #4]
- 747:Core/Src/hall_detection.c **** 		if(gen->differences_phaseA[i]==minimum[phase_A]){
- 2135              		.loc 1 747 5 view .LVU604
+ 748:Core/Src/hall_detection.c **** 		if(gen->differences_phaseA[i]==minimum[phase_A]){
+ 2135              		.loc 1 748 5 view .LVU604
  2136 0236 9142     		cmp	r1, r2
  2137 0238 E7D0     		beq	.L157
  2138              	.L149:
- 751:Core/Src/hall_detection.c **** 			gen->results[gen->numberOfresults].hall_order[i]=phase_B;
- 2139              		.loc 1 751 3 is_stmt 1 view .LVU605
- 751:Core/Src/hall_detection.c **** 			gen->results[gen->numberOfresults].hall_order[i]=phase_B;
- 2140              		.loc 1 751 29 is_stmt 0 view .LVU606
+ 752:Core/Src/hall_detection.c **** 			gen->results[gen->numberOfresults].hall_order[i]=phase_B;
+ 2139              		.loc 1 752 3 is_stmt 1 view .LVU605
+ 752:Core/Src/hall_detection.c **** 			gen->results[gen->numberOfresults].hall_order[i]=phase_B;
+ 2140              		.loc 1 752 29 is_stmt 0 view .LVU606
  2141 023a 03F14202 		add	r2, r3, #66
  2142 023e 04EB8202 		add	r2, r4, r2, lsl #2
  2143 0242 5168     		ldr	r1, [r2, #4]
- 751:Core/Src/hall_detection.c **** 			gen->results[gen->numberOfresults].hall_order[i]=phase_B;
- 2144              		.loc 1 751 41 view .LVU607
+ 752:Core/Src/hall_detection.c **** 			gen->results[gen->numberOfresults].hall_order[i]=phase_B;
+ 2144              		.loc 1 752 41 view .LVU607
  2145 0244 029A     		ldr	r2, [sp, #8]
- 751:Core/Src/hall_detection.c **** 			gen->results[gen->numberOfresults].hall_order[i]=phase_B;
- 2146              		.loc 1 751 5 view .LVU608
+ 752:Core/Src/hall_detection.c **** 			gen->results[gen->numberOfresults].hall_order[i]=phase_B;
+ 2146              		.loc 1 752 5 view .LVU608
  2147 0246 9142     		cmp	r1, r2
  2148 0248 E6D0     		beq	.L158
  2149              	.L150:
- 753:Core/Src/hall_detection.c **** 		}
- 754:Core/Src/hall_detection.c **** 
- 755:Core/Src/hall_detection.c **** 		if(gen->differences_phaseC[i]==minimum[phase_C]){
- 2150              		.loc 1 755 3 is_stmt 1 view .LVU609
- 2151              		.loc 1 755 29 is_stmt 0 view .LVU610
+ 754:Core/Src/hall_detection.c **** 		}
+ 755:Core/Src/hall_detection.c **** 
+ 756:Core/Src/hall_detection.c **** 		if(gen->differences_phaseC[i]==minimum[phase_C]){
+ 2150              		.loc 1 756 3 is_stmt 1 view .LVU609
+ 2151              		.loc 1 756 29 is_stmt 0 view .LVU610
  2152 024a 03F14602 		add	r2, r3, #70
  2153 024e 54F82210 		ldr	r1, [r4, r2, lsl #2]
- 2154              		.loc 1 755 41 view .LVU611
+ 2154              		.loc 1 756 41 view .LVU611
  2155 0252 039A     		ldr	r2, [sp, #12]
- 2156              		.loc 1 755 5 view .LVU612
+ 2156              		.loc 1 756 5 view .LVU612
  2157 0254 9142     		cmp	r1, r2
  2158 0256 E6D1     		bne	.L151
- 756:Core/Src/hall_detection.c **** 			gen->results[gen->numberOfresults].hall_order[i]=phase_C;
- 2159              		.loc 1 756 4 is_stmt 1 view .LVU613
- 2160              		.loc 1 756 52 is_stmt 0 view .LVU614
+ 757:Core/Src/hall_detection.c **** 			gen->results[gen->numberOfresults].hall_order[i]=phase_C;
+ 2159              		.loc 1 757 4 is_stmt 1 view .LVU613
+ 2160              		.loc 1 757 52 is_stmt 0 view .LVU614
  2161 0258 04EB0512 		add	r2, r4, r5, lsl #4
  2162 025c 1A44     		add	r2, r2, r3
  2163 025e 0221     		movs	r1, #2
  2164 0260 82F85811 		strb	r1, [r2, #344]
+ARM GAS  /tmp/cces1Dgo.s 			page 57
+
+
  2165 0264 DFE7     		b	.L151
-ARM GAS  /tmp/ccGla46d.s 			page 57
-
-
  2166              	.L156:
- 2167              		.loc 1 756 52 view .LVU615
+ 2167              		.loc 1 757 52 view .LVU615
  2168              	.LBE22:
- 757:Core/Src/hall_detection.c **** 		}
- 758:Core/Src/hall_detection.c **** 	}
- 759:Core/Src/hall_detection.c **** 
- 760:Core/Src/hall_detection.c **** }
- 2169              		.loc 1 760 1 view .LVU616
+ 758:Core/Src/hall_detection.c **** 		}
+ 759:Core/Src/hall_detection.c **** 	}
+ 760:Core/Src/hall_detection.c **** 
+ 761:Core/Src/hall_detection.c **** }
+ 2169              		.loc 1 761 1 view .LVU616
  2170 0266 05B0     		add	sp, sp, #20
  2171              	.LCFI30:
  2172              		.cfi_def_cfa_offset 28
@@ -3376,7 +3377,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  2174 0268 BDE8F083 		pop	{r4, r5, r6, r7, r8, r9, pc}
  2175              	.LVL158:
  2176              	.L160:
- 2177              		.loc 1 760 1 view .LVU617
+ 2177              		.loc 1 761 1 view .LVU617
  2178 026c AFF30080 		.align	3
  2179              	.L159:
  2180 0270 00000000 		.word	.LANCHOR2
@@ -3395,21 +3396,21 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  2195              	assign_polarity:
  2196              	.LVL159:
  2197              	.LFB253:
- 761:Core/Src/hall_detection.c **** 
  762:Core/Src/hall_detection.c **** 
  763:Core/Src/hall_detection.c **** 
- 764:Core/Src/hall_detection.c **** /**
- 765:Core/Src/hall_detection.c **** * \brief the other magic function, asigns polarity from risign or falling edges, it also takes into
- 766:Core/Src/hall_detection.c **** * right now has a cyclomatic complexity of 21, that should be reduced.
- 767:Core/Src/hall_detection.c **** * \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything t
- 768:Core/Src/hall_detection.c **** */
- 769:Core/Src/hall_detection.c **** void assign_polarity(hall_detection_general_struct *gen){
- 2198              		.loc 1 769 57 is_stmt 1 view -0
+ 764:Core/Src/hall_detection.c **** 
+ 765:Core/Src/hall_detection.c **** /**
+ 766:Core/Src/hall_detection.c **** * \brief the other magic function, asigns polarity from risign or falling edges, it also takes into
+ 767:Core/Src/hall_detection.c **** * right now has a cyclomatic complexity of 21, that should be reduced.
+ 768:Core/Src/hall_detection.c **** * \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything t
+ 769:Core/Src/hall_detection.c **** */
+ 770:Core/Src/hall_detection.c **** void assign_polarity(hall_detection_general_struct *gen){
+ 2198              		.loc 1 770 57 is_stmt 1 view -0
  2199              		.cfi_startproc
  2200              		@ args = 0, pretend = 0, frame = 24
  2201              		@ frame_needed = 0, uses_anonymous_args = 0
  2202              		@ link register save eliminated.
- 2203              		.loc 1 769 57 is_stmt 0 view .LVU619
+ 2203              		.loc 1 770 57 is_stmt 0 view .LVU619
  2204 0000 30B4     		push	{r4, r5}
  2205              	.LCFI31:
  2206              		.cfi_def_cfa_offset 8
@@ -3417,172 +3418,172 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  2208              		.cfi_offset 5, -4
  2209 0002 86B0     		sub	sp, sp, #24
  2210              	.LCFI32:
+ARM GAS  /tmp/cces1Dgo.s 			page 58
+
+
  2211              		.cfi_def_cfa_offset 32
-ARM GAS  /tmp/ccGla46d.s 			page 58
-
-
- 770:Core/Src/hall_detection.c **** 	current_or_hall_measurements_struct*	currents[NUMBEROFPHASES]={&gen->currA,&gen->currB,&gen->currC
- 2212              		.loc 1 770 2 is_stmt 1 view .LVU620
- 2213              		.loc 1 770 65 is_stmt 0 view .LVU621
+ 771:Core/Src/hall_detection.c **** 	current_or_hall_measurements_struct*	currents[NUMBEROFPHASES]={&gen->currA,&gen->currB,&gen->currC
+ 2212              		.loc 1 771 2 is_stmt 1 view .LVU620
+ 2213              		.loc 1 771 65 is_stmt 0 view .LVU621
  2214 0004 031D     		adds	r3, r0, #4
- 2215              		.loc 1 770 39 view .LVU622
+ 2215              		.loc 1 771 39 view .LVU622
  2216 0006 0393     		str	r3, [sp, #12]
- 2217              		.loc 1 770 77 view .LVU623
+ 2217              		.loc 1 771 77 view .LVU623
  2218 0008 00F13003 		add	r3, r0, #48
- 2219              		.loc 1 770 39 view .LVU624
+ 2219              		.loc 1 771 39 view .LVU624
  2220 000c 0493     		str	r3, [sp, #16]
- 2221              		.loc 1 770 89 view .LVU625
+ 2221              		.loc 1 771 89 view .LVU625
  2222 000e 00F15C03 		add	r3, r0, #92
- 2223              		.loc 1 770 39 view .LVU626
+ 2223              		.loc 1 771 39 view .LVU626
  2224 0012 0593     		str	r3, [sp, #20]
- 771:Core/Src/hall_detection.c **** 	hall_measurements_struct*	            halls[NUMBEROFPHASES]	={&gen->hallA,&gen->hallB,&gen->hallC}
- 2225              		.loc 1 771 2 is_stmt 1 view .LVU627
- 2226              		.loc 1 771 64 is_stmt 0 view .LVU628
+ 772:Core/Src/hall_detection.c **** 	hall_measurements_struct*	            halls[NUMBEROFPHASES]	={&gen->hallA,&gen->hallB,&gen->hallC}
+ 2225              		.loc 1 772 2 is_stmt 1 view .LVU627
+ 2226              		.loc 1 772 64 is_stmt 0 view .LVU628
  2227 0014 00F18803 		add	r3, r0, #136
- 2228              		.loc 1 771 40 view .LVU629
+ 2228              		.loc 1 772 40 view .LVU629
  2229 0018 0093     		str	r3, [sp]
- 2230              		.loc 1 771 76 view .LVU630
+ 2230              		.loc 1 772 76 view .LVU630
  2231 001a 00F1B003 		add	r3, r0, #176
- 2232              		.loc 1 771 40 view .LVU631
+ 2232              		.loc 1 772 40 view .LVU631
  2233 001e 0193     		str	r3, [sp, #4]
- 2234              		.loc 1 771 88 view .LVU632
+ 2234              		.loc 1 772 88 view .LVU632
  2235 0020 00F1D803 		add	r3, r0, #216
- 2236              		.loc 1 771 40 view .LVU633
+ 2236              		.loc 1 772 40 view .LVU633
  2237 0024 0293     		str	r3, [sp, #8]
- 772:Core/Src/hall_detection.c **** 	detection_results_struct *pointerOfcurrentResult=&gen->results[gen->numberOfresults];
- 2238              		.loc 1 772 2 is_stmt 1 view .LVU634
- 2239              		.loc 1 772 68 is_stmt 0 view .LVU635
+ 773:Core/Src/hall_detection.c **** 	detection_results_struct *pointerOfcurrentResult=&gen->results[gen->numberOfresults];
+ 2238              		.loc 1 773 2 is_stmt 1 view .LVU634
+ 2239              		.loc 1 773 68 is_stmt 0 view .LVU635
  2240 0026 D0F84841 		ldr	r4, [r0, #328]
  2241              	.LVL160:
- 773:Core/Src/hall_detection.c **** 
  774:Core/Src/hall_detection.c **** 
- 775:Core/Src/hall_detection.c **** 	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
- 2242              		.loc 1 775 2 is_stmt 1 view .LVU636
+ 775:Core/Src/hall_detection.c **** 
+ 776:Core/Src/hall_detection.c **** 	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
+ 2242              		.loc 1 776 2 is_stmt 1 view .LVU636
  2243              	.LBB23:
- 2244              		.loc 1 775 7 view .LVU637
- 2245              		.loc 1 775 16 is_stmt 0 view .LVU638
+ 2244              		.loc 1 776 7 view .LVU637
+ 2245              		.loc 1 776 16 is_stmt 0 view .LVU638
  2246 002a 0023     		movs	r3, #0
- 2247              		.loc 1 775 2 view .LVU639
+ 2247              		.loc 1 776 2 view .LVU639
  2248 002c 1CE0     		b	.L162
  2249              	.LVL161:
  2250              	.L170:
- 776:Core/Src/hall_detection.c **** 		if(currents[pointerOfcurrentResult->hall_order[i]]->zerocrossings_polarity[1]==halls[i]->zerocros
- 777:Core/Src/hall_detection.c **** 			if(gen->shifted_polarity[pointerOfcurrentResult->hall_order[i]][i]==0){
- 2251              		.loc 1 777 4 is_stmt 1 view .LVU640
- 2252              		.loc 1 777 67 is_stmt 0 view .LVU641
+ 777:Core/Src/hall_detection.c **** 		if(currents[pointerOfcurrentResult->hall_order[i]]->zerocrossings_polarity[1]==halls[i]->zerocros
+ 778:Core/Src/hall_detection.c **** 			if(gen->shifted_polarity[pointerOfcurrentResult->hall_order[i]][i]==0){
+ 2251              		.loc 1 778 4 is_stmt 1 view .LVU640
+ 2252              		.loc 1 778 67 is_stmt 0 view .LVU641
  2253 002e 01EB4102 		add	r2, r1, r1, lsl #1
  2254 0032 1A44     		add	r2, r2, r3
  2255 0034 4832     		adds	r2, r2, #72
  2256 0036 00EB8202 		add	r2, r0, r2, lsl #2
  2257 003a 5268     		ldr	r2, [r2, #4]
- 2258              		.loc 1 777 6 view .LVU642
+ 2258              		.loc 1 778 6 view .LVU642
  2259 003c 32B9     		cbnz	r2, .L164
- 778:Core/Src/hall_detection.c **** 				pointerOfcurrentResult->hall_polarity[pointerOfcurrentResult->hall_order[i]]=hall_direct;
-ARM GAS  /tmp/ccGla46d.s 			page 59
+ARM GAS  /tmp/cces1Dgo.s 			page 59
 
 
- 2260              		.loc 1 778 5 is_stmt 1 view .LVU643
- 2261              		.loc 1 778 81 is_stmt 0 view .LVU644
+ 779:Core/Src/hall_detection.c **** 				pointerOfcurrentResult->hall_polarity[pointerOfcurrentResult->hall_order[i]]=hall_direct;
+ 2260              		.loc 1 779 5 is_stmt 1 view .LVU643
+ 2261              		.loc 1 779 81 is_stmt 0 view .LVU644
  2262 003e 00EB0412 		add	r2, r0, r4, lsl #4
  2263 0042 1144     		add	r1, r1, r2
  2264 0044 0022     		movs	r2, #0
  2265 0046 81F85B21 		strb	r2, [r1, #347]
  2266 004a 0CE0     		b	.L165
  2267              	.L164:
- 779:Core/Src/hall_detection.c **** 			}else{
- 780:Core/Src/hall_detection.c **** 				pointerOfcurrentResult->hall_polarity[pointerOfcurrentResult->hall_order[i]]=hall_inverse;
- 2268              		.loc 1 780 5 is_stmt 1 view .LVU645
- 2269              		.loc 1 780 81 is_stmt 0 view .LVU646
+ 780:Core/Src/hall_detection.c **** 			}else{
+ 781:Core/Src/hall_detection.c **** 				pointerOfcurrentResult->hall_polarity[pointerOfcurrentResult->hall_order[i]]=hall_inverse;
+ 2268              		.loc 1 781 5 is_stmt 1 view .LVU645
+ 2269              		.loc 1 781 81 is_stmt 0 view .LVU646
  2270 004c 00EB0412 		add	r2, r0, r4, lsl #4
  2271 0050 1144     		add	r1, r1, r2
  2272 0052 0122     		movs	r2, #1
  2273 0054 81F85B21 		strb	r2, [r1, #347]
  2274 0058 05E0     		b	.L165
  2275              	.L166:
- 781:Core/Src/hall_detection.c **** 			}
- 782:Core/Src/hall_detection.c **** 		}else{
- 783:Core/Src/hall_detection.c **** 			if(gen->shifted_polarity[pointerOfcurrentResult->hall_order[i]][i]==0){
- 784:Core/Src/hall_detection.c **** 				pointerOfcurrentResult->hall_polarity[pointerOfcurrentResult->hall_order[i]]=hall_inverse;
- 785:Core/Src/hall_detection.c **** 			}else{
- 786:Core/Src/hall_detection.c **** 				pointerOfcurrentResult->hall_polarity[pointerOfcurrentResult->hall_order[i]]=hall_direct;
- 2276              		.loc 1 786 5 is_stmt 1 view .LVU647
- 2277              		.loc 1 786 81 is_stmt 0 view .LVU648
+ 782:Core/Src/hall_detection.c **** 			}
+ 783:Core/Src/hall_detection.c **** 		}else{
+ 784:Core/Src/hall_detection.c **** 			if(gen->shifted_polarity[pointerOfcurrentResult->hall_order[i]][i]==0){
+ 785:Core/Src/hall_detection.c **** 				pointerOfcurrentResult->hall_polarity[pointerOfcurrentResult->hall_order[i]]=hall_inverse;
+ 786:Core/Src/hall_detection.c **** 			}else{
+ 787:Core/Src/hall_detection.c **** 				pointerOfcurrentResult->hall_polarity[pointerOfcurrentResult->hall_order[i]]=hall_direct;
+ 2276              		.loc 1 787 5 is_stmt 1 view .LVU647
+ 2277              		.loc 1 787 81 is_stmt 0 view .LVU648
  2278 005a 00EB0412 		add	r2, r0, r4, lsl #4
  2279 005e 1144     		add	r1, r1, r2
  2280 0060 0022     		movs	r2, #0
  2281 0062 81F85B21 		strb	r2, [r1, #347]
  2282              	.L165:
- 775:Core/Src/hall_detection.c **** 		if(currents[pointerOfcurrentResult->hall_order[i]]->zerocrossings_polarity[1]==halls[i]->zerocros
- 2283              		.loc 1 775 43 discriminator 2 view .LVU649
+ 776:Core/Src/hall_detection.c **** 		if(currents[pointerOfcurrentResult->hall_order[i]]->zerocrossings_polarity[1]==halls[i]->zerocros
+ 2283              		.loc 1 776 43 discriminator 2 view .LVU649
  2284 0066 0133     		adds	r3, r3, #1
  2285              	.LVL162:
  2286              	.L162:
- 775:Core/Src/hall_detection.c **** 		if(currents[pointerOfcurrentResult->hall_order[i]]->zerocrossings_polarity[1]==halls[i]->zerocros
- 2287              		.loc 1 775 2 discriminator 1 view .LVU650
+ 776:Core/Src/hall_detection.c **** 		if(currents[pointerOfcurrentResult->hall_order[i]]->zerocrossings_polarity[1]==halls[i]->zerocros
+ 2287              		.loc 1 776 2 discriminator 1 view .LVU650
  2288 0068 022B     		cmp	r3, #2
  2289 006a 23D8     		bhi	.L169
- 776:Core/Src/hall_detection.c **** 			if(gen->shifted_polarity[pointerOfcurrentResult->hall_order[i]][i]==0){
- 2290              		.loc 1 776 3 is_stmt 1 view .LVU651
- 776:Core/Src/hall_detection.c **** 			if(gen->shifted_polarity[pointerOfcurrentResult->hall_order[i]][i]==0){
- 2291              		.loc 1 776 49 is_stmt 0 view .LVU652
+ 777:Core/Src/hall_detection.c **** 			if(gen->shifted_polarity[pointerOfcurrentResult->hall_order[i]][i]==0){
+ 2290              		.loc 1 777 3 is_stmt 1 view .LVU651
+ 777:Core/Src/hall_detection.c **** 			if(gen->shifted_polarity[pointerOfcurrentResult->hall_order[i]][i]==0){
+ 2291              		.loc 1 777 49 is_stmt 0 view .LVU652
  2292 006c 00EB0412 		add	r2, r0, r4, lsl #4
  2293 0070 1A44     		add	r2, r2, r3
  2294 0072 92F85811 		ldrb	r1, [r2, #344]	@ zero_extendqisi2
- 776:Core/Src/hall_detection.c **** 			if(gen->shifted_polarity[pointerOfcurrentResult->hall_order[i]][i]==0){
- 2295              		.loc 1 776 14 view .LVU653
+ 777:Core/Src/hall_detection.c **** 			if(gen->shifted_polarity[pointerOfcurrentResult->hall_order[i]][i]==0){
+ 2295              		.loc 1 777 14 view .LVU653
  2296 0076 06AA     		add	r2, sp, #24
  2297 0078 02EB8102 		add	r2, r2, r1, lsl #2
  2298 007c 52F80C2C 		ldr	r2, [r2, #-12]
- 776:Core/Src/hall_detection.c **** 			if(gen->shifted_polarity[pointerOfcurrentResult->hall_order[i]][i]==0){
- 2299              		.loc 1 776 77 view .LVU654
+ 777:Core/Src/hall_detection.c **** 			if(gen->shifted_polarity[pointerOfcurrentResult->hall_order[i]][i]==0){
+ 2299              		.loc 1 777 77 view .LVU654
  2300 0080 92F82150 		ldrb	r5, [r2, #33]	@ zero_extendqisi2
- 776:Core/Src/hall_detection.c **** 			if(gen->shifted_polarity[pointerOfcurrentResult->hall_order[i]][i]==0){
- 2301              		.loc 1 776 87 view .LVU655
-ARM GAS  /tmp/ccGla46d.s 			page 60
+ 777:Core/Src/hall_detection.c **** 			if(gen->shifted_polarity[pointerOfcurrentResult->hall_order[i]][i]==0){
+ARM GAS  /tmp/cces1Dgo.s 			page 60
 
 
+ 2301              		.loc 1 777 87 view .LVU655
  2302 0084 06AA     		add	r2, sp, #24
  2303 0086 02EB8302 		add	r2, r2, r3, lsl #2
  2304 008a 52F8182C 		ldr	r2, [r2, #-24]
- 776:Core/Src/hall_detection.c **** 			if(gen->shifted_polarity[pointerOfcurrentResult->hall_order[i]][i]==0){
- 2305              		.loc 1 776 114 view .LVU656
+ 777:Core/Src/hall_detection.c **** 			if(gen->shifted_polarity[pointerOfcurrentResult->hall_order[i]][i]==0){
+ 2305              		.loc 1 777 114 view .LVU656
  2306 008e 527F     		ldrb	r2, [r2, #29]	@ zero_extendqisi2
- 776:Core/Src/hall_detection.c **** 			if(gen->shifted_polarity[pointerOfcurrentResult->hall_order[i]][i]==0){
- 2307              		.loc 1 776 5 view .LVU657
+ 777:Core/Src/hall_detection.c **** 			if(gen->shifted_polarity[pointerOfcurrentResult->hall_order[i]][i]==0){
+ 2307              		.loc 1 777 5 view .LVU657
  2308 0090 9542     		cmp	r5, r2
  2309 0092 CCD0     		beq	.L170
- 783:Core/Src/hall_detection.c **** 				pointerOfcurrentResult->hall_polarity[pointerOfcurrentResult->hall_order[i]]=hall_inverse;
- 2310              		.loc 1 783 4 is_stmt 1 view .LVU658
- 783:Core/Src/hall_detection.c **** 				pointerOfcurrentResult->hall_polarity[pointerOfcurrentResult->hall_order[i]]=hall_inverse;
- 2311              		.loc 1 783 67 is_stmt 0 view .LVU659
+ 784:Core/Src/hall_detection.c **** 				pointerOfcurrentResult->hall_polarity[pointerOfcurrentResult->hall_order[i]]=hall_inverse;
+ 2310              		.loc 1 784 4 is_stmt 1 view .LVU658
+ 784:Core/Src/hall_detection.c **** 				pointerOfcurrentResult->hall_polarity[pointerOfcurrentResult->hall_order[i]]=hall_inverse;
+ 2311              		.loc 1 784 67 is_stmt 0 view .LVU659
  2312 0094 01EB4102 		add	r2, r1, r1, lsl #1
  2313 0098 1A44     		add	r2, r2, r3
  2314 009a 4832     		adds	r2, r2, #72
  2315 009c 00EB8202 		add	r2, r0, r2, lsl #2
  2316 00a0 5268     		ldr	r2, [r2, #4]
- 783:Core/Src/hall_detection.c **** 				pointerOfcurrentResult->hall_polarity[pointerOfcurrentResult->hall_order[i]]=hall_inverse;
- 2317              		.loc 1 783 6 view .LVU660
+ 784:Core/Src/hall_detection.c **** 				pointerOfcurrentResult->hall_polarity[pointerOfcurrentResult->hall_order[i]]=hall_inverse;
+ 2317              		.loc 1 784 6 view .LVU660
  2318 00a2 002A     		cmp	r2, #0
  2319 00a4 D9D1     		bne	.L166
- 784:Core/Src/hall_detection.c **** 			}else{
- 2320              		.loc 1 784 5 is_stmt 1 view .LVU661
- 784:Core/Src/hall_detection.c **** 			}else{
- 2321              		.loc 1 784 81 is_stmt 0 view .LVU662
+ 785:Core/Src/hall_detection.c **** 			}else{
+ 2320              		.loc 1 785 5 is_stmt 1 view .LVU661
+ 785:Core/Src/hall_detection.c **** 			}else{
+ 2321              		.loc 1 785 81 is_stmt 0 view .LVU662
  2322 00a6 00EB0412 		add	r2, r0, r4, lsl #4
  2323 00aa 1144     		add	r1, r1, r2
  2324 00ac 0122     		movs	r2, #1
  2325 00ae 81F85B21 		strb	r2, [r1, #347]
  2326 00b2 D8E7     		b	.L165
  2327              	.L169:
- 784:Core/Src/hall_detection.c **** 			}else{
- 2328              		.loc 1 784 81 view .LVU663
+ 785:Core/Src/hall_detection.c **** 			}else{
+ 2328              		.loc 1 785 81 view .LVU663
  2329              	.LBE23:
- 787:Core/Src/hall_detection.c **** 			}
- 788:Core/Src/hall_detection.c **** 		}
- 789:Core/Src/hall_detection.c **** 	}
- 790:Core/Src/hall_detection.c **** 
- 791:Core/Src/hall_detection.c **** }
- 2330              		.loc 1 791 1 view .LVU664
+ 788:Core/Src/hall_detection.c **** 			}
+ 789:Core/Src/hall_detection.c **** 		}
+ 790:Core/Src/hall_detection.c **** 	}
+ 791:Core/Src/hall_detection.c **** 
+ 792:Core/Src/hall_detection.c **** }
+ 2330              		.loc 1 792 1 view .LVU664
  2331 00b4 06B0     		add	sp, sp, #24
  2332              	.LCFI33:
  2333              		.cfi_def_cfa_offset 8
@@ -3593,14 +3594,14 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  2338              		.cfi_restore 4
  2339              		.cfi_def_cfa_offset 0
  2340              	.LVL163:
- 2341              		.loc 1 791 1 view .LVU665
+ 2341              		.loc 1 792 1 view .LVU665
  2342 00b8 7047     		bx	lr
  2343              		.cfi_endproc
  2344              	.LFE253:
+ARM GAS  /tmp/cces1Dgo.s 			page 61
+
+
  2346              		.section	.text.interpretation,"ax",%progbits
-ARM GAS  /tmp/ccGla46d.s 			page 61
-
-
  2347              		.align	1
  2348              		.global	interpretation
  2349              		.syntax unified
@@ -3657,10 +3658,10 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  309:Core/Src/hall_detection.c **** 	assign_polarity(gen);
  2391              		.loc 1 309 2 is_stmt 1 view .LVU676
  2392 0016 0846     		mov	r0, r1
+ARM GAS  /tmp/cces1Dgo.s 			page 62
+
+
  2393              	.LVL167:
-ARM GAS  /tmp/ccGla46d.s 			page 62
-
-
  309:Core/Src/hall_detection.c **** 	assign_polarity(gen);
  2394              		.loc 1 309 2 is_stmt 0 view .LVU677
  2395 0018 FFF7FEFF 		bl	assign_closest_phase_to_hall
@@ -3717,270 +3718,269 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  2440              		.cfi_offset 5, -8
  2441              		.cfi_offset 14, -4
  2442 0002 85B0     		sub	sp, sp, #20
+ARM GAS  /tmp/cces1Dgo.s 			page 63
+
+
  2443              	.LCFI37:
-ARM GAS  /tmp/ccGla46d.s 			page 63
-
-
  2444              		.cfi_def_cfa_offset 32
  175:Core/Src/hall_detection.c **** 		case detection_ENABLED:
  2445              		.loc 1 175 2 is_stmt 1 view .LVU686
- 2446 0004 2B4C     		ldr	r4, .L188
+ 2446 0004 2C4C     		ldr	r4, .L188
  2447 0006 2478     		ldrb	r4, [r4]	@ zero_extendqisi2
  2448 0008 013C     		subs	r4, r4, #1
- 2449 000a 052C     		cmp	r4, #5
- 2450 000c 4ED8     		bhi	.L178
+ 2449 000a 062C     		cmp	r4, #6
+ 2450 000c 11D8     		bhi	.L177
  2451 000e DFE804F0 		tbb	[pc, r4]
  2452              	.L180:
- 2453 0012 03       		.byte	(.L185-.L180)/2
- 2454 0013 11       		.byte	(.L184-.L180)/2
- 2455 0014 20       		.byte	(.L183-.L180)/2
- 2456 0015 2F       		.byte	(.L182-.L180)/2
- 2457 0016 38       		.byte	(.L181-.L180)/2
- 2458 0017 44       		.byte	(.L179-.L180)/2
- 2459              		.p2align 1
- 2460              	.L185:
+ 2453 0012 04       		.byte	(.L186-.L180)/2
+ 2454 0013 12       		.byte	(.L185-.L180)/2
+ 2455 0014 21       		.byte	(.L184-.L180)/2
+ 2456 0015 30       		.byte	(.L183-.L180)/2
+ 2457 0016 39       		.byte	(.L182-.L180)/2
+ 2458 0017 45       		.byte	(.L181-.L180)/2
+ 2459 0018 4E       		.byte	(.L179-.L180)/2
+ 2460 0019 00       		.p2align 1
+ 2461              	.L186:
  177:Core/Src/hall_detection.c **** 			resetVariables(&general);
- 2461              		.loc 1 177 4 view .LVU687
+ 2462              		.loc 1 177 4 view .LVU687
  177:Core/Src/hall_detection.c **** 			resetVariables(&general);
- 2462              		.loc 1 177 9 is_stmt 0 view .LVU688
- 2463 0018 274D     		ldr	r5, .L188+4
- 2464 001a 0023     		movs	r3, #0
- 2465              	.LVL171:
+ 2463              		.loc 1 177 9 is_stmt 0 view .LVU688
+ 2464 001a 284D     		ldr	r5, .L188+4
+ 2465 001c 0023     		movs	r3, #0
+ 2466              	.LVL171:
  177:Core/Src/hall_detection.c **** 			resetVariables(&general);
- 2466              		.loc 1 177 9 view .LVU689
- 2467 001c 2B60     		str	r3, [r5]
+ 2467              		.loc 1 177 9 view .LVU689
+ 2468 001e 2B60     		str	r3, [r5]
  178:Core/Src/hall_detection.c **** 			detection_state=detection_WAIT_CURRENT_STATIONARY;
- 2468              		.loc 1 178 4 is_stmt 1 view .LVU690
- 2469 001e 274C     		ldr	r4, .L188+8
- 2470 0020 2046     		mov	r0, r4
- 2471              	.LVL172:
+ 2469              		.loc 1 178 4 is_stmt 1 view .LVU690
+ 2470 0020 274C     		ldr	r4, .L188+8
+ 2471 0022 2046     		mov	r0, r4
+ 2472              	.LVL172:
  178:Core/Src/hall_detection.c **** 			detection_state=detection_WAIT_CURRENT_STATIONARY;
- 2472              		.loc 1 178 4 is_stmt 0 view .LVU691
- 2473 0022 FFF7FEFF 		bl	resetVariables
- 2474              	.LVL173:
+ 2473              		.loc 1 178 4 is_stmt 0 view .LVU691
+ 2474 0024 FFF7FEFF 		bl	resetVariables
+ 2475              	.LVL173:
  179:Core/Src/hall_detection.c **** 			general.start_adquisition_ticks=ticks;
- 2475              		.loc 1 179 4 is_stmt 1 view .LVU692
+ 2476              		.loc 1 179 4 is_stmt 1 view .LVU692
  179:Core/Src/hall_detection.c **** 			general.start_adquisition_ticks=ticks;
- 2476              		.loc 1 179 19 is_stmt 0 view .LVU693
- 2477 0026 234B     		ldr	r3, .L188
- 2478 0028 0222     		movs	r2, #2
- 2479 002a 1A70     		strb	r2, [r3]
+ 2477              		.loc 1 179 19 is_stmt 0 view .LVU693
+ 2478 0028 234B     		ldr	r3, .L188
+ 2479 002a 0222     		movs	r2, #2
+ 2480 002c 1A70     		strb	r2, [r3]
  180:Core/Src/hall_detection.c **** 			break;
- 2480              		.loc 1 180 4 is_stmt 1 view .LVU694
+ 2481              		.loc 1 180 4 is_stmt 1 view .LVU694
  180:Core/Src/hall_detection.c **** 			break;
- 2481              		.loc 1 180 35 is_stmt 0 view .LVU695
- 2482 002c 2B68     		ldr	r3, [r5]
- 2483 002e 2360     		str	r3, [r4]
+ 2482              		.loc 1 180 35 is_stmt 0 view .LVU695
+ 2483 002e 2B68     		ldr	r3, [r5]
+ 2484 0030 2360     		str	r3, [r4]
  181:Core/Src/hall_detection.c **** 		case detection_WAIT_CURRENT_STATIONARY:
- 2484              		.loc 1 181 4 is_stmt 1 view .LVU696
- 2485              	.L177:
+ 2485              		.loc 1 181 4 is_stmt 1 view .LVU696
+ 2486              	.L177:
  209:Core/Src/hall_detection.c **** 
- 2486              		.loc 1 209 1 is_stmt 0 view .LVU697
- 2487 0030 05B0     		add	sp, sp, #20
- 2488              	.LCFI38:
-ARM GAS  /tmp/ccGla46d.s 			page 64
+ 2487              		.loc 1 209 1 is_stmt 0 view .LVU697
+ARM GAS  /tmp/cces1Dgo.s 			page 64
 
 
- 2489              		.cfi_remember_state
- 2490              		.cfi_def_cfa_offset 12
- 2491              		@ sp needed
- 2492 0032 30BD     		pop	{r4, r5, pc}
- 2493              	.LVL174:
- 2494              	.L184:
- 2495              	.LCFI39:
- 2496              		.cfi_restore_state
+ 2488 0032 05B0     		add	sp, sp, #20
+ 2489              	.LCFI38:
+ 2490              		.cfi_remember_state
+ 2491              		.cfi_def_cfa_offset 12
+ 2492              		@ sp needed
+ 2493 0034 30BD     		pop	{r4, r5, pc}
+ 2494              	.LVL174:
+ 2495              	.L185:
+ 2496              	.LCFI39:
+ 2497              		.cfi_restore_state
  183:Core/Src/hall_detection.c **** 			ticks++;
- 2497              		.loc 1 183 4 is_stmt 1 view .LVU698
- 2498 0034 089C     		ldr	r4, [sp, #32]
- 2499 0036 0294     		str	r4, [sp, #8]
- 2500 0038 0193     		str	r3, [sp, #4]
- 2501 003a 0092     		str	r2, [sp]
- 2502 003c 0B46     		mov	r3, r1
- 2503              	.LVL175:
+ 2498              		.loc 1 183 4 is_stmt 1 view .LVU698
+ 2499 0036 089C     		ldr	r4, [sp, #32]
+ 2500 0038 0294     		str	r4, [sp, #8]
+ 2501 003a 0193     		str	r3, [sp, #4]
+ 2502 003c 0092     		str	r2, [sp]
+ 2503 003e 0B46     		mov	r3, r1
+ 2504              	.LVL175:
  183:Core/Src/hall_detection.c **** 			ticks++;
- 2504              		.loc 1 183 4 is_stmt 0 view .LVU699
- 2505 003e 0246     		mov	r2, r0
- 2506              	.LVL176:
+ 2505              		.loc 1 183 4 is_stmt 0 view .LVU699
+ 2506 0040 0246     		mov	r2, r0
+ 2507              	.LVL176:
  183:Core/Src/hall_detection.c **** 			ticks++;
- 2507              		.loc 1 183 4 view .LVU700
- 2508 0040 1E49     		ldr	r1, .L188+8
- 2509              	.LVL177:
+ 2508              		.loc 1 183 4 view .LVU700
+ 2509 0042 1F49     		ldr	r1, .L188+8
+ 2510              	.LVL177:
  183:Core/Src/hall_detection.c **** 			ticks++;
- 2510              		.loc 1 183 4 view .LVU701
- 2511 0042 1C48     		ldr	r0, .L188
- 2512              	.LVL178:
+ 2511              		.loc 1 183 4 view .LVU701
+ 2512 0044 1C48     		ldr	r0, .L188
+ 2513              	.LVL178:
  183:Core/Src/hall_detection.c **** 			ticks++;
- 2513              		.loc 1 183 4 view .LVU702
- 2514 0044 FFF7FEFF 		bl	wait_for_the_current_stationary
- 2515              	.LVL179:
+ 2514              		.loc 1 183 4 view .LVU702
+ 2515 0046 FFF7FEFF 		bl	wait_for_the_current_stationary
+ 2516              	.LVL179:
  184:Core/Src/hall_detection.c **** 			break;
- 2516              		.loc 1 184 4 is_stmt 1 view .LVU703
+ 2517              		.loc 1 184 4 is_stmt 1 view .LVU703
  184:Core/Src/hall_detection.c **** 			break;
- 2517              		.loc 1 184 9 is_stmt 0 view .LVU704
- 2518 0048 1B4A     		ldr	r2, .L188+4
- 2519 004a 1368     		ldr	r3, [r2]
- 2520 004c 0133     		adds	r3, r3, #1
- 2521 004e 1360     		str	r3, [r2]
+ 2518              		.loc 1 184 9 is_stmt 0 view .LVU704
+ 2519 004a 1C4A     		ldr	r2, .L188+4
+ 2520 004c 1368     		ldr	r3, [r2]
+ 2521 004e 0133     		adds	r3, r3, #1
+ 2522 0050 1360     		str	r3, [r2]
  185:Core/Src/hall_detection.c **** 		case detection_ADQUISITION:
- 2522              		.loc 1 185 4 is_stmt 1 view .LVU705
- 2523 0050 EEE7     		b	.L177
- 2524              	.LVL180:
- 2525              	.L183:
+ 2523              		.loc 1 185 4 is_stmt 1 view .LVU705
+ 2524 0052 EEE7     		b	.L177
+ 2525              	.LVL180:
+ 2526              	.L184:
  187:Core/Src/hall_detection.c **** 			ticks++;
- 2526              		.loc 1 187 4 view .LVU706
- 2527 0052 089C     		ldr	r4, [sp, #32]
- 2528 0054 0294     		str	r4, [sp, #8]
- 2529 0056 0193     		str	r3, [sp, #4]
- 2530 0058 0092     		str	r2, [sp]
- 2531 005a 0B46     		mov	r3, r1
- 2532              	.LVL181:
+ 2527              		.loc 1 187 4 view .LVU706
+ 2528 0054 089C     		ldr	r4, [sp, #32]
+ 2529 0056 0294     		str	r4, [sp, #8]
+ 2530 0058 0193     		str	r3, [sp, #4]
+ 2531 005a 0092     		str	r2, [sp]
+ 2532 005c 0B46     		mov	r3, r1
+ 2533              	.LVL181:
  187:Core/Src/hall_detection.c **** 			ticks++;
- 2533              		.loc 1 187 4 is_stmt 0 view .LVU707
- 2534 005c 0246     		mov	r2, r0
- 2535              	.LVL182:
-ARM GAS  /tmp/ccGla46d.s 			page 65
+ 2534              		.loc 1 187 4 is_stmt 0 view .LVU707
+ARM GAS  /tmp/cces1Dgo.s 			page 65
 
 
+ 2535 005e 0246     		mov	r2, r0
+ 2536              	.LVL182:
  187:Core/Src/hall_detection.c **** 			ticks++;
- 2536              		.loc 1 187 4 view .LVU708
- 2537 005e 1749     		ldr	r1, .L188+8
- 2538              	.LVL183:
+ 2537              		.loc 1 187 4 view .LVU708
+ 2538 0060 1749     		ldr	r1, .L188+8
+ 2539              	.LVL183:
  187:Core/Src/hall_detection.c **** 			ticks++;
- 2539              		.loc 1 187 4 view .LVU709
- 2540 0060 1448     		ldr	r0, .L188
- 2541              	.LVL184:
+ 2540              		.loc 1 187 4 view .LVU709
+ 2541 0062 1548     		ldr	r0, .L188
+ 2542              	.LVL184:
  187:Core/Src/hall_detection.c **** 			ticks++;
- 2542              		.loc 1 187 4 view .LVU710
- 2543 0062 FFF7FEFF 		bl	adquisition
- 2544              	.LVL185:
+ 2543              		.loc 1 187 4 view .LVU710
+ 2544 0064 FFF7FEFF 		bl	adquisition
+ 2545              	.LVL185:
  188:Core/Src/hall_detection.c **** 			break;
- 2545              		.loc 1 188 4 is_stmt 1 view .LVU711
+ 2546              		.loc 1 188 4 is_stmt 1 view .LVU711
  188:Core/Src/hall_detection.c **** 			break;
- 2546              		.loc 1 188 9 is_stmt 0 view .LVU712
- 2547 0066 144A     		ldr	r2, .L188+4
- 2548 0068 1368     		ldr	r3, [r2]
- 2549 006a 0133     		adds	r3, r3, #1
- 2550 006c 1360     		str	r3, [r2]
+ 2547              		.loc 1 188 9 is_stmt 0 view .LVU712
+ 2548 0068 144A     		ldr	r2, .L188+4
+ 2549 006a 1368     		ldr	r3, [r2]
+ 2550 006c 0133     		adds	r3, r3, #1
+ 2551 006e 1360     		str	r3, [r2]
  189:Core/Src/hall_detection.c **** 		case detection_INTERPRETATION:
- 2551              		.loc 1 189 4 is_stmt 1 view .LVU713
- 2552 006e DFE7     		b	.L177
- 2553              	.LVL186:
- 2554              	.L182:
+ 2552              		.loc 1 189 4 is_stmt 1 view .LVU713
+ 2553 0070 DFE7     		b	.L177
+ 2554              	.LVL186:
+ 2555              	.L183:
  191:Core/Src/hall_detection.c **** 			ticks++;
- 2555              		.loc 1 191 4 view .LVU714
- 2556 0070 1249     		ldr	r1, .L188+8
- 2557              	.LVL187:
+ 2556              		.loc 1 191 4 view .LVU714
+ 2557 0072 1349     		ldr	r1, .L188+8
+ 2558              	.LVL187:
  191:Core/Src/hall_detection.c **** 			ticks++;
- 2558              		.loc 1 191 4 is_stmt 0 view .LVU715
- 2559 0072 1048     		ldr	r0, .L188
- 2560              	.LVL188:
+ 2559              		.loc 1 191 4 is_stmt 0 view .LVU715
+ 2560 0074 1048     		ldr	r0, .L188
+ 2561              	.LVL188:
  191:Core/Src/hall_detection.c **** 			ticks++;
- 2561              		.loc 1 191 4 view .LVU716
- 2562 0074 FFF7FEFF 		bl	interpretation
- 2563              	.LVL189:
+ 2562              		.loc 1 191 4 view .LVU716
+ 2563 0076 FFF7FEFF 		bl	interpretation
+ 2564              	.LVL189:
  192:Core/Src/hall_detection.c **** 			break;
- 2564              		.loc 1 192 4 is_stmt 1 view .LVU717
+ 2565              		.loc 1 192 4 is_stmt 1 view .LVU717
  192:Core/Src/hall_detection.c **** 			break;
- 2565              		.loc 1 192 9 is_stmt 0 view .LVU718
- 2566 0078 0F4A     		ldr	r2, .L188+4
- 2567 007a 1368     		ldr	r3, [r2]
- 2568 007c 0133     		adds	r3, r3, #1
- 2569 007e 1360     		str	r3, [r2]
+ 2566              		.loc 1 192 9 is_stmt 0 view .LVU718
+ 2567 007a 104A     		ldr	r2, .L188+4
+ 2568 007c 1368     		ldr	r3, [r2]
+ 2569 007e 0133     		adds	r3, r3, #1
+ 2570 0080 1360     		str	r3, [r2]
  193:Core/Src/hall_detection.c **** 		case detection_VALIDATION:
- 2570              		.loc 1 193 4 is_stmt 1 view .LVU719
- 2571 0080 D6E7     		b	.L177
- 2572              	.LVL190:
- 2573              	.L181:
+ 2571              		.loc 1 193 4 is_stmt 1 view .LVU719
+ 2572 0082 D6E7     		b	.L177
+ 2573              	.LVL190:
+ 2574              	.L182:
  195:Core/Src/hall_detection.c **** 			validation(&detection_state,&general);
- 2574              		.loc 1 195 4 view .LVU720
+ 2575              		.loc 1 195 4 view .LVU720
  195:Core/Src/hall_detection.c **** 			validation(&detection_state,&general);
- 2575              		.loc 1 195 9 is_stmt 0 view .LVU721
- 2576 0082 0D4C     		ldr	r4, .L188+4
- 2577 0084 2368     		ldr	r3, [r4]
- 2578              	.LVL191:
-ARM GAS  /tmp/ccGla46d.s 			page 66
+ 2576              		.loc 1 195 9 is_stmt 0 view .LVU721
+ 2577 0084 0D4C     		ldr	r4, .L188+4
+ARM GAS  /tmp/cces1Dgo.s 			page 66
 
 
+ 2578 0086 2368     		ldr	r3, [r4]
+ 2579              	.LVL191:
  195:Core/Src/hall_detection.c **** 			validation(&detection_state,&general);
- 2579              		.loc 1 195 9 view .LVU722
- 2580 0086 0133     		adds	r3, r3, #1
- 2581 0088 2360     		str	r3, [r4]
+ 2580              		.loc 1 195 9 view .LVU722
+ 2581 0088 0133     		adds	r3, r3, #1
+ 2582 008a 2360     		str	r3, [r4]
  196:Core/Src/hall_detection.c **** 			ticks++;
- 2582              		.loc 1 196 4 is_stmt 1 view .LVU723
- 2583 008a 0C49     		ldr	r1, .L188+8
- 2584              	.LVL192:
+ 2583              		.loc 1 196 4 is_stmt 1 view .LVU723
+ 2584 008c 0C49     		ldr	r1, .L188+8
+ 2585              	.LVL192:
  196:Core/Src/hall_detection.c **** 			ticks++;
- 2585              		.loc 1 196 4 is_stmt 0 view .LVU724
- 2586 008c 0948     		ldr	r0, .L188
- 2587              	.LVL193:
+ 2586              		.loc 1 196 4 is_stmt 0 view .LVU724
+ 2587 008e 0A48     		ldr	r0, .L188
+ 2588              	.LVL193:
  196:Core/Src/hall_detection.c **** 			ticks++;
- 2588              		.loc 1 196 4 view .LVU725
- 2589 008e FFF7FEFF 		bl	validation
- 2590              	.LVL194:
+ 2589              		.loc 1 196 4 view .LVU725
+ 2590 0090 FFF7FEFF 		bl	validation
+ 2591              	.LVL194:
  197:Core/Src/hall_detection.c **** 			break;
- 2591              		.loc 1 197 4 is_stmt 1 view .LVU726
+ 2592              		.loc 1 197 4 is_stmt 1 view .LVU726
  197:Core/Src/hall_detection.c **** 			break;
- 2592              		.loc 1 197 9 is_stmt 0 view .LVU727
- 2593 0092 2368     		ldr	r3, [r4]
- 2594 0094 0133     		adds	r3, r3, #1
- 2595 0096 2360     		str	r3, [r4]
+ 2593              		.loc 1 197 9 is_stmt 0 view .LVU727
+ 2594 0094 2368     		ldr	r3, [r4]
+ 2595 0096 0133     		adds	r3, r3, #1
+ 2596 0098 2360     		str	r3, [r4]
  198:Core/Src/hall_detection.c **** 		case detection_PRESENTATION_FINISH:
- 2596              		.loc 1 198 4 is_stmt 1 view .LVU728
- 2597 0098 CAE7     		b	.L177
- 2598              	.LVL195:
- 2599              	.L179:
+ 2597              		.loc 1 198 4 is_stmt 1 view .LVU728
+ 2598 009a CAE7     		b	.L177
+ 2599              	.LVL195:
+ 2600              	.L181:
  200:Core/Src/hall_detection.c **** 			ticks++;
- 2600              		.loc 1 200 4 view .LVU729
- 2601 009a 0849     		ldr	r1, .L188+8
- 2602              	.LVL196:
+ 2601              		.loc 1 200 4 view .LVU729
+ 2602 009c 0849     		ldr	r1, .L188+8
+ 2603              	.LVL196:
  200:Core/Src/hall_detection.c **** 			ticks++;
- 2603              		.loc 1 200 4 is_stmt 0 view .LVU730
- 2604 009c 0548     		ldr	r0, .L188
- 2605              	.LVL197:
+ 2604              		.loc 1 200 4 is_stmt 0 view .LVU730
+ 2605 009e 0648     		ldr	r0, .L188
+ 2606              	.LVL197:
  200:Core/Src/hall_detection.c **** 			ticks++;
- 2606              		.loc 1 200 4 view .LVU731
- 2607 009e FFF7FEFF 		bl	present_and_finish
- 2608              	.LVL198:
+ 2607              		.loc 1 200 4 view .LVU731
+ 2608 00a0 FFF7FEFF 		bl	present_and_finish
+ 2609              	.LVL198:
  201:Core/Src/hall_detection.c **** 			break;
- 2609              		.loc 1 201 4 is_stmt 1 view .LVU732
+ 2610              		.loc 1 201 4 is_stmt 1 view .LVU732
  201:Core/Src/hall_detection.c **** 			break;
- 2610              		.loc 1 201 9 is_stmt 0 view .LVU733
- 2611 00a2 054A     		ldr	r2, .L188+4
- 2612 00a4 1368     		ldr	r3, [r2]
- 2613 00a6 0133     		adds	r3, r3, #1
- 2614 00a8 1360     		str	r3, [r2]
+ 2611              		.loc 1 201 9 is_stmt 0 view .LVU733
+ 2612 00a4 054A     		ldr	r2, .L188+4
+ 2613 00a6 1368     		ldr	r3, [r2]
+ 2614 00a8 0133     		adds	r3, r3, #1
+ 2615 00aa 1360     		str	r3, [r2]
  202:Core/Src/hall_detection.c **** 		case detection_ERROR_OR_TIMEOUT:
- 2615              		.loc 1 202 4 is_stmt 1 view .LVU734
- 2616 00aa C1E7     		b	.L177
- 2617              	.LVL199:
- 2618              	.L178:
- 206:Core/Src/hall_detection.c **** 			break;
- 2619              		.loc 1 206 4 view .LVU735
- 206:Core/Src/hall_detection.c **** 			break;
- 2620              		.loc 1 206 19 is_stmt 0 view .LVU736
-ARM GAS  /tmp/ccGla46d.s 			page 67
+ 2616              		.loc 1 202 4 is_stmt 1 view .LVU734
+ 2617 00ac C1E7     		b	.L177
+ 2618              	.LVL199:
+ 2619              	.L179:
+ 204:Core/Src/hall_detection.c **** 		case detection_DISABLED://do nothing
+ 2620              		.loc 1 204 4 view .LVU735
+ARM GAS  /tmp/cces1Dgo.s 			page 67
 
 
- 2621 00ac 014B     		ldr	r3, .L188
- 2622              	.LVL200:
- 206:Core/Src/hall_detection.c **** 			break;
- 2623              		.loc 1 206 19 view .LVU737
- 2624 00ae 0022     		movs	r2, #0
- 2625              	.LVL201:
- 206:Core/Src/hall_detection.c **** 			break;
- 2626              		.loc 1 206 19 view .LVU738
- 2627 00b0 1A70     		strb	r2, [r3]
- 207:Core/Src/hall_detection.c **** 	}
- 2628              		.loc 1 207 4 is_stmt 1 view .LVU739
+ 204:Core/Src/hall_detection.c **** 		case detection_DISABLED://do nothing
+ 2621              		.loc 1 204 19 is_stmt 0 view .LVU736
+ 2622 00ae 024B     		ldr	r3, .L188
+ 2623              	.LVL200:
+ 204:Core/Src/hall_detection.c **** 		case detection_DISABLED://do nothing
+ 2624              		.loc 1 204 19 view .LVU737
+ 2625 00b0 0022     		movs	r2, #0
+ 2626              	.LVL201:
+ 204:Core/Src/hall_detection.c **** 		case detection_DISABLED://do nothing
+ 2627              		.loc 1 204 19 view .LVU738
+ 2628 00b2 1A70     		strb	r2, [r3]
  209:Core/Src/hall_detection.c **** 
- 2629              		.loc 1 209 1 is_stmt 0 view .LVU740
- 2630 00b2 BDE7     		b	.L177
+ 2629              		.loc 1 209 1 view .LVU739
+ 2630 00b4 BDE7     		b	.L177
  2631              	.L189:
- 2632              		.align	2
+ 2632 00b6 00BF     		.align	2
  2633              	.L188:
- 2634 00b4 00000000 		.word	.LANCHOR0
- 2635 00b8 00000000 		.word	ticks
- 2636 00bc 00000000 		.word	.LANCHOR1
+ 2634 00b8 00000000 		.word	.LANCHOR0
+ 2635 00bc 00000000 		.word	ticks
+ 2636 00c0 00000000 		.word	.LANCHOR1
  2637              		.cfi_endproc
  2638              	.LFE237:
  2640              		.global	empty_general
@@ -4018,7 +4018,7 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  2670              		.text
  2671              	.Letext0:
  2672              		.file 2 "/usr/lib/gcc/arm-none-eabi/8.3.1/include/stdint.h"
-ARM GAS  /tmp/ccGla46d.s 			page 68
+ARM GAS  /tmp/cces1Dgo.s 			page 68
 
 
  2673              		.file 3 "Drivers/CMSIS/Include/core_cm4.h"
@@ -4033,75 +4033,76 @@ ARM GAS  /tmp/ccGla46d.s 			page 1
  2682              		.file 12 "Core/Inc/hall_detection.h"
  2683              		.file 13 "Core/Inc/usart.h"
  2684              		.file 14 "<built-in>"
-ARM GAS  /tmp/ccGla46d.s 			page 69
+ARM GAS  /tmp/cces1Dgo.s 			page 69
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 hall_detection.c
-     /tmp/ccGla46d.s:18     .text.Hall_start_detection:0000000000000000 $t
-     /tmp/ccGla46d.s:26     .text.Hall_start_detection:0000000000000000 Hall_start_detection
-     /tmp/ccGla46d.s:44     .text.Hall_start_detection:0000000000000008 $d
-     /tmp/ccGla46d.s:49     .text.Hall_is_detection_finished:0000000000000000 $t
-     /tmp/ccGla46d.s:56     .text.Hall_is_detection_finished:0000000000000000 Hall_is_detection_finished
-     /tmp/ccGla46d.s:80     .text.Hall_is_detection_finished:0000000000000010 $d
-     /tmp/ccGla46d.s:85     .text.resetVariables:0000000000000000 $t
-     /tmp/ccGla46d.s:92     .text.resetVariables:0000000000000000 resetVariables
-     /tmp/ccGla46d.s:117    .text.validation:0000000000000000 $t
-     /tmp/ccGla46d.s:124    .text.validation:0000000000000000 validation
-     /tmp/ccGla46d.s:422    .text.validation:0000000000000128 $d
+     /tmp/cces1Dgo.s:18     .text.Hall_start_detection:0000000000000000 $t
+     /tmp/cces1Dgo.s:26     .text.Hall_start_detection:0000000000000000 Hall_start_detection
+     /tmp/cces1Dgo.s:44     .text.Hall_start_detection:0000000000000008 $d
+     /tmp/cces1Dgo.s:49     .text.Hall_is_detection_finished:0000000000000000 $t
+     /tmp/cces1Dgo.s:56     .text.Hall_is_detection_finished:0000000000000000 Hall_is_detection_finished
+     /tmp/cces1Dgo.s:80     .text.Hall_is_detection_finished:0000000000000010 $d
+     /tmp/cces1Dgo.s:85     .text.resetVariables:0000000000000000 $t
+     /tmp/cces1Dgo.s:92     .text.resetVariables:0000000000000000 resetVariables
+     /tmp/cces1Dgo.s:117    .text.validation:0000000000000000 $t
+     /tmp/cces1Dgo.s:124    .text.validation:0000000000000000 validation
+     /tmp/cces1Dgo.s:422    .text.validation:0000000000000128 $d
                             *COM*:0000000000000004 ticks
-     /tmp/ccGla46d.s:428    .text.present_and_finish:0000000000000000 $t
-     /tmp/ccGla46d.s:435    .text.present_and_finish:0000000000000000 present_and_finish
-     /tmp/ccGla46d.s:602    .text.present_and_finish:00000000000000b4 $d
-     /tmp/ccGla46d.s:608    .text.fill_buffers:0000000000000000 $t
-     /tmp/ccGla46d.s:615    .text.fill_buffers:0000000000000000 fill_buffers
-     /tmp/ccGla46d.s:718    .text.detect_N_current_zerocrossings:0000000000000000 $t
-     /tmp/ccGla46d.s:725    .text.detect_N_current_zerocrossings:0000000000000000 detect_N_current_zerocrossings
-     /tmp/ccGla46d.s:856    .text.detect_N_hall_zerocrossings:0000000000000000 $t
-     /tmp/ccGla46d.s:863    .text.detect_N_hall_zerocrossings:0000000000000000 detect_N_hall_zerocrossings
-     /tmp/ccGla46d.s:942    .text.detect_N_zerocrossings:0000000000000000 $t
-     /tmp/ccGla46d.s:949    .text.detect_N_zerocrossings:0000000000000000 detect_N_zerocrossings
-     /tmp/ccGla46d.s:1106   .text.detect_N_zerocrossings:00000000000000bc $d
-     /tmp/ccGla46d.s:1112   .text.calculateElectricPeriod_inTicks:0000000000000000 $t
-     /tmp/ccGla46d.s:1119   .text.calculateElectricPeriod_inTicks:0000000000000000 calculateElectricPeriod_inTicks
-     /tmp/ccGla46d.s:1261   .text.calculateElectricPeriod_inTicks:00000000000000a0 $d
-     /tmp/ccGla46d.s:1266   .text.adquisition:0000000000000000 $t
-     /tmp/ccGla46d.s:1273   .text.adquisition:0000000000000000 adquisition
-     /tmp/ccGla46d.s:1368   .text.adquisition:0000000000000054 $d
-     /tmp/ccGla46d.s:1378   .text.is_deviation_from_period_acceptable:0000000000000000 $t
-     /tmp/ccGla46d.s:1385   .text.is_deviation_from_period_acceptable:0000000000000000 is_deviation_from_period_acceptable
-     /tmp/ccGla46d.s:1558   .text.is_deviation_from_period_acceptable:00000000000000a4 $d
-     /tmp/ccGla46d.s:1565   .text.are_all_periods_stable:0000000000000000 $t
-     /tmp/ccGla46d.s:1572   .text.are_all_periods_stable:0000000000000000 are_all_periods_stable
-     /tmp/ccGla46d.s:1606   .text.are_all_periods_stable:0000000000000018 $d
-     /tmp/ccGla46d.s:1611   .text.wait_for_the_current_stationary:0000000000000000 $t
-     /tmp/ccGla46d.s:1618   .text.wait_for_the_current_stationary:0000000000000000 wait_for_the_current_stationary
-     /tmp/ccGla46d.s:1734   .text.wait_for_the_current_stationary:0000000000000070 $d
-     /tmp/ccGla46d.s:1741   .text.absolute:0000000000000000 $t
-     /tmp/ccGla46d.s:1748   .text.absolute:0000000000000000 absolute
-     /tmp/ccGla46d.s:1769   .text.assign_closest_phase_to_hall:0000000000000000 $t
-     /tmp/ccGla46d.s:1776   .text.assign_closest_phase_to_hall:0000000000000000 assign_closest_phase_to_hall
-     /tmp/ccGla46d.s:2180   .text.assign_closest_phase_to_hall:0000000000000270 $d
-     /tmp/ccGla46d.s:2188   .text.assign_polarity:0000000000000000 $t
-     /tmp/ccGla46d.s:2195   .text.assign_polarity:0000000000000000 assign_polarity
-     /tmp/ccGla46d.s:2347   .text.interpretation:0000000000000000 $t
-     /tmp/ccGla46d.s:2354   .text.interpretation:0000000000000000 interpretation
-     /tmp/ccGla46d.s:2415   .text.interpretation:0000000000000034 $d
-     /tmp/ccGla46d.s:2421   .text.Hall_Identification_Test_measurement:0000000000000000 $t
-     /tmp/ccGla46d.s:2428   .text.Hall_Identification_Test_measurement:0000000000000000 Hall_Identification_Test_measurement
-     /tmp/ccGla46d.s:2453   .text.Hall_Identification_Test_measurement:0000000000000012 $d
-     /tmp/ccGla46d.s:2459   .text.Hall_Identification_Test_measurement:0000000000000018 $t
-     /tmp/ccGla46d.s:2634   .text.Hall_Identification_Test_measurement:00000000000000b4 $d
-     /tmp/ccGla46d.s:2668   .rodata.empty_general:0000000000000000 empty_general
-ARM GAS  /tmp/ccGla46d.s 			page 70
+     /tmp/cces1Dgo.s:428    .text.present_and_finish:0000000000000000 $t
+     /tmp/cces1Dgo.s:435    .text.present_and_finish:0000000000000000 present_and_finish
+     /tmp/cces1Dgo.s:602    .text.present_and_finish:00000000000000b4 $d
+     /tmp/cces1Dgo.s:608    .text.fill_buffers:0000000000000000 $t
+     /tmp/cces1Dgo.s:615    .text.fill_buffers:0000000000000000 fill_buffers
+     /tmp/cces1Dgo.s:718    .text.detect_N_current_zerocrossings:0000000000000000 $t
+     /tmp/cces1Dgo.s:725    .text.detect_N_current_zerocrossings:0000000000000000 detect_N_current_zerocrossings
+     /tmp/cces1Dgo.s:856    .text.detect_N_hall_zerocrossings:0000000000000000 $t
+     /tmp/cces1Dgo.s:863    .text.detect_N_hall_zerocrossings:0000000000000000 detect_N_hall_zerocrossings
+     /tmp/cces1Dgo.s:942    .text.detect_N_zerocrossings:0000000000000000 $t
+     /tmp/cces1Dgo.s:949    .text.detect_N_zerocrossings:0000000000000000 detect_N_zerocrossings
+     /tmp/cces1Dgo.s:1106   .text.detect_N_zerocrossings:00000000000000bc $d
+     /tmp/cces1Dgo.s:1112   .text.calculateElectricPeriod_inTicks:0000000000000000 $t
+     /tmp/cces1Dgo.s:1119   .text.calculateElectricPeriod_inTicks:0000000000000000 calculateElectricPeriod_inTicks
+     /tmp/cces1Dgo.s:1261   .text.calculateElectricPeriod_inTicks:00000000000000a0 $d
+     /tmp/cces1Dgo.s:1266   .text.adquisition:0000000000000000 $t
+     /tmp/cces1Dgo.s:1273   .text.adquisition:0000000000000000 adquisition
+     /tmp/cces1Dgo.s:1368   .text.adquisition:0000000000000054 $d
+     /tmp/cces1Dgo.s:1378   .text.is_deviation_from_period_acceptable:0000000000000000 $t
+     /tmp/cces1Dgo.s:1385   .text.is_deviation_from_period_acceptable:0000000000000000 is_deviation_from_period_acceptable
+     /tmp/cces1Dgo.s:1558   .text.is_deviation_from_period_acceptable:00000000000000a4 $d
+     /tmp/cces1Dgo.s:1565   .text.are_all_periods_stable:0000000000000000 $t
+     /tmp/cces1Dgo.s:1572   .text.are_all_periods_stable:0000000000000000 are_all_periods_stable
+     /tmp/cces1Dgo.s:1606   .text.are_all_periods_stable:0000000000000018 $d
+     /tmp/cces1Dgo.s:1611   .text.wait_for_the_current_stationary:0000000000000000 $t
+     /tmp/cces1Dgo.s:1618   .text.wait_for_the_current_stationary:0000000000000000 wait_for_the_current_stationary
+     /tmp/cces1Dgo.s:1734   .text.wait_for_the_current_stationary:0000000000000070 $d
+     /tmp/cces1Dgo.s:1741   .text.absolute:0000000000000000 $t
+     /tmp/cces1Dgo.s:1748   .text.absolute:0000000000000000 absolute
+     /tmp/cces1Dgo.s:1769   .text.assign_closest_phase_to_hall:0000000000000000 $t
+     /tmp/cces1Dgo.s:1776   .text.assign_closest_phase_to_hall:0000000000000000 assign_closest_phase_to_hall
+     /tmp/cces1Dgo.s:2180   .text.assign_closest_phase_to_hall:0000000000000270 $d
+     /tmp/cces1Dgo.s:2188   .text.assign_polarity:0000000000000000 $t
+     /tmp/cces1Dgo.s:2195   .text.assign_polarity:0000000000000000 assign_polarity
+     /tmp/cces1Dgo.s:2347   .text.interpretation:0000000000000000 $t
+     /tmp/cces1Dgo.s:2354   .text.interpretation:0000000000000000 interpretation
+     /tmp/cces1Dgo.s:2415   .text.interpretation:0000000000000034 $d
+     /tmp/cces1Dgo.s:2421   .text.Hall_Identification_Test_measurement:0000000000000000 $t
+     /tmp/cces1Dgo.s:2428   .text.Hall_Identification_Test_measurement:0000000000000000 Hall_Identification_Test_measurement
+     /tmp/cces1Dgo.s:2453   .text.Hall_Identification_Test_measurement:0000000000000012 $d
+     /tmp/cces1Dgo.s:2634   .text.Hall_Identification_Test_measurement:00000000000000b8 $d
+     /tmp/cces1Dgo.s:2668   .rodata.empty_general:0000000000000000 empty_general
+     /tmp/cces1Dgo.s:2662   .bss.general:0000000000000000 general
+ARM GAS  /tmp/cces1Dgo.s 			page 70
 
 
-     /tmp/ccGla46d.s:2662   .bss.general:0000000000000000 general
-     /tmp/ccGla46d.s:2655   .bss.detection_state:0000000000000000 detection_state
-     /tmp/ccGla46d.s:2645   .rodata:0000000000000000 $d
-     /tmp/ccGla46d.s:2656   .bss.detection_state:0000000000000000 $d
-     /tmp/ccGla46d.s:2658   .bss.general:0000000000000000 $d
-     /tmp/ccGla46d.s:2665   .rodata.empty_general:0000000000000000 $d
+     /tmp/cces1Dgo.s:2655   .bss.detection_state:0000000000000000 detection_state
+     /tmp/cces1Dgo.s:2645   .rodata:0000000000000000 $d
+     /tmp/cces1Dgo.s:2656   .bss.detection_state:0000000000000000 $d
+     /tmp/cces1Dgo.s:2658   .bss.general:0000000000000000 $d
+     /tmp/cces1Dgo.s:2665   .rodata.empty_general:0000000000000000 $d
+     /tmp/cces1Dgo.s:2460   .text.Hall_Identification_Test_measurement:0000000000000019 $d
+     /tmp/cces1Dgo.s:2460   .text.Hall_Identification_Test_measurement:000000000000001a $t
 
 UNDEFINED SYMBOLS
 memset
