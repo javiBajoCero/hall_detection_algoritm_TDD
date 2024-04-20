@@ -55,8 +55,12 @@ def setup_emulator(serial_out):
     time.sleep(waittime)  # Add a delay to allow the device to process the message
         
 def run_single_test(test_number,serial_out,serial_in,messages):
+    serial_out.flush()    
+    serial_in.flush()
+    
     global succesfulltests;
     successfullTEST=False;
+    
     messages=messages +"\n\r"
     serial_out.write(messages.encode());
     time.sleep(waittime*0.1)  # Add a delay to allow the device to process the message
