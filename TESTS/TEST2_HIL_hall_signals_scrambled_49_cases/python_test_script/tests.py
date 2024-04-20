@@ -55,6 +55,7 @@ def setup_emulator(serial_out):
     time.sleep(waittime)  # Add a delay to allow the device to process the message
         
 def run_single_test(test_number,serial_out,serial_in,messages):
+    time.sleep(waittime*0.1) 
     serial_out.flush()    
     serial_in.flush()
     
@@ -101,8 +102,7 @@ def run_single_test(test_number,serial_out,serial_in,messages):
     else:
         print(f"TIMEOUT TEST:{test_number}, {messages}")
         sucess=False
-
-    time.sleep(waittime*0.1)  
+ 
     serial_out.flush()    
     serial_in.flush()
 
