@@ -87,7 +87,7 @@ def run_single_test(test_number,serial_out,serial_in,messages):
     
     if successfullTEST :
         if messages==received_data:
-            print(f"SUCCESS TEST:{test_number}, {messages} == {received_data}, retries: {numberofretries}")
+            print(f"SUCCESS TEST:{test_number}, {messages} == {received_data}, retries: {numberofretries}, time of test {((datetime.now() - start_time ).microseconds/1000   )+0.3*waittime}")
             succesfulltests=succesfulltests+1;
             sucess=True
         else:
