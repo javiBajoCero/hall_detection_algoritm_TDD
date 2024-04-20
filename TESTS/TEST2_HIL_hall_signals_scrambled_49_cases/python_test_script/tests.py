@@ -53,8 +53,6 @@ def setup_emulator(serial_out):
     emulationmessage="emulation\n\r";
     serial_out.write(emulationmessage.encode());
     time.sleep(waittime)  # Add a delay to allow the device to process the message
-    serial_out.flush()    
-    serial_in.flush()
         
 def run_single_test(test_number,serial_out,serial_in,messages):
     global succesfulltests;
@@ -159,6 +157,9 @@ messages = [
 def main():
     find_out_tester_and_open_ports();
     setup_emulator(serial_emulator);
+    serial_emulator.flush()    
+    serial_target.flush()
+
     n=0
     for m in messages:
         n=n+1;
