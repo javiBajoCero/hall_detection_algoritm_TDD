@@ -76,7 +76,7 @@ void fill_buffers(
 		);
 detection_YES_NO detect_N_zerocrossings	(hall_detection_general_struct *gen,uint32_t N);
 void detect_N_current_zerocrossings	(uint32_t ticks,current_or_hall_measurements_struct* currx,uint32_t N);
-void detect_N_hall_zerocrossings	(uint32_t ticks,hall_measurements_struct* hallx,uint32_t N);
+void detect_N_hall_zerocrossings	(uint32_t ticks,current_or_hall_measurements_struct* hallx,uint32_t N);
 void calculateElectricPeriod_inTicks(hall_detection_general_struct *gen, uint32_t samples);
 detection_YES_NO is_deviation_from_period_acceptable(hall_detection_general_struct *gen, float tolerance_factor,uint32_t samples);
 detection_YES_NO are_all_periods_stable(hall_detection_general_struct *gen, uint32_t samples);
@@ -474,13 +474,13 @@ void fill_buffers(
 
 
 	gen->hallA.two_samples_buffer[1]=gen->hallA.two_samples_buffer[0];
-	gen->hallA.two_samples_buffer[0]= H1_gpio->state;
+	gen->hallA.two_samples_buffer[0]=(float) H1_gpio->state;
 
 	gen->hallB.two_samples_buffer[1]=gen->hallB.two_samples_buffer[0];
-	gen->hallB.two_samples_buffer[0]= H2_gpio->state;
+	gen->hallB.two_samples_buffer[0]=(float) H2_gpio->state;
 
 	gen->hallC.two_samples_buffer[1]=gen->hallC.two_samples_buffer[0];
-	gen->hallC.two_samples_buffer[0]= H3_gpio->state;
+	gen->hallC.two_samples_buffer[0]=(float) H3_gpio->state;
 }
 
 /**
@@ -547,7 +547,7 @@ void detect_N_current_zerocrossings(uint32_t ticks,current_or_hall_measurements_
 * \brief similar to detect_N_current_zerocrossings() reading the hall buffers detects logic changes and notes down the tick number
 * \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
 */
-void detect_N_hall_zerocrossings(uint32_t ticks,hall_measurements_struct* hallx,uint32_t N){
+void detect_N_hall_zerocrossings(uint32_t ticks,current_or_hall_measurements_struct* hallx,uint32_t N){
 	if(hallx->two_samples_buffer[0]!=hallx->two_samples_buffer[1]){
 		if(hallx->numberof_zerocrossings<N){
 			hallx->zerocrossings_tick[hallx->numberof_zerocrossings]=ticks;
@@ -769,7 +769,7 @@ void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
 */
 void assign_polarity(hall_detection_general_struct *gen){
 	current_or_hall_measurements_struct*	currents[NUMBEROFPHASES]={&gen->currA,&gen->currB,&gen->currC};
-	hall_measurements_struct*	            halls[NUMBEROFPHASES]	={&gen->hallA,&gen->hallB,&gen->hallC};
+	current_or_hall_measurements_struct*	halls[NUMBEROFPHASES]	={&gen->hallA,&gen->hallB,&gen->hallC};
 	detection_results_struct *pointerOfcurrentResult=&gen->results[gen->numberOfresults];
 
 

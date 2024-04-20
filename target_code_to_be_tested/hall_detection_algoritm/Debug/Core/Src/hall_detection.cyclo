@@ -1,6 +1,6 @@
 ../Core/Src/hall_detection.c:99:6:Hall_start_detection	1
 ../Core/Src/hall_detection.c:106:10:Hall_is_detection_finished	2
-../Core/Src/hall_detection.c:168:6:Hall_Identification_Test_measurement	7
+../Core/Src/hall_detection.c:168:6:Hall_Identification_Test_measurement	8
 ../Core/Src/hall_detection.c:215:6:resetVariables	1
 ../Core/Src/hall_detection.c:230:6:wait_for_the_current_stationary	5
 ../Core/Src/hall_detection.c:270:6:adquisition	4
@@ -16,4 +16,4 @@
 ../Core/Src/hall_detection.c:618:18:are_all_periods_stable	1
 ../Core/Src/hall_detection.c:682:9:absolute	1
 ../Core/Src/hall_detection.c:691:6:assign_closest_phase_to_hall	16
-../Core/Src/hall_detection.c:769:6:assign_polarity	5
+../Core/Src/hall_detection.c:770:6:assign_polarity	5

@@ -63,13 +63,6 @@ typedef struct{
 	uint32_t numberof_zerocrossings;
 }current_or_hall_measurements_struct;
 
-typedef struct{
-	volatile uint8_t two_samples_buffer[2];
-	uint32_t zerocrossings_tick[MAXZEROCROSSINGS];
-	signals_polarity_enum zerocrossings_polarity[MAXZEROCROSSINGS];
-	uint32_t numberof_zerocrossings;
-}hall_measurements_struct;
-
 typedef enum{
 	NO	= (uint32_t) 0,
 	YES	= (uint32_t) 1
@@ -85,13 +78,13 @@ typedef struct{
 
 
 typedef struct{
-	uint32_t start_adquisition_ticks;
-	current_or_hall_measurements_struct currA;
-	current_or_hall_measurements_struct currB;
-	current_or_hall_measurements_struct currC;
-	hall_measurements_struct hallA;
-	hall_measurements_struct hallB;
-	hall_measurements_struct hallC;
+	uint32_t start_adquisition_ticks;			/*!< used as a timestamp when adquisition starts*/
+	current_or_hall_measurements_struct currA;	/*!< contains zerocrossings and pre-distiled info for phaseA current*/
+	current_or_hall_measurements_struct currB;	/*!< contains zerocrossings and pre-distiled info for phaseB current*/
+	current_or_hall_measurements_struct currC;	/*!< contains zerocrossings and pre-distiled info for phaseC current*/
+	current_or_hall_measurements_struct hallA;	/*!< contains zerocrossings and pre-distiled info for hallA signal*/
+	current_or_hall_measurements_struct hallB;	/*!< contains zerocrossings and pre-distiled info for hallA signal*/
+	current_or_hall_measurements_struct hallC;	/*!< contains zerocrossings and pre-distiled info for hallA signal*/
 
 	int32_t differences_phaseA[NUMBEROFPHASES];	/*!< auxiliar variable storing average distances between zerocrossings between each hall and phaseA*/
 	int32_t differences_phaseB[NUMBEROFPHASES];	/*!< auxiliar variable storing average distances between zerocrossings between each hall and phaseB*/
