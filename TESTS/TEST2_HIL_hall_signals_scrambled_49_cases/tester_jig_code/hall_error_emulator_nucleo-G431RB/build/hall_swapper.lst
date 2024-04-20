@@ -1,4 +1,4 @@
-ARM GAS  /tmp/cc7CnBl5.s 			page 1
+ARM GAS  /tmp/ccxXWhFs.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /tmp/cc7CnBl5.s 			page 1
   28:Core/Src/hall_swapper.c **** 
   29:Core/Src/hall_swapper.c **** 
   30:Core/Src/hall_swapper.c **** 
-ARM GAS  /tmp/cc7CnBl5.s 			page 2
+ARM GAS  /tmp/ccxXWhFs.s 			page 2
 
 
   31:Core/Src/hall_swapper.c **** /**
@@ -118,7 +118,7 @@ ARM GAS  /tmp/cc7CnBl5.s 			page 1
   54 0014 FFF7FEFF 		bl	HAL_GPIO_ReadPin
   55              	.LVL1:
   56              		.loc 1 59 23 view .LVU6
-ARM GAS  /tmp/cc7CnBl5.s 			page 3
+ARM GAS  /tmp/ccxXWhFs.s 			page 3
 
 
   57 0018 6070     		strb	r0, [r4, #1]
@@ -178,7 +178,7 @@ ARM GAS  /tmp/cc7CnBl5.s 			page 1
  104 000e C95C     		ldrb	r1, [r1, r3]	@ zero_extendqisi2
  105              		.loc 1 68 23 view .LVU17
  106 0010 5170     		strb	r1, [r2, #1]
-ARM GAS  /tmp/cc7CnBl5.s 			page 4
+ARM GAS  /tmp/ccxXWhFs.s 			page 4
 
 
   69:Core/Src/hall_swapper.c **** 	signal_inputs[hall_C]=HALL_C[dma_index];
@@ -238,7 +238,7 @@ ARM GAS  /tmp/cc7CnBl5.s 			page 1
   79:Core/Src/hall_swapper.c **** * \brief For a single hall_x signal: apply to signal_inputs the polarization noted by signal_polari
   80:Core/Src/hall_swapper.c **** * polarizing should come before swapping.
   81:Core/Src/hall_swapper.c **** * \param hall_signals_order hall_x , reffers to the hall signal, could be hall_A/B/C
-ARM GAS  /tmp/cc7CnBl5.s 			page 5
+ARM GAS  /tmp/ccxXWhFs.s 			page 5
 
 
   82:Core/Src/hall_swapper.c **** */
@@ -298,7 +298,7 @@ ARM GAS  /tmp/cc7CnBl5.s 			page 1
  186 001e 1A54     		strb	r2, [r3, r0]
   93:Core/Src/hall_swapper.c **** 
  187              		.loc 1 93 2 is_stmt 1 view .LVU40
-ARM GAS  /tmp/cc7CnBl5.s 			page 6
+ARM GAS  /tmp/ccxXWhFs.s 			page 6
 
 
  188              		.loc 1 95 1 is_stmt 0 view .LVU41
@@ -358,7 +358,7 @@ ARM GAS  /tmp/cc7CnBl5.s 			page 1
  107:Core/Src/hall_swapper.c **** 	}else if(signal_order[hall_x]==hall_C){
  233              		.loc 1 107 8 is_stmt 1 view .LVU51
  234              		.loc 1 107 10 is_stmt 0 view .LVU52
-ARM GAS  /tmp/cc7CnBl5.s 			page 7
+ARM GAS  /tmp/ccxXWhFs.s 			page 7
 
 
  235 0016 022B     		cmp	r3, #2
@@ -418,7 +418,7 @@ ARM GAS  /tmp/cc7CnBl5.s 			page 1
  115:Core/Src/hall_swapper.c **** void write_output_signals(){
  278              		.loc 1 115 28 is_stmt 1 view -0
  279              		.cfi_startproc
-ARM GAS  /tmp/cc7CnBl5.s 			page 8
+ARM GAS  /tmp/ccxXWhFs.s 			page 8
 
 
  280              		@ args = 0, pretend = 0, frame = 0
@@ -478,7 +478,7 @@ ARM GAS  /tmp/cc7CnBl5.s 			page 1
  331              		@ args = 0, pretend = 0, frame = 0
  332              		@ frame_needed = 0, uses_anonymous_args = 0
  333 0000 08B5     		push	{r3, lr}
-ARM GAS  /tmp/cc7CnBl5.s 			page 9
+ARM GAS  /tmp/ccxXWhFs.s 			page 9
 
 
  334              	.LCFI2:
@@ -538,7 +538,7 @@ ARM GAS  /tmp/cc7CnBl5.s 			page 1
  376 0034 08BD     		pop	{r3, pc}
  377              	.L29:
   40:Core/Src/hall_swapper.c **** 	}
-ARM GAS  /tmp/cc7CnBl5.s 			page 10
+ARM GAS  /tmp/ccxXWhFs.s 			page 10
 
 
  378              		.loc 1 40 3 is_stmt 1 view .LVU79
@@ -592,37 +592,37 @@ ARM GAS  /tmp/cc7CnBl5.s 			page 1
  434              		.file 11 "Core/Inc/hall_swapper.h"
  435              		.file 12 "Core/Inc/real_waveforms.h"
  436              		.file 13 "Core/Inc/wave_emulator.h"
-ARM GAS  /tmp/cc7CnBl5.s 			page 11
+ARM GAS  /tmp/ccxXWhFs.s 			page 11
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 hall_swapper.c
-     /tmp/cc7CnBl5.s:18     .text.read_input_signals:0000000000000000 $t
-     /tmp/cc7CnBl5.s:26     .text.read_input_signals:0000000000000000 read_input_signals
-     /tmp/cc7CnBl5.s:71     .text.read_input_signals:0000000000000028 $d
-     /tmp/cc7CnBl5.s:78     .text.emulated_read_input_signals:0000000000000000 $t
-     /tmp/cc7CnBl5.s:85     .text.emulated_read_input_signals:0000000000000000 emulated_read_input_signals
-     /tmp/cc7CnBl5.s:134    .text.emulated_read_input_signals:000000000000002c $d
-     /tmp/cc7CnBl5.s:143    .text.polarice_signals:0000000000000000 $t
-     /tmp/cc7CnBl5.s:150    .text.polarice_signals:0000000000000000 polarice_signals
-     /tmp/cc7CnBl5.s:193    .text.polarice_signals:0000000000000024 $d
-     /tmp/cc7CnBl5.s:199    .text.swap_signals:0000000000000000 $t
-     /tmp/cc7CnBl5.s:206    .text.swap_signals:0000000000000000 swap_signals
-     /tmp/cc7CnBl5.s:262    .text.swap_signals:0000000000000030 $d
-     /tmp/cc7CnBl5.s:269    .text.write_output_signals:0000000000000000 $t
-     /tmp/cc7CnBl5.s:276    .text.write_output_signals:0000000000000000 write_output_signals
-     /tmp/cc7CnBl5.s:314    .text.write_output_signals:0000000000000028 $d
-     /tmp/cc7CnBl5.s:320    .text.hall_swapper_twentyKHzinterruptionIRQ:0000000000000000 $t
-     /tmp/cc7CnBl5.s:327    .text.hall_swapper_twentyKHzinterruptionIRQ:0000000000000000 hall_swapper_twentyKHzinterruptionIRQ
-     /tmp/cc7CnBl5.s:385    .text.hall_swapper_twentyKHzinterruptionIRQ:000000000000003c $d
-     /tmp/cc7CnBl5.s:405    .bss.signal_outputs:0000000000000000 signal_outputs
-     /tmp/cc7CnBl5.s:398    .bss.signal_inputs:0000000000000000 signal_inputs
-     /tmp/cc7CnBl5.s:412    .bss.signal_polarity:0000000000000000 signal_polarity
-     /tmp/cc7CnBl5.s:419    .data.signal_order:0000000000000000 signal_order
-     /tmp/cc7CnBl5.s:394    .bss.signal_inputs:0000000000000000 $d
-     /tmp/cc7CnBl5.s:401    .bss.signal_outputs:0000000000000000 $d
-     /tmp/cc7CnBl5.s:408    .bss.signal_polarity:0000000000000000 $d
-     /tmp/cc7CnBl5.s:415    .data.signal_order:0000000000000000 $d
+     /tmp/ccxXWhFs.s:18     .text.read_input_signals:0000000000000000 $t
+     /tmp/ccxXWhFs.s:26     .text.read_input_signals:0000000000000000 read_input_signals
+     /tmp/ccxXWhFs.s:71     .text.read_input_signals:0000000000000028 $d
+     /tmp/ccxXWhFs.s:78     .text.emulated_read_input_signals:0000000000000000 $t
+     /tmp/ccxXWhFs.s:85     .text.emulated_read_input_signals:0000000000000000 emulated_read_input_signals
+     /tmp/ccxXWhFs.s:134    .text.emulated_read_input_signals:000000000000002c $d
+     /tmp/ccxXWhFs.s:143    .text.polarice_signals:0000000000000000 $t
+     /tmp/ccxXWhFs.s:150    .text.polarice_signals:0000000000000000 polarice_signals
+     /tmp/ccxXWhFs.s:193    .text.polarice_signals:0000000000000024 $d
+     /tmp/ccxXWhFs.s:199    .text.swap_signals:0000000000000000 $t
+     /tmp/ccxXWhFs.s:206    .text.swap_signals:0000000000000000 swap_signals
+     /tmp/ccxXWhFs.s:262    .text.swap_signals:0000000000000030 $d
+     /tmp/ccxXWhFs.s:269    .text.write_output_signals:0000000000000000 $t
+     /tmp/ccxXWhFs.s:276    .text.write_output_signals:0000000000000000 write_output_signals
+     /tmp/ccxXWhFs.s:314    .text.write_output_signals:0000000000000028 $d
+     /tmp/ccxXWhFs.s:320    .text.hall_swapper_twentyKHzinterruptionIRQ:0000000000000000 $t
+     /tmp/ccxXWhFs.s:327    .text.hall_swapper_twentyKHzinterruptionIRQ:0000000000000000 hall_swapper_twentyKHzinterruptionIRQ
+     /tmp/ccxXWhFs.s:385    .text.hall_swapper_twentyKHzinterruptionIRQ:000000000000003c $d
+     /tmp/ccxXWhFs.s:405    .bss.signal_outputs:0000000000000000 signal_outputs
+     /tmp/ccxXWhFs.s:398    .bss.signal_inputs:0000000000000000 signal_inputs
+     /tmp/ccxXWhFs.s:412    .bss.signal_polarity:0000000000000000 signal_polarity
+     /tmp/ccxXWhFs.s:419    .data.signal_order:0000000000000000 signal_order
+     /tmp/ccxXWhFs.s:394    .bss.signal_inputs:0000000000000000 $d
+     /tmp/ccxXWhFs.s:401    .bss.signal_outputs:0000000000000000 $d
+     /tmp/ccxXWhFs.s:408    .bss.signal_polarity:0000000000000000 $d
+     /tmp/ccxXWhFs.s:415    .data.signal_order:0000000000000000 $d
 
 UNDEFINED SYMBOLS
 HAL_GPIO_ReadPin
