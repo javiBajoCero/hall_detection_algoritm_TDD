@@ -3,68 +3,15 @@ import serial.tools.list_ports
 import time
 import threading
 import sys
+from datetime import datetime
 
-waittime=1;
-stopthreads=True;
-listeningSerial=False;
-serial_tester=0;
+waittime=3;
+serial_emulator=0;
 serial_target=0;
-
-receivedMessages=[]
-messages = [
-            "ABC\n\r",
-            "!ABC\n\r",
-            "!A!BC\n\r",
-            "!A!B!C\n\r",
-            "!AB!C\n\r",
-            "AB!C\n\r",
-            "A!B!C\n\r",
-            "A!BC\n\r",
-            "BCA\n\r",
-            "!BCA\n\r",
-            "!B!CA\n\r",
-            "!B!C!A\n\r",
-            "!BC!A\n\r",
-            "BC!A\n\r",
-            "B!C!A\n\r",
-            "B!CA\n\r",
-            "CAB\n\r",
-            "!CAB\n\r",
-            "!C!AB\n\r",
-            "!C!A!B\n\r",
-            "!CA!B\n\r",
-            "CA!B\n\r",
-            "C!A!B\n\r",
-            "C!AB\n\r",
-            "ACB\n\r",
-            "!ACB\n\r",
-            "!A!CB\n\r",
-            "!A!C!B\n\r",
-            "!AC!B\n\r",
-            "AC!B\n\r",
-            "A!C!B\n\r",
-            "A!CB\n\r",
-            "BAC\n\r",
-            "!BAC\n\r",
-            "!B!AC\n\r",
-            "!B!A!C\n\r",
-            "!BA!C\n\r",
-            "BA!C\n\r",
-            "B!A!C\n\r",
-            "B!AC\n\r",
-            "CBA\n\r",
-            "!CBA\n\r",
-            "!C!BA\n\r",
-            "!C!B!A\n\r",
-            "!CB!A\n\r",
-            "CB!A\n\r",
-            "C!B!A\n\r",
-            "C!BA\n\r",
-        ]
-
+succesfulltests=0;
 
 def find_out_tester_and_open_ports():
-    global serial_tester;
+    global serial_emulator;
     global serial_target;
         # Define the serial connection parameters
     baud_rate = 115200
@@ -80,111 +27,152 @@ def find_out_tester_and_open_ports():
     for port in ports:
         if(port.pid==14155):
             print(f"- found target board in : {port.device}  with pid: {port.pid}")
-            serial_target = serial.Serial(port=port.device,baudrate=baud_rate,bytesize=byte_size,parity=parity,stopbits=stop_bits,timeout=timeout,xonxoff=xonxoff,rtscts=rtscts)
-            serial_target.flush();
+            try:
+                serial_target = serial.Serial(port=port.device,baudrate=baud_rate,bytesize=byte_size,parity=parity,stopbits=stop_bits,timeout=timeout,xonxoff=xonxoff,rtscts=rtscts)
+                serial_target.flush();
+                serial_target.isOpen()
+                print ("port opened")
+            except IOError:
+                serial_target.close()
+                serial_target.open()
+                print ("port was already opened, i closed and opened again")
+                
         elif (port.pid==14164):
             print(f"- found tester board in : {port.device}  with pid: {port.pid}")
-            serial_tester = serial.Serial(port=port.device,baudrate=baud_rate,bytesize=byte_size,parity=parity,stopbits=stop_bits,timeout=timeout,xonxoff=xonxoff,rtscts=rtscts)
-            serial_tester.flush();
-            
-def send_messages_tester(ser, messages):
-    resetmessage="reset target\n\r";
+            try:
+                serial_emulator = serial.Serial(port=port.device,baudrate=baud_rate,bytesize=byte_size,parity=parity,stopbits=stop_bits,timeout=timeout,xonxoff=xonxoff,rtscts=rtscts)
+                serial_emulator.flush();
+                serial_emulator.isOpen()
+                print ("port opened")
+            except IOError:
+                serial_emulator.close()
+                serial_emulator.open()
+                print ("port was already opened, i closed and opened again")
+
+
+def setup_emulator(serial_out):
+    print(f"setup_emulator")
     emulationmessage="emulation\n\r";
-    serial_tester.write(emulationmessage.encode());
+    serial_out.write(emulationmessage.encode());
     time.sleep(waittime)  # Add a delay to allow the device to process the message
+        
+def run_single_test(test_number,serial_out,serial_in,messages):
+    global succesfulltests;
+    successfullTEST=False;
+    messages=messages +"\n\r"
+    serial_out.write(messages.encode());
+    time.sleep(waittime*0.1)  # Add a delay to allow the device to process the message
+    
+    resetmessage="reset target\n\r";
+    serial_out.write(resetmessage.encode());
+    time.sleep(waittime*0.1)  # Add a delay to allow the device to process the message
 
-    for message in messages:
-        serial_tester.write(message.encode())
-        if message.find('reset')!=0:
-            print(f'Sent message to tester: {message}')
-        time.sleep(waittime/2)  # Add a delay to allow the device to process the message
-        serial_tester.write(resetmessage.encode());
-        time.sleep(waittime)  # Add a delay to allow the device to process the message
+    start_time = datetime.now()
+    received_data = ""
+    numberofretries=0;
+    while (datetime.now() - start_time).seconds <= waittime *0.7:
+
+        if(datetime.now() - start_time).seconds >= waittime *0.3:
+            numberofretries=numberofretries+1;
+            resetmessage="reset target\n\r";
+            serial_out.write(resetmessage.encode());
+            time.sleep(waittime*0.1)  # Add a delay to allow the device to process the message
+            
+        if serial_in.in_waiting:
+            received_data += serial_in.read(serial_in.in_waiting).decode()
+            if '\r' in received_data:
+                successfullTEST=True
+                break
+
+    received_data = received_data.replace('\r', '').replace('\n', '').replace(' ', '')
+    messages = messages.replace('\r', '').replace('\n', '').replace(' ', '')
+    
+    if successfullTEST :
+        if messages==received_data:
+            print(f"SUCCESS TEST:{test_number}, {messages} == {received_data}, retries: {numberofretries}")
+            succesfulltests=succesfulltests+1;
+            sucess=True
+        else:
+            print(f"ERROR TEST:{test_number}, {messages} != {received_data}")
+            sucess=False
+    else:
+        print(f"TIMEOUT TEST:{test_number}, {messages}")
+        sucess=False
+
+    time.sleep(waittime*0.1)  
+    serial_out.flush()    
+    serial_in.flush()
 
 
-def receive_messages_tester(ser,messages):
-    global stopthreads
-    global listeningSerial
-    while stopthreads==True and listeningSerial==True:
-        if ser.in_waiting:
-            received_data = ser.readline().decode()
-            if received_data.find('\r')!=0:
-                print(f"received from tester: {received_data}")
-                time.sleep(0.1);
+messages = [
+            "ABC",
+            "!ABC",
+            "!A!BC",
+            "!A!B!C",
+            "!AB!C",
+            "AB!C",
+            "A!B!C",
+            "A!BC",
+            "BCA",
+            "!BCA",
+            "!B!CA",
+            "!B!C!A",
+            "!BC!A",
+            "BC!A",
+            "B!C!A",
+            "B!CA",
+            "CAB",
+            "!CAB",
+            "!C!AB",
+            "!C!A!B",
+            "!CA!B",
+            "CA!B",
+            "C!A!B",
+            "C!AB",
+            "ACB",
+            "!ACB",
+            "!A!CB",
+            "!A!C!B",
+            "!AC!B",
+            "AC!B",
+            "A!C!B",
+            "A!CB",
+            "BAC",
+            "!BAC",
+            "!B!AC",
+            "!B!A!C",
+            "!BA!C",
+            "BA!C",
+            "B!A!C",
+            "B!AC",
+            "CBA",
+            "!CBA",
+            "!C!BA",
+            "!C!B!A",
+            "!CB!A",
+            "CB!A",
+            "C!B!A",
+            "C!BA",
+        ]
 
-def receive_messages_target(ser,messages):
-    global stopthreads
-    global listeningSerial
-    while stopthreads==True and listeningSerial==True:
-        if ser.in_waiting:
-            received_data = ser.readline().decode().replace(' ','')
-            if received_data.find('\r')!=0:
-                print(f"Received from target: {received_data}")
-                receivedMessages.append(received_data);
-                time.sleep(0.1);
 
 def main():
-    global messages;
-    global listeningSerial;
-    # List and open available serial ports
-    find_out_tester_and_open_ports()
-
-    time.sleep(1);
-    serial_tester.flush();
-    serial_target.flush();
-
-    # Start a thread or a separate process to receive incoming messages
-    receive_thread = threading.Thread(target=receive_messages_tester, args=(serial_tester,messages),daemon=True)
-    #receive_thread.start();
-    
-    receive_thread_test = threading.Thread(target=receive_messages_target, args=(serial_target,messages),daemon=True)
-    receive_thread_test.start();
-    
-    time.sleep(1);
-    serial_tester.flush();
-    serial_target.flush();
-
-    listeningSerial=True
-    send_thread = threading.Thread(target=send_messages_tester, args=(serial_tester,messages),daemon=True) 
-    send_thread.start();
-
-    # Wait for the receive thread to finish (or handle it differently based on your needs)
-    send_thread.join()
-    global stopthreads
-    stopthreads=False;
-    #receive_thread.join();
-    receive_thread_test.join();
-
-    # Close the serial connection
-    serial_tester.close()
-    print("Serial connection closed.")
-
-    for i in range(len(messages)):
-        messages[i]=messages[i].replace('\r','');
-        messages[i]=messages[i].replace(" ","");
-    for i in range(len(receivedMessages)):
-        receivedMessages[i]=receivedMessages[i].replace('\r','');
-        receivedMessages[i]=receivedMessages[i].replace(" ","");
+    find_out_tester_and_open_ports();
+    setup_emulator(serial_emulator);
+    n=0
+    for m in messages:
+        n=n+1;
+        run_single_test(n,serial_emulator,serial_target,m);
         
-    print(f"received messages length: {len(receivedMessages)}");
-    print(f"sent messages length: {len(messages)}");
-
-    if len(receivedMessages) != len(messages):
-        print(f"number of sent messages {len(messages)}  match the number of received results {len(receivedMessages)}, TESTING FAILED");
-        sys.exit(-1);
-        
-    if receivedMessages == messages:
-        print("all test cases passed");
+    if succesfulltests== len(messages):
+        print("its all good man")
         sys.exit(0);
     else:
-        print("not all test cases passed");
-        for j in range(len(receivedMessages)):
-            if messages[j]!=receivedMessages[j]:
-                #lists are indexed starting in 0, thats why i do j+1, our cases are from 1 to 48, the list is from 0 to 47
-                print(  f"error in test case number {j+1}, it was supposed to be:{messages[j]} instead of:{receivedMessages[j]}")
-
-        print(messages);
-        print(receivedMessages);
+        print(f"MEEEEEEK! {succesfulltests} succesfull tests out of {len(messages)}")
         sys.exit(-1);
+
+
+
+
 
 main()
