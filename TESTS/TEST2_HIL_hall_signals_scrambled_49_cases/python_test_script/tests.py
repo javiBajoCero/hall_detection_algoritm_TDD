@@ -31,7 +31,6 @@ def find_out_tester_and_open_ports():
                 serial_target = serial.Serial(port=port.device,baudrate=baud_rate,bytesize=byte_size,parity=parity,stopbits=stop_bits,timeout=timeout,xonxoff=xonxoff,rtscts=rtscts)
                 serial_target.flush();
                 serial_target.isOpen()
-                print ("port opened")
             except IOError:
                 serial_target.close()
                 serial_target.open()
@@ -43,7 +42,6 @@ def find_out_tester_and_open_ports():
                 serial_emulator = serial.Serial(port=port.device,baudrate=baud_rate,bytesize=byte_size,parity=parity,stopbits=stop_bits,timeout=timeout,xonxoff=xonxoff,rtscts=rtscts)
                 serial_emulator.flush();
                 serial_emulator.isOpen()
-                print ("port opened")
             except IOError:
                 serial_emulator.close()
                 serial_emulator.open()
