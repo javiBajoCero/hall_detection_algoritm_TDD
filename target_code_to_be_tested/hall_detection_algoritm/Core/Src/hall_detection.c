@@ -201,9 +201,9 @@ void Hall_Identification_Test_measurement(
 			ticks++;
 			break;
 		case detection_ERROR_OR_TIMEOUT:
+			detection_state=detection_DISABLED;
 		case detection_DISABLED://do nothing
 		default:
-			detection_state=detection_DISABLED;
 			break;
 	}
 }
@@ -729,7 +729,7 @@ void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
 			gen->shifted_polarity[hall_C][i]=1;
 		}
 
-
+		//takes notes of the minimum difference
 		if(gen->differences_phaseA[i]<minimum[phase_A]){
 			minimum[phase_A]=gen->differences_phaseA[i];
 		}
@@ -743,6 +743,7 @@ void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
 		}
 	}
 
+	//finds out whicone is the minimum diff
 	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
 		if(gen->differences_phaseA[i]==minimum[phase_A]){
 			gen->results[gen->numberOfresults].hall_order[i]=phase_A;
