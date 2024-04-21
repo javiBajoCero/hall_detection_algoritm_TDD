@@ -322,14 +322,8 @@ void interpretation(detection_state_enum* state,hall_detection_general_struct *g
 */
 void validation(detection_state_enum* state,hall_detection_general_struct *gen){
 
-	//timeout
-	if( ticks>MAXTICKs){
-		*state=detection_ERROR_OR_TIMEOUT;
-		return;
-	}
-
-	//reached results buffer full capacity
-	if(gen->numberOfresults>TOTAL_NUMBEROFRESULTS){
+	//timeout or 	//reached results buffer full capacity
+	if( ticks>MAXTICKs || gen->numberOfresults>TOTAL_NUMBEROFRESULTS){
 		*state=detection_ERROR_OR_TIMEOUT;
 		return;
 	}
