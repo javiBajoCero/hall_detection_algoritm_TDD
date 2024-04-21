@@ -52,8 +52,12 @@ def setup_emulator(serial_out):
     print(f"setup_emulator")
     emulationmessage="emulation\n\r";
     serial_out.write(emulationmessage.encode());
-    time.sleep(waittime)  # Add a delay to allow the device to process the message
-        
+    time.sleep(waittime/2)  # Add a delay to allow the device to process the message
+    
+    resetmessage="reset target\n\r";
+    serial_out.write(resetmessage.encode());
+    time.sleep(waittime/2)  # Add a delay to allow the device to process the message
+    
 def run_single_test(test_number,serial_out,serial_in,messages):
     time.sleep(waittime*0.1) 
     serial_out.flush()    
@@ -164,7 +168,7 @@ def main():
     setup_emulator(serial_emulator);
     serial_emulator.flush()    
     serial_target.flush()
-
+    
     n=0
     for m in messages:
         n=n+1;
