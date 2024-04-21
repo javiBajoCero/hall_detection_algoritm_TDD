@@ -54,14 +54,11 @@ def setup_emulator(serial_out):
     serial_out.write(emulationmessage.encode());
     time.sleep(waittime/2)  # Add a delay to allow the device to process the message
     
-    resetmessage="reset target\n\r";
-    serial_out.write(resetmessage.encode());
-    time.sleep(waittime/2)  # Add a delay to allow the device to process the message
-    
 def run_single_test(test_number,serial_out,serial_in,messages):
     time.sleep(waittime*0.1) 
     serial_out.flush()    
     serial_in.flush()
+    serial_in.flushInput()
     
     global succesfulltests;
     successfullTEST=False;
