@@ -1,4 +1,4 @@
-ARM GAS  /tmp/cccq5VL3.s 			page 1
+ARM GAS  /tmp/ccmWq57u.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /tmp/cccq5VL3.s 			page 1
   28:Core/Src/wave_emulator.c **** /**
   29:Core/Src/wave_emulator.c **** * \brief to be placed in main() superloop, constanly on the lookout for changes in emulator_enabled
   30:Core/Src/wave_emulator.c **** * manages the enable/disable function logic.
-ARM GAS  /tmp/cccq5VL3.s 			page 2
+ARM GAS  /tmp/ccmWq57u.s 			page 2
 
 
   31:Core/Src/wave_emulator.c **** */
@@ -118,7 +118,7 @@ ARM GAS  /tmp/cccq5VL3.s 			page 1
   58 001a 2146     		mov	r1, r4
   59 001c 3046     		mov	r0, r6
   60 001e FFF7FEFF 		bl	HAL_DAC_Start_DMA
-ARM GAS  /tmp/cccq5VL3.s 			page 3
+ARM GAS  /tmp/ccmWq57u.s 			page 3
 
 
   61              	.LVL1:
@@ -178,7 +178,7 @@ ARM GAS  /tmp/cccq5VL3.s 			page 1
  102              		.cfi_startproc
  103              		@ args = 0, pretend = 0, frame = 0
  104              		@ frame_needed = 0, uses_anonymous_args = 0
-ARM GAS  /tmp/cccq5VL3.s 			page 4
+ARM GAS  /tmp/ccmWq57u.s 			page 4
 
 
  105 0000 38B5     		push	{r3, r4, r5, lr}
@@ -238,7 +238,7 @@ ARM GAS  /tmp/cccq5VL3.s 			page 1
  155              		@ frame_needed = 0, uses_anonymous_args = 0
  156 0000 08B5     		push	{r3, lr}
  157              	.LCFI4:
-ARM GAS  /tmp/cccq5VL3.s 			page 5
+ARM GAS  /tmp/ccmWq57u.s 			page 5
 
 
  158              		.cfi_def_cfa_offset 8
@@ -298,7 +298,7 @@ ARM GAS  /tmp/cccq5VL3.s 			page 1
  203              		.set	.LANCHOR0,. + 0
  206              	emulator_enabled:
  207 0000 00000000 		.space	4
-ARM GAS  /tmp/cccq5VL3.s 			page 6
+ARM GAS  /tmp/ccmWq57u.s 			page 6
 
 
  208              		.section	.bss.old_emulator_enabled,"aw",%nobits
@@ -324,24 +324,24 @@ ARM GAS  /tmp/cccq5VL3.s 			page 1
  230              		.file 15 "Core/Inc/tim.h"
  231              		.file 16 "Core/Inc/real_waveforms.h"
  232              		.file 17 "Core/Inc/wave_emulator.h"
-ARM GAS  /tmp/cccq5VL3.s 			page 7
+ARM GAS  /tmp/ccmWq57u.s 			page 7
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 wave_emulator.c
-     /tmp/cccq5VL3.s:18     .text.enable_emulator:0000000000000000 $t
-     /tmp/cccq5VL3.s:26     .text.enable_emulator:0000000000000000 enable_emulator
-     /tmp/cccq5VL3.s:83     .text.enable_emulator:000000000000003c $d
-     /tmp/cccq5VL3.s:92     .text.disable_emulator:0000000000000000 $t
-     /tmp/cccq5VL3.s:99     .text.disable_emulator:0000000000000000 disable_emulator
-     /tmp/cccq5VL3.s:137    .text.disable_emulator:0000000000000024 $d
-     /tmp/cccq5VL3.s:143    .text.emulation:0000000000000000 $t
-     /tmp/cccq5VL3.s:150    .text.emulation:0000000000000000 emulation
-     /tmp/cccq5VL3.s:194    .text.emulation:0000000000000024 $d
-     /tmp/cccq5VL3.s:213    .bss.old_emulator_enabled:0000000000000000 old_emulator_enabled
-     /tmp/cccq5VL3.s:206    .bss.emulator_enabled:0000000000000000 emulator_enabled
-     /tmp/cccq5VL3.s:202    .bss.emulator_enabled:0000000000000000 $d
-     /tmp/cccq5VL3.s:209    .bss.old_emulator_enabled:0000000000000000 $d
+     /tmp/ccmWq57u.s:18     .text.enable_emulator:0000000000000000 $t
+     /tmp/ccmWq57u.s:26     .text.enable_emulator:0000000000000000 enable_emulator
+     /tmp/ccmWq57u.s:83     .text.enable_emulator:000000000000003c $d
+     /tmp/ccmWq57u.s:92     .text.disable_emulator:0000000000000000 $t
+     /tmp/ccmWq57u.s:99     .text.disable_emulator:0000000000000000 disable_emulator
+     /tmp/ccmWq57u.s:137    .text.disable_emulator:0000000000000024 $d
+     /tmp/ccmWq57u.s:143    .text.emulation:0000000000000000 $t
+     /tmp/ccmWq57u.s:150    .text.emulation:0000000000000000 emulation
+     /tmp/ccmWq57u.s:194    .text.emulation:0000000000000024 $d
+     /tmp/ccmWq57u.s:213    .bss.old_emulator_enabled:0000000000000000 old_emulator_enabled
+     /tmp/ccmWq57u.s:206    .bss.emulator_enabled:0000000000000000 emulator_enabled
+     /tmp/ccmWq57u.s:202    .bss.emulator_enabled:0000000000000000 $d
+     /tmp/ccmWq57u.s:209    .bss.old_emulator_enabled:0000000000000000 $d
 
 UNDEFINED SYMBOLS
 HAL_TIM_Base_Stop_IT
