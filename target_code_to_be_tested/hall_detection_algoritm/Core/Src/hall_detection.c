@@ -548,8 +548,10 @@ void detect_N_current_zerocrossings(uint32_t ticks,current_or_hall_measurements_
 * \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
 */
 void detect_N_hall_zerocrossings(uint32_t ticks,current_or_hall_measurements_struct* hallx,uint32_t N){
-	if(hallx->two_samples_buffer[0]!=hallx->two_samples_buffer[1]){
-		if(hallx->numberof_zerocrossings<N){
+	if(
+		hallx->two_samples_buffer[0]!=hallx->two_samples_buffer[1]
+		&& hallx->numberof_zerocrossings<N)
+	{
 			hallx->zerocrossings_tick[hallx->numberof_zerocrossings]=ticks;
 			if(hallx->two_samples_buffer[0]!=0){
 				hallx->zerocrossings_polarity[hallx->numberof_zerocrossings]=rising_polarity;
@@ -557,7 +559,6 @@ void detect_N_hall_zerocrossings(uint32_t ticks,current_or_hall_measurements_str
 				hallx->zerocrossings_polarity[hallx->numberof_zerocrossings]=falling_polarity;
 			}
 			hallx->numberof_zerocrossings++;
-		}
 	}
 }
 
