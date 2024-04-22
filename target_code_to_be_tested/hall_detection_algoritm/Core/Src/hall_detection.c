@@ -13,7 +13,7 @@
 //#define REAL_PHASES_B_C_calculated_A		/*!< our ADC is reading real current signals B and C, A=-B-C */
 
 #define TESTuart
-#define TESTnodelay
+
 
 #ifdef TESTuart
 #include "usart.h"
