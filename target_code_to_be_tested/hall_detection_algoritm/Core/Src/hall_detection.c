@@ -177,7 +177,6 @@ void Hall_Identification_Test_measurement(
 			ticks=0;
 			resetVariables(&general);
 			detection_state=detection_WAIT_CURRENT_STATIONARY;
-			general.start_adquisition_ticks=ticks;
 			break;
 		case detection_WAIT_CURRENT_STATIONARY:
 			wait_for_the_current_stationary(&detection_state,&general,H1_gpio,H2_gpio,H3_gpio,ADCcurr1,ADCcurr2);
