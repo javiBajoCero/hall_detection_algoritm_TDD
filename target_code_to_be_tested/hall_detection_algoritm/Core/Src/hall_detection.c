@@ -298,19 +298,15 @@ void adquisition(
 * \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
 */
 void interpretation(detection_state_enum* state,hall_detection_general_struct *gen){
-
 	//timeout
 	if( ticks>MAXTICKs){
 		*state=detection_ERROR_OR_TIMEOUT;
 		return;
 	}
-
 	assign_closest_phase_to_hall(gen);
 	assign_polarity(gen);
 	gen->numberOfresults++;
 	*state=detection_VALIDATION;
-
-
 }
 
 /**
@@ -320,7 +316,6 @@ void interpretation(detection_state_enum* state,hall_detection_general_struct *g
 * \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
 */
 void validation(detection_state_enum* state,hall_detection_general_struct *gen){
-
 	//timeout or 	//reached results buffer full capacity
 	if( ticks>MAXTICKs || gen->numberOfresults>TOTAL_NUMBEROFRESULTS){
 		*state=detection_ERROR_OR_TIMEOUT;
@@ -343,8 +338,6 @@ void validation(detection_state_enum* state,hall_detection_general_struct *gen){
 	}else{
 		gen->results[gen->numberOfresults-1].is_valid=NO;
 	}
-
-
 
 	if(gen->numberOfresults>=NUMBER_OF_VALID_MATCHING_RESULTS){			//only if enough adquisitions were made
 		for (uint32_t i = 0; i < gen->numberOfresults; ++i) {			//loop trough results
@@ -382,7 +375,6 @@ void validation(detection_state_enum* state,hall_detection_general_struct *gen){
 * \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
 */
 void present_and_finish(detection_state_enum* state,hall_detection_general_struct *gen){
-
 	for (uint32_t i = 0; i < messageLength; ++i) {
 		gen->message[i]=' ';
 	}
@@ -464,7 +456,6 @@ void fill_buffers(
 	gen->currC.two_samples_buffer[1]=gen->currC.two_samples_buffer[0];
 	gen->currC.two_samples_buffer[0]= *ADCcurr2;
 #endif
-
 
 	gen->hallA.two_samples_buffer[1]=gen->hallA.two_samples_buffer[0];
 	gen->hallA.two_samples_buffer[0]=(float) H1_gpio->state;
@@ -572,7 +563,6 @@ void calculateElectricPeriod_inTicks(hall_detection_general_struct *gen, uint32_
 
 	averagedsemiPeriod/=(samples-1);
 	averagedsemiPeriod/=5;
-
 	gen->results[gen->numberOfresults].electricPeriod_ticks=averagedsemiPeriod*2; //FOR torrot emulated this should be 66*2
 }
 
@@ -712,17 +702,14 @@ void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
 			gen->differences_phaseA[i]%=_bottom_limit;
 			gen->shifted_polarity[hall_A][i]=1;
 		}
-
 		if(gen->differences_phaseB[i]>_bottom_limit && gen->differences_phaseB[i]<_top_limit){
 			gen->differences_phaseB[i]%=_bottom_limit;
 			gen->shifted_polarity[hall_B][i]=1;
 		}
-
 		if(gen->differences_phaseC[i]>_bottom_limit && gen->differences_phaseC[i]<_top_limit){
 			gen->differences_phaseC[i]%=_bottom_limit;
 			gen->shifted_polarity[hall_C][i]=1;
 		}
-
 		//takes notes of the minimum difference
 		if(gen->differences_phaseA[i]<minimum[phase_A]){
 			minimum[phase_A]=gen->differences_phaseA[i];
@@ -736,7 +723,6 @@ void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
 			minimum[phase_C]=gen->differences_phaseC[i];
 		}
 	}
-
 	//finds out whicone is the minimum diff
 	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
 		if(gen->differences_phaseA[i]==minimum[phase_A]){
@@ -751,7 +737,6 @@ void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
 			gen->results[gen->numberOfresults].hall_order[i]=phase_C;
 		}
 	}
-
 }
 
 
@@ -765,7 +750,6 @@ void assign_polarity(hall_detection_general_struct *gen){
 	current_or_hall_measurements_struct*	currents[NUMBEROFPHASES]={&gen->currA,&gen->currB,&gen->currC};
 	current_or_hall_measurements_struct*	halls[NUMBEROFPHASES]	={&gen->hallA,&gen->hallB,&gen->hallC};
 	detection_results_struct *pointerOfcurrentResult=&gen->results[gen->numberOfresults];
-
 
 	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
 		if(currents[pointerOfcurrentResult->hall_order[i]]->zerocrossings_polarity[1]==halls[i]->zerocrossings_polarity[1]){
