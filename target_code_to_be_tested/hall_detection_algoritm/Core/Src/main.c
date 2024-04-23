@@ -112,7 +112,7 @@ int main(void)
  Hall_start_detection();
   while (1)
   {
-	  if(Hall_is_detection_finished()){
+	  if(Hall_is_detection_finished()){//when finished the detection, just blink a green led LD2
 		  HAL_Delay(70);
 		  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
 	  }
