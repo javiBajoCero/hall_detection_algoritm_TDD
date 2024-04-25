@@ -1632,6 +1632,10 @@
             <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/main.c" line="208" column="0"/>
             <symbol>assert_failed</symbol>
         </error>
+        <error id="unusedFunction" severity="style" msg="The function &apos;error_handler&apos; is never used." verbose="The function &apos;error_handler&apos; is never used." cwe="561">
+            <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/hall_detection.c" line="853" column="0"/>
+            <symbol>error_handler</symbol>
+        </error>
         <error id="unusedFunction" severity="style" msg="The function &apos;initialise_monitor_handles&apos; is never used." verbose="The function &apos;initialise_monitor_handles&apos; is never used." cwe="561">
             <location file="target_code_to_be_tested/hall_detection_algoritm/Core/Src/syscalls.c" line="44" column="0"/>
             <symbol>initialise_monitor_handles</symbol>
