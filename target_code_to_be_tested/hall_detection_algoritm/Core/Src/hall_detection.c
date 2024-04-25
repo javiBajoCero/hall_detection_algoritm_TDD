@@ -23,8 +23,8 @@
 #define lowpassfilter_ticks 15 						/*!< minimum number of ticks that should have passed in between zerocrossings (lowpassfilter) */
 #define currentAplusBplusC (uint32_t)(3*(4096)/2)	/*!< the sum of the average of each currents should be this number aprox, used to calculate currentC ortogonally*/
 #define currentADCoffset (float) 0.0				/*!< as we are using already processed filtered currents, no offset is take into account */
-#define TOLERANCE_FACTOR_FOR_STATIONARY_CURRENTS 0.1
-#define WAITING_STATIONARY_MAXZEROCROSSINGS 3
+#define TOLERANCE_FACTOR_FOR_STATIONARY_CURRENTS 0.25
+#define WAITING_STATIONARY_MAXZEROCROSSINGS 6
 #define NUMBER_OF_VALID_MATCHING_RESULTS 3
 
 
@@ -59,7 +59,8 @@ void Hall_Identification_Test_measurement(
 
 //PRIVATE FUNCTIONS (only declared inside this .c file)
 //state machine
-void resetVariables					(hall_detection_general_struct *gen);
+void resetVariables_adquisition					(hall_detection_general_struct *gen);
+void resetVariables_diferences					(hall_detection_general_struct *gen);
 void wait_for_the_current_stationary(detection_state_enum* state,hall_detection_general_struct *gen,hall_pin_info* H1_gpio,hall_pin_info* H2_gpio,hall_pin_info* H3_gpio,volatile float* ADCcurr1,volatile float* ADCcurr2);
 void adquisition					(detection_state_enum* state,hall_detection_general_struct *gen,hall_pin_info* H1_gpio,hall_pin_info* H2_gpio,hall_pin_info* H3_gpio,volatile float* ADCcurr1,volatile float* ADCcurr2);
 void interpretation					(detection_state_enum* state,hall_detection_general_struct *gen);
@@ -175,7 +176,7 @@ void Hall_Identification_Test_measurement(
 	switch (detection_state) {
 		case detection_ENABLED:
 			ticks=0;
-			resetVariables(&general);
+			resetVariables_adquisition(&general);
 			detection_state=detection_WAIT_CURRENT_STATIONARY;
 			break;
 		case detection_WAIT_CURRENT_STATIONARY:
@@ -191,7 +192,6 @@ void Hall_Identification_Test_measurement(
 			ticks++;
 			break;
 		case detection_VALIDATION:
-			ticks++;
 			validation(&detection_state,&general);
 			ticks++;
 			break;
@@ -211,8 +211,45 @@ void Hall_Identification_Test_measurement(
 * \brief just resets to 0 the huge structure used by the detection
 * \param hall_detection_general_struct *gen, pointer to the huge structure.
 */
-void resetVariables(hall_detection_general_struct *gen){
-	*gen=empty_general;		//i dont want to use memset, so we sacrifice flash memory space filled with 0's for this.
+void resetVariables_adquisition(hall_detection_general_struct *gen){
+	//wow this was taking too long it was throwing execution errors
+	//*gen=empty_general;		//i dont want to use memset, so we sacrifice flash memory space filled with 0's for this.
+	gen->currA=empty_general.currA;
+	gen->currB=empty_general.currB;
+	gen->currC=empty_general.currC;
+	gen->hallA=empty_general.hallA;
+	gen->hallB=empty_general.hallB;
+	gen->hallC=empty_general.hallC;
+	gen->results[0]=empty_general.results[0];
+	gen->differences_phaseA[0]=empty_general.differences_phaseA[0];
+	gen->differences_phaseA[1]=empty_general.differences_phaseA[1];
+	gen->differences_phaseA[2]=empty_general.differences_phaseA[2];
+
+	gen->differences_phaseB[0]=empty_general.differences_phaseB[0];
+	gen->differences_phaseB[1]=empty_general.differences_phaseB[1];
+	gen->differences_phaseB[2]=empty_general.differences_phaseB[2];
+
+	gen->differences_phaseC[0]=empty_general.differences_phaseC[0];
+	gen->differences_phaseC[1]=empty_general.differences_phaseC[1];
+	gen->differences_phaseC[2]=empty_general.differences_phaseC[2];
+}
+
+/**
+* \brief just resets to 0 the huge structure used by the detection
+* \param hall_detection_general_struct *gen, pointer to the huge structure.
+*/
+void resetVariables_diferences(hall_detection_general_struct *gen){
+	gen->differences_phaseA[0]=empty_general.differences_phaseA[0];
+	gen->differences_phaseA[1]=empty_general.differences_phaseA[1];
+	gen->differences_phaseA[2]=empty_general.differences_phaseA[2];
+
+	gen->differences_phaseB[0]=empty_general.differences_phaseB[0];
+	gen->differences_phaseB[1]=empty_general.differences_phaseB[1];
+	gen->differences_phaseB[2]=empty_general.differences_phaseB[2];
+
+	gen->differences_phaseC[0]=empty_general.differences_phaseC[0];
+	gen->differences_phaseC[1]=empty_general.differences_phaseC[1];
+	gen->differences_phaseC[2]=empty_general.differences_phaseC[2];
 }
 
 
@@ -245,12 +282,13 @@ void wait_for_the_current_stationary(detection_state_enum* state,hall_detection_
 	if(ticks>general.start_adquisition_ticks+2){//run alone signals_adquisition() to pre-fill the buffers
 		if(detect_N_zerocrossings(gen,WAITING_STATIONARY_MAXZEROCROSSINGS)==YES){
 			if(are_all_periods_stable(gen,WAITING_STATIONARY_MAXZEROCROSSINGS)==YES){
-				resetVariables(gen);
+				resetVariables_adquisition(gen);
 				general.start_adquisition_ticks=ticks;
 				*state=detection_ADQUISITION;
 				return;
 			}else{
-				resetVariables(gen);
+				resetVariables_adquisition(gen);
+				general.start_adquisition_ticks=ticks;
 			}
 		}
 	}
@@ -287,6 +325,7 @@ void adquisition(
 	if(ticks>general.start_adquisition_ticks+2){//run alone signals_adquisition() to pre-fill the buffers
 		if(detect_N_zerocrossings(gen,MAXZEROCROSSINGS)==YES){
 			calculateElectricPeriod_inTicks(gen,MAXZEROCROSSINGS);
+			resetVariables_diferences(gen);
 			*state=detection_INTERPRETATION;
 		}
 	}
@@ -364,6 +403,7 @@ void validation(detection_state_enum* state,hall_detection_general_struct *gen){
 
 		}
 	}else{
+		resetVariables_adquisition(gen);
 		*state=detection_ADQUISITION;
 		return;
 	}
@@ -578,13 +618,8 @@ detection_YES_NO is_deviation_from_period_acceptable(hall_detection_general_stru
 	uint32_t _deviation_top=	_semiperiod +_semiperiod*tolerance_factor;
 	uint32_t _deviation_bottom=	_semiperiod	-_semiperiod*tolerance_factor;
 
-	for (uint32_t i = 0; i < samples-1; ++i) {
+	for (uint32_t i = samples/2; i < samples-1; ++i) {
 		uint32_t _sampled_period=(gen->currA.zerocrossings_tick[i+1]-gen->currA.zerocrossings_tick[i]);
-		if((_sampled_period<(_deviation_bottom))||(_sampled_period>(_deviation_top))){
-			return NO;//early return, bad news
-		}
-
-		_sampled_period=(gen->currC.zerocrossings_tick[i+1]-gen->currC.zerocrossings_tick[i]);
 		if((_sampled_period<(_deviation_bottom))||(_sampled_period>(_deviation_top))){
 			return NO;//early return, bad news
 		}
