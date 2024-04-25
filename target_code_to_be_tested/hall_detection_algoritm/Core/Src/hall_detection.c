@@ -61,12 +61,13 @@ void Hall_Identification_Test_measurement(
 //state machine
 void resetVariables_adquisition					(hall_detection_general_struct *gen);
 void resetVariables_diferences					(hall_detection_general_struct *gen);
+void resetVariables_results						(hall_detection_general_struct *gen);
 void wait_for_the_current_stationary(detection_state_enum* state,hall_detection_general_struct *gen,hall_pin_info* H1_gpio,hall_pin_info* H2_gpio,hall_pin_info* H3_gpio,volatile float* ADCcurr1,volatile float* ADCcurr2);
 void adquisition					(detection_state_enum* state,hall_detection_general_struct *gen,hall_pin_info* H1_gpio,hall_pin_info* H2_gpio,hall_pin_info* H3_gpio,volatile float* ADCcurr1,volatile float* ADCcurr2);
 void interpretation					(detection_state_enum* state,hall_detection_general_struct *gen);
 void validation						(detection_state_enum* state,hall_detection_general_struct *gen);
 void present_and_finish				(detection_state_enum* state,hall_detection_general_struct *gen);
-
+void error_handler();
 void fill_buffers(
 		hall_detection_general_struct *gen,
 		hall_pin_info* H1_gpio,
@@ -220,7 +221,7 @@ void resetVariables_adquisition(hall_detection_general_struct *gen){
 	gen->hallA=empty_general.hallA;
 	gen->hallB=empty_general.hallB;
 	gen->hallC=empty_general.hallC;
-	gen->results[0]=empty_general.results[0];
+
 	gen->differences_phaseA[0]=empty_general.differences_phaseA[0];
 	gen->differences_phaseA[1]=empty_general.differences_phaseA[1];
 	gen->differences_phaseA[2]=empty_general.differences_phaseA[2];
@@ -252,7 +253,30 @@ void resetVariables_diferences(hall_detection_general_struct *gen){
 	gen->differences_phaseC[2]=empty_general.differences_phaseC[2];
 }
 
+/**
+* \brief just resets to 0 the huge structure used by the detection
+* \param hall_detection_general_struct *gen, pointer to the huge structure.
+*/
+void resetVariables_results(hall_detection_general_struct *gen){
+	gen->results[0]=empty_general.results[0];
+	gen->results[1]=empty_general.results[1];
+	gen->results[2]=empty_general.results[2];
+	gen->results[3]=empty_general.results[3];
+	gen->results[4]=empty_general.results[4];
+	gen->results[5]=empty_general.results[5];
 
+	gen->shifted_polarity[0][0]=empty_general.shifted_polarity[0][0];
+	gen->shifted_polarity[0][1]=empty_general.shifted_polarity[0][0];
+	gen->shifted_polarity[0][2]=empty_general.shifted_polarity[0][0];
+
+	gen->shifted_polarity[1][0]=empty_general.shifted_polarity[0][0];
+	gen->shifted_polarity[1][1]=empty_general.shifted_polarity[0][0];
+	gen->shifted_polarity[1][2]=empty_general.shifted_polarity[0][0];
+
+	gen->shifted_polarity[2][0]=empty_general.shifted_polarity[0][0];
+	gen->shifted_polarity[2][1]=empty_general.shifted_polarity[0][0];
+	gen->shifted_polarity[2][2]=empty_general.shifted_polarity[0][0];
+}
 /**
 * \brief the motor running in open loop control needs a bit of time to lock in place so current signals stop being so ugly.
 * \param detection_state_enum* state,			pointer to the variable controling the state machine
@@ -283,6 +307,7 @@ void wait_for_the_current_stationary(detection_state_enum* state,hall_detection_
 		if(detect_N_zerocrossings(gen,WAITING_STATIONARY_MAXZEROCROSSINGS)==YES){
 			if(are_all_periods_stable(gen,WAITING_STATIONARY_MAXZEROCROSSINGS)==YES){
 				resetVariables_adquisition(gen);
+				resetVariables_results(gen);
 				general.start_adquisition_ticks=ticks;
 				*state=detection_ADQUISITION;
 				return;
@@ -325,7 +350,6 @@ void adquisition(
 	if(ticks>general.start_adquisition_ticks+2){//run alone signals_adquisition() to pre-fill the buffers
 		if(detect_N_zerocrossings(gen,MAXZEROCROSSINGS)==YES){
 			calculateElectricPeriod_inTicks(gen,MAXZEROCROSSINGS);
-			resetVariables_diferences(gen);
 			*state=detection_INTERPRETATION;
 		}
 	}
@@ -345,6 +369,7 @@ void interpretation(detection_state_enum* state,hall_detection_general_struct *g
 	assign_closest_phase_to_hall(gen);
 	assign_polarity(gen);
 	gen->numberOfresults++;
+	gen->start_adquisition_ticks=ticks;
 	*state=detection_VALIDATION;
 }
 
@@ -378,11 +403,18 @@ void validation(detection_state_enum* state,hall_detection_general_struct *gen){
 		gen->results[gen->numberOfresults-1].is_valid=NO;
 	}
 
-	if(gen->numberOfresults>=NUMBER_OF_VALID_MATCHING_RESULTS){			//only if enough adquisitions were made
+	uint32_t numberofvalid=0;
+	for (uint32_t i = 0;  i < TOTAL_NUMBEROFRESULTS; ++ i) {
+		if(gen->results[i].is_valid==YES){
+			numberofvalid++;
+		}
+	}
+
+	if(numberofvalid>=NUMBER_OF_VALID_MATCHING_RESULTS){			//only if enough adquisitions were made
 		for (uint32_t i = 0; i < gen->numberOfresults; ++i) {			//loop trough results
 			if(gen->results[i].is_valid==YES){	//skip the not valid results.
 				uint32_t number_of_results_matching=0;
-				for (uint32_t j = i+1; j < gen->numberOfresults; ++j) {	//compare that one result with the rest
+				for (uint32_t j = 0; j < gen->numberOfresults; ++j) {	//compare that one result with the rest
 					if(
 							gen->results[i].hall_order[0]==gen->results[j].hall_order[0] &&
 							gen->results[i].hall_order[1]==gen->results[j].hall_order[1] &&
@@ -392,7 +424,7 @@ void validation(detection_state_enum* state,hall_detection_general_struct *gen){
 							gen->results[i].hall_polarity[2]==gen->results[j].hall_polarity[2]
 							){//do they match?
 							number_of_results_matching++;
-						if(number_of_results_matching>=NUMBER_OF_VALID_MATCHING_RESULTS-1){
+						if(number_of_results_matching>=NUMBER_OF_VALID_MATCHING_RESULTS){
 							gen->indexOfcorrectResult=i;
 							*state=detection_PRESENTATION_FINISH;
 							return;
@@ -402,11 +434,13 @@ void validation(detection_state_enum* state,hall_detection_general_struct *gen){
 			}
 
 		}
-	}else{
-		resetVariables_adquisition(gen);
-		*state=detection_ADQUISITION;
-		return;
 	}
+
+	resetVariables_adquisition(gen);
+	resetVariables_diferences(gen);
+	gen->start_adquisition_ticks=ticks;
+	*state=detection_ADQUISITION;
+	return;
 }
 
 /**
@@ -514,12 +548,12 @@ void fill_buffers(
 */
 detection_YES_NO detect_N_zerocrossings(hall_detection_general_struct *gen,uint32_t N){
 	if((ticks-general.start_adquisition_ticks)>2){ //skip the first two samples to fill the buffers
-		detect_N_current_zerocrossings((ticks-general.start_adquisition_ticks),&gen->currA,MAXZEROCROSSINGS);
-		detect_N_current_zerocrossings((ticks-general.start_adquisition_ticks),&gen->currB,MAXZEROCROSSINGS);
-		detect_N_current_zerocrossings((ticks-general.start_adquisition_ticks),&gen->currC,MAXZEROCROSSINGS);
-		detect_N_hall_zerocrossings	((ticks-general.start_adquisition_ticks),&gen->hallA,MAXZEROCROSSINGS);
-		detect_N_hall_zerocrossings	((ticks-general.start_adquisition_ticks),&gen->hallB,MAXZEROCROSSINGS);
-		detect_N_hall_zerocrossings	((ticks-general.start_adquisition_ticks),&gen->hallC,MAXZEROCROSSINGS);
+		detect_N_current_zerocrossings	((ticks-general.start_adquisition_ticks),&gen->currA,MAXZEROCROSSINGS);
+		detect_N_current_zerocrossings	((ticks-general.start_adquisition_ticks),&gen->currB,MAXZEROCROSSINGS);
+		detect_N_current_zerocrossings	((ticks-general.start_adquisition_ticks),&gen->currC,MAXZEROCROSSINGS);
+		detect_N_hall_zerocrossings		((ticks-general.start_adquisition_ticks),&gen->hallA,MAXZEROCROSSINGS);
+		detect_N_hall_zerocrossings		((ticks-general.start_adquisition_ticks),&gen->hallB,MAXZEROCROSSINGS);
+		detect_N_hall_zerocrossings		((ticks-general.start_adquisition_ticks),&gen->hallC,MAXZEROCROSSINGS);
 	}
 	if(//if all buffers are full
 			(gen->currA.numberof_zerocrossings>=N) &&
@@ -709,6 +743,8 @@ int32_t absolute(int32_t x){
 */
 void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
 
+	resetVariables_diferences(gen);
+
 	for (uint32_t i = 0; i < MAXZEROCROSSINGS; ++i) {// all zerocrossings loop
 		gen->differences_phaseA[phase_A]+=absolute((int32_t)gen->currA.zerocrossings_tick[i]-(int32_t)gen->hallA.zerocrossings_tick[i]);
 		gen->differences_phaseA[phase_B]+=absolute((int32_t)gen->currA.zerocrossings_tick[i]-(int32_t)gen->hallB.zerocrossings_tick[i]);
@@ -736,15 +772,24 @@ void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
 		if(gen->differences_phaseA[i]>_bottom_limit && gen->differences_phaseA[i]<_top_limit){
 			gen->differences_phaseA[i]%=_bottom_limit;
 			gen->shifted_polarity[hall_A][i]=1;
+		}else{
+			gen->shifted_polarity[hall_A][i]=0;
 		}
+
 		if(gen->differences_phaseB[i]>_bottom_limit && gen->differences_phaseB[i]<_top_limit){
 			gen->differences_phaseB[i]%=_bottom_limit;
 			gen->shifted_polarity[hall_B][i]=1;
+		}else{
+			gen->shifted_polarity[hall_B][i]=0;
 		}
+
 		if(gen->differences_phaseC[i]>_bottom_limit && gen->differences_phaseC[i]<_top_limit){
 			gen->differences_phaseC[i]%=_bottom_limit;
 			gen->shifted_polarity[hall_C][i]=1;
+		}else{
+			gen->shifted_polarity[hall_C][i]=0;
 		}
+
 		//takes notes of the minimum difference
 		if(gen->differences_phaseA[i]<minimum[phase_A]){
 			minimum[phase_A]=gen->differences_phaseA[i];
@@ -758,7 +803,7 @@ void assign_closest_phase_to_hall(hall_detection_general_struct *gen){
 			minimum[phase_C]=gen->differences_phaseC[i];
 		}
 	}
-	//finds out whicone is the minimum diff
+	//finds out wichone is the minimum diff
 	for (uint32_t i = 0; i < NUMBEROFPHASES; ++i) {
 		if(gen->differences_phaseA[i]==minimum[phase_A]){
 			gen->results[gen->numberOfresults].hall_order[i]=phase_A;
@@ -805,5 +850,10 @@ void assign_polarity(hall_detection_general_struct *gen){
 }
 
 
-
+void error_handler(){
+const uint8_t error_message[]="error";
+#ifdef TESTuart
+	HAL_UART_Transmit(&huart2, (const uint8_t *)&error_message, sizeof(error_message),100);
+#endif
+}
 
