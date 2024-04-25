@@ -85,8 +85,7 @@ detection_YES_NO are_all_periods_stable(hall_detection_general_struct *gen, uint
 int32_t absolute(int32_t x);
 void assign_closest_phase_to_hall(hall_detection_general_struct *gen);
 void assign_polarity(hall_detection_general_struct *gen);
-
-
+void swap_hall_gpios_with_detected_results(hall_detection_general_struct *gen,hall_pin_info* pin_infoH1,hall_pin_info* pin_infoH2,hall_pin_info* pin_infoH3);
 
 
 
@@ -198,6 +197,7 @@ void Hall_Identification_Test_measurement(
 			break;
 		case detection_PRESENTATION_FINISH:
 			present_and_finish(&detection_state,&general);
+			swap_hall_gpios_with_detected_results(&general,H1_gpio, H2_gpio, H3_gpio);
 			ticks++;
 			break;
 		case detection_ERROR_OR_TIMEOUT:
@@ -404,6 +404,7 @@ void present_and_finish(detection_state_enum* state,hall_detection_general_struc
 	gen->message[messageLength-2]='\n';//two last characters
 	gen->message[messageLength-1]='\r';
 
+
 #ifdef TESTuart
 	HAL_UART_Transmit(&huart2, (const uint8_t *)&general.message, messageLength,100);
 #endif
@@ -606,58 +607,63 @@ detection_YES_NO are_all_periods_stable(hall_detection_general_struct *gen, uint
 }
 
 
-///**
-//* \brief
-//* \param
-//*/
-//void swap_hall_gpios_with_detected_results(hall_pin_info* pin_infoH1,hall_pin_info* pin_infoH2,hall_pin_info* pin_infoH3){
-//	hall_pin_info old_pin_infoH1=*pin_infoH1;
-//	hall_pin_info old_pin_infoH2=*pin_infoH2;
-//	hall_pin_info old_pin_infoH3=*pin_infoH3;
-//
-//	switch (results.hall_order[phase_A]) {
-//		case hall_A:
-//			*pin_infoH1=old_pin_infoH1;
-//			break;
-//		case hall_B:
-//			*pin_infoH2=old_pin_infoH1;
-//			break;
-//		case hall_C:
-//			*pin_infoH3=old_pin_infoH1;
-//			break;
-//		default:
-//			break;
-//	}
-//
-//	switch (results.hall_order[phase_B]) {
-//		case hall_A:
-//			*pin_infoH1=old_pin_infoH2;
-//			break;
-//		case hall_B:
-//			*pin_infoH2=old_pin_infoH2;
-//			break;
-//		case hall_C:
-//			*pin_infoH3=old_pin_infoH2;
-//			break;
-//		default:
-//			break;
-//	}
-//
-//	switch (results.hall_order[phase_C]) {
-//		case hall_A:
-//			*pin_infoH1=old_pin_infoH3;
-//			break;
-//		case hall_B:
-//			*pin_infoH2=old_pin_infoH3;
-//			break;
-//		case hall_C:
-//			*pin_infoH3=old_pin_infoH3;
-//			break;
-//		default:
-//			break;
-//	}
-//
-//}
+/**
+* \brief
+* \param
+*/
+void swap_hall_gpios_with_detected_results(
+		hall_detection_general_struct *gen,
+		hall_pin_info* pin_infoH1,
+		hall_pin_info* pin_infoH2,
+		hall_pin_info* pin_infoH3
+		){
+	hall_pin_info old_pin_infoH1=*pin_infoH1;
+	hall_pin_info old_pin_infoH2=*pin_infoH2;
+	hall_pin_info old_pin_infoH3=*pin_infoH3;
+
+	switch (gen->results[gen->indexOfcorrectResult].hall_order[phase_A]) {
+		case hall_A:
+			*pin_infoH1=old_pin_infoH1;
+			break;
+		case hall_B:
+			*pin_infoH2=old_pin_infoH1;
+			break;
+		case hall_C:
+			*pin_infoH3=old_pin_infoH1;
+			break;
+		default:
+			break;
+	}
+
+	switch (gen->results[gen->indexOfcorrectResult].hall_order[phase_B]) {
+		case hall_A:
+			*pin_infoH1=old_pin_infoH2;
+			break;
+		case hall_B:
+			*pin_infoH2=old_pin_infoH2;
+			break;
+		case hall_C:
+			*pin_infoH3=old_pin_infoH2;
+			break;
+		default:
+			break;
+	}
+
+	switch (gen->results[gen->indexOfcorrectResult].hall_order[phase_C]) {
+		case hall_A:
+			*pin_infoH1=old_pin_infoH3;
+			break;
+		case hall_B:
+			*pin_infoH2=old_pin_infoH3;
+			break;
+		case hall_C:
+			*pin_infoH3=old_pin_infoH3;
+			break;
+		default:
+			break;
+	}
+
+}
 
 /**
 * \brief small and util to calculate signed absolute values
