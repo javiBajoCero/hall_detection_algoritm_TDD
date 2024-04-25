@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccjYDmjC.s 			page 1
+ARM GAS  /tmp/ccSUS3QN.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
   28:Core/Src/user_interface.c **** 		"-INPUTS: uart-USB(stlink) bridge from the user with text commands\n\r"
   29:Core/Src/user_interface.c **** 		"-INPUTS: three (alegedly healthy) square signals from three real hall sensors\n\r"
   30:Core/Src/user_interface.c **** 		"-OUTPUTS: same three square signals with the designated order,polarity, and phase errors\n\r"
-ARM GAS  /tmp/ccjYDmjC.s 			page 2
+ARM GAS  /tmp/ccSUS3QN.s 			page 2
 
 
   31:Core/Src/user_interface.c **** 		"\n\r%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\r
@@ -118,7 +118,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
   29              		.loc 1 84 40 view -0
   30              		.cfi_startproc
   31              		@ args = 0, pretend = 0, frame = 0
-ARM GAS  /tmp/ccjYDmjC.s 			page 3
+ARM GAS  /tmp/ccSUS3QN.s 			page 3
 
 
   32              		@ frame_needed = 0, uses_anonymous_args = 0
@@ -178,7 +178,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
   72              		.cfi_offset 4, -12
   73              		.cfi_offset 5, -8
   74              		.cfi_offset 14, -4
-ARM GAS  /tmp/ccjYDmjC.s 			page 4
+ARM GAS  /tmp/ccSUS3QN.s 			page 4
 
 
  101:Core/Src/user_interface.c **** 	uint32_t linejumpdetected_flag=0;//1= we detected a line jump
@@ -238,7 +238,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
   99 0016 1978     		ldrb	r1, [r3]	@ zero_extendqisi2
  100 0018 551A     		subs	r5, r2, r1
  104:Core/Src/user_interface.c **** 		if((rx_size-echoed_size)>0){						//check only that new something not the whole RX buffer each ti
-ARM GAS  /tmp/ccjYDmjC.s 			page 5
+ARM GAS  /tmp/ccSUS3QN.s 			page 5
 
 
  101              		.loc 1 104 5 view .LVU13
@@ -298,7 +298,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  141              		.loc 1 122 10 is_stmt 0 view .LVU27
  142 003c 104B     		ldr	r3, .L20
  143 003e 0022     		movs	r2, #0
-ARM GAS  /tmp/ccjYDmjC.s 			page 6
+ARM GAS  /tmp/ccSUS3QN.s 			page 6
 
 
  144 0040 1A70     		strb	r2, [r3]
@@ -358,7 +358,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  114:Core/Src/user_interface.c **** 				HAL_Delay(25);
  187              		.loc 1 114 5 is_stmt 1 view .LVU39
  114:Core/Src/user_interface.c **** 				HAL_Delay(25);
-ARM GAS  /tmp/ccjYDmjC.s 			page 7
+ARM GAS  /tmp/ccSUS3QN.s 			page 7
 
 
  188              		.loc 1 114 71 is_stmt 0 view .LVU40
@@ -418,7 +418,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  145:Core/Src/user_interface.c **** 			if(i==0){//take care of the 0 index, we dont want to access the array out of bounds
  146:Core/Src/user_interface.c **** 				aux_signal_polarity[number_of_identified_phases]=hall_direct;
  147:Core/Src/user_interface.c **** 			}else{
-ARM GAS  /tmp/ccjYDmjC.s 			page 8
+ARM GAS  /tmp/ccSUS3QN.s 			page 8
 
 
  148:Core/Src/user_interface.c **** 				aux_signal_polarity[number_of_identified_phases]=decode_char_to_hall_signals_polarity((uint8_t 
@@ -478,7 +478,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  239              		.loc 1 187 33 is_stmt 0 view .LVU47
  240 0004 2849     		ldr	r1, .L32
  241              	.LVL20:
-ARM GAS  /tmp/ccjYDmjC.s 			page 9
+ARM GAS  /tmp/ccSUS3QN.s 			page 9
 
 
  242              		.loc 1 187 33 view .LVU48
@@ -538,7 +538,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  207:Core/Src/user_interface.c **** 			emulator_enabled=1;
  277              		.loc 1 207 4 is_stmt 1 view .LVU64
  278              		.loc 1 207 20 is_stmt 0 view .LVU65
-ARM GAS  /tmp/ccjYDmjC.s 			page 10
+ARM GAS  /tmp/ccSUS3QN.s 			page 10
 
 
  279 0028 224B     		ldr	r3, .L32+12
@@ -598,7 +598,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  218:Core/Src/user_interface.c **** 	return 0;
  219:Core/Src/user_interface.c **** }
  318              		.loc 1 219 1 view .LVU76
-ARM GAS  /tmp/ccjYDmjC.s 			page 11
+ARM GAS  /tmp/ccSUS3QN.s 			page 11
 
 
  319 0056 10BD     		pop	{r4, pc}
@@ -658,7 +658,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  362 008e 0022     		movs	r2, #0
  363 0090 1A60     		str	r2, [r3]
  212:Core/Src/user_interface.c **** 			HAL_UART_Transmit_DMA(&hlpuart1, off_emulationmessage, sizeof(off_emulationmessage));
-ARM GAS  /tmp/ccjYDmjC.s 			page 12
+ARM GAS  /tmp/ccSUS3QN.s 			page 12
 
 
  364              		.loc 1 212 4 is_stmt 1 view .LVU88
@@ -718,7 +718,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  413              		@ args = 0, pretend = 0, frame = 0
  414              		@ frame_needed = 0, uses_anonymous_args = 0
  415              		@ link register save eliminated.
-ARM GAS  /tmp/ccjYDmjC.s 			page 13
+ARM GAS  /tmp/ccSUS3QN.s 			page 13
 
 
  416              		.loc 1 222 73 is_stmt 0 view .LVU94
@@ -778,7 +778,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  456              		.loc 1 225 3 is_stmt 1 view .LVU107
  225:Core/Src/user_interface.c **** 		if(pData[i]=='\177'){		//delete found
  457              		.loc 1 225 11 is_stmt 0 view .LVU108
-ARM GAS  /tmp/ccjYDmjC.s 			page 14
+ARM GAS  /tmp/ccSUS3QN.s 			page 14
 
 
  458 0014 135D     		ldrb	r3, [r2, r4]	@ zero_extendqisi2
@@ -838,7 +838,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  233:Core/Src/user_interface.c **** 				newSize_after_all_deletions-=2;
  496              		.loc 1 233 5 is_stmt 1 view .LVU124
  497              		.loc 1 233 32 is_stmt 0 view .LVU125
-ARM GAS  /tmp/ccjYDmjC.s 			page 15
+ARM GAS  /tmp/ccSUS3QN.s 			page 15
 
 
  498 0030 0238     		subs	r0, r0, #2
@@ -898,7 +898,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  542 0048 7047     		bx	lr
  543              		.cfi_endproc
  544              	.LFE138:
-ARM GAS  /tmp/ccjYDmjC.s 			page 16
+ARM GAS  /tmp/ccSUS3QN.s 			page 16
 
 
  546              		.section	.text.decode_char_to_hall_signals_order,"ax",%progbits
@@ -958,7 +958,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  596 0024 16       		.byte	(.L47-.L49)/2
  597 0025 16       		.byte	(.L47-.L49)/2
  598 0026 16       		.byte	(.L47-.L49)/2
-ARM GAS  /tmp/ccjYDmjC.s 			page 17
+ARM GAS  /tmp/ccSUS3QN.s 			page 17
 
 
  599 0027 16       		.byte	(.L47-.L49)/2
@@ -1018,7 +1018,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  635 003e 0120     		movs	r0, #1
  636              	.LVL73:
  262:Core/Src/user_interface.c **** 	}
-ARM GAS  /tmp/ccjYDmjC.s 			page 18
+ARM GAS  /tmp/ccSUS3QN.s 			page 18
 
 
  263:Core/Src/user_interface.c **** 
@@ -1078,7 +1078,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  674              		.loc 1 272 27 view .LVU166
  675 000a 0120     		movs	r0, #1
  676              	.LVL77:
-ARM GAS  /tmp/ccjYDmjC.s 			page 19
+ARM GAS  /tmp/ccSUS3QN.s 			page 19
 
 
  272:Core/Src/user_interface.c **** 			break;
@@ -1138,7 +1138,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  724              	.LVL80:
  135:Core/Src/user_interface.c **** 	uint32_t hall_polarity_unknown_flag=0;
  725              		.loc 1 135 2 view .LVU176
-ARM GAS  /tmp/ccjYDmjC.s 			page 20
+ARM GAS  /tmp/ccSUS3QN.s 			page 20
 
 
  136:Core/Src/user_interface.c **** 
@@ -1198,7 +1198,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  151:Core/Src/user_interface.c **** 		}
  766              		.loc 1 151 4 is_stmt 1 view .LVU191
  151:Core/Src/user_interface.c **** 		}
-ARM GAS  /tmp/ccjYDmjC.s 			page 21
+ARM GAS  /tmp/ccSUS3QN.s 			page 21
 
 
  767              		.loc 1 151 31 is_stmt 0 view .LVU192
@@ -1258,7 +1258,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  808              	.L73:
  146:Core/Src/user_interface.c **** 			}else{
  809              		.loc 1 146 53 view .LVU206
-ARM GAS  /tmp/ccjYDmjC.s 			page 22
+ARM GAS  /tmp/ccSUS3QN.s 			page 22
 
 
  810              	.LBE10:
@@ -1318,7 +1318,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  851              	.L64:
  852              	.LVL95:
  167:Core/Src/user_interface.c **** 		//everything went well, unload out new values into the real order and polarity arrays
-ARM GAS  /tmp/ccjYDmjC.s 			page 23
+ARM GAS  /tmp/ccSUS3QN.s 			page 23
 
 
  853              		.loc 1 167 2 is_stmt 1 view .LVU220
@@ -1378,7 +1378,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  896              		.loc 1 162 30 view .LVU231
  897 00c4 0123     		movs	r3, #1
  898              	.LVL101:
-ARM GAS  /tmp/ccjYDmjC.s 			page 24
+ARM GAS  /tmp/ccSUS3QN.s 			page 24
 
 
  162:Core/Src/user_interface.c **** 			break;			//we found an unacceptable value, early break
@@ -1438,7 +1438,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  175:Core/Src/user_interface.c **** 	}else{
  940              		.loc 1 175 10 is_stmt 0 view .LVU245
  941 00fa 0120     		movs	r0, #1
-ARM GAS  /tmp/ccjYDmjC.s 			page 25
+ARM GAS  /tmp/ccSUS3QN.s 			page 25
 
 
  942 00fc DDE7     		b	.L57
@@ -1498,7 +1498,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  992 001e 00BF     		.align	2
  993              	.L79:
  994 0020 00000000 		.word	hlpuart1
-ARM GAS  /tmp/ccjYDmjC.s 			page 26
+ARM GAS  /tmp/ccSUS3QN.s 			page 26
 
 
  995 0024 00000000 		.word	.LANCHOR4
@@ -1558,7 +1558,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  1046              		.section	.text.ui_uart_listen,"ax",%progbits
  1047              		.align	1
  1048              		.global	ui_uart_listen
-ARM GAS  /tmp/ccjYDmjC.s 			page 27
+ARM GAS  /tmp/ccSUS3QN.s 			page 27
 
 
  1049              		.syntax unified
@@ -1618,7 +1618,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
   95:Core/Src/user_interface.c **** 		reset_or_start_uart_DMA_communications();
  1093              		.loc 1 95 14 is_stmt 0 view .LVU268
  1094 0020 054A     		ldr	r2, .L91
-ARM GAS  /tmp/ccjYDmjC.s 			page 28
+ARM GAS  /tmp/ccSUS3QN.s 			page 28
 
 
  1095 0022 1370     		strb	r3, [r2]
@@ -1678,7 +1678,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  1145              		.fpu fpv4-sp-d16
  1147              	HAL_UARTEx_RxEventCallback:
  1148              	.LVL116:
-ARM GAS  /tmp/ccjYDmjC.s 			page 29
+ARM GAS  /tmp/ccSUS3QN.s 			page 29
 
 
  1149              	.LFB143:
@@ -1738,7 +1738,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  1200              	echoed_size:
  1201 0000 00       		.space	1
  1202              		.section	.bss.rx_buffer,"aw",%nobits
-ARM GAS  /tmp/ccjYDmjC.s 			page 30
+ARM GAS  /tmp/ccSUS3QN.s 			page 30
 
 
  1203              		.align	2
@@ -1798,7 +1798,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  1250      202B2065 
  1250      6E746572 
  1250      20666F72 
-ARM GAS  /tmp/ccjYDmjC.s 			page 31
+ARM GAS  /tmp/ccSUS3QN.s 			page 31
 
 
  1250      20746865 
@@ -1858,7 +1858,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  1266      25252525 
  1267 002d 25252525 		.ascii	"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\012\015"
  1267      25252525 
-ARM GAS  /tmp/ccjYDmjC.s 			page 32
+ARM GAS  /tmp/ccSUS3QN.s 			page 32
 
 
  1267      25252525 
@@ -1918,7 +1918,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  1278      50555453 
  1278      3A207561 
  1278      72742D55 
-ARM GAS  /tmp/ccjYDmjC.s 			page 33
+ARM GAS  /tmp/ccSUS3QN.s 			page 33
 
 
  1278      53422873 
@@ -1978,7 +1978,7 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  1305      20206F6B 
  1305      0A0D00
  1306              		.section	.rodata.on_emulationmessage,"a"
-ARM GAS  /tmp/ccjYDmjC.s 			page 34
+ARM GAS  /tmp/ccSUS3QN.s 			page 34
 
 
  1307              		.align	2
@@ -2028,80 +2028,80 @@ ARM GAS  /tmp/ccjYDmjC.s 			page 1
  1346              		.file 19 "Core/Inc/wave_emulator.h"
  1347              		.file 20 "Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h"
  1348              		.file 21 "/usr/include/newlib/string.h"
-ARM GAS  /tmp/ccjYDmjC.s 			page 35
+ARM GAS  /tmp/ccSUS3QN.s 			page 35
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 user_interface.c
-     /tmp/ccjYDmjC.s:18     .text.ui_uart_transmit_initial_message:0000000000000000 $t
-     /tmp/ccjYDmjC.s:26     .text.ui_uart_transmit_initial_message:0000000000000000 ui_uart_transmit_initial_message
-     /tmp/ccjYDmjC.s:49     .text.ui_uart_transmit_initial_message:0000000000000010 $d
-     /tmp/ccjYDmjC.s:55     .text.ui_uart_echo_and_breaklinedetect_rx:0000000000000000 $t
-     /tmp/ccjYDmjC.s:62     .text.ui_uart_echo_and_breaklinedetect_rx:0000000000000000 ui_uart_echo_and_breaklinedetect_rx
-     /tmp/ccjYDmjC.s:206    .text.ui_uart_echo_and_breaklinedetect_rx:0000000000000080 $d
-     /tmp/ccjYDmjC.s:215    .text.decode_othercommands:0000000000000000 $t
-     /tmp/ccjYDmjC.s:222    .text.decode_othercommands:0000000000000000 decode_othercommands
-     /tmp/ccjYDmjC.s:387    .text.decode_othercommands:00000000000000a8 $d
-     /tmp/ccjYDmjC.s:401    .text.apply_delete_character_to_buffer:0000000000000000 $t
-     /tmp/ccjYDmjC.s:408    .text.apply_delete_character_to_buffer:0000000000000000 apply_delete_character_to_buffer
-     /tmp/ccjYDmjC.s:547    .text.decode_char_to_hall_signals_order:0000000000000000 $t
-     /tmp/ccjYDmjC.s:554    .text.decode_char_to_hall_signals_order:0000000000000000 decode_char_to_hall_signals_order
-     /tmp/ccjYDmjC.s:572    .text.decode_char_to_hall_signals_order:000000000000000c $d
-     /tmp/ccjYDmjC.s:644    .text.decode_char_to_hall_signals_polarity:0000000000000000 $t
-     /tmp/ccjYDmjC.s:651    .text.decode_char_to_hall_signals_polarity:0000000000000000 decode_char_to_hall_signals_polarity
-     /tmp/ccjYDmjC.s:683    .text.decode_ABCcommands:0000000000000000 $t
-     /tmp/ccjYDmjC.s:690    .text.decode_ABCcommands:0000000000000000 decode_ABCcommands
-     /tmp/ccjYDmjC.s:946    .text.decode_ABCcommands:0000000000000100 $d
-     /tmp/ccjYDmjC.s:956    .text.reset_or_start_uart_DMA_communications:0000000000000000 $t
-     /tmp/ccjYDmjC.s:963    .text.reset_or_start_uart_DMA_communications:0000000000000000 reset_or_start_uart_DMA_communications
-     /tmp/ccjYDmjC.s:994    .text.reset_or_start_uart_DMA_communications:0000000000000020 $d
-     /tmp/ccjYDmjC.s:1000   .text.ui_uart_init:0000000000000000 $t
-     /tmp/ccjYDmjC.s:1007   .text.ui_uart_init:0000000000000000 ui_uart_init
-     /tmp/ccjYDmjC.s:1041   .text.ui_uart_init:0000000000000024 $d
-     /tmp/ccjYDmjC.s:1047   .text.ui_uart_listen:0000000000000000 $t
-     /tmp/ccjYDmjC.s:1054   .text.ui_uart_listen:0000000000000000 ui_uart_listen
-     /tmp/ccjYDmjC.s:1112   .text.ui_uart_listen:0000000000000038 $d
-     /tmp/ccjYDmjC.s:1119   .text.HAL_UART_TxCpltCallback:0000000000000000 $t
-     /tmp/ccjYDmjC.s:1126   .text.HAL_UART_TxCpltCallback:0000000000000000 HAL_UART_TxCpltCallback
-     /tmp/ccjYDmjC.s:1140   .text.HAL_UARTEx_RxEventCallback:0000000000000000 $t
-     /tmp/ccjYDmjC.s:1147   .text.HAL_UARTEx_RxEventCallback:0000000000000000 HAL_UARTEx_RxEventCallback
-     /tmp/ccjYDmjC.s:1169   .text.HAL_UARTEx_RxEventCallback:000000000000000c $d
-     /tmp/ccjYDmjC.s:1225   .data.hall_status_string:0000000000000000 hall_status_string
-     /tmp/ccjYDmjC.s:1200   .bss.echoed_size:0000000000000000 echoed_size
-     /tmp/ccjYDmjC.s:1219   .bss.rx_size:0000000000000000 rx_size
-     /tmp/ccjYDmjC.s:1213   .bss.rx_flag:0000000000000000 rx_flag
-     /tmp/ccjYDmjC.s:1207   .bss.rx_buffer:0000000000000000 rx_buffer
-     /tmp/ccjYDmjC.s:1290   .rodata.notokmessage:0000000000000000 notokmessage
-     /tmp/ccjYDmjC.s:1304   .rodata.okmessage:0000000000000000 okmessage
-     /tmp/ccjYDmjC.s:1325   .rodata.resetmessage:0000000000000000 resetmessage
-     /tmp/ccjYDmjC.s:1318   .rodata.resetcommand:0000000000000000 resetcommand
-     /tmp/ccjYDmjC.s:1297   .rodata.off_emulationmessage:0000000000000000 off_emulationmessage
-     /tmp/ccjYDmjC.s:1311   .rodata.on_emulationmessage:0000000000000000 on_emulationmessage
-     /tmp/ccjYDmjC.s:1232   .rodata.emulationcommand:0000000000000000 emulationcommand
-     /tmp/ccjYDmjC.s:1246   .rodata.helpmessage:0000000000000000 helpmessage
-     /tmp/ccjYDmjC.s:1239   .rodata.helpcommand:0000000000000000 helpcommand
-     /tmp/ccjYDmjC.s:1265   .rodata.initialmessage:0000000000000000 initialmessage
-     /tmp/ccjYDmjC.s:1190   .rodata:0000000000000000 $d
-     /tmp/ccjYDmjC.s:1201   .bss.echoed_size:0000000000000000 $d
-     /tmp/ccjYDmjC.s:1203   .bss.rx_buffer:0000000000000000 $d
-     /tmp/ccjYDmjC.s:1214   .bss.rx_flag:0000000000000000 $d
-     /tmp/ccjYDmjC.s:1220   .bss.rx_size:0000000000000000 $d
-     /tmp/ccjYDmjC.s:1222   .data.hall_status_string:0000000000000000 $d
-     /tmp/ccjYDmjC.s:1228   .rodata.emulationcommand:0000000000000000 $d
-ARM GAS  /tmp/ccjYDmjC.s 			page 36
+     /tmp/ccSUS3QN.s:18     .text.ui_uart_transmit_initial_message:0000000000000000 $t
+     /tmp/ccSUS3QN.s:26     .text.ui_uart_transmit_initial_message:0000000000000000 ui_uart_transmit_initial_message
+     /tmp/ccSUS3QN.s:49     .text.ui_uart_transmit_initial_message:0000000000000010 $d
+     /tmp/ccSUS3QN.s:55     .text.ui_uart_echo_and_breaklinedetect_rx:0000000000000000 $t
+     /tmp/ccSUS3QN.s:62     .text.ui_uart_echo_and_breaklinedetect_rx:0000000000000000 ui_uart_echo_and_breaklinedetect_rx
+     /tmp/ccSUS3QN.s:206    .text.ui_uart_echo_and_breaklinedetect_rx:0000000000000080 $d
+     /tmp/ccSUS3QN.s:215    .text.decode_othercommands:0000000000000000 $t
+     /tmp/ccSUS3QN.s:222    .text.decode_othercommands:0000000000000000 decode_othercommands
+     /tmp/ccSUS3QN.s:387    .text.decode_othercommands:00000000000000a8 $d
+     /tmp/ccSUS3QN.s:401    .text.apply_delete_character_to_buffer:0000000000000000 $t
+     /tmp/ccSUS3QN.s:408    .text.apply_delete_character_to_buffer:0000000000000000 apply_delete_character_to_buffer
+     /tmp/ccSUS3QN.s:547    .text.decode_char_to_hall_signals_order:0000000000000000 $t
+     /tmp/ccSUS3QN.s:554    .text.decode_char_to_hall_signals_order:0000000000000000 decode_char_to_hall_signals_order
+     /tmp/ccSUS3QN.s:572    .text.decode_char_to_hall_signals_order:000000000000000c $d
+     /tmp/ccSUS3QN.s:644    .text.decode_char_to_hall_signals_polarity:0000000000000000 $t
+     /tmp/ccSUS3QN.s:651    .text.decode_char_to_hall_signals_polarity:0000000000000000 decode_char_to_hall_signals_polarity
+     /tmp/ccSUS3QN.s:683    .text.decode_ABCcommands:0000000000000000 $t
+     /tmp/ccSUS3QN.s:690    .text.decode_ABCcommands:0000000000000000 decode_ABCcommands
+     /tmp/ccSUS3QN.s:946    .text.decode_ABCcommands:0000000000000100 $d
+     /tmp/ccSUS3QN.s:956    .text.reset_or_start_uart_DMA_communications:0000000000000000 $t
+     /tmp/ccSUS3QN.s:963    .text.reset_or_start_uart_DMA_communications:0000000000000000 reset_or_start_uart_DMA_communications
+     /tmp/ccSUS3QN.s:994    .text.reset_or_start_uart_DMA_communications:0000000000000020 $d
+     /tmp/ccSUS3QN.s:1000   .text.ui_uart_init:0000000000000000 $t
+     /tmp/ccSUS3QN.s:1007   .text.ui_uart_init:0000000000000000 ui_uart_init
+     /tmp/ccSUS3QN.s:1041   .text.ui_uart_init:0000000000000024 $d
+     /tmp/ccSUS3QN.s:1047   .text.ui_uart_listen:0000000000000000 $t
+     /tmp/ccSUS3QN.s:1054   .text.ui_uart_listen:0000000000000000 ui_uart_listen
+     /tmp/ccSUS3QN.s:1112   .text.ui_uart_listen:0000000000000038 $d
+     /tmp/ccSUS3QN.s:1119   .text.HAL_UART_TxCpltCallback:0000000000000000 $t
+     /tmp/ccSUS3QN.s:1126   .text.HAL_UART_TxCpltCallback:0000000000000000 HAL_UART_TxCpltCallback
+     /tmp/ccSUS3QN.s:1140   .text.HAL_UARTEx_RxEventCallback:0000000000000000 $t
+     /tmp/ccSUS3QN.s:1147   .text.HAL_UARTEx_RxEventCallback:0000000000000000 HAL_UARTEx_RxEventCallback
+     /tmp/ccSUS3QN.s:1169   .text.HAL_UARTEx_RxEventCallback:000000000000000c $d
+     /tmp/ccSUS3QN.s:1225   .data.hall_status_string:0000000000000000 hall_status_string
+     /tmp/ccSUS3QN.s:1200   .bss.echoed_size:0000000000000000 echoed_size
+     /tmp/ccSUS3QN.s:1219   .bss.rx_size:0000000000000000 rx_size
+     /tmp/ccSUS3QN.s:1213   .bss.rx_flag:0000000000000000 rx_flag
+     /tmp/ccSUS3QN.s:1207   .bss.rx_buffer:0000000000000000 rx_buffer
+     /tmp/ccSUS3QN.s:1290   .rodata.notokmessage:0000000000000000 notokmessage
+     /tmp/ccSUS3QN.s:1304   .rodata.okmessage:0000000000000000 okmessage
+     /tmp/ccSUS3QN.s:1325   .rodata.resetmessage:0000000000000000 resetmessage
+     /tmp/ccSUS3QN.s:1318   .rodata.resetcommand:0000000000000000 resetcommand
+     /tmp/ccSUS3QN.s:1297   .rodata.off_emulationmessage:0000000000000000 off_emulationmessage
+     /tmp/ccSUS3QN.s:1311   .rodata.on_emulationmessage:0000000000000000 on_emulationmessage
+     /tmp/ccSUS3QN.s:1232   .rodata.emulationcommand:0000000000000000 emulationcommand
+     /tmp/ccSUS3QN.s:1246   .rodata.helpmessage:0000000000000000 helpmessage
+     /tmp/ccSUS3QN.s:1239   .rodata.helpcommand:0000000000000000 helpcommand
+     /tmp/ccSUS3QN.s:1265   .rodata.initialmessage:0000000000000000 initialmessage
+     /tmp/ccSUS3QN.s:1190   .rodata:0000000000000000 $d
+     /tmp/ccSUS3QN.s:1201   .bss.echoed_size:0000000000000000 $d
+     /tmp/ccSUS3QN.s:1203   .bss.rx_buffer:0000000000000000 $d
+     /tmp/ccSUS3QN.s:1214   .bss.rx_flag:0000000000000000 $d
+     /tmp/ccSUS3QN.s:1220   .bss.rx_size:0000000000000000 $d
+     /tmp/ccSUS3QN.s:1222   .data.hall_status_string:0000000000000000 $d
+     /tmp/ccSUS3QN.s:1228   .rodata.emulationcommand:0000000000000000 $d
+ARM GAS  /tmp/ccSUS3QN.s 			page 36
 
 
-     /tmp/ccjYDmjC.s:1235   .rodata.helpcommand:0000000000000000 $d
-     /tmp/ccjYDmjC.s:1242   .rodata.helpmessage:0000000000000000 $d
-     /tmp/ccjYDmjC.s:1261   .rodata.initialmessage:0000000000000000 $d
-     /tmp/ccjYDmjC.s:1286   .rodata.notokmessage:0000000000000000 $d
-     /tmp/ccjYDmjC.s:1293   .rodata.off_emulationmessage:0000000000000000 $d
-     /tmp/ccjYDmjC.s:1300   .rodata.okmessage:0000000000000000 $d
-     /tmp/ccjYDmjC.s:1307   .rodata.on_emulationmessage:0000000000000000 $d
-     /tmp/ccjYDmjC.s:1314   .rodata.resetcommand:0000000000000000 $d
-     /tmp/ccjYDmjC.s:1321   .rodata.resetmessage:0000000000000000 $d
-     /tmp/ccjYDmjC.s:607    .text.decode_char_to_hall_signals_order:000000000000002f $d
-     /tmp/ccjYDmjC.s:607    .text.decode_char_to_hall_signals_order:0000000000000030 $t
+     /tmp/ccSUS3QN.s:1235   .rodata.helpcommand:0000000000000000 $d
+     /tmp/ccSUS3QN.s:1242   .rodata.helpmessage:0000000000000000 $d
+     /tmp/ccSUS3QN.s:1261   .rodata.initialmessage:0000000000000000 $d
+     /tmp/ccSUS3QN.s:1286   .rodata.notokmessage:0000000000000000 $d
+     /tmp/ccSUS3QN.s:1293   .rodata.off_emulationmessage:0000000000000000 $d
+     /tmp/ccSUS3QN.s:1300   .rodata.okmessage:0000000000000000 $d
+     /tmp/ccSUS3QN.s:1307   .rodata.on_emulationmessage:0000000000000000 $d
+     /tmp/ccSUS3QN.s:1314   .rodata.resetcommand:0000000000000000 $d
+     /tmp/ccSUS3QN.s:1321   .rodata.resetmessage:0000000000000000 $d
+     /tmp/ccSUS3QN.s:607    .text.decode_char_to_hall_signals_order:000000000000002f $d
+     /tmp/ccSUS3QN.s:607    .text.decode_char_to_hall_signals_order:0000000000000030 $t
 
 UNDEFINED SYMBOLS
 HAL_UART_Transmit_DMA

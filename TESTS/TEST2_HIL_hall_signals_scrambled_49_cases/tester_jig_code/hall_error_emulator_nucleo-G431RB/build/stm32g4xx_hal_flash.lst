@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccNHeuQc.s 			page 1
+ARM GAS  /tmp/ccVuigSb.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
   28:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****       (+) Option bytes programming
   29:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****       (+) Prefetch on I-Code
   30:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****       (+) 32 cache lines of 4*64 or 2*128 bits on I-Code
-ARM GAS  /tmp/ccNHeuQc.s 			page 2
+ARM GAS  /tmp/ccVuigSb.s 			page 2
 
 
   31:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****       (+) 8 cache lines of 4*64 or 2*128 bits on D-Code
@@ -118,7 +118,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
   85:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****   */
   86:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c **** 
   87:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c **** /* Includes ------------------------------------------------------------------*/
-ARM GAS  /tmp/ccNHeuQc.s 			page 3
+ARM GAS  /tmp/ccVuigSb.s 			page 3
 
 
   88:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c **** #include "stm32g4xx_hal.h"
@@ -178,7 +178,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  142:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c **** /* Exported functions --------------------------------------------------------*/
  143:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c **** /** @defgroup FLASH_Exported_Functions FLASH Exported Functions
  144:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****   * @{
-ARM GAS  /tmp/ccNHeuQc.s 			page 4
+ARM GAS  /tmp/ccVuigSb.s 			page 4
 
 
  145:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****   */
@@ -238,7 +238,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  199:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****       /* Fast program a 32 row double-word (64-bit) at a specified address */
  200:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****       FLASH_Program_Fast(Address, (uint32_t)Data);
  201:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c **** 
-ARM GAS  /tmp/ccNHeuQc.s 			page 5
+ARM GAS  /tmp/ccVuigSb.s 			page 5
 
 
  202:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****       /* If it is the last row, the bit will be cleared at the end of the operation */
@@ -298,7 +298,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  256:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c **** 
  257:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****   if (status != HAL_OK)
  258:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****   {
-ARM GAS  /tmp/ccNHeuQc.s 			page 6
+ARM GAS  /tmp/ccVuigSb.s 			page 6
 
 
  259:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****     /* Process Unlocked */
@@ -358,7 +358,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  313:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****   /* Disable the FSTPG Bit only if it is the last row programmed */
  314:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****   if (pFlash.ProcedureOnGoing == FLASH_PROC_PROGRAM_LAST)
  315:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****   {
-ARM GAS  /tmp/ccNHeuQc.s 			page 7
+ARM GAS  /tmp/ccVuigSb.s 			page 7
 
 
  316:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****     CLEAR_BIT(FLASH->CR, FLASH_CR_FSTPG);
@@ -418,7 +418,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  370:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****       {
  371:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****         /* Indicate user which page has been erased*/
  372:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****         HAL_FLASH_EndOfOperationCallback(pFlash.Page);
-ARM GAS  /tmp/ccNHeuQc.s 			page 8
+ARM GAS  /tmp/ccVuigSb.s 			page 8
 
 
  373:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c **** 
@@ -478,7 +478,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  427:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****     /* Process Unlocked */
  428:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****     __HAL_UNLOCK(&pFlash);
  429:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****   }
-ARM GAS  /tmp/ccNHeuQc.s 			page 9
+ARM GAS  /tmp/ccVuigSb.s 			page 9
 
 
  430:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c **** }
@@ -538,7 +538,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  484:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c **** @endverbatim
  485:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****   * @{
  486:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****   */
-ARM GAS  /tmp/ccNHeuQc.s 			page 10
+ARM GAS  /tmp/ccVuigSb.s 			page 10
 
 
  487:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c **** 
@@ -598,7 +598,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  541:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****   {
  542:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****     /* Authorizes the Option Byte register programming */
  543:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****     WRITE_REG(FLASH->OPTKEYR, FLASH_OPTKEY1);
-ARM GAS  /tmp/ccNHeuQc.s 			page 11
+ARM GAS  /tmp/ccVuigSb.s 			page 11
 
 
  544:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****     WRITE_REG(FLASH->OPTKEYR, FLASH_OPTKEY2);
@@ -658,7 +658,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  598:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****                 ##### Peripheral Errors functions #####
  599:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****  ===============================================================================
  600:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****     [..]
-ARM GAS  /tmp/ccNHeuQc.s 			page 12
+ARM GAS  /tmp/ccVuigSb.s 			page 12
 
 
  601:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****     This subsection permits to get in run-time Errors of the FLASH peripheral.
@@ -718,7 +718,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  655:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****      Even if the FLASH operation fails, the BUSY flag will be reset and an error
  656:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****      flag will be set */
  657:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c **** 
-ARM GAS  /tmp/ccNHeuQc.s 			page 13
+ARM GAS  /tmp/ccVuigSb.s 			page 13
 
 
  658:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****   uint32_t tickstart = HAL_GetTick();
@@ -778,7 +778,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  702:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****   assert_param(IS_FLASH_PROGRAM_ADDRESS(Address));
   39              		.loc 1 702 3 is_stmt 1 view .LVU2
  703:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c **** 
-ARM GAS  /tmp/ccNHeuQc.s 			page 14
+ARM GAS  /tmp/ccVuigSb.s 			page 14
 
 
  704:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****   /* Set PG bit */
@@ -838,7 +838,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
   34:Drivers/CMSIS/Include/cmsis_gcc.h **** /* Fallback for __has_builtin */
   35:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef __has_builtin
   36:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __has_builtin(x) (0)
-ARM GAS  /tmp/ccNHeuQc.s 			page 15
+ARM GAS  /tmp/ccVuigSb.s 			page 15
 
 
   37:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
@@ -898,7 +898,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
   91:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
   92:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT16_READ(addr)          (((const struct T_UINT16_READ *)(const void *)(add
   93:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
-ARM GAS  /tmp/ccNHeuQc.s 			page 16
+ARM GAS  /tmp/ccVuigSb.s 			page 16
 
 
   94:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT32_WRITE
@@ -958,7 +958,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  148:Drivers/CMSIS/Include/cmsis_gcc.h ****   extern const __zero_table_t __zero_table_start__;
  149:Drivers/CMSIS/Include/cmsis_gcc.h ****   extern const __zero_table_t __zero_table_end__;
  150:Drivers/CMSIS/Include/cmsis_gcc.h **** 
-ARM GAS  /tmp/ccNHeuQc.s 			page 17
+ARM GAS  /tmp/ccVuigSb.s 			page 17
 
 
  151:Drivers/CMSIS/Include/cmsis_gcc.h ****   for (__copy_table_t const* pTable = &__copy_table_start__; pTable < &__copy_table_end__; ++pTable
@@ -1018,7 +1018,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  205:Drivers/CMSIS/Include/cmsis_gcc.h ****            Can only be executed in Privileged modes.
  206:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
  207:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE void __disable_irq(void)
-ARM GAS  /tmp/ccNHeuQc.s 			page 18
+ARM GAS  /tmp/ccVuigSb.s 			page 18
 
 
  208:Drivers/CMSIS/Include/cmsis_gcc.h **** {
@@ -1078,7 +1078,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  262:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MSR control_ns, %0" : : "r" (control) : "memory");
  263:Drivers/CMSIS/Include/cmsis_gcc.h **** }
  264:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
-ARM GAS  /tmp/ccNHeuQc.s 			page 19
+ARM GAS  /tmp/ccVuigSb.s 			page 19
 
 
  265:Drivers/CMSIS/Include/cmsis_gcc.h **** 
@@ -1138,7 +1138,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  319:Drivers/CMSIS/Include/cmsis_gcc.h ****   return(result);
  320:Drivers/CMSIS/Include/cmsis_gcc.h **** }
  321:Drivers/CMSIS/Include/cmsis_gcc.h **** 
-ARM GAS  /tmp/ccNHeuQc.s 			page 20
+ARM GAS  /tmp/ccVuigSb.s 			page 20
 
 
  322:Drivers/CMSIS/Include/cmsis_gcc.h **** 
@@ -1198,7 +1198,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  376:Drivers/CMSIS/Include/cmsis_gcc.h **** 
  377:Drivers/CMSIS/Include/cmsis_gcc.h **** #if (defined (__ARM_FEATURE_CMSE ) && (__ARM_FEATURE_CMSE == 3))
  378:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
-ARM GAS  /tmp/ccNHeuQc.s 			page 21
+ARM GAS  /tmp/ccVuigSb.s 			page 21
 
 
  379:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Get Main Stack Pointer (non-secure)
@@ -1258,7 +1258,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  433:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Set Stack Pointer (non-secure)
  434:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Assigns the given value to the non-secure Stack Pointer (SP) when in secure state.
  435:Drivers/CMSIS/Include/cmsis_gcc.h ****   \param [in]    topOfStack  Stack Pointer value to set
-ARM GAS  /tmp/ccNHeuQc.s 			page 22
+ARM GAS  /tmp/ccVuigSb.s 			page 22
 
 
  436:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
@@ -1318,7 +1318,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  490:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
  491:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE void __TZ_set_PRIMASK_NS(uint32_t priMask)
  492:Drivers/CMSIS/Include/cmsis_gcc.h **** {
-ARM GAS  /tmp/ccNHeuQc.s 			page 23
+ARM GAS  /tmp/ccVuigSb.s 			page 23
 
 
  493:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MSR primask_ns, %0" : : "r" (priMask) : "memory");
@@ -1378,7 +1378,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  547:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MRS %0, basepri_ns" : "=r" (result) );
  548:Drivers/CMSIS/Include/cmsis_gcc.h ****   return(result);
  549:Drivers/CMSIS/Include/cmsis_gcc.h **** }
-ARM GAS  /tmp/ccNHeuQc.s 			page 24
+ARM GAS  /tmp/ccVuigSb.s 			page 24
 
 
  550:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
@@ -1438,7 +1438,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  604:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
  605:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Get Fault Mask (non-secure)
  606:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Returns the current value of the non-secure Fault Mask register when in secure state.
-ARM GAS  /tmp/ccNHeuQc.s 			page 25
+ARM GAS  /tmp/ccVuigSb.s 			page 25
 
 
  607:Drivers/CMSIS/Include/cmsis_gcc.h ****   \return               Fault Mask register value
@@ -1498,7 +1498,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  661:Drivers/CMSIS/Include/cmsis_gcc.h **** #if (!(defined (__ARM_ARCH_8M_MAIN__ ) && (__ARM_ARCH_8M_MAIN__ == 1)) && \
  662:Drivers/CMSIS/Include/cmsis_gcc.h ****     (!defined (__ARM_FEATURE_CMSE) || (__ARM_FEATURE_CMSE < 3)))
  663:Drivers/CMSIS/Include/cmsis_gcc.h ****     // without main extensions, the non-secure PSPLIM is RAZ/WI
-ARM GAS  /tmp/ccNHeuQc.s 			page 26
+ARM GAS  /tmp/ccVuigSb.s 			page 26
 
 
  664:Drivers/CMSIS/Include/cmsis_gcc.h ****   return 0U;
@@ -1558,7 +1558,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  718:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Set Process Stack Pointer (non-secure)
  719:Drivers/CMSIS/Include/cmsis_gcc.h ****   Devices without ARMv8-M Main Extensions (i.e. Cortex-M23) lack the non-secure
  720:Drivers/CMSIS/Include/cmsis_gcc.h ****   Stack Pointer Limit register hence the write is silently ignored.
-ARM GAS  /tmp/ccNHeuQc.s 			page 27
+ARM GAS  /tmp/ccVuigSb.s 			page 27
 
 
  721:Drivers/CMSIS/Include/cmsis_gcc.h **** 
@@ -1618,7 +1618,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  775:Drivers/CMSIS/Include/cmsis_gcc.h ****   uint32_t result;
  776:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MRS %0, msplim_ns" : "=r" (result) );
  777:Drivers/CMSIS/Include/cmsis_gcc.h ****   return result;
-ARM GAS  /tmp/ccNHeuQc.s 			page 28
+ARM GAS  /tmp/ccVuigSb.s 			page 28
 
 
  778:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
@@ -1678,7 +1678,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  832:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
  833:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE uint32_t __get_FPSCR(void)
  834:Drivers/CMSIS/Include/cmsis_gcc.h **** {
-ARM GAS  /tmp/ccNHeuQc.s 			page 29
+ARM GAS  /tmp/ccVuigSb.s 			page 29
 
 
  835:Drivers/CMSIS/Include/cmsis_gcc.h **** #if ((defined (__FPU_PRESENT) && (__FPU_PRESENT == 1U)) && \
@@ -1738,7 +1738,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  889:Drivers/CMSIS/Include/cmsis_gcc.h **** #if defined (__thumb__) && !defined (__thumb2__)
  890:Drivers/CMSIS/Include/cmsis_gcc.h **** #define __CMSIS_GCC_OUT_REG(r) "=l" (r)
  891:Drivers/CMSIS/Include/cmsis_gcc.h **** #define __CMSIS_GCC_RW_REG(r) "+l" (r)
-ARM GAS  /tmp/ccNHeuQc.s 			page 30
+ARM GAS  /tmp/ccVuigSb.s 			page 30
 
 
  892:Drivers/CMSIS/Include/cmsis_gcc.h **** #define __CMSIS_GCC_USE_REG(r) "l" (r)
@@ -1798,7 +1798,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
   62              	.LBE10:
  713:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c **** 
  714:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****   /* Program second word */
-ARM GAS  /tmp/ccNHeuQc.s 			page 31
+ARM GAS  /tmp/ccVuigSb.s 			page 31
 
 
  715:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****   *(uint32_t *)(Address + 4U) = (uint32_t)(Data >> 32U);
@@ -1858,7 +1858,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  730:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c **** 
  731:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****   /* Check the parameters */
  732:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****   assert_param(IS_FLASH_MAIN_MEM_ADDRESS(Address));
-ARM GAS  /tmp/ccNHeuQc.s 			page 32
+ARM GAS  /tmp/ccVuigSb.s 			page 32
 
 
  104              		.loc 1 732 3 view .LVU18
@@ -1918,7 +1918,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  143 0012 4023     		movs	r3, #64
  144              	.LVL4:
  145              	.L6:
-ARM GAS  /tmp/ccNHeuQc.s 			page 33
+ARM GAS  /tmp/ccVuigSb.s 			page 33
 
 
  740:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c **** 
@@ -1978,7 +1978,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  183 0028 5DF8044B 		ldr	r4, [sp], #4
  184              	.LCFI3:
  185              		.cfi_restore 4
-ARM GAS  /tmp/ccNHeuQc.s 			page 34
+ARM GAS  /tmp/ccVuigSb.s 			page 34
 
 
  186              		.cfi_def_cfa_offset 0
@@ -2038,7 +2038,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  238              		.cfi_endproc
  239              	.LFE136:
  241              		.section	.text.HAL_FLASH_IRQHandler,"ax",%progbits
-ARM GAS  /tmp/ccNHeuQc.s 			page 35
+ARM GAS  /tmp/ccVuigSb.s 			page 35
 
 
  242              		.align	1
@@ -2098,7 +2098,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  285              		.loc 1 322 3 is_stmt 1 view .LVU63
  322:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****   {
  286              		.loc 1 322 6 is_stmt 0 view .LVU64
-ARM GAS  /tmp/ccNHeuQc.s 			page 36
+ARM GAS  /tmp/ccVuigSb.s 			page 36
 
 
  287 0022 1340     		ands	r3, r3, r2
@@ -2158,7 +2158,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  369:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****       {
  325              		.loc 1 369 10 view .LVU81
  326 004a 002B     		cmp	r3, #0
-ARM GAS  /tmp/ccNHeuQc.s 			page 37
+ARM GAS  /tmp/ccVuigSb.s 			page 37
 
 
  327 004c 34D0     		beq	.L20
@@ -2218,7 +2218,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  366              		.loc 1 328 5 view .LVU96
  367 0078 274A     		ldr	r2, .L32
  368 007a 1361     		str	r3, [r2, #16]
-ARM GAS  /tmp/ccNHeuQc.s 			page 38
+ARM GAS  /tmp/ccVuigSb.s 			page 38
 
 
  331:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c **** 
@@ -2278,7 +2278,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  408 009e FFF7FEFF 		bl	HAL_FLASH_OperationErrorCallback
  409              	.LVL27:
  337:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****     }
-ARM GAS  /tmp/ccNHeuQc.s 			page 39
+ARM GAS  /tmp/ccVuigSb.s 			page 39
 
 
  410              		.loc 1 337 7 is_stmt 0 view .LVU112
@@ -2338,7 +2338,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  452 00d0 FFF7FEFF 		bl	FLASH_FlushCaches
  453              	.LVL35:
  398:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****       if (procedure == FLASH_PROC_MASS_ERASE)
-ARM GAS  /tmp/ccNHeuQc.s 			page 40
+ARM GAS  /tmp/ccVuigSb.s 			page 40
 
 
  454              		.loc 1 398 7 view .LVU125
@@ -2398,7 +2398,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  425:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c **** 
  492              		.loc 1 425 5 discriminator 4 view .LVU142
  493 00f2 094A     		ldr	r2, .L32
-ARM GAS  /tmp/ccNHeuQc.s 			page 41
+ARM GAS  /tmp/ccVuigSb.s 			page 41
 
 
  494 00f4 5369     		ldr	r3, [r2, #20]
@@ -2458,7 +2458,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  542              	.LFB137:
  493:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****   HAL_StatusTypeDef status = HAL_OK;
  543              		.loc 1 493 1 is_stmt 1 view -0
-ARM GAS  /tmp/ccNHeuQc.s 			page 42
+ARM GAS  /tmp/ccVuigSb.s 			page 42
 
 
  544              		.cfi_startproc
@@ -2518,7 +2518,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  584              	.L40:
  585 0026 00BF     		.align	2
  586              	.L39:
-ARM GAS  /tmp/ccNHeuQc.s 			page 43
+ARM GAS  /tmp/ccVuigSb.s 			page 43
 
 
  587 0028 00200240 		.word	1073881088
@@ -2578,7 +2578,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  633 0018 00200240 		.word	1073881088
  634              		.cfi_endproc
  635              	.LFE138:
-ARM GAS  /tmp/ccNHeuQc.s 			page 44
+ARM GAS  /tmp/ccVuigSb.s 			page 44
 
 
  637              		.section	.text.HAL_FLASH_OB_Unlock,"ax",%progbits
@@ -2638,7 +2638,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  549:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****     }
  681              		.loc 1 549 14 view .LVU187
  682 0026 0120     		movs	r0, #1
-ARM GAS  /tmp/ccNHeuQc.s 			page 45
+ARM GAS  /tmp/ccVuigSb.s 			page 45
 
 
  683              	.LVL50:
@@ -2698,7 +2698,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  729              	.LVL52:
  573:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c **** }
  730              		.loc 1 573 3 is_stmt 1 view .LVU198
-ARM GAS  /tmp/ccNHeuQc.s 			page 46
+ARM GAS  /tmp/ccVuigSb.s 			page 46
 
 
  574:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c **** 
@@ -2758,7 +2758,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  653:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****   /* Wait for the FLASH operation to complete by polling on BUSY flag to be reset.
  783              		.loc 1 653 1 is_stmt 0 view .LVU205
  784 0000 38B5     		push	{r3, r4, r5, lr}
-ARM GAS  /tmp/ccNHeuQc.s 			page 47
+ARM GAS  /tmp/ccVuigSb.s 			page 47
 
 
  785              	.LCFI5:
@@ -2818,7 +2818,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  670:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****   if (error != 0u)
  825              		.loc 1 670 17 is_stmt 0 view .LVU220
  826 0022 0D4B     		ldr	r3, .L70
-ARM GAS  /tmp/ccNHeuQc.s 			page 48
+ARM GAS  /tmp/ccVuigSb.s 			page 48
 
 
  827 0024 1B69     		ldr	r3, [r3, #16]
@@ -2878,7 +2878,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  677:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c **** 
  865              		.loc 1 677 5 view .LVU237
  677:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c **** 
-ARM GAS  /tmp/ccNHeuQc.s 			page 49
+ARM GAS  /tmp/ccVuigSb.s 			page 49
 
 
  866              		.loc 1 677 5 view .LVU238
@@ -2938,7 +2938,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  914              	.LVL64:
  179:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c **** 
  915              		.loc 1 179 3 view .LVU247
-ARM GAS  /tmp/ccNHeuQc.s 			page 50
+ARM GAS  /tmp/ccVuigSb.s 			page 50
 
 
  182:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c **** 
@@ -2998,7 +2998,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  954              		.loc 1 197 13 view .LVU263
  955 0030 012B     		cmp	r3, #1
  956 0032 18D9     		bls	.L82
-ARM GAS  /tmp/ccNHeuQc.s 			page 51
+ARM GAS  /tmp/ccVuigSb.s 			page 51
 
 
  176:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c **** 
@@ -3058,7 +3058,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  998              	.LVL75:
  194:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c ****       prog_bit = FLASH_CR_PG;
  999              		.loc 1 194 7 is_stmt 0 view .LVU277
-ARM GAS  /tmp/ccNHeuQc.s 			page 52
+ARM GAS  /tmp/ccVuigSb.s 			page 52
 
 
  1000 005e FFF7FEFF 		bl	FLASH_Program_DoubleWord
@@ -3118,7 +3118,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  1042 0084 00200240 		.word	1073881088
  1043              		.cfi_endproc
  1044              	.LFE132:
-ARM GAS  /tmp/ccNHeuQc.s 			page 53
+ARM GAS  /tmp/ccVuigSb.s 			page 53
 
 
  1046              		.section	.text.HAL_FLASH_Program_IT,"ax",%progbits
@@ -3178,7 +3178,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  1091 001a 0023     		movs	r3, #0
  1092 001c 4360     		str	r3, [r0, #4]
  255:Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c **** 
-ARM GAS  /tmp/ccNHeuQc.s 			page 54
+ARM GAS  /tmp/ccVuigSb.s 			page 54
 
 
  1093              		.loc 1 255 3 is_stmt 1 discriminator 2 view .LVU300
@@ -3238,7 +3238,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  1131              		.loc 1 276 5 view .LVU316
  1132 0044 0D4A     		ldr	r2, .L95+4
  1133 0046 5369     		ldr	r3, [r2, #20]
-ARM GAS  /tmp/ccNHeuQc.s 			page 55
+ARM GAS  /tmp/ccVuigSb.s 			page 55
 
 
  1134 0048 43F04073 		orr	r3, r3, #50331648
@@ -3298,7 +3298,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  1176 0076 DBE7     		b	.L86
  1177              	.L96:
  1178              		.align	2
-ARM GAS  /tmp/ccNHeuQc.s 			page 56
+ARM GAS  /tmp/ccVuigSb.s 			page 56
 
 
  1179              	.L95:
@@ -3358,7 +3358,7 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  1233 0008 00       		.byte	0
  1234 0009 000000   		.space	3
  1235 000c 00000000 		.word	0
-ARM GAS  /tmp/ccNHeuQc.s 			page 57
+ARM GAS  /tmp/ccVuigSb.s 			page 57
 
 
  1236 0010 01000000 		.word	1
@@ -3377,53 +3377,53 @@ ARM GAS  /tmp/ccNHeuQc.s 			page 1
  1249              		.file 9 "Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h"
  1250              		.file 10 "Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h"
  1251              		.file 11 "Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_flash_ex.h"
-ARM GAS  /tmp/ccNHeuQc.s 			page 58
+ARM GAS  /tmp/ccVuigSb.s 			page 58
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 stm32g4xx_hal_flash.c
-     /tmp/ccNHeuQc.s:18     .text.FLASH_Program_DoubleWord:0000000000000000 $t
-     /tmp/ccNHeuQc.s:25     .text.FLASH_Program_DoubleWord:0000000000000000 FLASH_Program_DoubleWord
-     /tmp/ccNHeuQc.s:75     .text.FLASH_Program_DoubleWord:000000000000001c $d
-     /tmp/ccNHeuQc.s:80     .text.FLASH_Program_Fast:0000000000000000 $t
-     /tmp/ccNHeuQc.s:86     .text.FLASH_Program_Fast:0000000000000000 FLASH_Program_Fast
-     /tmp/ccNHeuQc.s:193    .text.FLASH_Program_Fast:0000000000000030 $d
-     /tmp/ccNHeuQc.s:198    .text.HAL_FLASH_EndOfOperationCallback:0000000000000000 $t
-     /tmp/ccNHeuQc.s:205    .text.HAL_FLASH_EndOfOperationCallback:0000000000000000 HAL_FLASH_EndOfOperationCallback
-     /tmp/ccNHeuQc.s:220    .text.HAL_FLASH_OperationErrorCallback:0000000000000000 $t
-     /tmp/ccNHeuQc.s:227    .text.HAL_FLASH_OperationErrorCallback:0000000000000000 HAL_FLASH_OperationErrorCallback
-     /tmp/ccNHeuQc.s:242    .text.HAL_FLASH_IRQHandler:0000000000000000 $t
-     /tmp/ccNHeuQc.s:249    .text.HAL_FLASH_IRQHandler:0000000000000000 HAL_FLASH_IRQHandler
-     /tmp/ccNHeuQc.s:528    .text.HAL_FLASH_IRQHandler:0000000000000118 $d
-     /tmp/ccNHeuQc.s:534    .text.HAL_FLASH_Unlock:0000000000000000 $t
-     /tmp/ccNHeuQc.s:541    .text.HAL_FLASH_Unlock:0000000000000000 HAL_FLASH_Unlock
-     /tmp/ccNHeuQc.s:587    .text.HAL_FLASH_Unlock:0000000000000028 $d
-     /tmp/ccNHeuQc.s:593    .text.HAL_FLASH_Lock:0000000000000000 $t
-     /tmp/ccNHeuQc.s:600    .text.HAL_FLASH_Lock:0000000000000000 HAL_FLASH_Lock
-     /tmp/ccNHeuQc.s:633    .text.HAL_FLASH_Lock:0000000000000018 $d
-     /tmp/ccNHeuQc.s:638    .text.HAL_FLASH_OB_Unlock:0000000000000000 $t
-     /tmp/ccNHeuQc.s:645    .text.HAL_FLASH_OB_Unlock:0000000000000000 HAL_FLASH_OB_Unlock
-     /tmp/ccNHeuQc.s:690    .text.HAL_FLASH_OB_Unlock:000000000000002c $d
-     /tmp/ccNHeuQc.s:696    .text.HAL_FLASH_OB_Lock:0000000000000000 $t
-     /tmp/ccNHeuQc.s:703    .text.HAL_FLASH_OB_Lock:0000000000000000 HAL_FLASH_OB_Lock
-     /tmp/ccNHeuQc.s:736    .text.HAL_FLASH_OB_Lock:000000000000001c $d
-     /tmp/ccNHeuQc.s:741    .text.HAL_FLASH_GetError:0000000000000000 $t
-     /tmp/ccNHeuQc.s:748    .text.HAL_FLASH_GetError:0000000000000000 HAL_FLASH_GetError
-     /tmp/ccNHeuQc.s:764    .text.HAL_FLASH_GetError:0000000000000008 $d
-     /tmp/ccNHeuQc.s:769    .text.FLASH_WaitForLastOperation:0000000000000000 $t
-     /tmp/ccNHeuQc.s:776    .text.FLASH_WaitForLastOperation:0000000000000000 FLASH_WaitForLastOperation
-     /tmp/ccNHeuQc.s:882    .text.FLASH_WaitForLastOperation:0000000000000058 $d
-     /tmp/ccNHeuQc.s:888    .text.HAL_FLASH_Program:0000000000000000 $t
-     /tmp/ccNHeuQc.s:895    .text.HAL_FLASH_Program:0000000000000000 HAL_FLASH_Program
-     /tmp/ccNHeuQc.s:1041   .text.HAL_FLASH_Program:0000000000000080 $d
-     /tmp/ccNHeuQc.s:1047   .text.HAL_FLASH_Program_IT:0000000000000000 $t
-     /tmp/ccNHeuQc.s:1054   .text.HAL_FLASH_Program_IT:0000000000000000 HAL_FLASH_Program_IT
-     /tmp/ccNHeuQc.s:1180   .text.HAL_FLASH_Program_IT:0000000000000078 $d
-     /tmp/ccNHeuQc.s:1186   .text.HAL_FLASH_OB_Launch:0000000000000000 $t
-     /tmp/ccNHeuQc.s:1193   .text.HAL_FLASH_OB_Launch:0000000000000000 HAL_FLASH_OB_Launch
-     /tmp/ccNHeuQc.s:1219   .text.HAL_FLASH_OB_Launch:0000000000000018 $d
-     /tmp/ccNHeuQc.s:1229   .data.pFlash:0000000000000000 pFlash
-     /tmp/ccNHeuQc.s:1225   .data.pFlash:0000000000000000 $d
+     /tmp/ccVuigSb.s:18     .text.FLASH_Program_DoubleWord:0000000000000000 $t
+     /tmp/ccVuigSb.s:25     .text.FLASH_Program_DoubleWord:0000000000000000 FLASH_Program_DoubleWord
+     /tmp/ccVuigSb.s:75     .text.FLASH_Program_DoubleWord:000000000000001c $d
+     /tmp/ccVuigSb.s:80     .text.FLASH_Program_Fast:0000000000000000 $t
+     /tmp/ccVuigSb.s:86     .text.FLASH_Program_Fast:0000000000000000 FLASH_Program_Fast
+     /tmp/ccVuigSb.s:193    .text.FLASH_Program_Fast:0000000000000030 $d
+     /tmp/ccVuigSb.s:198    .text.HAL_FLASH_EndOfOperationCallback:0000000000000000 $t
+     /tmp/ccVuigSb.s:205    .text.HAL_FLASH_EndOfOperationCallback:0000000000000000 HAL_FLASH_EndOfOperationCallback
+     /tmp/ccVuigSb.s:220    .text.HAL_FLASH_OperationErrorCallback:0000000000000000 $t
+     /tmp/ccVuigSb.s:227    .text.HAL_FLASH_OperationErrorCallback:0000000000000000 HAL_FLASH_OperationErrorCallback
+     /tmp/ccVuigSb.s:242    .text.HAL_FLASH_IRQHandler:0000000000000000 $t
+     /tmp/ccVuigSb.s:249    .text.HAL_FLASH_IRQHandler:0000000000000000 HAL_FLASH_IRQHandler
+     /tmp/ccVuigSb.s:528    .text.HAL_FLASH_IRQHandler:0000000000000118 $d
+     /tmp/ccVuigSb.s:534    .text.HAL_FLASH_Unlock:0000000000000000 $t
+     /tmp/ccVuigSb.s:541    .text.HAL_FLASH_Unlock:0000000000000000 HAL_FLASH_Unlock
+     /tmp/ccVuigSb.s:587    .text.HAL_FLASH_Unlock:0000000000000028 $d
+     /tmp/ccVuigSb.s:593    .text.HAL_FLASH_Lock:0000000000000000 $t
+     /tmp/ccVuigSb.s:600    .text.HAL_FLASH_Lock:0000000000000000 HAL_FLASH_Lock
+     /tmp/ccVuigSb.s:633    .text.HAL_FLASH_Lock:0000000000000018 $d
+     /tmp/ccVuigSb.s:638    .text.HAL_FLASH_OB_Unlock:0000000000000000 $t
+     /tmp/ccVuigSb.s:645    .text.HAL_FLASH_OB_Unlock:0000000000000000 HAL_FLASH_OB_Unlock
+     /tmp/ccVuigSb.s:690    .text.HAL_FLASH_OB_Unlock:000000000000002c $d
+     /tmp/ccVuigSb.s:696    .text.HAL_FLASH_OB_Lock:0000000000000000 $t
+     /tmp/ccVuigSb.s:703    .text.HAL_FLASH_OB_Lock:0000000000000000 HAL_FLASH_OB_Lock
+     /tmp/ccVuigSb.s:736    .text.HAL_FLASH_OB_Lock:000000000000001c $d
+     /tmp/ccVuigSb.s:741    .text.HAL_FLASH_GetError:0000000000000000 $t
+     /tmp/ccVuigSb.s:748    .text.HAL_FLASH_GetError:0000000000000000 HAL_FLASH_GetError
+     /tmp/ccVuigSb.s:764    .text.HAL_FLASH_GetError:0000000000000008 $d
+     /tmp/ccVuigSb.s:769    .text.FLASH_WaitForLastOperation:0000000000000000 $t
+     /tmp/ccVuigSb.s:776    .text.FLASH_WaitForLastOperation:0000000000000000 FLASH_WaitForLastOperation
+     /tmp/ccVuigSb.s:882    .text.FLASH_WaitForLastOperation:0000000000000058 $d
+     /tmp/ccVuigSb.s:888    .text.HAL_FLASH_Program:0000000000000000 $t
+     /tmp/ccVuigSb.s:895    .text.HAL_FLASH_Program:0000000000000000 HAL_FLASH_Program
+     /tmp/ccVuigSb.s:1041   .text.HAL_FLASH_Program:0000000000000080 $d
+     /tmp/ccVuigSb.s:1047   .text.HAL_FLASH_Program_IT:0000000000000000 $t
+     /tmp/ccVuigSb.s:1054   .text.HAL_FLASH_Program_IT:0000000000000000 HAL_FLASH_Program_IT
+     /tmp/ccVuigSb.s:1180   .text.HAL_FLASH_Program_IT:0000000000000078 $d
+     /tmp/ccVuigSb.s:1186   .text.HAL_FLASH_OB_Launch:0000000000000000 $t
+     /tmp/ccVuigSb.s:1193   .text.HAL_FLASH_OB_Launch:0000000000000000 HAL_FLASH_OB_Launch
+     /tmp/ccVuigSb.s:1219   .text.HAL_FLASH_OB_Launch:0000000000000018 $d
+     /tmp/ccVuigSb.s:1229   .data.pFlash:0000000000000000 pFlash
+     /tmp/ccVuigSb.s:1225   .data.pFlash:0000000000000000 $d
 
 UNDEFINED SYMBOLS
 FLASH_PageErase
