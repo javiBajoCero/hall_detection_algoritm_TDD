@@ -201,6 +201,7 @@ void Hall_Identification_Test_measurement(
 			ticks++;
 			break;
 		case detection_ERROR_OR_TIMEOUT:
+			error_handler();
 			detection_state=detection_DISABLED;
 		case detection_DISABLED://do nothing
 		default:
