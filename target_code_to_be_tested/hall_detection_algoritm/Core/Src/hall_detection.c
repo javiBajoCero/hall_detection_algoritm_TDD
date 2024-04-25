@@ -123,27 +123,27 @@ uint32_t Hall_is_detection_finished(){
   |
   v
 +-------------------------+
-|                         | ---+
-| WAIT_CURRENT_STATIONARY |    | still not stationary
 |                         | <--+
+| WAIT_CURRENT_STATIONARY |    | still not stationary
+|                         | ---+
 +-------------------------+
   |
   |	the openloop stabilished
   v
 +-------------------------+
-|       ADQUISITION       | <+
-+-------------------------+  |
-  |                          |
-  | zerocrossings detected   |
-  v                          |
-+-------------------------+  | still not 3 matching X!X!X! type results
-|     INTERPRETATION      |  |
-+-------------------------+  |
-  |                          |
-  | X!X!X! type result       |
-  v                          |
-+-------------------------+  |
-|       VALIDATION        | -+
+|       ADQUISITION       | <--+
++-------------------------+    |
+  |                            |
+  | zerocrossings detected     |
+  v                            |
++-------------------------+    | still not 3 matching X!X!X! type results
+|     INTERPRETATION      |    |
++-------------------------+    |
+  |                            |
+  | X!X!X! type result         |
+  v                            |
++-------------------------+    |
+|       VALIDATION        | ---+
 +-------------------------+
   |
   |	3 matching results, we are confident now
@@ -209,75 +209,6 @@ void Hall_Identification_Test_measurement(
 	}
 }
 
-/**
-* \brief just resets to 0 the huge structure used by the detection
-* \param hall_detection_general_struct *gen, pointer to the huge structure.
-*/
-void resetVariables_adquisition(hall_detection_general_struct *gen){
-	//wow this was taking too long it was throwing execution errors
-	//*gen=empty_general;		//i dont want to use memset, so we sacrifice flash memory space filled with 0's for this.
-	gen->currA=empty_general.currA;
-	gen->currB=empty_general.currB;
-	gen->currC=empty_general.currC;
-	gen->hallA=empty_general.hallA;
-	gen->hallB=empty_general.hallB;
-	gen->hallC=empty_general.hallC;
-
-	gen->differences_phaseA[0]=empty_general.differences_phaseA[0];
-	gen->differences_phaseA[1]=empty_general.differences_phaseA[1];
-	gen->differences_phaseA[2]=empty_general.differences_phaseA[2];
-
-	gen->differences_phaseB[0]=empty_general.differences_phaseB[0];
-	gen->differences_phaseB[1]=empty_general.differences_phaseB[1];
-	gen->differences_phaseB[2]=empty_general.differences_phaseB[2];
-
-	gen->differences_phaseC[0]=empty_general.differences_phaseC[0];
-	gen->differences_phaseC[1]=empty_general.differences_phaseC[1];
-	gen->differences_phaseC[2]=empty_general.differences_phaseC[2];
-}
-
-/**
-* \brief just resets to 0 the huge structure used by the detection
-* \param hall_detection_general_struct *gen, pointer to the huge structure.
-*/
-void resetVariables_diferences(hall_detection_general_struct *gen){
-	gen->differences_phaseA[0]=empty_general.differences_phaseA[0];
-	gen->differences_phaseA[1]=empty_general.differences_phaseA[1];
-	gen->differences_phaseA[2]=empty_general.differences_phaseA[2];
-
-	gen->differences_phaseB[0]=empty_general.differences_phaseB[0];
-	gen->differences_phaseB[1]=empty_general.differences_phaseB[1];
-	gen->differences_phaseB[2]=empty_general.differences_phaseB[2];
-
-	gen->differences_phaseC[0]=empty_general.differences_phaseC[0];
-	gen->differences_phaseC[1]=empty_general.differences_phaseC[1];
-	gen->differences_phaseC[2]=empty_general.differences_phaseC[2];
-}
-
-/**
-* \brief just resets to 0 the huge structure used by the detection
-* \param hall_detection_general_struct *gen, pointer to the huge structure.
-*/
-void resetVariables_results(hall_detection_general_struct *gen){
-	gen->results[0]=empty_general.results[0];
-	gen->results[1]=empty_general.results[1];
-	gen->results[2]=empty_general.results[2];
-	gen->results[3]=empty_general.results[3];
-	gen->results[4]=empty_general.results[4];
-	gen->results[5]=empty_general.results[5];
-
-	gen->shifted_polarity[0][0]=empty_general.shifted_polarity[0][0];
-	gen->shifted_polarity[0][1]=empty_general.shifted_polarity[0][0];
-	gen->shifted_polarity[0][2]=empty_general.shifted_polarity[0][0];
-
-	gen->shifted_polarity[1][0]=empty_general.shifted_polarity[0][0];
-	gen->shifted_polarity[1][1]=empty_general.shifted_polarity[0][0];
-	gen->shifted_polarity[1][2]=empty_general.shifted_polarity[0][0];
-
-	gen->shifted_polarity[2][0]=empty_general.shifted_polarity[0][0];
-	gen->shifted_polarity[2][1]=empty_general.shifted_polarity[0][0];
-	gen->shifted_polarity[2][2]=empty_general.shifted_polarity[0][0];
-}
 /**
 * \brief the motor running in open loop control needs a bit of time to lock in place so current signals stop being so ugly.
 * \param detection_state_enum* state,			pointer to the variable controling the state machine
@@ -850,7 +781,79 @@ void assign_polarity(hall_detection_general_struct *gen){
 
 }
 
+/**
+* \brief just resets to 0 the adquisition related part from the huge structure used by the detection
+* \param hall_detection_general_struct *gen, pointer to the huge structure.
+*/
+void resetVariables_adquisition(hall_detection_general_struct *gen){
+	//wow this was taking too long it was throwing execution errors
+	//*gen=empty_general;		//i dont want to use memset, so we sacrifice flash memory space filled with 0's for this.
+	gen->currA=empty_general.currA;
+	gen->currB=empty_general.currB;
+	gen->currC=empty_general.currC;
+	gen->hallA=empty_general.hallA;
+	gen->hallB=empty_general.hallB;
+	gen->hallC=empty_general.hallC;
 
+	gen->differences_phaseA[0]=empty_general.differences_phaseA[0];
+	gen->differences_phaseA[1]=empty_general.differences_phaseA[1];
+	gen->differences_phaseA[2]=empty_general.differences_phaseA[2];
+
+	gen->differences_phaseB[0]=empty_general.differences_phaseB[0];
+	gen->differences_phaseB[1]=empty_general.differences_phaseB[1];
+	gen->differences_phaseB[2]=empty_general.differences_phaseB[2];
+
+	gen->differences_phaseC[0]=empty_general.differences_phaseC[0];
+	gen->differences_phaseC[1]=empty_general.differences_phaseC[1];
+	gen->differences_phaseC[2]=empty_general.differences_phaseC[2];
+}
+
+/**
+* \brief just resets to 0 the identification related part
+* \param hall_detection_general_struct *gen, pointer to the huge structure.
+*/
+void resetVariables_diferences(hall_detection_general_struct *gen){
+	gen->differences_phaseA[0]=empty_general.differences_phaseA[0];
+	gen->differences_phaseA[1]=empty_general.differences_phaseA[1];
+	gen->differences_phaseA[2]=empty_general.differences_phaseA[2];
+
+	gen->differences_phaseB[0]=empty_general.differences_phaseB[0];
+	gen->differences_phaseB[1]=empty_general.differences_phaseB[1];
+	gen->differences_phaseB[2]=empty_general.differences_phaseB[2];
+
+	gen->differences_phaseC[0]=empty_general.differences_phaseC[0];
+	gen->differences_phaseC[1]=empty_general.differences_phaseC[1];
+	gen->differences_phaseC[2]=empty_general.differences_phaseC[2];
+}
+
+/**
+* \brief just resets to 0 the results (al resets are split like this because we are exection time constrained
+* \param hall_detection_general_struct *gen, pointer to the huge structure.
+*/
+void resetVariables_results(hall_detection_general_struct *gen){
+	gen->results[0]=empty_general.results[0];
+	gen->results[1]=empty_general.results[1];
+	gen->results[2]=empty_general.results[2];
+	gen->results[3]=empty_general.results[3];
+	gen->results[4]=empty_general.results[4];
+	gen->results[5]=empty_general.results[5];
+
+	gen->shifted_polarity[0][0]=empty_general.shifted_polarity[0][0];
+	gen->shifted_polarity[0][1]=empty_general.shifted_polarity[0][0];
+	gen->shifted_polarity[0][2]=empty_general.shifted_polarity[0][0];
+
+	gen->shifted_polarity[1][0]=empty_general.shifted_polarity[0][0];
+	gen->shifted_polarity[1][1]=empty_general.shifted_polarity[0][0];
+	gen->shifted_polarity[1][2]=empty_general.shifted_polarity[0][0];
+
+	gen->shifted_polarity[2][0]=empty_general.shifted_polarity[0][0];
+	gen->shifted_polarity[2][1]=empty_general.shifted_polarity[0][0];
+	gen->shifted_polarity[2][2]=empty_general.shifted_polarity[0][0];
+}
+
+/**
+* \brief for now just sends "error" via uart but it should do much more in the future
+*/
 void error_handler(){
 const uint8_t error_message[]="error";
 #ifdef TESTuart
