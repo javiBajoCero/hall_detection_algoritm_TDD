@@ -91,6 +91,8 @@ typedef struct{
 	int32_t differences_phaseC[NUMBEROFPHASES];	/*!< auxiliar variable storing average distances between zerocrossings between each hall and phaseC*/
 	uint32_t shifted_polarity[NUMBEROFPHASES][NUMBEROFPHASES];	/*!< when phase and hall signals are measured out of phase due to unlucky timming when detecting, it is noted down in this variable for the polarity calculation */
 
+	uint32_t lowpassfilter_ticks;
+
 	uint32_t numberOfresults;
 	uint32_t indexOfcorrectResult;
 	detection_results_struct results[TOTAL_NUMBEROFRESULTS];

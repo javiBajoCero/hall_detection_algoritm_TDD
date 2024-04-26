@@ -20,7 +20,6 @@
 #endif
 
 #define MAXTICKs 1*888888		/*!< timeout for the algorithm, measured in 0.05s ticks , so 1000*0.05=50ms (it takes only 380 ticks to get 6/2=3 electric periods from torrot emulated) */
-#define lowpassfilter_ticks 15 						/*!< minimum number of ticks that should have passed in between zerocrossings (lowpassfilter) */
 #define currentAplusBplusC (uint32_t)(3*(4096)/2)	/*!< the sum of the average of each currents should be this number aprox, used to calculate currentC ortogonally*/
 #define currentADCoffset (float) 0.0				/*!< as we are using already processed filtered currents, no offset is take into account */
 #define TOLERANCE_FACTOR_FOR_STATIONARY_CURRENTS 0.25
@@ -77,7 +76,7 @@ void fill_buffers(
 		volatile float* ADCcurr2
 		);
 detection_YES_NO detect_N_zerocrossings	(hall_detection_general_struct *gen,uint32_t N);
-void detect_N_current_zerocrossings	(uint32_t ticks,current_or_hall_measurements_struct* currx,uint32_t N);
+void detect_N_current_zerocrossings	(hall_detection_general_struct *gen,uint32_t ticks,current_or_hall_measurements_struct* currx,uint32_t N);
 void detect_N_hall_zerocrossings	(uint32_t ticks,current_or_hall_measurements_struct* hallx,uint32_t N);
 void calculateElectricPeriod_inTicks(hall_detection_general_struct *gen, uint32_t samples);
 detection_YES_NO is_deviation_from_period_acceptable(hall_detection_general_struct *gen, float tolerance_factor,uint32_t samples);
@@ -176,6 +175,7 @@ void Hall_Identification_Test_measurement(
 	switch (detection_state) {
 		case detection_ENABLED:
 			ticks=0;
+			general.lowpassfilter_ticks=15;//minimum value
 			resetVariables_adquisition(&general);
 			detection_state=detection_WAIT_CURRENT_STATIONARY;
 			break;
@@ -238,6 +238,7 @@ void wait_for_the_current_stationary(detection_state_enum* state,hall_detection_
 	if(ticks>general.start_adquisition_ticks+2){//run alone signals_adquisition() to pre-fill the buffers
 		if(detect_N_zerocrossings(gen,WAITING_STATIONARY_MAXZEROCROSSINGS)==YES){
 			if(are_all_periods_stable(gen,WAITING_STATIONARY_MAXZEROCROSSINGS)==YES){
+				gen->lowpassfilter_ticks=gen->results[gen->numberOfresults].electricPeriod_ticks*0.1;
 				resetVariables_adquisition(gen);
 				resetVariables_results(gen);
 				general.start_adquisition_ticks=ticks;
@@ -481,9 +482,9 @@ void fill_buffers(
 */
 detection_YES_NO detect_N_zerocrossings(hall_detection_general_struct *gen,uint32_t N){
 	if((ticks-general.start_adquisition_ticks)>2){ //skip the first two samples to fill the buffers
-		detect_N_current_zerocrossings	((ticks-general.start_adquisition_ticks),&gen->currA,MAXZEROCROSSINGS);
-		detect_N_current_zerocrossings	((ticks-general.start_adquisition_ticks),&gen->currB,MAXZEROCROSSINGS);
-		detect_N_current_zerocrossings	((ticks-general.start_adquisition_ticks),&gen->currC,MAXZEROCROSSINGS);
+		detect_N_current_zerocrossings	(gen,(ticks-general.start_adquisition_ticks),&gen->currA,MAXZEROCROSSINGS);
+		detect_N_current_zerocrossings	(gen,(ticks-general.start_adquisition_ticks),&gen->currB,MAXZEROCROSSINGS);
+		detect_N_current_zerocrossings	(gen,(ticks-general.start_adquisition_ticks),&gen->currC,MAXZEROCROSSINGS);
 		detect_N_hall_zerocrossings		((ticks-general.start_adquisition_ticks),&gen->hallA,MAXZEROCROSSINGS);
 		detect_N_hall_zerocrossings		((ticks-general.start_adquisition_ticks),&gen->hallB,MAXZEROCROSSINGS);
 		detect_N_hall_zerocrossings		((ticks-general.start_adquisition_ticks),&gen->hallC,MAXZEROCROSSINGS);
@@ -506,7 +507,7 @@ detection_YES_NO detect_N_zerocrossings(hall_detection_general_struct *gen,uint3
 * \brief reading the current buffers detects 0 crossings and takes notes of the tick number.
 * \param hall_detection_general_struct *gen, 	pointer to the huge structure containing everything the detection needs.
 */
-void detect_N_current_zerocrossings(uint32_t ticks,current_or_hall_measurements_struct* currx,uint32_t N){
+void detect_N_current_zerocrossings(hall_detection_general_struct *gen,uint32_t ticks,current_or_hall_measurements_struct* currx,uint32_t N){
 	if(	   (((currx->two_samples_buffer[0]-currentADCoffset)*
 			 (currx->two_samples_buffer[1]-currentADCoffset))<=0)
 			 && currx->numberof_zerocrossings<N
@@ -521,7 +522,7 @@ void detect_N_current_zerocrossings(uint32_t ticks,current_or_hall_measurements_
 					}
 					currx->numberof_zerocrossings++;
 		}else{
-			if((int32_t)(ticks-(currx->zerocrossings_tick[currx->numberof_zerocrossings-1]))>lowpassfilter_ticks){ //not the first zerocrossing, compare with the previous one to filter noisy signals
+			if((int32_t)(ticks-(currx->zerocrossings_tick[currx->numberof_zerocrossings-1]))>gen->lowpassfilter_ticks){ //not the first zerocrossing, compare with the previous one to filter noisy signals
 					currx->zerocrossings_tick[currx->numberof_zerocrossings]=ticks;
 					if(currx->two_samples_buffer[0]>currx->two_samples_buffer[1]){
 						currx->zerocrossings_polarity[currx->numberof_zerocrossings]=rising_polarity;
