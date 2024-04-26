@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccuvdaDM.s 			page 1
+ARM GAS  /tmp/ccNkPan7.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /tmp/ccuvdaDM.s 			page 1
   28:Core/Src/main.c **** /* USER CODE BEGIN Includes */
   29:Core/Src/main.c **** #include "hall_swapper.h"
   30:Core/Src/main.c **** #include "user_interface.h"
-ARM GAS  /tmp/ccuvdaDM.s 			page 2
+ARM GAS  /tmp/ccNkPan7.s 			page 2
 
 
   31:Core/Src/main.c **** #include "wave_emulator.h"
@@ -118,7 +118,7 @@ ARM GAS  /tmp/ccuvdaDM.s 			page 1
   85:Core/Src/main.c ****   /* Configure the system clock */
   86:Core/Src/main.c ****   SystemClock_Config();
   87:Core/Src/main.c **** 
-ARM GAS  /tmp/ccuvdaDM.s 			page 3
+ARM GAS  /tmp/ccNkPan7.s 			page 3
 
 
   88:Core/Src/main.c ****   /* USER CODE BEGIN SysInit */
@@ -178,7 +178,7 @@ ARM GAS  /tmp/ccuvdaDM.s 			page 1
  142:Core/Src/main.c ****   RCC_OscInitStruct.PLL.PLLN = 85;
  143:Core/Src/main.c ****   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
  144:Core/Src/main.c ****   RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
-ARM GAS  /tmp/ccuvdaDM.s 			page 4
+ARM GAS  /tmp/ccNkPan7.s 			page 4
 
 
  145:Core/Src/main.c ****   RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
@@ -238,7 +238,7 @@ ARM GAS  /tmp/ccuvdaDM.s 			page 1
   11:Drivers/CMSIS/Include/cmsis_gcc.h ****  *
   12:Drivers/CMSIS/Include/cmsis_gcc.h ****  * Licensed under the Apache License, Version 2.0 (the License); you may
   13:Drivers/CMSIS/Include/cmsis_gcc.h ****  * not use this file except in compliance with the License.
-ARM GAS  /tmp/ccuvdaDM.s 			page 5
+ARM GAS  /tmp/ccNkPan7.s 			page 5
 
 
   14:Drivers/CMSIS/Include/cmsis_gcc.h ****  * You may obtain a copy of the License at
@@ -298,7 +298,7 @@ ARM GAS  /tmp/ccuvdaDM.s 			page 1
   68:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __PACKED_UNION                         union __attribute__((packed, aligned(1)))
   69:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
   70:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT32        /* deprecated */
-ARM GAS  /tmp/ccuvdaDM.s 			page 6
+ARM GAS  /tmp/ccNkPan7.s 			page 6
 
 
   71:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic push
@@ -358,7 +358,7 @@ ARM GAS  /tmp/ccuvdaDM.s 			page 1
  125:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Initializes data and bss sections
  126:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details This default implementations initialized all data and additional bss
  127:Drivers/CMSIS/Include/cmsis_gcc.h ****            sections relying on .copy.table and .zero.table specified properly
-ARM GAS  /tmp/ccuvdaDM.s 			page 7
+ARM GAS  /tmp/ccNkPan7.s 			page 7
 
 
  128:Drivers/CMSIS/Include/cmsis_gcc.h ****            in the used linker script.
@@ -418,7 +418,7 @@ ARM GAS  /tmp/ccuvdaDM.s 			page 1
  182:Drivers/CMSIS/Include/cmsis_gcc.h **** #define __VECTOR_TABLE_ATTRIBUTE  __attribute((used, section(".vectors")))
  183:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
  184:Drivers/CMSIS/Include/cmsis_gcc.h **** 
-ARM GAS  /tmp/ccuvdaDM.s 			page 8
+ARM GAS  /tmp/ccNkPan7.s 			page 8
 
 
  185:Drivers/CMSIS/Include/cmsis_gcc.h **** /* ###########################  Core Function Access  ########################### */
@@ -478,7 +478,7 @@ ARM GAS  /tmp/ccuvdaDM.s 			page 1
  125:Core/Src/main.c ****   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   67              		.loc 1 125 1 view -0
   68              		.cfi_startproc
-ARM GAS  /tmp/ccuvdaDM.s 			page 9
+ARM GAS  /tmp/ccNkPan7.s 			page 9
 
 
   69              		@ args = 0, pretend = 0, frame = 80
@@ -538,7 +538,7 @@ ARM GAS  /tmp/ccuvdaDM.s 			page 1
  110 002c 0D93     		str	r3, [sp, #52]
  140:Core/Src/main.c ****   RCC_OscInitStruct.PLL.PLLM = RCC_PLLM_DIV4;
  111              		.loc 1 140 3 is_stmt 1 view .LVU20
-ARM GAS  /tmp/ccuvdaDM.s 			page 10
+ARM GAS  /tmp/ccNkPan7.s 			page 10
 
 
  140:Core/Src/main.c ****   RCC_OscInitStruct.PLL.PLLM = RCC_PLLM_DIV4;
@@ -598,7 +598,7 @@ ARM GAS  /tmp/ccuvdaDM.s 			page 1
  156:Core/Src/main.c ****   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
  147              		.loc 1 156 35 is_stmt 0 view .LVU40
  148 004e 0023     		movs	r3, #0
-ARM GAS  /tmp/ccuvdaDM.s 			page 11
+ARM GAS  /tmp/ccNkPan7.s 			page 11
 
 
  149 0050 0393     		str	r3, [sp, #12]
@@ -658,7 +658,7 @@ ARM GAS  /tmp/ccuvdaDM.s 			page 1
  194              		.loc 1 71 1 view -0
  195              		.cfi_startproc
  196              		@ Volatile: function does not return.
-ARM GAS  /tmp/ccuvdaDM.s 			page 12
+ARM GAS  /tmp/ccNkPan7.s 			page 12
 
 
  197              		@ args = 0, pretend = 0, frame = 0
@@ -718,7 +718,7 @@ ARM GAS  /tmp/ccuvdaDM.s 			page 1
  239              	.LVL16:
  110:Core/Src/main.c **** 
  240              		.loc 1 110 2 discriminator 1 view .LVU64
-ARM GAS  /tmp/ccuvdaDM.s 			page 13
+ARM GAS  /tmp/ccNkPan7.s 			page 13
 
 
  241 0030 FFF7FEFF 		bl	emulation
@@ -756,18 +756,18 @@ ARM GAS  /tmp/ccuvdaDM.s 			page 1
  274              		.file 24 "Core/Inc/dma.h"
  275              		.file 25 "Core/Inc/user_interface.h"
  276              		.file 26 "<built-in>"
-ARM GAS  /tmp/ccuvdaDM.s 			page 14
+ARM GAS  /tmp/ccNkPan7.s 			page 14
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 main.c
-     /tmp/ccuvdaDM.s:18     .text.Error_Handler:0000000000000000 $t
-     /tmp/ccuvdaDM.s:26     .text.Error_Handler:0000000000000000 Error_Handler
-     /tmp/ccuvdaDM.s:58     .text.SystemClock_Config:0000000000000000 $t
-     /tmp/ccuvdaDM.s:65     .text.SystemClock_Config:0000000000000000 SystemClock_Config
-     /tmp/ccuvdaDM.s:185    .text.main:0000000000000000 $t
-     /tmp/ccuvdaDM.s:192    .text.main:0000000000000000 main
-     /tmp/ccuvdaDM.s:247    .text.main:0000000000000038 $d
+     /tmp/ccNkPan7.s:18     .text.Error_Handler:0000000000000000 $t
+     /tmp/ccNkPan7.s:26     .text.Error_Handler:0000000000000000 Error_Handler
+     /tmp/ccNkPan7.s:58     .text.SystemClock_Config:0000000000000000 $t
+     /tmp/ccNkPan7.s:65     .text.SystemClock_Config:0000000000000000 SystemClock_Config
+     /tmp/ccNkPan7.s:185    .text.main:0000000000000000 $t
+     /tmp/ccNkPan7.s:192    .text.main:0000000000000000 main
+     /tmp/ccNkPan7.s:247    .text.main:0000000000000038 $d
 
 UNDEFINED SYMBOLS
 memset
