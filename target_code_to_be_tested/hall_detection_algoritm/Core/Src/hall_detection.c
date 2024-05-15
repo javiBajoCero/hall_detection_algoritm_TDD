@@ -624,13 +624,16 @@ void swap_hall_gpios_with_detected_results(
 
 	switch (gen->results[gen->indexOfcorrectResult].hall_order[phase_A]) {
 		case hall_A:
-			*pin_infoH1=old_pin_infoH1;
+			*pin_infoH1=old_pin_infoH1;															//swap gpio pointers
+			pin_infoH1->polarity= gen->results[gen->indexOfcorrectResult].hall_polarity[hall_A];//dont forget the detected polarity
 			break;
 		case hall_B:
 			*pin_infoH2=old_pin_infoH1;
+			pin_infoH2->polarity=gen->results[gen->indexOfcorrectResult].hall_polarity[hall_B];
 			break;
 		case hall_C:
 			*pin_infoH3=old_pin_infoH1;
+			pin_infoH3->polarity=gen->results[gen->indexOfcorrectResult].hall_polarity[hall_C];
 			break;
 		default:
 			break;
@@ -639,12 +642,15 @@ void swap_hall_gpios_with_detected_results(
 	switch (gen->results[gen->indexOfcorrectResult].hall_order[phase_B]) {
 		case hall_A:
 			*pin_infoH1=old_pin_infoH2;
+			pin_infoH1->polarity=gen->results[gen->indexOfcorrectResult].hall_polarity[hall_A];
 			break;
 		case hall_B:
 			*pin_infoH2=old_pin_infoH2;
+			pin_infoH2->polarity=gen->results[gen->indexOfcorrectResult].hall_polarity[hall_B];
 			break;
 		case hall_C:
 			*pin_infoH3=old_pin_infoH2;
+			pin_infoH3->polarity=gen->results[gen->indexOfcorrectResult].hall_polarity[hall_C];
 			break;
 		default:
 			break;
@@ -653,12 +659,15 @@ void swap_hall_gpios_with_detected_results(
 	switch (gen->results[gen->indexOfcorrectResult].hall_order[phase_C]) {
 		case hall_A:
 			*pin_infoH1=old_pin_infoH3;
+			pin_infoH1->polarity=gen->results[gen->indexOfcorrectResult].hall_polarity[hall_A];
 			break;
 		case hall_B:
 			*pin_infoH2=old_pin_infoH3;
+			pin_infoH2->polarity=gen->results[gen->indexOfcorrectResult].hall_polarity[hall_B];
 			break;
 		case hall_C:
 			*pin_infoH3=old_pin_infoH3;
+			pin_infoH3->polarity=gen->results[gen->indexOfcorrectResult].hall_polarity[hall_C];
 			break;
 		default:
 			break;
